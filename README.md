@@ -58,7 +58,7 @@ Pamiętaj, że plik `Pipfile.lock` automatycznie zapisuje dokładne wersje zains
 ## Konwencja
 Dokumentacja, docstringi, komentarze - po polsku
 
-Kod - po angielsku
+Kod, pliki - po angielsku
 
 zmienne, metody - snake_case
 
