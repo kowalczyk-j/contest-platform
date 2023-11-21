@@ -54,3 +54,12 @@ W projekcie korzystamy z Pipenv, który jest narzędziem do zarządzania zależn
 
 
 Pamiętaj, że plik `Pipfile.lock` automatycznie zapisuje dokładne wersje zainstalowanych pakietów, aby zapewnić spójność środowiska na różnych maszynach. Przy kolejnych uruchomieniach projektu, zaleca się używanie poleceń `pipenv install` w celu zainstalowania zależności zdefiniowanych w pliku `Pipfile`.
+
+## Konwencja
+Dokumentacja, docstringi, komentarze - po polsku
+
+Kod - po angielsku
+
+zmienne, metody - snake_case
+
+klasy - PascalCase
