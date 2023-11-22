@@ -86,10 +86,10 @@ W projekcie backend piszemy w Django. Aby uruchomić serwer Django, wykonaj nast
 - W trybie deweloperskim serwer automatycznie przeładowuje się po wprowadzeniu zmian w kodzie, więc nie musisz ręcznie ponownie uruchamiać serwera za każdym razem.
 
 ## Konwencja
-Dokumentacja, docstringi, komentarze - po polsku
+Dokumentacja, docstringi, komentarze - w języku polskim
 
-Kod, pliki - po angielsku
+Kod i nazwy plików - w języku angielskim
 
-zmienne, metody - snake_case
+Nazwy zmiennych i metod - snake_case
 
-klasy - PascalCase
+Nazwy klas - PascalCase
