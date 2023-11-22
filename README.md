@@ -1,8 +1,8 @@
 # Platforma konkursowa dla fundacji BoWarto
 
 
-## Krótki opis
-TODO opis
+## Cel projektu
+Implementacja internetowej platformy konkursowej do rejestracji zgłoszeń uczestników, które zawierają prace artystyczne. Aplikacja webowa umożliwi właścicielom fundacji "Bo Warto" powiadomienie odbiorców z bazy mailingowej o nowym konkursie, zarządzanie trwającymi konkursami, weryfikację formularzy zgłoszeniowych, ocenę prac i generowanie statystyk. System ma być dostępny po przekierowaniu z zakładki istniejącej już strony www.fundacjabowarto.pl.
 
 
 ## Konfiguracja środowiska
