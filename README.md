@@ -55,6 +55,36 @@ W projekcie korzystamy z Pipenv, który jest narzędziem do zarządzania zależn
 
 Pamiętaj, że plik `Pipfile.lock` automatycznie zapisuje dokładne wersje zainstalowanych pakietów, aby zapewnić spójność środowiska na różnych maszynach. Przy kolejnych uruchomieniach projektu, zaleca się używanie poleceń `pipenv install` w celu zainstalowania zależności zdefiniowanych w pliku `Pipfile`.
 
+## Uruchomienie serwera
+W projekcie backend piszemy w Django. Aby uruchomić serwer Django, wykonaj następujące kroki:
+
+
+1. **Migracje bazy danych**: Wykonaj migracje, aby zastosować zmiany w bazie danych:
+
+    ```
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+
+2. **Uruchomienie serwera**: Aby uruchomić serwer deweloperski, wpisz poniższą komendę:
+
+    ```
+    python manage.py runserver
+    ```
+
+    Serwer będzie dostępny pod adresem domyślnym `http://127.0.0.1:8000/`.
+
+3. **Otwórz aplikację w przeglądarce**: Wejdź na `http://127.0.0.1:8000/` w przeglądarce internetowej, aby zobaczyć działającą aplikację Django.
+
+
+4. **Zmiana portu**:Możesz zmienić port, na którym działa serwer, dodając parametr `-p` lub `--port`. Na przykład, aby uruchomić serwer na porcie 8080, wpisz:
+
+    ```
+    python manage.py runserver 8080
+    ```
+
+- W trybie deweloperskim serwer automatycznie przeładowuje się po wprowadzeniu zmian w kodzie, więc nie musisz ręcznie ponownie uruchamiać serwera za każdym razem.
+
 ## Konwencja
 Dokumentacja, docstringi, komentarze - po polsku
 
