@@ -93,3 +93,5 @@ Kod i nazwy plików - w języku angielskim
 Nazwy zmiennych i metod - snake_case
 
 Nazwy klas - PascalCase
+
+test commitów w jira
