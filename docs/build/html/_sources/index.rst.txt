@@ -15,6 +15,42 @@ Witamy w dokumentacji Platformy Konkursowej dla fundacji BoWarto.
    :caption: Contents:
 
 
+.. req:: My first requirement
+
+  :id: REQ_001
+
+  :integrity: ASIL-D
+
+
+
+   A requirement
+
+
+
+.. spec:: My first specification
+
+   :id: SPEC_001
+
+   :assignee: Mr. Nice Guy
+
+   :implements: REQ_001
+
+
+
+   A specification
+
+
+
+.. test:: Test case for spec
+
+   :id: TEST_001
+
+   :checks: SPEC_001
+
+
+
+   A test case
+
 
 Indices and tables
 ==================

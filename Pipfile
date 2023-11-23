@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 django = "*"
+sphinx-needs = "*"
+"sphinxcontrib.plantuml" = "*"
 
 [dev-packages]
 sphinx = "*"
