@@ -88,9 +88,11 @@ W projekcie backend piszemy w Django. Aby uruchomić serwer Django, wykonaj nast
 ## Dokumentacja
 W celu tworzenia dokumentacji używamy modułu Sphinx. Poniżej widnieje krótka instrukcja korzystania z niego w naszym projekcie.
 
-- Sphinx wykorzy
+- Sphinx wykorzystuje pliki `.rst` z własnym syntaxem, w których definiować można elementy dokumentacji.
+- Rozszerzenie `autodoc` pozwala na automatyczne generowanie dokumentacji. `autodoc` tworzy pliki `.rst` po wykonaniu komendy `make html` w folderze `/docs`.
+- Aby dodać moduł do dokumentacji nawiguj do pliku `/docs/source/index.html` w którym można dodawać poszczególne moduły z wykorzystaniem syntaxu Sphinxa.
 
-1. **Generowanie dokumentacji**: Wykorzystujemy rozszerzenie `autodoc` które pozwala na automatyczne generowanie plików źródłowych dla Sphinx. Sphinx generuje dokumentację w postaci `html`. Aby to zrobić nawiguj do folderu docs i uruchom:
+1. **Generowanie dokumentacji**: Sphinx generuje dokumentację w postaci `html`. Aby to zrobić nawiguj do folderu docs i uruchom:
 
     ```
     cd docs
