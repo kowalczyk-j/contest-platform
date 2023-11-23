@@ -7,6 +7,9 @@ name = "pypi"
 django = "*"
 
 [dev-packages]
+sphinx = "*"
+"sphinxcontrib.httpdomain" = "*"
+sphinxcontrib-mermaid = "*"
 
 [requires]
 python_version = "3.11"

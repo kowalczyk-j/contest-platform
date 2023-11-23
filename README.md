@@ -85,6 +85,24 @@ W projekcie backend piszemy w Django. Aby uruchomić serwer Django, wykonaj nast
 
 - W trybie deweloperskim serwer automatycznie przeładowuje się po wprowadzeniu zmian w kodzie, więc nie musisz ręcznie ponownie uruchamiać serwera za każdym razem.
 
+## Dokumentacja
+W celu tworzenia dokumentacji używamy modułu Sphinx. Poniżej widnieje krótka instrukcja korzystania z niego w naszym projekcie.
+
+- Sphinx wykorzy
+
+1. **Generowanie dokumentacji**: Wykorzystujemy rozszerzenie `autodoc` które pozwala na automatyczne generowanie plików źródłowych dla Sphinx. Sphinx generuje dokumentację w postaci `html`. Aby to zrobić nawiguj do folderu docs i uruchom:
+
+    ```
+    cd docs
+    make html
+    ```
+    Sphinx umieści wygenerowane pliki w folderze `docs/build/html`
+2. **Wyświetlanie**: Aby wyświetlić plik użyj:
+    ```
+    open build/html/index.html
+    ```
+    bądź znajdź nawiguj do pliku i otwórz w dowolnej przeglądarce.
+
 ## Konwencja
 Dokumentacja, docstringi, komentarze - w języku polskim
 
@@ -93,5 +111,3 @@ Kod i nazwy plików - w języku angielskim
 Nazwy zmiennych i metod - snake_case
 
 Nazwy klas - PascalCase
-
-test commitów w jira
