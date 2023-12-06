@@ -7,6 +7,7 @@ name = "pypi"
 django = "*"
 sphinx-needs = "*"
 "sphinxcontrib.plantuml" = "*"
+psycopg = "*"
 
 [dev-packages]
 sphinx = "*"
@@ -14,4 +15,4 @@ sphinx = "*"
 sphinxcontrib-mermaid = "*"
 
 [requires]
-python_version = "3.11"
+python_version = "3.12"
