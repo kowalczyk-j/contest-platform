@@ -103,7 +103,7 @@ W projekcie frontend piszemy w React. Aby uruchomić serwer React, wykonaj nast�
 
    https://nodejs.org/en/download
 
-3. **Uruchomienie serwera**: Aby uruchomić serwer deweloperski, wpisz poniższą komendę:
+3. **Uruchomienie serwera**: Aby uruchomić serwer deweloperski, wpisz poniższą komendę w katalogu frontend:
 
    ```
    npm run dev
