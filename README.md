@@ -96,7 +96,7 @@ Projekt skonfigurowany jest do pracy z bazą PostgreSQL. Aby aplikacja instancja
     ```
     sudo service postgresql start
     ```
-2. **Interakcja**: Możesz połączyć się z serwerem za pomocą dowolnego klienta `postgres`.
+3. **Interakcja**: Możesz połączyć się z serwerem za pomocą dowolnego klienta `postgres`.
 - Aby zrobić to za pomocą `psql` wykonaj:
     ```
     sudo -u postgres psql
@@ -104,6 +104,10 @@ Projekt skonfigurowany jest do pracy z bazą PostgreSQL. Aby aplikacja instancja
 - Aby wyjść z klienta `psql` wykonaj:
     ```
     exit
+    ```
+4. **Zatrzymanie serwera**: Aby zatrzymać serwer użyj:
+    ```
+    sudo service postgresql stop
     ```
 ## Dokumentacja
 W celu tworzenia dokumentacji używamy modułu Sphinx. Poniżej widnieje krótka instrukcja korzystania z niego w naszym projekcie.
