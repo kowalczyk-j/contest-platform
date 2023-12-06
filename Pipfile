@@ -9,6 +9,7 @@ sphinx-needs = "*"
 "sphinxcontrib.plantuml" = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+psycopg = "*"
 
 [dev-packages]
 sphinx = "*"
@@ -16,4 +17,4 @@ sphinx = "*"
 sphinxcontrib-mermaid = "*"
 
 [requires]
-python_version = "3.11"
+python_version = "3.12"

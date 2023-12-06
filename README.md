@@ -8,7 +8,7 @@ Implementacja internetowej platformy konkursowej do rejestracji zgłoszeń uczes
 ## Konfiguracja środowiska
 W projekcie korzystamy z Pipenv, który jest narzędziem do zarządzania zależnościami w projekcie Pythona, łączące w sobie funkcje pip (do instalacji pakietów) i virtualenv (do izolowania środowiska).
 
-1. **Instalacja Pipenv**: Upewnij się, że masz zainstalowany Python w wersji większej niż 3.7, a następnie zainstaluj Pipenv za pomocą polecenia pip:
+1. **Instalacja Pipenv**: Upewnij się, że masz zainstalowany Python w wersji 3.12, lub `pyenv`, którego pipenv użyje do zainstalowania odpowiedniej wersji pythona. Następnie zainstaluj Pipenv za pomocą polecenia pip:
 
     ```bash
     pip install pipenv
@@ -85,6 +85,26 @@ W projekcie backend piszemy w Django. Aby uruchomić serwer Django, wykonaj nast
 
 - W trybie deweloperskim serwer automatycznie przeładowuje się po wprowadzeniu zmian w kodzie, więc nie musisz ręcznie ponownie uruchamiać serwera za każdym razem.
 
+## Baza danych
+Projekt skonfigurowany jest do pracy z bazą PostgreSQL. Aby aplikacja instancja `django` działała poprawnie, powinieneś na swojej maszynie skonfigurować serwer `postgres`, i uruchomić go na porcie `5432`.
+
+1. **Instalacja postgres**: Aby zainstalować serwer postgres na swojej maszynie `linux` wykonaj:
+    ```
+    sudo apt install postgresql
+    ```
+2. **Uruchomienie serwera**: Następnie aby uruchomić serwer użyj:
+    ```
+    sudo service postgresql start
+    ```
+2. **Interakcja**: Możesz połączyć się z serwerem za pomocą dowolnego klienta `postgres`.
+- Aby zrobić to za pomocą `psql` wykonaj:
+    ```
+    sudo -u postgres psql
+    ```
+- Aby wyjść z klienta `psql` wykonaj:
+    ```
+    exit
+    ```
 ## Dokumentacja
 W celu tworzenia dokumentacji używamy modułu Sphinx. Poniżej widnieje krótka instrukcja korzystania z niego w naszym projekcie.
 
