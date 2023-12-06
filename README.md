@@ -88,6 +88,23 @@ W projekcie backend piszemy w Django. Aby uruchomić serwer Django, wykonaj nast
 ## Baza danych
 Projekt skonfigurowany jest do pracy z bazą PostgreSQL. Aby aplikacja instancja `django` działała poprawnie, powinieneś na swojej maszynie skonfigurować serwer `postgres`, i uruchomić go na porcie `5432`.
 
+1. **Instalacja postgres**: Aby zainstalować serwer postgres na swojej maszynie `linux` wykonaj:
+    ```
+    sudo apt install postgresql
+    ```
+2. **Uruchomienie serwera**: Następnie aby uruchomić serwer użyj:
+    ```
+    sudo service postgresql start
+    ```
+2. **Interakcja**: Możesz połączyć się z serwerem za pomocą dowolnego klienta `postgres`.
+- Aby zrobić to za pomocą `psql` wykonaj:
+    ```
+    sudo -u postgres psql
+    ```
+- Aby wyjść z klienta `psql` wykonaj:
+    ```
+    exit
+    ```
 ## Dokumentacja
 W celu tworzenia dokumentacji używamy modułu Sphinx. Poniżej widnieje krótka instrukcja korzystania z niego w naszym projekcie.
 
