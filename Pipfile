@@ -7,6 +7,8 @@ name = "pypi"
 django = "*"
 sphinx-needs = "*"
 "sphinxcontrib.plantuml" = "*"
+djangorestframework = "*"
+django-cors-headers = "*"
 psycopg = "*"
 
 [dev-packages]

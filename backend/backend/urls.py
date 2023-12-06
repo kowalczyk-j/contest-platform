@@ -16,8 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from contest_platform.views import *
+from rest_framework.routers import DefaultRouter
+from contest_platform.urls import contest_router
+
 
 urlpatterns = [
-    path("contest_platform/", include("contest_platform.urls")),
     path("admin/", admin.site.urls),
+    path("", include(contest_router.urls))
+    # path("", ContestView.as_view(), name="anything")
+    # path("contest_platform/", include("contest_platform.urls")),
 ]

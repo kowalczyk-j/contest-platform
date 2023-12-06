@@ -1,0 +1,9 @@
+backend/.idea/
+
+backend/backend/__pycache__/
+backend/contest_platform/__pycache__/
+
+backend/contest_platform/migrations/__pycache__/
+
+.DS_Store
+
