@@ -98,18 +98,27 @@ W projekcie frontend piszemy w React. Aby uruchomić serwer React, wykonaj nast�
    ```
 
    Jeżeli pokazuje ci się zainstalowa wersja to znaczy, że node i npm są zainstalowane.
-
-2. **Pobierz Nodejs i npm**: Upewnij się, że masz pobrany Nodejs i npm lub pobierz dla swojej platformy:
-
-   https://nodejs.org/en/download
-
-3. **Uruchomienie serwera**: Aby uruchomić serwer deweloperski, wpisz poniższą komendę w katalogu frontend:
-
+   Jeżęli Nodejs i npm nie są zainstalowane, użyj:
+   ```bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
    ```
+   Po pobraniu zrestartuj terminal, następnie:
+   ```bash
+   nvm install node
+   ```
+   
+   Node i npm powinny być już zainstalowane, teraz należy pobrać przypisane do projektu pakiety poprzez:
+   ```bash
+   npm install
+   ```
+   
+   Następnie uruchamiamy serwer react:
+   ```bash
    npm run dev
    ```
+   
+   Serwer powinien być uruchomiony i dostępny na porcie: localhost:5173
 
-   Serwer będzie dostępny pod adresem domyślnym `http://localhost:5173/`.
 
 ## Baza danych
 
