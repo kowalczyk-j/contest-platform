@@ -55,35 +55,16 @@ else:
 # Define own need types
 
 needs_types = [{"directive": "req",
-                "title": "Requirement",
+                "title": "Wymaganie",
                 "prefix": "R_",
 
                 "color": "#BFD8D2",
-                "style": "node"},
-
-               {"directive": "spec",
-                "title": "Specification",
-
-                "prefix": "S_",
-
-                "color": "#FEDCD2",
-
-                "style": "node"},
-
-               {"directive": "test",
-
-                "title": "Test Case",
-
-                "prefix": "T_",
-
-                "color": "#DCB239",
-
                 "style": "node"}]
 
 
 # Define own options
 
-needs_extra_options = ["integrity", "assignee"]
+needs_extra_options = ["osoba", "priorytet"]
 
 
 # Define own link types
