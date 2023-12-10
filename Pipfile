@@ -10,6 +10,7 @@ sphinx-needs = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 psycopg = "*"
+pre-commit = "*"
 
 [dev-packages]
 sphinx = "*"
