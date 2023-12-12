@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
-function App() {
+import { useNavigate } from 'react-router-dom';
+
+function HomePage() {
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -22,18 +25,23 @@ function App() {
     fetchData();
   }, []);
 
+  const handleClick = () => {navigate("/create-contest");};
+
   return (
     <>
-      <ul>
+    <ul>
         {data.map((item) => (
-          <li key={item.id}>
+        <li key={item.id}>
             <p>{item.title}</p>
             <p>{item.description}</p>
-          </li>
+            <p>Zgłoszenia zbierane od {item.date_start} do {item.date_end}</p>
+            <p>Typ konkursu: {item.type}</p>
+        </li>
         ))}
-      </ul>
+    </ul>
+    <button onClick={handleClick}>Utwórz konkurs</button>
     </>
   );
 }
 
-export default App;
+export default HomePage;
