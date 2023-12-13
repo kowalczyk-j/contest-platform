@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Card, CardHeader, CardContent, Typography, TextField, Button, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import FileUploadButton from './FileUploadButton';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css'
 
 
 function CreateContestPage() {
@@ -78,8 +80,8 @@ function CreateContestPage() {
           <div>
             <FormControl component="fieldset" className="flex flex-col space-y-2">
               <Typography component="legend">Typ konkursu:</Typography>
-              <RadioGroup row aria-label="type" 
-                          name="row-radio-buttons-group" 
+              <RadioGroup row aria-label="type"
+                          name="row-radio-buttons-group"
                           value={individual}
                           onChange={(e) => setIndividual(e.target.value)}>
                 <FormControlLabel value="1" control={<Radio />} label="indywidualny" />
@@ -108,7 +110,28 @@ function CreateContestPage() {
             <FileUploadButton name="Załącz plakat" />
           </div>
 
-          <Button variant="outlined" type="submit">Utwórz konkurs</Button>
+          <div>
+            <Popup trigger=
+              {<Button variant="outlined" type="submit">Utwórz konkurs</Button>}
+              modal nested>
+                {
+                  close => (
+                    <div className='modal'>
+                      <div className='content'>
+                        Pomyślnie utworzono konkurs!
+                      </div>
+                      <div>
+                        <button onClick=
+                        {() => close()}>
+                          OK
+                        </button>
+                      </div>
+                    </div>
+                  )
+                }
+              </Popup>
+          </div>
+
         </form>
       </CardContent>
     </Card>
