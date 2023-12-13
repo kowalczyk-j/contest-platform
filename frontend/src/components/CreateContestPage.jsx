@@ -3,6 +3,7 @@ import { Card, CardHeader, CardContent, Typography, TextField, Button, FormContr
 import FileUploadButton from './FileUploadButton';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css'
+import { useNavigate } from 'react-router-dom';
 
 
 function CreateContestPage() {
@@ -12,6 +13,7 @@ function CreateContestPage() {
   const [dateEnd, setDateEnd] = useState('');
   const [individual, setIndividual] = useState('');
   const [type, setType] = useState('');
+  const navigate = useNavigate();
 
 
   const handleSubmit = async (event) => {
@@ -121,10 +123,7 @@ function CreateContestPage() {
                         Pomyślnie utworzono konkurs!
                       </div>
                       <div>
-                        <button onClick=
-                        {() => close()}>
-                          OK
-                        </button>
+                        <button onClick={() => navigate('/')}>OK</button>
                       </div>
                     </div>
                   )
