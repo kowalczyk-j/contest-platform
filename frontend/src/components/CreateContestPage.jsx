@@ -7,33 +7,6 @@ import Logo from '../static/assets/Logo.png';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css'
 
-const ColorButton = styled(Button)({
-  boxShadow: 'none',
-  textTransform: 'none',
-  fontSize: 16,
-  padding: '6px 12px',
-  lineHeight: 1.5,
-  backgroundColor: '#95C21E',
-  fontFamily: [
-    '-apple-system',
-    'BlinkMacSystemFont',
-    '"Segoe UI"',
-    'Roboto',
-    '"Helvetica Neue"',
-    'Arial',
-    'sans-serif',
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-  ].join(','),
-  '&:hover': {
-    backgroundColor: '#82a819',
-    borderColor: "none",
-    boxShadow: 'none',
-  },
-});
-
-
 
 function CreateContestPage() {
   const [title, setTitle] = useState('');
@@ -150,21 +123,33 @@ function CreateContestPage() {
                   <FileUploadButton name="Załącz plakat" />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-                  <Popup trigger=
-                    {<ColorButton variant="contained" style={{ width: "225px" }} type="submit">Utwórz konkurs</ColorButton>}
-                    modal nested>
-                    {
-                      close => (
-                        <div className='modal'>
-                          <div className='content'>
-                            Pomyślnie utworzono konkurs!
-                          </div>
-                          <div>
-                            <ColorButton variant="contained" style={{ width: "50px" }} onClick={() => navigate('/')}>OK</ColorButton>
-                          </div>
-                        </div>
-                      )
+                  <Popup
+                    trigger={
+                      <Button variant="contained" style={{ backgroundColor: '#95C21E', color: 'white', width: "225px" }} type="submit">
+                        Utwórz konkurs
+                      </Button>
                     }
+                    modal
+                    contentStyle={{
+                      maxWidth: '300px',
+                      borderRadius: '10px',
+                      padding: '20px',
+                      textAlign: 'center',
+                      fontFamily: 'Arial'
+                    }}
+                  >
+                    {(close) => (
+                      <div className='modal'>
+                        <div className='content'>
+                          Pomyślnie utworzono konkurs!
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                          <Button variant="contained" style={{ backgroundColor: '#95C21E', color: 'white', width: "80px" }} onClick={() => handleBack()}>
+                            OK
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </Popup>
                 </div>
               </form>

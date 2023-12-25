@@ -7,3 +7,4 @@ backend/contest_platform/migrations/__pycache__/
 
 .DS_Store
 
+Pipfile.lock
