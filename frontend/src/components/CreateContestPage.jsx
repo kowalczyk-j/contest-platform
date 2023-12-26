@@ -6,6 +6,7 @@ import FileUploadButton from './FileUploadButton';
 import Logo from '../static/assets/Logo.png';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css'
+import axios from "axios";
 
 
 function CreateContestPage() {
@@ -21,31 +22,34 @@ function CreateContestPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}contests/`, {
-        method: 'POST',
+    const postData = {
+      title: title,
+      description: description,
+      date_start: dateStart,
+      date_end: dateEnd,
+      individual: individual,
+      type: type
+    };
+
+    axios.post(`${import.meta.env.VITE_API_URL}contests/`, postData,
+      {
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: title,
-          description: description,
-          date_start: dateStart,
-          date_end: dateEnd,
-          individual: individual,
-          type: type
-        }),
+          'Authorization': 'Token 2336386141986178201499d767a9f556f04e2b67'
+        }
+      })
+      .then(response => {
+        if (response.status === 200) {
+          console.log(response.data);
+        } else {
+          console.log(response)
+          throw new Error('Network response was not ok');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.error('Error:', error);
-    }
   };
 
   const handleBack = () => { navigate("/"); };

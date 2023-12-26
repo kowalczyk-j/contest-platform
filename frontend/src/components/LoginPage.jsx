@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import Logo from '../static/assets/Logo.png';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css'
+import axios from "axios";
 
 
 const LoginPage = () => {
@@ -15,32 +16,32 @@ const LoginPage = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        const data = {
+        const postData = {
             username: username,
             password: password,
         };
 
-        try {
-            const response = await fetch('http://your-backend-url.com/api/login/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                throw new Error('Invalid credentials');
+        axios.post(`${process.env.VITE_API_URL}/user/login/`, postData, {
+            headers: {
+                'Content-Type': 'application/json',
             }
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    // Login successful
+                    setLoginError(false); // Reset login error state
+                    const responseData = response.data;
+                    const token = responseData.token;
 
-            const responseData = await response.json();
-            const token = responseData.token;
-
-            // Handle the token (e.g., store it in local storage, state, or cookies)
-            console.log('Received token:', token);
-        } catch (error) {
-            console.error('Login failed:', error.message);
-        }
+                    // Handle the token TODO
+                } else {
+                    throw new Error('Invalid credentials');
+                }
+            })
+            .catch(error => {
+                console.error('Login failed:', error.message);
+                setLoginError(true); // Set login error state
+            });
     };
 
     const handleBack = () => { navigate("/"); };
@@ -72,7 +73,8 @@ const LoginPage = () => {
                                 <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                                     <Popup
                                         trigger={
-                                            <Button variant="contained" style={{ backgroundColor: '#95C21E', color: 'white', width: "225px" }} type="submit">
+                                            <Button variant="contained" style={{ backgroundColor: '#95C21E', color: 'white', width: "225px" }} type="submit"
+                                                onClick={loginError ? close : () => handleBack()}>
                                                 Zaloguj się
                                             </Button>
                                         }
@@ -88,10 +90,15 @@ const LoginPage = () => {
                                         {(close) => (
                                             <div className='modal'>
                                                 <div className='content'>
-                                                    Pomyślnie zalogowano!
+                                                    {loginError ? (
+                                                        'Logowanie nieudane, spróbuj ponownie.'
+                                                    ) : (
+                                                        'Pomyślnie zalogowano!'
+                                                    )}
                                                 </div>
                                                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                                                    <Button variant="contained" style={{ backgroundColor: '#95C21E', color: 'white', width: "80px" }} onClick={() => handleBack()}>
+                                                    <Button variant="contained" style={{ backgroundColor: '#95C21E', color: 'white', width: "80px" }}
+                                                        onClick={loginError ? close : () => handleBack()}>
                                                         OK
                                                     </Button>
                                                 </div>

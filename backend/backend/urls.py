@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 from contest_platform.views import *
 from rest_framework.routers import DefaultRouter
-from contest_platform.urls import contest_router, account_router
+from contest_platform.urls import contest_router, user_router
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -26,5 +26,5 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path("admin/", admin.site.urls),
     path("", include(contest_router.urls)),
-    path("", include(account_router.urls))
+    path("", include(user_router.urls))
 ]
