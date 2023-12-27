@@ -1,15 +1,14 @@
 from rest_framework import serializers
-from .models import Contest
-from django.contrib.auth.models import User
+from .models import *
 
 
 class ContestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contest
-        fields = '__all__'
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
+        fields = ("id", 
+                  "title", 
+                  "description",
+                  "date_start",
+                  "date_end",
+                  "individual",
+                  "type")
