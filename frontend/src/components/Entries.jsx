@@ -1,5 +1,6 @@
-import { Badge, Card, Button, Typography, Box, SvgIcon } from "@mui/material";
+import { Card, Typography, Box } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import BackButton from "./BackButton";
 import "@fontsource/montserrat";
 
 const theme = createTheme({
@@ -39,18 +40,7 @@ export default function Component() {
             Prace konkursowe: “Rodzinna recenzja książki dla dzieci”
           </Typography>
         </Box>
-        <Button
-          variant="outlined"
-          startIcon={<ArrowLeftIcon />}
-          sx={{
-            ml: 4,
-            mb: 2,
-            color: "black", // Ustawiamy kolor tekstu przycisku
-            borderColor: "#95C21E", // Ustawiamy kolor obramowania przycisku
-          }}
-        >
-          Powrót
-        </Button>
+        <BackButton />
         <Card
           sx={{
             p: 4,
@@ -151,14 +141,5 @@ function EntryScore({ badgeColor, score }) {
         suma
       </Typography>
     </Box>
-  );
-}
-
-function ArrowLeftIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="m12 19-7-7 7-7" />
-      <path d="M19 12H5" />
-    </SvgIcon>
   );
 }
