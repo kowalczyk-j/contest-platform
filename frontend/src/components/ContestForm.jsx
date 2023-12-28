@@ -10,6 +10,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import SubmitButton from './SubmitButton';
+import CreateCriterion from './CreateCriterion';
+import TextButton from './TextButton';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
   
 
 function ContestForm({onSubmit}) {
@@ -21,6 +24,7 @@ function ContestForm({onSubmit}) {
     const [type, setType] = useState('');
     const [otherType, setOtherType] = useState('');
 
+    // pop up after submiting
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -30,6 +34,13 @@ function ContestForm({onSubmit}) {
     const handleClose = () => {
         setOpen(false);
         navigate("/");
+    };
+
+    // adding new criterion
+    const [newComponent, setNewComponent] = useState([<CreateCriterion index="1"/>]);
+
+    const handleClickAddCriterion = () => {
+        setNewComponent(prevComponents => [...prevComponents, <CreateCriterion index={newComponent.length + 1}/>]);
     };
 
     const navigate = useNavigate();
@@ -104,9 +115,20 @@ function ContestForm({onSubmit}) {
                     <FormControlLabel value="plastyczne" control={<Radio />} label="plastyczne" />
                     <FormControlLabel value="literackie" control={<Radio />} label="literackie" />
                     <FormControlLabel value="inne" control={<Radio />} label="inne: " />
-                    <TextField id="other" onChange={(e) => setOtherType(e.target.value)}/>
+                    <TextField id="other" size="small" onChange={(e) => setOtherType(e.target.value)}/>
                 </RadioGroup>
                 </FormControl>
+            </div>
+
+            <div className="criteria">
+                <Typography component="legend">Kryteria oceny:</Typography>
+                {newComponent}
+                <TextButton
+                    style={{fontSize: 16, marginTop: "10px"}}
+                    startIcon={<AddCircleOutline style={{color: "#95C21E"}} />}
+                    onClick={handleClickAddCriterion}>
+                    Dodaj kryterium
+                </TextButton>
             </div>
 
             <div className="uploads">
