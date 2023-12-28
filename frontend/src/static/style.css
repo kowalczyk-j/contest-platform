@@ -8,8 +8,42 @@
     width: 200px;
 }
 
+.form {
+    margin: 20px auto;
+    width: 600px;
+    border: 1px solid #95C21E;
+    border-radius: 10px;
+    padding: 50px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
 .back {
     color: #95C21E;
+}
+
+.back-btn {
+    position: absolute;
+}
+
+@media (max-width: 900px) {
+    .back-btn {
+        top: 80px;
+        left: 0px;
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1300px) {
+    .back-btn {
+        top: 120px;
+        left: 0px;
+    }
+}
+
+@media (min-width: 1300px) {
+    .back-btn {
+        top: 120px;
+        left: 200px;
+    }
 }
 
 .description, .dates, .contest-type {
@@ -22,6 +56,26 @@
     align-items: center;
 }
 
+.date {
+    width: 270px;
+}
+
 .contest-type {
     display: flex;
+}
+
+.contest-type #other {
+    width: 250px;
+}
+
+.uploads {
+    display: flex;
+    margin: 15px;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.submit {
+    display: flex;
+    justify-content: space-around;
 }

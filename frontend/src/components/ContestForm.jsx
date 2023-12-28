@@ -45,7 +45,7 @@ function ContestForm({onSubmit}) {
     };
 
     return (
-        <form className="form space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="title">
                 <FormControl className="flex flex-col space-y-4" fullWidth={true}>
                     <TextField id="title" label="Tytuł konkursu" value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -67,12 +67,12 @@ function ContestForm({onSubmit}) {
 
             <div className="dates">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
+                    <DatePicker className="date"
                         label="Data rozpoczęcia"
                         defaultValue={dayjs()}
                         format="DD-MM-YYYY"
                         onChange={(date) => setDateStart(date.format('YYYY-MM-DD'))}/>
-                    <DatePicker
+                    <DatePicker className="date"
                         label="Data zakończenia"
                         defaultValue={dayjs()}
                         format="DD-MM-YYYY"
@@ -109,25 +109,21 @@ function ContestForm({onSubmit}) {
                 </FormControl>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-evenly", marginTop: "2%", marginBottom: "2%" }}>
+            <div className="uploads">
                 <FileUploadButton name="Załącz regulamin" />
                 <FileUploadButton name="Załącz plakat" />
             </div>
-            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+
+            <div className="submit">
                 <SubmitButton text="Utwórz konkurs" onClick={handleClickOpen}/>
                 <Dialog
                     open={open}
                     onClose={handleClose}
                     aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">
-                    {"Dodano nowy konkurs"}
-                    </DialogTitle>
+                    aria-describedby="alert-dialog-description">
+                    <DialogTitle id="alert-dialog-title"> {"Dodano nowy konkurs"} </DialogTitle>
                     <DialogActions>
-                    <Button onClick={handleClose} autoFocus>
-                        Ok
-                    </Button>
+                        <Button onClick={handleClose} autoFocus> Ok </Button>
                     </DialogActions>
                 </Dialog>
             </div>
