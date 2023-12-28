@@ -1,0 +1,27 @@
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo img {
+    width: 200px;
+}
+
+.back {
+    color: #95C21E;
+}
+
+.description, .dates, .contest-type {
+    margin-top: 20px;
+}
+
+.dates {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contest-type {
+    display: flex;
+}
