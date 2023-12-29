@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, FormControl } from '@mui/material';
+import { TextField } from '@mui/material';
 
 function CreateCriterion( {index} ) {
     // const [description, setDescription] = useState('');

@@ -59,7 +59,8 @@ body {
     }
 }
 
-.description, .dates, .contest-type, .criteria {
+.description, .dates, .contest-type,.criteria, .name,
+.surname, .parent-name, .email, .entry-title {
     margin-top: 20px;
 }
 
@@ -98,7 +99,7 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 1.3rem;
-    font-weight: bolder;
+    font-weight: bold;
   }
 
 .criterion .description {
@@ -110,13 +111,24 @@ body {
 }
 
 .uploads {
+    margin-top: 15px;
     display: flex;
-    margin: 15px;
     justify-content: space-evenly;
     align-items: center;
 }
 
 .submit {
+    margin-top: 15px;
     display: flex;
     justify-content: space-around;
+}
+
+.checkbox {
+    margin-top: 15px;
+}
+
+.entry-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardHeader, CardContent, Grid } from '@mui/material';
 import 'reactjs-popup/dist/index.css'
 import Header from './Header';
 import BackButton from './BackButton';

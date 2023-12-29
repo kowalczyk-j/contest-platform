@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, FormControl, FormControlLabel, Radio, RadioGroup, Typography, Button } from '@mui/material';
 import FileUploadButton from './FileUploadButton';
@@ -37,10 +37,10 @@ function ContestForm({onSubmit}) {
     };
 
     // adding new criterion
-    const [newComponent, setNewComponent] = useState([<CreateCriterion index="1"/>]);
+    const [criteria, setCriteria] = useState([<CreateCriterion index="1"/>]);
 
     const handleClickAddCriterion = () => {
-        setNewComponent(prevComponents => [...prevComponents, <CreateCriterion index={newComponent.length + 1}/>]);
+        setCriteria(prevComponents => [...prevComponents, <CreateCriterion index={criteria.length + 1}/>]);
     };
 
     const navigate = useNavigate();
@@ -122,7 +122,7 @@ function ContestForm({onSubmit}) {
 
             <div className="criteria">
                 <Typography component="legend">Kryteria oceny:</Typography>
-                {newComponent}
+                {criteria}
                 <TextButton
                     style={{fontSize: 16, marginTop: "10px"}}
                     startIcon={<AddCircleOutline style={{color: "#95C21E"}} />}

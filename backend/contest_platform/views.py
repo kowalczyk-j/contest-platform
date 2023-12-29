@@ -18,6 +18,9 @@ class ContestViewSet(viewsets.ModelViewSet):
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def get_object(self):
+        return self.get_queryset().get(pk=self.kwargs["pk"])
+
 
 class EntryViewSet(viewsets.ModelViewSet):
     queryset = Entry.objects.all()
