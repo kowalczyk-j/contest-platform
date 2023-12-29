@@ -33,6 +33,13 @@ class EntryViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get_queryset(self):
+        queryset = Entry.objects.all()
+        contest_id = self.request.query_params.get('contest', None)
+        if contest_id is not None:
+            queryset = queryset.filter(contest=contest_id)
+        return queryset
 
 
 class AddressViewSet(viewsets.ModelViewSet):

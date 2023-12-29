@@ -132,3 +132,8 @@ body {
     justify-content: space-around;
     align-items: center;
 }
+
+.green-bold { 
+    color: #95C21E;
+    font-weight: bold;
+}

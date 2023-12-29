@@ -1,11 +1,28 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Card, Typography, Box } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "./BackButton";
 import montserrat from "../static/theme";
 
 export default function Component() {
+  const [entries, setEntries] = useState([]);
+  const [contest, setContest] = useState({});
   const navigate = useNavigate();
+  const { contestId } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_API_URL}entries/?contest=${contestId}`)
+      .then((response) => setEntries(response.data))
+      .catch((error) => console.error("Error fetching data: ", error));
+
+    axios
+      .get(`${import.meta.env.VITE_API_URL}contests/${contestId}/`)
+      .then((response) => setContest(response.data))
+      .catch((error) => console.error("Error fetching data: ", error));
+  }, [contestId]);
 
   const handleBackClick = () => {
     navigate("/");
@@ -37,71 +54,52 @@ export default function Component() {
             variant="h4"
             component="h1"
           >
-            Prace konkursowe: “Rodzinna recenzja książki dla dzieci”
+            Prace konkursowe: {contest.title}
           </Typography>
         </Box>
         <BackButton clickHandler={handleBackClick} />
-        <Card
-          sx={{
-            p: 4,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2,
-            maxWidth: "50%",
-            boxShadow: "0 0 3px 1px #95C21E",
-          }}
-        >
-          <EntryInfo name="John Doe" age={15} school="XYZ High School" />
-          <EntryScore badgeColor="success.main" score={85} />
-        </Card>
-        <Card
-          sx={{
-            p: 4,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2,
-            boxShadow: "0 0 5px 2px #95C21E",
-          }}
-        >
-          <EntryInfo name="Jane Smith" age={16} school="ABC High School" />
-          <EntryScore badgeColor="warning.main" score={90} />
-        </Card>
-        <Card
-          sx={{
-            p: 4,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2,
-            boxShadow: "0 0 5px 2px #95C21E",
-          }}
-        >
-          <EntryInfo
-            name="Tom Brown"
-            age={17}
-            school="Jednostka koordynująca: Szkoła podstawowa nr 94 im. I marszałka polski Józefa Piłsudskiego"
-          />
-          <EntryScore badgeColor="error.main" score={88} />
-        </Card>
+        {entries.map((entry) => (
+          <Card
+            key={entry.id}
+            sx={{
+              p: 4,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+              maxWidth: "50%",
+              boxShadow: "0 0 3px 1px #95C21E",
+            }}
+          >
+            <EntryInfo
+              id={entry.id}
+              name={entry.contestant_name}
+              surname={entry.contestant_surname}
+              age="12"
+              school="Szkoła Podstawowa nr 1 w Głogowie"
+            />
+            <EntryScore badgeColor="success.main" score={22} />
+          </Card>
+        ))}
       </Box>
     </ThemeProvider>
   );
 }
 
-function EntryInfo({ name, age, school }) {
+function EntryInfo({ id, name, surname, age, school }) {
   return (
     <Box sx={{ mr: 2 }}>
       <Typography variant="h5" component="h2">
-        <span className="green-bold">{name} </span>
+        <span className="green-bold">
+          #{id} {name} {surname}
+        </span>
       </Typography>
       <Typography variant="body1">
-        <span className="green-bold">Age: </span>
+        <span className="green-bold">Wiek: </span>
         {age}
       </Typography>
       <Typography variant="body1" color="text.secondary">
-        <span className="green-bold">School: </span> {school}
+        <span className="green-bold">Jednostka koordynująca: </span> {school}
       </Typography>
     </Box>
   );
