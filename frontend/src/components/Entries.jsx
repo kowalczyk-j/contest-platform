@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, Typography, Box } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate, useParams } from "react-router-dom";
+import Header from "./Header";
 import BackButton from "./BackButton";
 import montserrat from "../static/theme";
+import EntryInfo from "./EntryInfo";
+import EntryScore from "./EntryScore";
 
-export default function Component() {
+export default function Entries() {
   const [entries, setEntries] = useState([]);
   const [contest, setContest] = useState({});
   const navigate = useNavigate();
@@ -38,19 +41,9 @@ export default function Component() {
         }}
       >
         <Box sx={{ textAlign: "center", my: 2, mx: "auto" }}>
-          <img
-            alt="Logo"
-            src="/Logo.png"
-            style={{
-              aspectRatio: "316/148",
-              objectFit: "cover",
-              marginBottom: "1%",
-            }}
-            height="148"
-            width="316"
-          />
+          <Header />
           <Typography
-            style={{ fontWeight: "bold" }}
+            style={{ fontWeight: "bold", marginTop: "20px" }}
             variant="h4"
             component="h1"
           >
@@ -83,60 +76,5 @@ export default function Component() {
         ))}
       </Box>
     </ThemeProvider>
-  );
-}
-
-function EntryInfo({ id, name, surname, age, school }) {
-  return (
-    <Box sx={{ mr: 2 }}>
-      <Typography variant="h5" component="h2">
-        <span className="green-bold">
-          #{id} {name} {surname}
-        </span>
-      </Typography>
-      <Typography variant="body1">
-        <span className="green-bold">Wiek: </span>
-        {age}
-      </Typography>
-      <Typography variant="body1" color="text.secondary">
-        <span className="green-bold">Jednostka koordynująca: </span> {school}
-      </Typography>
-    </Box>
-  );
-}
-
-function EntryScore({ badgeColor, score }) {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <Box
-        sx={{
-          bgcolor: badgeColor,
-          width: 56,
-          height: 56,
-          borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#fff",
-        }}
-      >
-        <Typography
-          variant="body1"
-          component="div"
-          style={{ fontWeight: "bold" }}
-        >
-          {score}
-        </Typography>
-      </Box>
-      <Typography variant="body2" component="div">
-        suma
-      </Typography>
-    </Box>
   );
 }
