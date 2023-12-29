@@ -38,10 +38,6 @@ function EntryForm( {contestId, onSubmit} ) {
     // pop up after submiting
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
     const handleClose = () => {
         setOpen(false);
         navigate("/");
@@ -51,9 +47,17 @@ function EntryForm( {contestId, onSubmit} ) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        onSubmit({ contest: contestId, contestant_name: contestantName,
-            parent_name: parentName, contestant_surname: surname, email,
-            entry_title: entryTitle });
+        try {
+            const response = await onSubmit({ contest: contestId, contestant_name: contestantName,
+                parent_name: parentName, contestant_surname: surname, email,
+                entry_title: entryTitle });
+            if (response.ok) {
+                setOpen(true);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        
     };
 
     if (loading) {
@@ -111,7 +115,7 @@ function EntryForm( {contestId, onSubmit} ) {
                     </div>
 
                     <div className="submit">
-                        <SubmitButton text="Zgłoś swoją pracę" onClick={handleClickOpen}/>
+                        <SubmitButton text="Zgłoś swoją pracę" />
                         <Dialog
                             open={open}
                             onClose={handleClose}

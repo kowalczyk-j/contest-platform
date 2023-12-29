@@ -12,6 +12,8 @@ function CreateContestPage() {
   const handleFormSubmit = async (formData) => {
     let criterion = formData.criterion;
     let contestId;
+    let contestResponse, criterionResponse;
+
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}contests/`, {
         method: 'POST',
@@ -28,6 +30,7 @@ function CreateContestPage() {
       const result = await response.json();
       contestId = result.id;
       console.log(result);
+      contestResponse = response;
     } catch (error) {
       console.error('Error:', error);
     }
@@ -49,11 +52,12 @@ function CreateContestPage() {
 
         const result = await response.json();
         console.log(result);
+        criterionResponse = response;
       } catch (error) {
         console.error('Error:', error);
       }
     }
-    
+    return {contestResponse, criterionResponse};
   };
 
   const handleBack = () => { navigate("/"); };

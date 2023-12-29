@@ -29,10 +29,6 @@ function ContestForm({onSubmit}) {
     // pop up after submiting
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
     const handleClose = () => {
         setOpen(false);
         navigate("/");
@@ -63,7 +59,14 @@ function ContestForm({onSubmit}) {
         if (type === "inne") {
             finalType = otherType;
         }
-        onSubmit({ title, description, date_start: dateStart, date_end: dateEnd, individual, type: finalType, criterion });
+        try {
+            const {contestResponse, criterionResponse} = await onSubmit({ title, description, date_start: dateStart, date_end: dateEnd, individual, type: finalType, criterion });
+            if (contestResponse.ok && criterionResponse.ok) {
+                setOpen(true);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (
@@ -148,7 +151,7 @@ function ContestForm({onSubmit}) {
             </div>
 
             <div className="submit">
-                <SubmitButton text="Utwórz konkurs" onClick={handleClickOpen}/>
+                <SubmitButton text="Utwórz konkurs" />
                 <Dialog
                     open={open}
                     onClose={handleClose}

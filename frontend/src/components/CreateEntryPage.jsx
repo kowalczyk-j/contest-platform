@@ -10,8 +10,9 @@ function CreateEntryPage() {
     const { contestId } = useParams();
 
     const handleFormSubmit = async (formData) => {
+      let response;
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}entries/`, {
+        response = await fetch(`${import.meta.env.VITE_API_URL}entries/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -28,6 +29,7 @@ function CreateEntryPage() {
       } catch (error) {
         console.error('Error:', error);
       }
+      return response;
     };
   
     const handleBack = () => { navigate("/"); };
