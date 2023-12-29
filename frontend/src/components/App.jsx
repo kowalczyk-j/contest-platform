@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import CreateContestPage from './CreateContestPage';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import CreateContestPage from "./CreateContestPage";
 import HomePage from "./HomePage";
 import CreateEntryPage from './CreateEntryPage';
 
