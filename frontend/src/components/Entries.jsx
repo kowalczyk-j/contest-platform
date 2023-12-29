@@ -1,17 +1,17 @@
 import { Card, Typography, Box } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
-import "@fontsource/montserrat";
-
-const theme = createTheme({
-  typography: {
-    fontFamily: "Montserrat",
-  },
-});
+import montserrat from "../static/theme";
 
 export default function Component() {
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    navigate("/");
+  };
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={montserrat}>
       <Box
         sx={{
           px: 4,
@@ -40,7 +40,7 @@ export default function Component() {
             Prace konkursowe: “Rodzinna recenzja książki dla dzieci”
           </Typography>
         </Box>
-        <BackButton />
+        <BackButton clickHandler={handleBackClick} />
         <Card
           sx={{
             p: 4,
@@ -49,7 +49,7 @@ export default function Component() {
             alignItems: "center",
             mb: 2,
             maxWidth: "50%",
-            boxShadow: "0 0 5px 2px #95C21E",
+            boxShadow: "0 0 3px 1px #95C21E",
           }}
         >
           <EntryInfo name="John Doe" age={15} school="XYZ High School" />
@@ -94,15 +94,14 @@ function EntryInfo({ name, age, school }) {
   return (
     <Box sx={{ mr: 2 }}>
       <Typography variant="h5" component="h2">
-        <span style={{ color: "#95C21E", fontWeight: "bold" }}>{name} </span>
+        <span className="green-bold">{name} </span>
       </Typography>
       <Typography variant="body1">
-        <span style={{ color: "#95C21E", fontWeight: "bold" }}>Age: </span>
+        <span className="green-bold">Age: </span>
         {age}
       </Typography>
       <Typography variant="body1" color="text.secondary">
-        <span style={{ color: "#95C21E", fontWeight: "bold" }}>School: </span>{" "}
-        {school}
+        <span className="green-bold">School: </span> {school}
       </Typography>
     </Box>
   );
@@ -126,7 +125,7 @@ function EntryScore({ badgeColor, score }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#fff", // Ustawiamy kolor tekstu na biały
+          color: "#fff",
         }}
       >
         <Typography

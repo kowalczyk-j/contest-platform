@@ -12,6 +12,11 @@
     color: #95C21E;
 }
 
+.green-bold { 
+    color: #95C21E;
+    font-weight: bold;
+}
+
 .description, .dates, .contest-type {
     margin-top: 20px;
 }
