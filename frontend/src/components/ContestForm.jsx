@@ -16,6 +16,8 @@ import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
   
 
 function ContestForm({onSubmit}) {
+    const navigate = useNavigate();
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [dateStart, setDateStart] = useState('');
@@ -37,22 +39,31 @@ function ContestForm({onSubmit}) {
     };
 
     // adding new criterion
-    const [criteria, setCriteria] = useState([<CreateCriterion index="1"/>]);
+    const [criterion, setCriterion] = useState([{contest: '', description: '', maxRating: '' }]);
 
-    const handleClickAddCriterion = () => {
-        setCriteria(prevComponents => [...prevComponents, <CreateCriterion index={criteria.length + 1}/>]);
+    const handleCriterionChange = (index, criterionData) => {
+        setCriterion(prevCriteria => {
+            const newCriteria = [...prevCriteria];
+            newCriteria[index - 1] = criterionData;
+            return newCriteria;
+        });
     };
 
-    const navigate = useNavigate();
+    const [criteria, setCriteria] = useState([<CreateCriterion index="1"
+                                                onCriterionChange={handleCriterionChange} key="0"/>]);
+
+    const handleClickAddCriterion = () => {
+        setCriteria(prevComponents => [...prevComponents, <CreateCriterion index={criteria.length + 1}
+                                                            onCriterionChange={handleCriterionChange} key={criteria.length} />]);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         let finalType = type;
         if (type === "inne") {
             finalType = otherType;
-            console.log("yes");
         }
-        onSubmit({ title, description, date_start: dateStart, date_end: dateEnd, individual, type: finalType });
+        onSubmit({ title, description, date_start: dateStart, date_end: dateEnd, individual, type: finalType, criterion });
     };
 
     return (

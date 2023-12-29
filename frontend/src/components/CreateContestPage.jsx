@@ -10,6 +10,8 @@ function CreateContestPage() {
   const navigate = useNavigate();
 
   const handleFormSubmit = async (formData) => {
+    let criterion = formData.criterion;
+    let contestId;
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}contests/`, {
         method: 'POST',
@@ -24,10 +26,34 @@ function CreateContestPage() {
       }
 
       const result = await response.json();
+      contestId = result.id;
       console.log(result);
     } catch (error) {
       console.error('Error:', error);
     }
+
+    for (const c of criterion) {
+      try {
+        c.contest = contestId;
+        const response = await fetch(`${import.meta.env.VITE_API_URL}assessment-criterion/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(c),
+        });
+        console.log(JSON.stringify(c));
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        console.log(result);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    
   };
 
   const handleBack = () => { navigate("/"); };
