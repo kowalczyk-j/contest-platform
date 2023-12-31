@@ -1,43 +1,39 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardContent, Typography, TextField, Button, FormControl, FormControlLabel, Radio, RadioGroup, Grid } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import Logo from '../static/assets/Logo.png';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css'
 import axios from "axios";
 
 
-const LoginPage = () => {
+const RegistrationPage = () => {
     const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loginError, setLoginError] = useState('');
-    const [loginErrorMessage, setLoginErrorMessage] = useState('');
+    const [registrationError, setRegistrationError] = useState('');
+    const [registrationErrorMessage, setRegistrationErrorMessage] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = async (event) => {
+    const handleRegistration = async (event) => {
         event.preventDefault();
 
         const postData = {
             username: username,
+            email: email,
             password: password,
         };
 
-        axios.post(`${import.meta.env.VITE_API_URL}/api/login/`, postData, {
+        axios.post(`${import.meta.env.VITE_API_URL}/api/users/`, postData, {
             headers: {
                 'Content-Type': 'application/json',
             }
         })
-            .then(response => {
-                setLoginError(false);
-                const responseData = response.data;
-                const token = responseData.token;
-                sessionStorage.setItem("accessToken", token);
-            })
+            .then(setRegistrationError(false))
             .catch(error => {
-                console.log('Login failed:', error.message);
-                setLoginError(true);
-                setLoginErrorMessage(JSON.stringify(error.response.data, null, 2));
+                console.log(error);
+                setRegistrationError(true);
+                setRegistrationErrorMessage(JSON.stringify(error.response.data, null, 2));
             });
     };
 
@@ -54,12 +50,17 @@ const LoginPage = () => {
             <Grid container justifyContent="center" alignItems="center">
                 <Grid item>
                     <Card>
-                        <CardHeader title="Logowanie" />
+                        <CardHeader title="Rejestracja" />
                         <CardContent>
-                            <form onSubmit={handleLogin}>
+                            <form onSubmit={handleRegistration}>
                                 <div>
                                     <FormControl style={{ display: "flex", margin: "2%" }} className="flex flex-col space-y-4">
                                         <TextField id="username" label="Nazwa użytkownika" value={username} onChange={(e) => setUsername(e.target.value)} />
+                                    </FormControl>
+                                </div>
+                                <div>
+                                    <FormControl style={{ display: "flex", margin: "2%" }} className="flex flex-col space-y-4">
+                                        <TextField id="email" label="Adres email" value={email} onChange={(e) => setEmail(e.target.value)} />
                                     </FormControl>
                                 </div>
                                 <div>
@@ -71,8 +72,8 @@ const LoginPage = () => {
                                     <Popup
                                         trigger={
                                             <Button variant="contained" style={{ backgroundColor: '#95C21E', color: 'white', width: "225px" }} type="submit"
-                                                onClick={loginError ? close : () => handleBack()}>
-                                                Zaloguj się
+                                                onClick={registrationError ? close : () => handleBack()}>
+                                                Zarejestruj się
                                             </Button>
                                         }
                                         modal
@@ -87,19 +88,19 @@ const LoginPage = () => {
                                         {(close) => (
                                             <div className='modal'>
                                                 <div className='content'>
-                                                    {loginError ? (
+                                                    {registrationError ? (
                                                         <React.Fragment>
-                                                            Logowanie nieudane, spróbuj ponownie.
+                                                            Rejestracja nieudana, spróbuj ponownie.
                                                             <br /><br />
-                                                            {loginErrorMessage}
+                                                            {registrationErrorMessage}
                                                         </React.Fragment>
                                                     ) : (
-                                                        'Pomyślnie zalogowano!'
+                                                        'Pomyślnie zarejestrowano!'
                                                     )}
                                                 </div>
                                                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                                                     <Button variant="contained" style={{ backgroundColor: '#95C21E', color: 'white', width: "80px" }}
-                                                        onClick={loginError ? close : () => handleBack()}>
+                                                        onClick={registrationError ? close : () => handleBack()}>
                                                         OK
                                                     </Button>
                                                 </div>
@@ -117,4 +118,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default RegistrationPage;

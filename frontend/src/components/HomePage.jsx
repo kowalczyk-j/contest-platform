@@ -30,10 +30,10 @@ const ContestIndexPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}contests/`, {
+    axios.get(`${import.meta.env.VITE_API_URL}api/contests/`, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Token 2336386141986178201499d767a9f556f04e2b67'
+        'Authorization': 'Token ' + sessionStorage.getItem("accessToken")
       }
     }
     ).then((ret) => {

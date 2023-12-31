@@ -1,9 +1,12 @@
 from rest_framework.routers import DefaultRouter
 from .views import ContestViewSet, UserViewSet
+from django.urls import include, path
 
 
-contest_router = DefaultRouter()
-contest_router.register(r"contests", ContestViewSet)
+router = DefaultRouter()
+router.register(r"contests", ContestViewSet)
+router.register(r"users", UserViewSet)
 
-user_router = DefaultRouter()
-user_router.register(r"user", UserViewSet)
+urlpatterns = [
+    path("", include(router.urls)),
+]

@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.contrib.auth.models import AbstractUser
 
 
 class Contest(models.Model):
@@ -15,3 +16,7 @@ class Contest(models.Model):
 
     def __str__(self):
         return f"Contest: {self.title, self.description}"
+
+
+class User(AbstractUser):
+    pass

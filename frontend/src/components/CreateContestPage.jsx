@@ -31,11 +31,11 @@ function CreateContestPage() {
       type: type
     };
 
-    axios.post(`${import.meta.env.VITE_API_URL}contests/`, postData,
+    axios.post(`${import.meta.env.VITE_API_URL}api/contests/`, postData,
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Token 2336386141986178201499d767a9f556f04e2b67'
+          'Authorization': 'Token ' + sessionStorage.getItem("accessToken")
         }
       })
       .then(response => {
