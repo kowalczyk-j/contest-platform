@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CreateContestPage from './CreateContestPage';
 import HomePage from "./HomePage";
 import AvailableEntries from './AvailableEntries';
+import MineCard from './MineCard';
 
 function App() {
   return (
