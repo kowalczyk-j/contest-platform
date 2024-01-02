@@ -35,7 +35,7 @@ const AvailableEntries = () => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}contests`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}api/contests`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

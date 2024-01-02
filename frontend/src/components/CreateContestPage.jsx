@@ -4,7 +4,6 @@ import 'reactjs-popup/dist/index.css'
 import Header from './Header';
 import BackButton from './BackButton';
 import ContestForm from './ContestForm';
-import axios from "axios";
 
 
 function CreateContestPage() {
@@ -15,64 +14,67 @@ function CreateContestPage() {
     let contestId;
     let contestResponse, criterionResponse;
 
-
-    axios.post(`${import.meta.env.VITE_API_URL}api/contests/`, formData,
-      {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/contests/`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Token ' + sessionStorage.getItem("accessToken")
-        }
-      }).then(response => {
-        if (response.status === 200) {
-          console.log(response.data);
-          contestId = response.json().id;
-          contestResponse = response;
-
-        } else {
-          console.log(response)
-          throw new Error('Network response was not ok');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
+        },
+        body: JSON.stringify(formData),
       });
+      console.log(JSON.stringify(formData));
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
-    for (const c of criterion) {
-      c.contest = contestId;
-      axios.post(`${import.meta.env.VITE_API_URL}api/assessment-criterion/`, c, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }).then(response => {
-        if (response.status === 200) {
-          console.log(JSON.stringify(c))
-        }
-        else {
-          throw new Error('Network response was not ok');
-        }
-      }).catch(error => {
-        console.error('Error:', error);
-      });
-      criterionResponse = response;
-      console.log(response.json());
+      const result = await response.json();
+      contestId = result.id;
+      console.log(result);
+      contestResponse = response;
+    } catch (error) {
+      console.error('Error:', error);
     }
 
-    const handleBack = () => { navigate("/"); };
+    for (const c of criterion) {
+      try {
+        c.contest = contestId;
+        const response = await fetch(`${import.meta.env.VITE_API_URL}api/assessment-criterion/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(c),
+        });
+        console.log(JSON.stringify(c));
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
 
-    return (
-      <div>
-        <Header />
-        <div className="main">
-          <div className="back-btn">
-            <BackButton clickHandler={handleBack} />
-          </div>
-          <div className="form">
-            <ContestForm onSubmit={handleFormSubmit} />
-          </div>
+        const result = await response.json();
+        console.log(result);
+        criterionResponse = response;
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    return { contestResponse, criterionResponse };
+  };
+
+  const handleBack = () => { navigate("/"); };
+
+  return (
+    <div>
+      <Header />
+      <div className="main">
+        <div className="back-btn">
+          <BackButton clickHandler={handleBack} />
+        </div>
+        <div className="form">
+          <ContestForm onSubmit={handleFormSubmit} />
         </div>
       </div>
-    )
-  }
-};
+    </div>
+  )
+}
 
 export default CreateContestPage;

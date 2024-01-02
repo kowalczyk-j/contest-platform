@@ -17,12 +17,12 @@ export default function Entries() {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_URL}entries/?contest=${contestId}`)
+      .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`)
       .then((response) => setEntries(response.data))
       .catch((error) => console.error("Error fetching data: ", error));
 
     axios
-      .get(`${import.meta.env.VITE_API_URL}contests/${contestId}/`)
+      .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`)
       .then((response) => setContest(response.data))
       .catch((error) => console.error("Error fetching data: ", error));
   }, [contestId]);
