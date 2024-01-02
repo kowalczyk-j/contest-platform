@@ -13,6 +13,7 @@ import SubmitButton from './SubmitButton';
 import CreateCriterion from './CreateCriterion';
 import TextButton from './TextButton';
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import 'dayjs/locale/pl';
   
 
 function ContestForm({onSubmit}) {
@@ -91,7 +92,7 @@ function ContestForm({onSubmit}) {
             </div>
 
             <div className="dates">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider adapterLocale='pl' dateAdapter={AdapterDayjs}>
                     <DatePicker className="date"
                         label="Data rozpoczęcia"
                         defaultValue={dayjs()}

@@ -104,7 +104,7 @@ function EntryForm( {contestId, onSubmit} ) {
                 </div>
 
                 <div className="checkbox">
-                    <FormControlLabel control={<Checkbox />} label={
+                    <FormControlLabel required control={<Checkbox />} label={
                         <Typography style={{fontSize: "0.7rem", fontWeight: "lighter"}}>Wyrażam zgodę na przetwarzanie zawartych w niniejszym formularzu zgłoszeniowym moich danych osobowych w postaci imienia, nazwiska, telefonu i maila kontaktowego przez Fundację Bo Warto, z siedzibą w Warszawie (00-713) przy ul. Batalionu AK „Bałtyk 7/U3, w celu udziału w Konkursie Rodzinna recenzja książki dla dzieci, zgodnie z art. 6 ust. 1 lit. a Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 roku w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO). Jeśli zechce Pan/Pani usunąć swoje dane proszę o kontakt z Fundacją BO WARTO, tel. 602 228 732 mail: biuro@fundacjabowarto.pl.</Typography>
                     }/>
                 </div>
