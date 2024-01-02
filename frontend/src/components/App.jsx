@@ -11,7 +11,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/create-contest" element={<CreateContestPage />} />
         <Route path="/contest/:contestId" element={<CreateEntryPage />} />
-        <Route path="/entries" element={<Entries />} />
+        <Route path="/entries/:contestId" element={<Entries />} />
       </Routes>
     </Router>
   );
