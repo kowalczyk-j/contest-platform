@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.contrib.auth.models import AbstractUser
 
 
 class Contest(models.Model):
@@ -7,7 +8,8 @@ class Contest(models.Model):
     description = models.CharField(max_length=1800, default="")
     date_start = models.DateField(default=date(2023, 3, 15))
     date_end = models.DateField(default=date.today)
-    individual = models.BooleanField(default=True)  # 1 - konkurs indywidualny; 0 - konkurs grupowy
+    # 1 - konkurs indywidualny; 0 - konkurs grupowy
+    individual = models.BooleanField(default=True)
     type = models.CharField(max_length=50, default="")
     rules_pdf = models.BinaryField(null=True)
     poster_img = models.BinaryField(null=True)
@@ -41,3 +43,7 @@ class Entry(models.Model):
     email = models.EmailField(null=True)
     entry_title = models.CharField(max_length=100)
     entry_file = models.BinaryField(null=True)
+
+
+class User(AbstractUser):
+    pass
