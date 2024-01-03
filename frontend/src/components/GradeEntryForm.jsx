@@ -11,7 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 
-function MineCard() {
+function GradeEntryForm() {
   return(
     <>
       <div className="card">
@@ -116,4 +116,4 @@ function MineCard() {
 } // TODO: ogarnąć themeProvidera, dodać przyciski pobierania i zatwierdzania oceny, przetestować z dużym zdjęciem, odstęp z lewej strony dla przycisku, stopień ocen
 // !!! TODO: Dodać handleChange do przycisku (zakładka)
 
-export default MineCard
+export default GradeEntryForm
