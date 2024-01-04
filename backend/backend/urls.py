@@ -19,6 +19,7 @@ from django.urls import include, path
 from contest_platform.urls import router
 from rest_framework.authtoken.views import obtain_auth_token
 from contest_platform.views import logout
+from contest_platform.views import UserViewSet
 
 
 urlpatterns = [

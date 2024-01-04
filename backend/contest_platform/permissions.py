@@ -13,7 +13,7 @@ class UserPermission(permissions.BasePermission):
             return True
         if view.action == "list":
             return request.user.is_authenticated and request.user.is_staff
-        elif view.action in ["retrieve", "update", "partial_update", "destroy"]:
+        elif view.action in ["retrieve", "update", "partial_update", "destroy", "current_user"]:
             return True
         else:
             return False
@@ -25,7 +25,7 @@ class UserPermission(permissions.BasePermission):
         if not request.user.is_authenticated:
             return False
 
-        if view.action in ["retrieve", "update", "partial_update"]:
+        if view.action in ["retrieve", "update", "partial_update", "current_user"]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
         elif view.action == "destroy":
