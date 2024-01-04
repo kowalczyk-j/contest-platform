@@ -12,7 +12,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-function EntryForm( {contestId, onSubmit} ) {
+function EntryForm({ contestId, onSubmit }) {
     const [contestantName, setContestantName] = useState('');
     const [parentName, setParentName] = useState('');
     const [surname, setSurname] = useState('');
@@ -23,16 +23,16 @@ function EntryForm( {contestId, onSubmit} ) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}contests/${contestId}/`)
-        .then(response => {
-            console.log(response.data);
-            setContest(response.data);
-            setLoading(false);
-        })
-        .catch(error => {
-            console.error(error);
-            setLoading(false);
-        });
+        axios.get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`)
+            .then(response => {
+                console.log(response.data);
+                setContest(response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error(error);
+                setLoading(false);
+            });
     }, [contestId]);
 
     // pop up after submiting
@@ -48,16 +48,18 @@ function EntryForm( {contestId, onSubmit} ) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await onSubmit({ contest: contestId, contestant_name: contestantName,
+            const response = await onSubmit({
+                contest: contestId, contestant_name: contestantName,
                 parent_name: parentName, contestant_surname: surname, email,
-                entry_title: entryTitle });
+                entry_title: entryTitle
+            });
             if (response.ok) {
                 setOpen(true);
             }
         } catch (error) {
             console.error('Error:', error);
         }
-        
+
     };
 
     if (loading) {
@@ -68,10 +70,10 @@ function EntryForm( {contestId, onSubmit} ) {
 
     return (
         <>
-            <Typography variant="h4" style={{fontWeight: "bold", letterSpacing: 1.3}}>{contest.title}</Typography>
-            <Typography variant="body1" style={{fontWeight: "lighter"}}>{contest.description}</Typography>
-            <TextButton style={{fontSize: "1rem", color: "#95C21E"}} endIcon={<ArrowForwardIcon />}>Regulamin</TextButton>
-            
+            <Typography variant="h4" style={{ fontWeight: "bold", letterSpacing: 1.3 }}>{contest.title}</Typography>
+            <Typography variant="body1" style={{ fontWeight: "lighter" }}>{contest.description}</Typography>
+            <TextButton style={{ fontSize: "1rem", color: "#95C21E" }} endIcon={<ArrowForwardIcon />}>Regulamin</TextButton>
+
             <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="name">
                     <FormControl className="flex flex-col space-y-4" fullWidth={true}>
@@ -105,8 +107,8 @@ function EntryForm( {contestId, onSubmit} ) {
 
                 <div className="checkbox">
                     <FormControlLabel required control={<Checkbox />} label={
-                        <Typography style={{fontSize: "0.7rem", fontWeight: "lighter"}}>Wyrażam zgodę na przetwarzanie zawartych w niniejszym formularzu zgłoszeniowym moich danych osobowych w postaci imienia, nazwiska, telefonu i maila kontaktowego przez Fundację Bo Warto, z siedzibą w Warszawie (00-713) przy ul. Batalionu AK „Bałtyk 7/U3, w celu udziału w Konkursie Rodzinna recenzja książki dla dzieci, zgodnie z art. 6 ust. 1 lit. a Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 roku w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO). Jeśli zechce Pan/Pani usunąć swoje dane proszę o kontakt z Fundacją BO WARTO, tel. 602 228 732 mail: biuro@fundacjabowarto.pl.</Typography>
-                    }/>
+                        <Typography style={{ fontSize: "0.7rem", fontWeight: "lighter" }}>Wyrażam zgodę na przetwarzanie zawartych w niniejszym formularzu zgłoszeniowym moich danych osobowych w postaci imienia, nazwiska, telefonu i maila kontaktowego przez Fundację Bo Warto, z siedzibą w Warszawie (00-713) przy ul. Batalionu AK „Bałtyk 7/U3, w celu udziału w Konkursie Rodzinna recenzja książki dla dzieci, zgodnie z art. 6 ust. 1 lit. a Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 roku w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO). Jeśli zechce Pan/Pani usunąć swoje dane proszę o kontakt z Fundacją BO WARTO, tel. 602 228 732 mail: biuro@fundacjabowarto.pl.</Typography>
+                    } />
                 </div>
 
                 <div className="entry-buttons">
@@ -130,7 +132,7 @@ function EntryForm( {contestId, onSubmit} ) {
                 </div>
             </form>
         </>
-        
+
     )
 }
 

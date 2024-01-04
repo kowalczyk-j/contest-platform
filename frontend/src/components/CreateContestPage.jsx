@@ -15,7 +15,7 @@ function CreateContestPage() {
     let contestResponse, criterionResponse;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}contests/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/contests/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ function CreateContestPage() {
     for (const c of criterion) {
       try {
         c.contest = contestId;
-        const response = await fetch(`${import.meta.env.VITE_API_URL}assessment-criterion/`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}api/assessment-criterion/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -57,17 +57,17 @@ function CreateContestPage() {
         console.error('Error:', error);
       }
     }
-    return {contestResponse, criterionResponse};
+    return { contestResponse, criterionResponse };
   };
 
   const handleBack = () => { navigate("/"); };
 
   return (
     <div>
-      <Header  />
+      <Header />
       <div className="main">
         <div className="back-btn">
-          <BackButton clickHandler={handleBack}/>
+          <BackButton clickHandler={handleBack} />
         </div>
         <div className="form">
           <ContestForm onSubmit={handleFormSubmit} />

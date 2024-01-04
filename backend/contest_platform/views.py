@@ -1,39 +1,35 @@
 from rest_framework import status
-from rest_framework import viewsets
 from rest_framework.response import Response
-from .models import Address, AssessmentCriterion, Contest, Entry
-from .serializer import (AddressSerializer, AssessmentCriterionSerializer,
-                         ContestSerializer, EntrySerializer)
+from .models import Address, AssessmentCriterion, Contest, Entry, User
+from .serializers import (AddressSerializer, AssessmentCriterionSerializer,
+                          ContestSerializer, EntrySerializer, UserSerializer)
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import api_view
+from rest_framework.authentication import TokenAuthentication
+from .permissions import UserPermission, ContestPermission
 
 
-class ContestViewSet(viewsets.ModelViewSet):
+@api_view(["POST",])
+def logout(request):
+    if request.method == "POST":
+        request.user.auth_token.delete()
+        return Response({"message": "user has been logged out"}, status=status.HTTP_200_OK)
+
+
+class ContestViewSet(ModelViewSet):
     queryset = Contest.objects.all()
     serializer_class = ContestSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def get_object(self):
-        return self.get_queryset().get(pk=self.kwargs["pk"])
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [ContestPermission]
 
 
-class EntryViewSet(viewsets.ModelViewSet):
+class EntryViewSet(ModelViewSet):
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [EntryPermission]
+    # TODO
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
     def get_queryset(self):
         queryset = Entry.objects.all()
         contest_id = self.request.query_params.get('contest', None)
@@ -42,19 +38,25 @@ class EntryViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class AddressViewSet(viewsets.ModelViewSet):
+class AddressViewSet(ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [AddressPermission]
+    # TODO
 
 
-class AssessmentCriterionViewSet(viewsets.ModelViewSet):
+class AssessmentCriterionViewSet(ModelViewSet):
     queryset = AssessmentCriterion.objects.all()
     serializer_class = AssessmentCriterionSerializer
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [AssesmentPermission]
+    # TODO
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserViewSet(ModelViewSet):
+
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [UserPermission]

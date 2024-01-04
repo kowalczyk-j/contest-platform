@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Logo from "../static/assets/Logo.png";
+import axios from "axios";
 
 const GreenButton = styled(Button)({
   backgroundColor: "#95C21E",
@@ -29,20 +30,15 @@ const ContestIndexPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchContests = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}contests`);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        setContests(result);
-      } catch (error) {
-        console.error("Error:", error);
+    axios.get(`${import.meta.env.VITE_API_URL}api/contests/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.getItem("accessToken")
       }
-    };
-
-    fetchContests();
+    }
+    ).then((ret) => {
+      setContests(ret.data)
+    }).catch(error => console.error("Error:", error));
   }, []);
 
   const handleContestClick = (contest) => {
