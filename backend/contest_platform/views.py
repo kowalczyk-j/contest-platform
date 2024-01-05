@@ -7,6 +7,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import api_view
 from rest_framework.authentication import TokenAuthentication
 from .permissions import UserPermission, ContestPermission
+from rest_framework.decorators import action
+from django.contrib.auth import authenticate
 
 
 @api_view(["POST",])
@@ -60,3 +62,9 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [UserPermission]
+
+    @action(detail=False, methods=['get'])
+    def current_user(self, request):
+        user = request.user
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)

@@ -46,4 +46,4 @@ class Entry(models.Model):
 
 
 class User(AbstractUser):
-    pass
+    is_jury = models.BooleanField(default=False)

@@ -7,7 +7,7 @@ router.register(r"contests", ContestViewSet)
 router.register(r"entries", EntryViewSet)
 router.register(r"addresses", AddressViewSet)
 router.register(r"assessment-criterion", AssessmentCriterionViewSet)
-router.register(r"users", UserViewSet)
+router.register(r"users", UserViewSet),
 
 urlpatterns = [
     path("", include(router.urls)),
