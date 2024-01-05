@@ -57,3 +57,22 @@ class ContestPermission(permissions.BasePermission):
             return request.user.is_authenticated and request.user.is_staff
         else:
             return False
+
+
+class EntryPermission(permissions.BasePermission):
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
+        if view.action == "list":
+            return request.user.is_authenticated and request.user.is_staff
+        if view.action == "create":
+            return True
+        if view.action in ["retrieve", "update", "partial_update", "destroy"]:
+            return False
+
+
+class AssessmentCriterion(permissions.BasePermission):
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
+        if view.action == "list":
+            return request.user.is_authenticated and request.user.is_staff
+        if view.action == "create":
+            return request.user.is_authenticated and request.user.is_staff
+        

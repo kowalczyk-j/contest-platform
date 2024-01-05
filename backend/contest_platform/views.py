@@ -6,7 +6,7 @@ from .serializers import (AddressSerializer, AssessmentCriterionSerializer,
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import api_view
 from rest_framework.authentication import TokenAuthentication
-from .permissions import UserPermission, ContestPermission
+from .permissions import UserPermission, ContestPermission, EntryPermission
 from rest_framework.decorators import action
 from django.contrib.auth import authenticate
 
@@ -21,15 +21,15 @@ def logout(request):
 class ContestViewSet(ModelViewSet):
     queryset = Contest.objects.all()
     serializer_class = ContestSerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [ContestPermission]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [ContestPermission]
 
 
 class EntryViewSet(ModelViewSet):
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [EntryPermission]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [EntryPermission]
     # TODO
 
     def get_queryset(self):
