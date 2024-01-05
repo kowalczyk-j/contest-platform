@@ -56,9 +56,28 @@ function ContestForm({onSubmit}) {
     const [criteria, setCriteria] = useState([<CreateCriterion index="1"
                                                 onCriterionChange={handleCriterionChange} key="0"/>]);
 
+    const handleClickRemoveCriterion = (index) => {
+        setCriteria(prevComponents => {
+            const newComponents = prevComponents.slice(0, index);
+            for (let i = index; i < prevComponents.length - 1; i++) {
+                newComponents.push(<CreateCriterion index={i + 1} onCriterionChange={handleCriterionChange} onCriterionRemove={() => {handleClickRemoveCriterion(i)}} key={i}/>);
+            }
+            return newComponents;
+        });
+        
+        setCriterion(prevCriterion => {
+            const newCriterion = [...prevCriterion];
+            newCriterion.splice(index, 1);
+            return newCriterion;
+        });
+    };
+
     const handleClickAddCriterion = () => {
         setCriteria(prevComponents => [...prevComponents, <CreateCriterion index={criteria.length + 1}
-                                                            onCriterionChange={handleCriterionChange} key={criteria.length} />]);
+                                                            onCriterionChange={handleCriterionChange}
+                                                            onCriterionRemove={() => {handleClickRemoveCriterion(criteria.length)}}
+                                                            key={criteria.length} />]);
+
     };
 
     const handleSubmit = async (event) => {
