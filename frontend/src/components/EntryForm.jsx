@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, FormControl, Button, Typography } from '@mui/material';
+import { TextField, FormControl, Button, Typography, DialogContent, DialogContentText } from '@mui/material';
 import FileUploadButton from './FileUploadButton';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -23,7 +23,12 @@ function EntryForm({ contestId, onSubmit }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`)
+        axios.get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + sessionStorage.getItem("accessToken")
+            }
+        })
             .then(response => {
                 console.log(response.data);
                 setContest(response.data);
@@ -37,11 +42,16 @@ function EntryForm({ contestId, onSubmit }) {
 
     // pop up after submiting
     const [open, setOpen] = React.useState(false);
+    const [openError, setOpenError] = React.useState(false);
 
     const handleClose = () => {
         setOpen(false);
         navigate("/");
     };
+
+    const handleCloseError = () => {
+        setOpenError(false);
+    }
 
     const navigate = useNavigate();
 
@@ -53,10 +63,13 @@ function EntryForm({ contestId, onSubmit }) {
                 parent_name: parentName, contestant_surname: surname, email,
                 entry_title: entryTitle
             });
-            if (response.ok) {
+            if (response.status === 201) {
                 setOpen(true);
+            } else {
+                setOpenError(true);
             }
         } catch (error) {
+            setOpenError(true);
             console.error('Error:', error);
         }
 
@@ -124,8 +137,28 @@ function EntryForm({ contestId, onSubmit }) {
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description">
                             <DialogTitle id="alert-dialog-title"> {"Dodano nowe zgłoszenie konkursowe"} </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Zostaniesz przekierowany do strony głównej
+                                </DialogContentText>
+                            </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose} autoFocus> Ok </Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Dialog
+                            open={openError}
+                            onClose={handleCloseError}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description">
+                            <DialogTitle id="alert-dialog-title"> {"Wystąpił błąd przy dodawaniu zgłoszenia"} </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Upewnij się, że wszystkie pola są wypełnione
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleCloseError} autoFocus> Ok </Button>
                             </DialogActions>
                         </Dialog>
                     </div>
