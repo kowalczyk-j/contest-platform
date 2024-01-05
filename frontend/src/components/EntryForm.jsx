@@ -90,31 +90,31 @@ function EntryForm({ contestId, onSubmit }) {
             <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="name">
                     <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField label="Imię uczestnika" value={contestantName} onChange={(e) => setContestantName(e.target.value)} />
+                        <TextField required label="Imię uczestnika" value={contestantName} onChange={(e) => setContestantName(e.target.value)} />
                     </FormControl>
                 </div>
 
                 <div className="surname">
                     <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField label="Nazwisko uczestnika" value={surname} onChange={(e) => setSurname(e.target.value)} />
+                        <TextField required label="Nazwisko uczestnika" value={surname} onChange={(e) => setSurname(e.target.value)} />
                     </FormControl>
                 </div>
 
                 <div className="parent-name">
                     <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField label="Imię rodzica uczestnika" value={parentName} onChange={(e) => setParentName(e.target.value)} />
+                        <TextField required label="Imię rodzica uczestnika" value={parentName} onChange={(e) => setParentName(e.target.value)} />
                     </FormControl>
                 </div>
 
                 <div className="email">
                     <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField label="Adres e-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <TextField required label="Adres e-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </FormControl>
                 </div>
 
                 <div className="entry-title">
                     <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField label="Tytuł pracy" value={entryTitle} onChange={(e) => setEntryTitle(e.target.value)} />
+                        <TextField required label="Tytuł pracy" value={entryTitle} onChange={(e) => setEntryTitle(e.target.value)} />
                     </FormControl>
                 </div>
 
@@ -154,7 +154,7 @@ function EntryForm({ contestId, onSubmit }) {
                             <DialogTitle id="alert-dialog-title"> {"Wystąpił błąd przy dodawaniu zgłoszenia"} </DialogTitle>
                             <DialogContent>
                                 <DialogContentText id="alert-dialog-description">
-                                    Upewnij się, że wszystkie pola są wypełnione
+                                    Upewnij się, że wszystkie pola są wypełnione poprawnie
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
