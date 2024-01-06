@@ -8,14 +8,13 @@ import DialogActions from '@mui/material/DialogActions';
 import SubmitButton from './SubmitButton';
 import axios from 'axios';
 import TextButton from './TextButton';
+import CreatePerson from './CreatePerson';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 
 function EntryForm({ contestId, onSubmit }) {
-    const [contestantName, setContestantName] = useState('');
-    const [parentName, setParentName] = useState('');
-    const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
     const [entryTitle, setEntryTitle] = useState('');
 
@@ -55,12 +54,48 @@ function EntryForm({ contestId, onSubmit }) {
 
     const navigate = useNavigate();
 
+    const [persons, setPersons] = React.useState([{name: '', surname: ''}]);
+    const handlePersonChange = (index, personData) => {
+        setPersons(prevPersons => {
+            const newPersons = [...prevPersons];
+            newPersons[index] = personData;
+            return newPersons;
+        })
+    };
+
+    const [personComponents, setPersonComponents] = React.useState([<CreatePerson index={0}
+                                                                    onPersonChange={handlePersonChange}
+                                                                    key={0}/>]);
+    const handleClickAddPerson = () => {
+        setPersonComponents(prevComponents => [...prevComponents, <CreatePerson
+                                                                   index={personComponents.length}
+                                                                   onPersonChange={handlePersonChange}
+                                                                   key={personComponents.length}/>])
+    };
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
+        const contestants = [];
+        const requests = persons.map(person => {
+            return axios.post(`${import.meta.env.VITE_API_URL}/api/person/`, person, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Token ' + sessionStorage.getItem('accessToken')
+                }
+            }).then((response) => {
+                if (response.status !== 201) {
+                    setOpenError(true);
+                }
+                contestants.push(response.data.id);
+            }).catch(error => {
+                setOpenError(true);
+                console.error('Error:', error);
+            });
+        });
+    
+        Promise.all(requests).then(async () => {
             const response = await onSubmit({
-                contest: contestId, contestant_name: contestantName,
-                parent_name: parentName, contestant_surname: surname, email,
+                contest: contestId, contestants, email,
                 entry_title: entryTitle
             });
             if (response.status === 201) {
@@ -68,11 +103,7 @@ function EntryForm({ contestId, onSubmit }) {
             } else {
                 setOpenError(true);
             }
-        } catch (error) {
-            setOpenError(true);
-            console.error('Error:', error);
-        }
-
+        });
     };
 
     if (loading) {
@@ -88,23 +119,16 @@ function EntryForm({ contestId, onSubmit }) {
             <TextButton style={{ fontSize: "1rem", color: "#95C21E" }} endIcon={<ArrowForwardIcon />}>Regulamin</TextButton>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
-                <div className="name">
-                    <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField required label="Imię uczestnika" value={contestantName} onChange={(e) => setContestantName(e.target.value)} />
-                    </FormControl>
-                </div>
-
-                <div className="surname">
-                    <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField required label="Nazwisko uczestnika" value={surname} onChange={(e) => setSurname(e.target.value)} />
-                    </FormControl>
-                </div>
-
-                <div className="parent-name">
-                    <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField required label="Imię rodzica uczestnika" value={parentName} onChange={(e) => setParentName(e.target.value)} />
-                    </FormControl>
-                </div>
+                {personComponents}
+                {!contest.individual && (
+                    <TextButton
+                        style={{fontSize: 16, marginTop: "10px"}}
+                        startIcon={<AddCircleOutline style={{color: "#95C21E"}} />}
+                        onClick={handleClickAddPerson}>
+                        Dodaj uczestnika
+                    </TextButton>
+                )}
+                
 
                 <div className="email">
                     <FormControl className="flex flex-col space-y-4" fullWidth={true}>

@@ -43,21 +43,21 @@ function ContestForm({onSubmit}) {
     }
 
     // adding new criterion
-    const [criterion, setCriterion] = useState([{contest: '', description: '', maxRating: '' }]);
+    const [criteria, setCriteria] = useState([{contest: '', description: '', maxRating: '' }]);
 
     const handleCriterionChange = (index, criterionData) => {
-        setCriterion(prevCriteria => {
+        setCriteria(prevCriteria => {
             const newCriteria = [...prevCriteria];
             newCriteria[index - 1] = criterionData;
             return newCriteria;
         });
     };
 
-    const [criteria, setCriteria] = useState([<CreateCriterion index="1"
-                                                onCriterionChange={handleCriterionChange} key="0"/>]);
+    const [criterionComponents, setCriterionComponents] = useState([<CreateCriterion index="1"
+        onCriterionChange={handleCriterionChange} key="0"/>]);
 
     const handleClickRemoveCriterion = (index) => {
-        setCriteria(prevComponents => {
+        setCriterionComponents(prevComponents => {
             const newComponents = prevComponents.slice(0, index);
             for (let i = index; i < prevComponents.length - 1; i++) {
                 newComponents.push(<CreateCriterion index={i + 1} onCriterionChange={handleCriterionChange} onCriterionRemove={() => {handleClickRemoveCriterion(i)}} key={i}/>);
@@ -65,7 +65,7 @@ function ContestForm({onSubmit}) {
             return newComponents;
         });
         
-        setCriterion(prevCriterion => {
+        setCriteria(prevCriterion => {
             const newCriterion = [...prevCriterion];
             newCriterion.splice(index, 1);
             return newCriterion;
@@ -73,10 +73,10 @@ function ContestForm({onSubmit}) {
     };
 
     const handleClickAddCriterion = () => {
-        setCriteria(prevComponents => [...prevComponents, <CreateCriterion index={criteria.length + 1}
+        setCriterionComponents(prevComponents => [...prevComponents, <CreateCriterion index={criterionComponents.length + 1}
                                                             onCriterionChange={handleCriterionChange}
-                                                            onCriterionRemove={() => {handleClickRemoveCriterion(criteria.length)}}
-                                                            key={criteria.length} />]);
+                                                            onCriterionRemove={() => {handleClickRemoveCriterion(criterionComponents.length)}}
+                                                            key={criterionComponents.length} />]);
 
     };
 
@@ -87,7 +87,7 @@ function ContestForm({onSubmit}) {
             finalType = otherType;
         }
         try {
-            const {contestResponse, criterionResponse} = await onSubmit({ title, description, date_start: dateStart, date_end: dateEnd, individual, type: finalType, criterion });
+            const {contestResponse, criterionResponse} = await onSubmit({ title, description, date_start: dateStart, date_end: dateEnd, individual, type: finalType, criterion: criteria });
             if (contestResponse.status === 201 && criterionResponse.every(response => response.status === 201)) {
                 setOpen(true);
             }
@@ -169,7 +169,7 @@ function ContestForm({onSubmit}) {
 
             <div className="criteria">
                 <Typography component="legend">Kryteria oceny:</Typography>
-                {criteria}
+                {criterionComponents}
                 <TextButton
                     style={{fontSize: 16, marginTop: "10px"}}
                     startIcon={<AddCircleOutline style={{color: "#95C21E"}} />}

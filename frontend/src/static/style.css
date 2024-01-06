@@ -107,6 +107,15 @@ body {
     width: 380px;
 }
 
+.person {
+    display: flex;
+    justify-content: space-between;
+}
+
+.name, .surname {
+    width: 290px;
+}
+
 .max-rating {
     width: 150px;
 }

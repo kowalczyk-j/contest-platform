@@ -1,4 +1,4 @@
-from .models import Address, AssessmentCriterion, Contest, Entry
+from .models import Address, AssessmentCriterion, Contest, Entry, Person
 from .models import User
 from rest_framework import serializers
 
@@ -35,6 +35,12 @@ class ContestSerializer(serializers.ModelSerializer):
                   "type",
                   "rules_pdf",
                   "poster_img")
+        
+
+class PersonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = ("id", "name", "surname")
 
 
 class EntrySerializer(serializers.ModelSerializer):
@@ -42,9 +48,7 @@ class EntrySerializer(serializers.ModelSerializer):
         model = Entry
         fields = ("id",
                   "contest",
-                  "contestant_name",
-                  "parent_name",
-                  "contestant_surname",
+                  "contestants",
                   "address",
                   "email",
                   "entry_title",

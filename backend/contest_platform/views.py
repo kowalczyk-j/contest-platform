@@ -1,8 +1,9 @@
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Address, AssessmentCriterion, Contest, Entry, User
+from .models import Address, AssessmentCriterion, Contest, Entry, User, Person
 from .serializers import (AddressSerializer, AssessmentCriterionSerializer,
-                          ContestSerializer, EntrySerializer, UserSerializer)
+                          ContestSerializer, EntrySerializer, UserSerializer,
+                          PersonSerializer)
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import api_view
 from rest_framework.authentication import TokenAuthentication
@@ -23,6 +24,11 @@ class ContestViewSet(ModelViewSet):
     serializer_class = ContestSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [ContestPermission]
+
+
+class PersonViewSet(ModelViewSet):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
 
 
 class EntryViewSet(ModelViewSet):
