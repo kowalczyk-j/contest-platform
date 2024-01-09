@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { BlobServiceClient } from "@azure/storage-blob";
 import {
   TextField,
   FormControl,
@@ -21,6 +22,18 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline";
 
+async function uploadFile(containerName, file) {
+  const blobServiceClient = BlobServiceClient.fromConnectionString(
+    import.meta.env.VITE_AZURE_STORAGE_CONNECTION_STRING
+  );
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+  const blobClient = containerClient.getBlobClient(file.name);
+  const blockBlobClient = blobClient.getBlockBlobClient();
+  const result = await blockBlobClient.uploadData(file, {
+    onProgress: ev => console.log(ev)
+  });
+  console.log(`Upload of file '${file.name}' completed`);
+}
 
 function EntryForm({ contestId, onSubmit }) {
   const [email, setEmail] = useState("");
@@ -93,10 +106,14 @@ function EntryForm({ contestId, onSubmit }) {
   const handleFileChange = (event) => {
     const uploadedFile = event.target.files[0];
     setFile(uploadedFile);
+    console.log(uploadedFile.name);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (file) {
+      uploadFile("entries", file);
+    }
     const response = await onSubmit({
       contest: contestId,
       contestants: persons,
