@@ -189,12 +189,34 @@ const ContestIndexPage = () => {
             {selectedContest?.description}
           </Typography>
 
-          <TextButton
-            style={{ fontSize: "1rem", color: "#95C21E" }}
-            endIcon={<ArrowForwardIcon />}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
           >
-            Regulamin
-          </TextButton>
+            <TextButton
+              style={{ fontSize: "1rem", color: "#95C21E" }}
+              endIcon={<ArrowForwardIcon />}
+            >
+              Regulamin
+            </TextButton>
+
+            {userData.is_staff === true ? (
+              <Link
+                to={`/entries/${selectedContest?.id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <TextButton
+                  style={{ fontSize: "1rem", color: "#95C21E" }}
+                  endIcon={<ArrowForwardIcon />}
+                >
+                  Nadesłane prace
+                </TextButton>
+              </Link>
+            ) : null}
+          </div>
 
           {/* Add other details as needed */}
         </DialogContent>
