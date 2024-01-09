@@ -15,7 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Header from "./Header";
 import { Link } from "react-router-dom";
 
-const pages = ["Konkursy", "Wydarzenia", "Blog"];
+const pages = ["Konkursy", "Wydarzenia", "Blog", "użytkownicy"];
 const settings = ["Profil", "Moje prace", "Dashboard", "Wyloguj"];
 const settingsLinks = {
   Profil: "/profile",
@@ -25,11 +25,17 @@ const pagesLinks = {
   Konkursy: "/",
   Wydarzenia: "/",
   Blog: "/",
+  użytkownicy: "/users",
 };
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [userData, setUserData] = React.useState(
+    JSON.parse(sessionStorage.getItem("userData")) || {},
+  );
+
+  const accessToken = sessionStorage.getItem("accessToken");
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -46,7 +52,10 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-  const isLoggedIn = !!sessionStorage.getItem("accessToken");
+  const isStaff = userData.is_staff === true;
+  const filteredPages = isStaff
+    ? pages
+    : pages.filter((page) => page !== "użytkownicy");
 
   return (
     <AppBar
@@ -87,7 +96,7 @@ function ResponsiveAppBar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
+              {filteredPages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
@@ -97,7 +106,7 @@ function ResponsiveAppBar() {
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {filteredPages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -109,7 +118,7 @@ function ResponsiveAppBar() {
               </Button>
             ))}
           </Box>
-          {isLoggedIn ? (
+          {accessToken ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -145,7 +154,12 @@ function ResponsiveAppBar() {
               </Menu>
             </Box>
           ) : (
-            <Button onClick={onLogin} color="inherit">
+            <Button
+              color="inherit"
+              component={Link}
+              to="/login"
+              sx={{ color: "black" }}
+            >
               Login
             </Button>
           )}

@@ -16,8 +16,20 @@ export default function Entries() {
   const { contestId } = useParams();
 
   useEffect(() => {
+    const accessToken = sessionStorage.getItem("accessToken");
+
+    if (!accessToken) {
+      console.error("Access token not found in session.");
+      return;
+    }
+
     axios
-      .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`)
+      .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + accessToken,
+        },
+      })
       .then((response) => setEntries(response.data))
       .catch((error) => console.error("Error fetching data: ", error));
 
@@ -66,8 +78,7 @@ export default function Entries() {
           >
             <EntryInfo
               id={entry.id}
-              name={entry.contestant_name}
-              surname={entry.contestant_surname}
+              contestants={entry.contestants}
               age="12"
               school="Szkoła Podstawowa nr 1 w Głogowie"
             />

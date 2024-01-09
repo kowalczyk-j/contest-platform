@@ -32,14 +32,15 @@ const ContestIndexPage = () => {
   const [contests, setContests] = useState([]);
   const [selectedContest, setSelectedContest] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState(
+    JSON.parse(sessionStorage.getItem("userData")) || {},
+  );
 
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}api/contests/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + sessionStorage.getItem("accessToken"),
         },
       })
       .then((ret) => {
@@ -47,23 +48,12 @@ const ContestIndexPage = () => {
       })
       .catch((error) => console.error("Error:", error));
 
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}api/users/current_user/`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Token " + sessionStorage.getItem("accessToken"),
-            },
-          },
-        );
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchUserData();
+    const accessToken = sessionStorage.getItem("accessToken");
+
+    if (!accessToken) {
+      console.error("Access token not found in session.");
+      return;
+    }
   }, []);
 
   const handleContestClick = (contest) => {
@@ -90,7 +80,7 @@ const ContestIndexPage = () => {
 
       <Grid container spacing={4} justifyContent="center">
         <Grid item>
-          {userData.is_staff && (
+          {userData.is_staff === true ? (
             <Card
               style={{
                 width: "300px",
@@ -120,7 +110,7 @@ const ContestIndexPage = () => {
                 </Link>
               </CardContent>
             </Card>
-          )}
+          ) : null}
         </Grid>
 
         {contests.map((contest) => (
