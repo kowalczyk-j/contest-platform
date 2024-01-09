@@ -37,23 +37,13 @@ const ContestIndexPage = () => {
   );
 
   useEffect(() => {
+    const contestsLink = `${import.meta.env.VITE_API_URL}api/contests/`;
+    const headers = { headers: { "Content-Type": "application/json" } };
+
     axios
-      .get(`${import.meta.env.VITE_API_URL}api/contests/`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((ret) => {
-        setContests(ret.data);
-      })
+      .get(contestsLink, headers)
+      .then((ret) => setContests(ret.data))
       .catch((error) => console.error("Error:", error));
-
-    const accessToken = sessionStorage.getItem("accessToken");
-
-    if (!accessToken) {
-      console.error("Access token not found in session.");
-      return;
-    }
   }, []);
 
   const handleContestClick = (contest) => {
