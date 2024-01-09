@@ -5,110 +5,36 @@ import '@fontsource/montserrat/500.css'
 // import montserrat from '../static/theme';
 import { Typography } from '@mui/material';
 import FileUploadButton from './FileUploadButton';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
+import SubmitButton from './SubmitButton';
+import GradeUpperCardInfo from './GradeUpperCardInfo';
+import GradeLowerCardInfo from './GradeLowerCardInfo';
 
 function GradeEntryForm() {
   return(
     <>
-      <div className="card">
-        <div className="upperCard">
-          <div className="cardUpperText">
+      <div className="grade-entry-card">
+        <div className="upper-grade-entry-card">
+          <div className="upper-grade-entry-card-text">
             <h1>
               <Typography fontFamily={"Montserrat"} fontWeight={700} fontSize={36}>O pracy</Typography>
             </h1>
-            <p>
-              <Typography fontFamily={"Montserrat"} fontWeight={500} fontSize={18} display={'inline'} color='#95C21E'>Tytuł pracy:</Typography>
-              <Typography fontFamily={"Montserrat"} fontWeight={500} fontSize={18} display={'inline'}> "Mój piękny piesek"</Typography>
-            </p>
-            <p>
-              <Typography fontFamily={"Montserrat"} fontWeight={500} fontSize={18} display={'inline'} color='#95C21E'>Autor pracy:</Typography>
-              <Typography fontFamily={"Montserrat"} fontWeight={500} fontSize={18} display={'inline'}> Jan Pan</Typography>
-            </p>
-            <p>
-              <Typography fontFamily={"Montserrat"} fontWeight={500} fontSize={18} display={'inline'} color='#95C21E'>Wiek:</Typography>
-              <Typography fontFamily={"Montserrat"} fontWeight={500} fontSize={18} display={'inline'}> 21</Typography>
-            </p>
-            <p>
-              <Typography fontFamily={"Montserrat"} fontWeight={500} fontSize={18} display={'inline'} color='#95C21E'>Jednostka koordynująca:</Typography>
-              <Typography fontFamily={"Montserrat"} fontWeight={500} fontSize={18} display={'inline'}> MSCZ Pruszków</Typography>
-            </p>
+            <GradeUpperCardInfo entryName={"Mój piękny piesek"} authorName={"Jan Pan"} age={21} applicant={"MSCZ Pruszków"}/>
           </div>
-          <div className='cardPhoto'>
+          <div className='grade-entry-card-photo'>
             <img src={Piesio_hr} alt="zdjęcie pracy" width={200} size={200}></img>
           </div>
         </div>
-        <FileUploadButton name='Pobierz pracę'></FileUploadButton>
+        <FileUploadButton name='Pobierz pracę'/>
         <h1>
           <Typography fontFamily={"Montserrat"} fontWeight={700} fontSize={36}>Kryteria oceny</Typography>
         </h1>
-        <div className="cardTextUnder">
-          <div className="cardNumberedCircle">
-            <text style={{ margin: "auto", fontFamily: "Montserrat", fontSize: 26, fontWeight: "bold" }}>1</text>
-          </div>
-          <p className="cardTextUnder1">
-            Zgodność z tematem/przedmiotem Konkursu
-          </p>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="setGradeLabel">
-              Ocena
-            </InputLabel>
-            <Select labelId="setGradeLabel" id="setGradeSelect" label="Ocena">
-              <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value={0}>0</MenuItem>
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
 
-        <div className="cardTextUnder">
-          <div className="cardNumberedCircle">
-            <text style={{ margin: "auto", fontFamily: "Montserrat", fontSize: 26, fontWeight: "bold" }}>2</text>
-          </div>
-          <p className="cardTextUnder1">
-            Atrakcyjność i bogactwo opisu
-          </p>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="setGradeLabel">
-              Ocena
-            </InputLabel>
-            <Select labelId="setGradeLabel" id="setGradeSelect" label="Ocena">
-              <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value={0}>0</MenuItem>
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
+        <GradeLowerCardInfo number={1} gradeCategory={"Zgodność z tematem/przedmiotem Konkursu"} minGrade={0} maxGrade={3} />
+        <GradeLowerCardInfo number={2} gradeCategory={"Atrakcyjność i bogactwo opisu"} minGrade={0} maxGrade={3} />
+        <GradeLowerCardInfo number={3} gradeCategory={"Atrakcyjność zdjęcia"} minGrade={0} maxGrade={3} />
 
-        <div className="cardTextUnder">
-          <div className="cardNumberedCircle">
-            <text style={{ margin: "auto", fontFamily: "Montserrat", fontSize: 26, fontWeight: "bold" }}>3</text>
-          </div>
-          <p className="cardTextUnder1">
-            Atrakcyjność zdjęcia
-          </p>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="setGradeLabel">
-              Ocena
-            </InputLabel>
-            <Select labelId="setGradeLabel" id="setGradeSelect" label="Ocena">
-              <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value={0}>0</MenuItem>
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-
-        <FileUploadButton className="cardButton" name="Zatwierdź ocenę"/>
+        <SubmitButton className="grade-entry-card-commit-button" text="Zatwierdź ocenę"/>
 
       </div>
     </>

@@ -146,50 +146,57 @@ body {
 
 /* GradeEntry styles */
 
-.card {
+.grade-entry-card {
     border: 1px solid #95C21E;
     border-radius: 10px;
     box-shadow: 1px 1px 4px #95C21E;
     padding: 20px;
     margin: 1px;
     max-width: 900px;
-  }
+}
 
-  /* .card .cardFont1 {
-    font-family: "Montserrat";
-    font-weight: 700;
-    font-size: 36;
-  } */
+/* .grade-entry-card .grade-entry-cardFont1 {
+font-family: "Montserrat";
+font-weight: 700;
+font-size: 36;
+} */
 
-  .card .upperCard {
+.grade-entry-card .upper-grade-entry-card {
     display: flex;
     justify-content: space-between;
-  }
+}
 
-  .card .cardPhoto {
+.grade-entry-card .grade-entry-card-photo {
     margin-left: 20px;
     padding: 15px;
-  }
+}
 
-  .card .cardUpperText {
+.grade-entry-card .upper-grade-entry-card-text {
     flex: 1;
-  }
+}
 
-  .card .cardTextUnder {
+.grade-entry-card .lower-grade-entry-card {
     display: flex;
     justify-content: space-between;
-  }
+}
 
-  .card .cardNumberedCircle {
+.grade-entry-card .grade-entry-card-num-circle {
     display: flex;
     width: 50px;
     height: 50px;
     background-color: #95C21E;
     border-radius: 50%;
-  }
+}
 
-  .card .cardTextUnder1 {
+.grade-entry-card .lower-grade-entry-card-text {
     flex: 1;
     margin-left: 20px;
     font-family: "Montserrat";
-  }
+    font-weight: 500;
+}
+
+.grade-entry-card .grade-entry-card-commit-button {
+    flex: 1;
+    padding: 10px;
+    justify-content: center;
+} /* nie działa, bo to własny przycisk */
