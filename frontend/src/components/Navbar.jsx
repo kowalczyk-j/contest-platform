@@ -14,12 +14,12 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Header from "./Header";
 import { Link } from "react-router-dom";
+import { handleLogout } from "./Logout";
 
 const pages = ["Konkursy", "Wydarzenia", "Blog", "użytkownicy"];
-const settings = ["Profil", "Moje prace", "Dashboard", "Wyloguj"];
+const settings = ["Profil", "Moje prace", "Dashboard"];
 const settingsLinks = {
   Profil: "/profile",
-  Wyloguj: "/logout",
 };
 const pagesLinks = {
   Konkursy: "/",
@@ -151,6 +151,9 @@ function ResponsiveAppBar() {
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
+                <MenuItem key="logout" onClick={handleLogout}>
+                  <Typography textAlign="center">Wyloguj</Typography>
+                </MenuItem>
               </Menu>
             </Box>
           ) : (

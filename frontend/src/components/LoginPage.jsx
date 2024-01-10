@@ -25,7 +25,6 @@ const LoginPage = () => {
   const [loginError, setLoginError] = useState("");
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
   const navigate = useNavigate();
-
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -34,25 +33,28 @@ const LoginPage = () => {
       password: password,
     };
 
+    const loginLink = `${import.meta.env.VITE_API_URL}/api/login/`;
+    const headersLogin = { headers: { "Content-Type": "application/json" } };
+
     axios
-      .post(`${import.meta.env.VITE_API_URL}/api/login/`, postData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .post(loginLink, postData, headersLogin)
       .then((response) => {
         setLoginError(false);
         const responseData = response.data;
         const token = responseData.token;
         sessionStorage.setItem("accessToken", token);
 
+        const currentUserLink = `${
+          import.meta.env.VITE_API_URL
+        }/api/users/current_user/`;
+        const headersCurrentUser = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token,
+          },
+        };
         axios
-          .get(`${import.meta.env.VITE_API_URL}/api/users/current_user/`, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Token " + sessionStorage.getItem("accessToken"),
-            },
-          })
+          .get(currentUserLink, headersCurrentUser)
           .then((res) => {
             const responseData = res.data;
             sessionStorage.setItem("userData", JSON.stringify(responseData));
