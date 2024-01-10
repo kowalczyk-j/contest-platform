@@ -106,13 +106,28 @@ function EntryForm({ contestId, onSubmit }) {
         contestants: persons,
         email,
         entry_title: entryTitle,
-        entry_file: file,
       });
 
       if (response && response.status === 201) {
         setOpen(true);
         if (file) {
-          uploadFile("entries", file);
+          const filePath = await uploadFile("entries", file);
+          console.log(filePath);
+          const updateResponse = await axios.patch(
+            `${import.meta.env.VITE_API_URL}api/entries/${response.data.id}/`,
+            {
+              entry_file: filePath,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Token " + sessionStorage.getItem("accessToken"),
+              },
+            }
+          );
+          if (updateResponse.status !== 200) {
+            console.error("Error updating entry:", updateResponse.status);
+          }
         }
       }
     } catch (error) {
