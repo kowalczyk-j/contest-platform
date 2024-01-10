@@ -10,19 +10,18 @@ from .serializers import (
     PersonSerializer,
 )
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import api_view
 from rest_framework.authentication import TokenAuthentication
 from .permissions import UserPermission, ContestPermission, EntryPermission
 from rest_framework.decorators import action
+from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAuthenticated
 
 
-@api_view(
-    [
-        "POST",
-    ]
-)
-def logout(request):
-    if request.method == "POST":
+class Logout(GenericAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(selg, request):
         request.user.auth_token.delete()
         return Response(
             {"message": "user has been logged out"}, status=status.HTTP_200_OK
