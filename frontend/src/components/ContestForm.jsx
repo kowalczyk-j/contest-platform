@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import dayjs from "dayjs";
 import "dayjs/locale/pl";
 import {
@@ -141,8 +142,24 @@ function ContestForm({ onSubmit }) {
         criterionResponse.every((response) => response.status === 201)
       ) {
         setOpen(true);
-        uploadFile("posters", poster);
-        uploadFile("rules", rulesFile);
+        const posterPath = await uploadFile("posters", poster);
+        const rulesPath = await uploadFile("rules", rulesFile);
+        const updateResponse = await axios.patch(
+          `${import.meta.env.VITE_API_URL}api/contests/${contestResponse.data.id}/`,
+          {
+            poster_img: posterPath,
+            rules_pdf: rulesPath,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Token " + sessionStorage.getItem("accessToken"),
+            },
+          }
+        );
+        if (updateResponse.status !== 200) {
+          console.error("Error updating contest:", updateResponse.status);
+        }
       }
     } catch (error) {
       setOpenError(true);

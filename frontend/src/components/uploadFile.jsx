@@ -11,4 +11,5 @@ export async function uploadFile(containerName, file) {
     onProgress: ev => console.log(ev)
   });
   console.log(`Upload of file '${file.name}' completed`);
+  return blobClient.url;
 }

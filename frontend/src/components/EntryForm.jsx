@@ -134,12 +134,16 @@ function EntryForm({ contestId, onSubmit }) {
       <Typography variant="body1" style={{ fontWeight: "lighter" }}>
         {contest.description}
       </Typography>
-      <TextButton
-        style={{ fontSize: "1rem", color: "#95C21E" }}
-        endIcon={<ArrowForwardIcon />}
-      >
-        Regulamin
-      </TextButton>
+      {contest.rules_pdf && (
+        <TextButton
+          style={{ fontSize: "1rem", color: "#95C21E" }}
+          endIcon={<ArrowForwardIcon />}
+          href={contest.rules_pdf.slice(2, contest.rules_pdf.length - 1)}
+        >
+          Regulamin
+        </TextButton>
+      )}
+      
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         {personComponents}
