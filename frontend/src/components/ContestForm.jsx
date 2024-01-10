@@ -113,12 +113,20 @@ function ContestForm({ onSubmit }) {
 
   // file uploads
   const [poster, setPoster] = React.useState(null);
+  const [posterText, setPosterText] = React.useState("Nie załączono plakatu");
   const handlePosterChange = (event) => {
-    setPoster(event.target.files[0]);
+    const file = event.target.files[0];
+    setPoster(file);
+    const filename = file.name.length > 25 ? `${file.name.slice(0, 23)}...` :  file.name;
+    setPosterText(filename)
   }
   const [rulesFile, setRulesFile] = React.useState(null);
+  const [rulesText, setRulesText] = React.useState("Nie załączono regulaminu");
   const handleRulesFileChange = (event) => {
-    setRulesFile(event.target.files[0]);
+    const file = event.target.files[0];
+    setRulesFile(file);
+    const filename = file.name.length > 25 ? `${file.name.slice(0, 23)}...` :  file.name;
+    setRulesText(filename);
   }
 
   const handleSubmit = async (event) => {
@@ -218,7 +226,7 @@ function ContestForm({ onSubmit }) {
 
       <div className="contest-type">
         <FormControl component="fieldset" className="flex flex-col space-y-2">
-          <Typography component="legend">Typ konkursu:</Typography>
+          <Typography variant="body1" style={{ fontWeight: "lighter" }}>Typ konkursu:</Typography>
           <RadioGroup
             row
             aria-label="type"
@@ -239,7 +247,7 @@ function ContestForm({ onSubmit }) {
 
       <div className="contest-type">
         <FormControl component="fieldset" className="flex flex-col space-y-2">
-          <Typography component="legend">Typ zgłoszeń:</Typography>
+          <Typography variant="body1" style={{ fontWeight: "lighter" }}>Typ zgłoszeń:</Typography>
           <RadioGroup
             row
             aria-label="type"
@@ -269,7 +277,7 @@ function ContestForm({ onSubmit }) {
       </div>
 
       <div className="criteria">
-        <Typography component="legend">Kryteria oceny:</Typography>
+        <Typography variant="body1" style={{ fontWeight: "lighter" }}>Kryteria oceny:</Typography>
         {criterionComponents}
         <TextButton
           style={{ fontSize: 16, marginTop: "10px" }}
@@ -281,14 +289,21 @@ function ContestForm({ onSubmit }) {
       </div>
 
       <div className="uploads">
-        <FileUploadButton
-          name="Załącz regulamin"
-          onFileChange={handleRulesFileChange}
-        />
-        <FileUploadButton
-          name="Załącz plakat" 
-          onFileChange={handlePosterChange}
-        />
+        <div className="rules">
+          <FileUploadButton
+            name="Załącz regulamin"
+            onFileChange={handleRulesFileChange}
+          />
+          <Typography variant="body1" style={{ fontWeight: "lighter", marginTop: "15px" }}>{rulesText}</Typography>
+        </div>
+        
+        <div className="poster">
+          <FileUploadButton
+            name="Załącz plakat" 
+            onFileChange={handlePosterChange}
+          />
+          <Typography variant="body1" style={{ fontWeight: "lighter", marginTop: "15px" }}>{posterText}</Typography>
+        </div>
       </div>
 
       <div className="submit">

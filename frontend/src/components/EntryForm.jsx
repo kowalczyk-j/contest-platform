@@ -12,7 +12,7 @@ import {
   DialogContent,
   DialogContentText,
   FormControlLabel,
-  Checkbox
+  Checkbox,
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline";
@@ -90,10 +90,12 @@ function EntryForm({ contestId, onSubmit }) {
 
   // file upload
   const [file, setFile] = React.useState(null);
+  const [fileText, setFileText] = React.useState("Nie załączono pliku");
   const handleFileChange = (event) => {
     const uploadedFile = event.target.files[0];
     setFile(uploadedFile);
-    console.log(uploadedFile.name);
+    const filename = uploadedFile.name.length > 25 ? `${uploadedFile.name.slice(0, 25)}...` :  uploadedFile.name;
+    setFileText(`Załączono pracę: ${filename}`);
   };
 
   const handleSubmit = async (event) => {
@@ -115,7 +117,7 @@ function EntryForm({ contestId, onSubmit }) {
       }
     } catch (error) {
       setOpenError(true);
-      console.error('Error: ', error);
+      console.error("Error: ", error);
     }
   };
 
@@ -143,7 +145,6 @@ function EntryForm({ contestId, onSubmit }) {
           Regulamin
         </TextButton>
       )}
-      
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         {personComponents}
@@ -258,6 +259,9 @@ function EntryForm({ contestId, onSubmit }) {
             </Dialog>
           </div>
         </div>
+
+        <Typography variant="body1" style={{ fontWeight: "lighter", marginTop: "15px", marginLeft: "40px" }}>{fileText}</Typography>
+
       </form>
     </>
   );

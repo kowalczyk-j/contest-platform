@@ -24,9 +24,6 @@ function CreateEntryPage() {
       }
       console.log(response.data);
       return response;
-    })
-    .catch((error) => {
-      console.error('Error:', error);
     });
   };
 
