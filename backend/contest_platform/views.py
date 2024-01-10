@@ -48,6 +48,11 @@ class EntryViewSet(ModelViewSet):
             queryset = queryset.filter(contest=contest_id)
         return queryset
 
+    def destroy(self, request, *args, **kwargs):
+        entry = self.get_object()
+        entry.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class AddressViewSet(ModelViewSet):
     queryset = Address.objects.all()

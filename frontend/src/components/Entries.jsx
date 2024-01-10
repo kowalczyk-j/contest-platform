@@ -51,18 +51,21 @@ export default function Entries() {
 
   const handleBackClick = () => {
     navigate("/");
+  };
 
-    const handleEditClick = (entryId) => {
-      // Handle edit action here
-    };
-
-    const handleDeleteClick = (entryId) => {
-      // Handle delete action here
-    };
-
-    const handleRateClick = (entryId) => {
-      // Handle rate action here
-    };
+  const handleDeleteClick = (id) => {
+    if (
+      window.confirm(
+        "Czy na pewno chcesz usunąć te zgłoszenie? UWAGA, akcja jest nieodwracalna."
+      )
+    ) {
+      axios
+        .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`)
+        .then(() => {
+          setEntries(entries.filter((entry) => entry.id !== id));
+        })
+        .catch((error) => console.error("Error deleting entry: ", error));
+    }
   };
   return (
     <ThemeProvider theme={montserrat}>
@@ -113,6 +116,7 @@ export default function Entries() {
                 surname={entry.contestant_surname}
                 age="12"
                 school="Szkoła Podstawowa nr 1 w Głogowie"
+                onDeleteClick={handleDeleteClick}
               />
 
               <EntryScore badgeColor={badgeColor} score={entry.score} />
