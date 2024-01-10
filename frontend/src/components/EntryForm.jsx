@@ -1,39 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BlobServiceClient } from "@azure/storage-blob";
+import axios from "axios";
 import {
   TextField,
   FormControl,
   Button,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
+  FormControlLabel,
+  Checkbox
 } from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import AddCircleOutline from "@mui/icons-material/AddCircleOutline";
 import FileUploadButton from "./FileUploadButton";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogActions from "@mui/material/DialogActions";
 import SubmitButton from "./SubmitButton";
-import axios from "axios";
 import TextButton from "./TextButton";
 import CreatePerson from "./CreatePerson";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import AddCircleOutline from "@mui/icons-material/AddCircleOutline";
-
-async function uploadFile(containerName, file) {
-  const blobServiceClient = BlobServiceClient.fromConnectionString(
-    import.meta.env.VITE_AZURE_STORAGE_CONNECTION_STRING
-  );
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  const blobClient = containerClient.getBlobClient(file.name);
-  const blockBlobClient = blobClient.getBlockBlobClient();
-  const result = await blockBlobClient.uploadData(file, {
-    onProgress: ev => console.log(ev)
-  });
-  console.log(`Upload of file '${file.name}' completed`);
-}
+import { uploadFile } from "./uploadFile";
 
 function EntryForm({ contestId, onSubmit }) {
   const [email, setEmail] = useState("");
@@ -111,20 +98,24 @@ function EntryForm({ contestId, onSubmit }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (file) {
-      uploadFile("entries", file);
-    }
-    const response = await onSubmit({
-      contest: contestId,
-      contestants: persons,
-      email,
-      entry_title: entryTitle,
-      entry_file: file,
-    });
-    if (response && response.status === 201) {
-      setOpen(true);
-    } else {
+    try {
+      const response = await onSubmit({
+        contest: contestId,
+        contestants: persons,
+        email,
+        entry_title: entryTitle,
+        entry_file: file,
+      });
+
+      if (response && response.status === 201) {
+        setOpen(true);
+        if (file) {
+          uploadFile("entries", file);
+        }
+      }
+    } catch (error) {
       setOpenError(true);
+      console.error('Error: ', error);
     }
   };
 

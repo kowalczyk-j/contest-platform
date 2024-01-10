@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CreateContestPage from "./CreateContestPage";
 import ContestListPage from "./ContestListPage";
 import AvailableEntries from './AvailableEntries';
-import MineCard from './MineCard';
 import CreateEntryPage from "./CreateEntryPage";
 import Entries from "./Entries";
 import RegistrationPage from './RegistrationPage';
