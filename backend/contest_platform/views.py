@@ -11,9 +11,15 @@ from rest_framework.decorators import action
 from django.contrib.auth import authenticate
 
 
-@api_view(["POST",])
-def logout(request):
-    if request.method == "POST":
+from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAuthenticated
+
+
+class Logout(GenericAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(selg, request):
         request.user.auth_token.delete()
         return Response({"message": "user has been logged out"}, status=status.HTTP_200_OK)
 
