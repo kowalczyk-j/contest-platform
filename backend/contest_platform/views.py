@@ -19,7 +19,7 @@ class Logout(GenericAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(selg, request):
+    def get(self, request):
         request.user.auth_token.delete()
         return Response({"message": "user has been logged out"}, status=status.HTTP_200_OK)
 
