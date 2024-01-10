@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 
 export default function EntryInfo({ id, name, surname, age, school }) {
   return (

@@ -4,9 +4,10 @@ from .models import Address, AssessmentCriterion, Contest, Entry, User
 from .serializers import (AddressSerializer, AssessmentCriterionSerializer,
                           ContestSerializer, EntrySerializer, UserSerializer)
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import api_view
+from rest_framework.decorators import (api_view, action)
 from rest_framework.authentication import TokenAuthentication
 from .permissions import UserPermission, ContestPermission
+from django.db.models import Sum
 
 
 @api_view(["POST",])
@@ -21,6 +22,16 @@ class ContestViewSet(ModelViewSet):
     serializer_class = ContestSerializer
     # authentication_classes = [TokenAuthentication]
     # permission_classes = [ContestPermission]
+
+    @action(detail=True, methods=['get'])
+    def max_rating_sum(self, request, pk=None):
+        """
+        Returns the sum of max_rating for all AssessmentCriteria related to the contest.
+        """
+        contest = self.get_object()
+        total_max_rating = AssessmentCriterion.objects.filter(
+            contest=contest).aggregate(Sum('max_rating'))['max_rating__sum']
+        return Response({'total_max_rating': total_max_rating or 0})
 
 
 class EntryViewSet(ModelViewSet):
