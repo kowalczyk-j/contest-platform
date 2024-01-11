@@ -15,6 +15,7 @@ from .permissions import UserPermission, ContestPermission, EntryPermission
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Sum
 
 
 class Logout(GenericAPIView):
@@ -34,11 +35,6 @@ class ContestViewSet(ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [ContestPermission]
 
-
-class PersonViewSet(ModelViewSet):
-    queryset = Person.objects.all()
-    serializer_class = PersonSerializer
-
     @action(detail=True, methods=['get'])
     def max_rating_sum(self, request, pk=None):
         """
@@ -48,6 +44,11 @@ class PersonViewSet(ModelViewSet):
         total_max_rating = AssessmentCriterion.objects.filter(
             contest=contest).aggregate(Sum('max_rating'))['max_rating__sum']
         return Response({'total_max_rating': total_max_rating or 0})
+
+
+class PersonViewSet(ModelViewSet):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
 
 
 class EntryViewSet(ModelViewSet):
@@ -67,7 +68,8 @@ class EntryViewSet(ModelViewSet):
             for person_data in persons_data:
                 person_serializer = PersonSerializer(data=person_data)
                 if person_serializer.is_valid():
-                    person = Person.objects.create(**person_serializer.validated_data)
+                    person = Person.objects.create(
+                        **person_serializer.validated_data)
                     contestants.append(person.id)
 
         entry_data['contestants'] = contestants
