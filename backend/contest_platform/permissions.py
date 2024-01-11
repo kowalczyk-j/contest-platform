@@ -13,7 +13,7 @@ class UserPermission(permissions.BasePermission):
             return True
         if view.action == "list":
             return request.user.is_authenticated and request.user.is_staff
-        elif view.action in ["retrieve", "update", "partial_update", "destroy"]:
+        elif view.action in ["retrieve", "update", "partial_update", "destroy", "current_user"]:
             return True
         else:
             return False
@@ -25,7 +25,7 @@ class UserPermission(permissions.BasePermission):
         if not request.user.is_authenticated:
             return False
 
-        if view.action in ["retrieve", "update", "partial_update"]:
+        if view.action in ["retrieve", "update", "partial_update", "current_user"]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
         elif view.action == "destroy":
@@ -58,23 +58,19 @@ class ContestPermission(permissions.BasePermission):
 
 
 class EntryPermission(permissions.BasePermission):
-
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
-
-        if view.action == "create":
-            return True
         if view.action == "list":
             return request.user.is_authenticated and request.user.is_staff
-        elif view.action in ["retrieve", "update", "partial_update", "destroy"]:
+        if view.action == "create":
             return True
-        else:
-            return False
-
-    def has_object_permission(
-        self, request: Request, view: GenericAPIView, obj: models.Model
-    ) -> bool:
-
         if view.action in ["retrieve", "update", "partial_update", "destroy"]:
-            return request.user.is_authenticated and request.user.is_staff
-        else:
             return False
+
+
+class AssessmentCriterion(permissions.BasePermission):
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
+        if view.action == "list":
+            return request.user.is_authenticated and request.user.is_staff
+        if view.action == "create":
+            return request.user.is_authenticated and request.user.is_staff
+        

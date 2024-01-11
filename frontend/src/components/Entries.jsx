@@ -18,6 +18,26 @@ export default function Entries() {
   const { contestId } = useParams();
 
   useEffect(() => {
+    const accessToken = sessionStorage.getItem("accessToken");
+
+    if (!accessToken) {
+      console.error("Access token not found in session.");
+      return;
+    }
+
+    const entriesLink = `${
+      import.meta.env.VITE_API_URL
+    }api/entries/?contest=${contestId}`;
+    const headers = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + accessToken,
+      },
+    };
+    const contestLink = `${
+      import.meta.env.VITE_API_URL
+    }api/contests/${contestId}/`;
+
     axios
       .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`)
       .then((response) => {
@@ -29,7 +49,7 @@ export default function Entries() {
       .catch((error) => console.error("Error fetching data: ", error));
 
     axios
-      .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`)
+      .get(contestLink)
       .then((response) => setContest(response.data))
       .catch((error) => console.error("Error fetching data: ", error));
 

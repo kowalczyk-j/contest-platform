@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, FormControl, Button, Typography } from '@mui/material';
+import { TextField, FormControl, Button, Typography, DialogContent, DialogContentText } from '@mui/material';
 import FileUploadButton from './FileUploadButton';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -8,14 +8,13 @@ import DialogActions from '@mui/material/DialogActions';
 import SubmitButton from './SubmitButton';
 import axios from 'axios';
 import TextButton from './TextButton';
+import CreatePerson from './CreatePerson';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 
 function EntryForm({ contestId, onSubmit }) {
-    const [contestantName, setContestantName] = useState('');
-    const [parentName, setParentName] = useState('');
-    const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
     const [entryTitle, setEntryTitle] = useState('');
 
@@ -23,7 +22,12 @@ function EntryForm({ contestId, onSubmit }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`)
+        axios.get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + sessionStorage.getItem("accessToken")
+            }
+        })
             .then(response => {
                 console.log(response.data);
                 setContest(response.data);
@@ -37,29 +41,69 @@ function EntryForm({ contestId, onSubmit }) {
 
     // pop up after submiting
     const [open, setOpen] = React.useState(false);
+    const [openError, setOpenError] = React.useState(false);
 
     const handleClose = () => {
         setOpen(false);
         navigate("/");
     };
 
+    const handleCloseError = () => {
+        setOpenError(false);
+    }
+
     const navigate = useNavigate();
 
+    const [persons, setPersons] = React.useState([{name: '', surname: ''}]);
+    const handlePersonChange = (index, personData) => {
+        setPersons(prevPersons => {
+            const newPersons = [...prevPersons];
+            newPersons[index] = personData;
+            return newPersons;
+        })
+    };
+
+    const [personComponents, setPersonComponents] = React.useState([<CreatePerson index={0}
+                                                                    onPersonChange={handlePersonChange}
+                                                                    key={0}/>]);
+    const handleClickAddPerson = () => {
+        setPersonComponents(prevComponents => [...prevComponents, <CreatePerson
+                                                                   index={personComponents.length}
+                                                                   onPersonChange={handlePersonChange}
+                                                                   key={personComponents.length}/>])
+    };
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
+        const contestants = [];
+        const requests = persons.map(person => {
+            return axios.post(`${import.meta.env.VITE_API_URL}/api/person/`, person, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Token ' + sessionStorage.getItem('accessToken')
+                }
+            }).then((response) => {
+                if (response.status !== 201) {
+                    setOpenError(true);
+                }
+                contestants.push(response.data.id);
+            }).catch(error => {
+                setOpenError(true);
+                console.error('Error:', error);
+            });
+        });
+    
+        Promise.all(requests).then(async () => {
             const response = await onSubmit({
-                contest: contestId, contestant_name: contestantName,
-                parent_name: parentName, contestant_surname: surname, email,
+                contest: contestId, contestants, email,
                 entry_title: entryTitle
             });
-            if (response.ok) {
+            if (response.status === 201) {
                 setOpen(true);
+            } else {
+                setOpenError(true);
             }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-
+        });
     };
 
     if (loading) {
@@ -75,33 +119,26 @@ function EntryForm({ contestId, onSubmit }) {
             <TextButton style={{ fontSize: "1rem", color: "#95C21E" }} endIcon={<ArrowForwardIcon />}>Regulamin</TextButton>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
-                <div className="name">
-                    <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField label="Imię uczestnika" value={contestantName} onChange={(e) => setContestantName(e.target.value)} />
-                    </FormControl>
-                </div>
-
-                <div className="surname">
-                    <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField label="Nazwisko uczestnika" value={surname} onChange={(e) => setSurname(e.target.value)} />
-                    </FormControl>
-                </div>
-
-                <div className="parent-name">
-                    <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField label="Imię rodzica uczestnika" value={parentName} onChange={(e) => setParentName(e.target.value)} />
-                    </FormControl>
-                </div>
+                {personComponents}
+                {!contest.individual && (
+                    <TextButton
+                        style={{fontSize: 16, marginTop: "10px"}}
+                        startIcon={<AddCircleOutline style={{color: "#95C21E"}} />}
+                        onClick={handleClickAddPerson}>
+                        Dodaj uczestnika
+                    </TextButton>
+                )}
+                
 
                 <div className="email">
                     <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField label="Adres e-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <TextField required label="Adres e-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </FormControl>
                 </div>
 
                 <div className="entry-title">
                     <FormControl className="flex flex-col space-y-4" fullWidth={true}>
-                        <TextField label="Tytuł pracy" value={entryTitle} onChange={(e) => setEntryTitle(e.target.value)} />
+                        <TextField required label="Tytuł pracy" value={entryTitle} onChange={(e) => setEntryTitle(e.target.value)} />
                     </FormControl>
                 </div>
 
@@ -124,8 +161,28 @@ function EntryForm({ contestId, onSubmit }) {
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description">
                             <DialogTitle id="alert-dialog-title"> {"Dodano nowe zgłoszenie konkursowe"} </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Zostaniesz przekierowany do strony głównej
+                                </DialogContentText>
+                            </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose} autoFocus> Ok </Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Dialog
+                            open={openError}
+                            onClose={handleCloseError}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description">
+                            <DialogTitle id="alert-dialog-title"> {"Wystąpił błąd przy dodawaniu zgłoszenia"} </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Upewnij się, że wszystkie pola są wypełnione poprawnie
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleCloseError} autoFocus> Ok </Button>
                             </DialogActions>
                         </Dialog>
                     </div>

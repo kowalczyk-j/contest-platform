@@ -1,27 +1,43 @@
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Address, AssessmentCriterion, Contest, Entry, User
-from .serializers import (AddressSerializer, AssessmentCriterionSerializer,
-                          ContestSerializer, EntrySerializer, UserSerializer)
+from .models import Address, AssessmentCriterion, Contest, Entry, User, Person
+from .serializers import (
+    AddressSerializer,
+    AssessmentCriterionSerializer,
+    ContestSerializer,
+    EntrySerializer,
+    UserSerializer,
+    PersonSerializer,
+)
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import (api_view, action)
 from rest_framework.authentication import TokenAuthentication
-from .permissions import UserPermission, ContestPermission
-from django.db.models import Sum
+from .permissions import UserPermission, ContestPermission, EntryPermission
+from rest_framework.decorators import action
+from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAuthenticated
 
 
-@api_view(["POST",])
-def logout(request):
-    if request.method == "POST":
+class Logout(GenericAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
         request.user.auth_token.delete()
-        return Response({"message": "user has been logged out"}, status=status.HTTP_200_OK)
+        return Response(
+            {"message": "user has been logged out"}, status=status.HTTP_200_OK
+        )
 
 
 class ContestViewSet(ModelViewSet):
     queryset = Contest.objects.all()
     serializer_class = ContestSerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [ContestPermission]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [ContestPermission]
+
+
+class PersonViewSet(ModelViewSet):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
 
     @action(detail=True, methods=['get'])
     def max_rating_sum(self, request, pk=None):
@@ -37,13 +53,13 @@ class ContestViewSet(ModelViewSet):
 class EntryViewSet(ModelViewSet):
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [EntryPermission]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [EntryPermission]
     # TODO
 
     def get_queryset(self):
         queryset = Entry.objects.all()
-        contest_id = self.request.query_params.get('contest', None)
+        contest_id = self.request.query_params.get("contest", None)
         if contest_id is not None:
             queryset = queryset.filter(contest=contest_id)
         return queryset
@@ -71,8 +87,13 @@ class AssessmentCriterionViewSet(ModelViewSet):
 
 
 class UserViewSet(ModelViewSet):
-
     serializer_class = UserSerializer
     queryset = User.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [UserPermission]
+
+    @action(detail=False, methods=["get"])
+    def current_user(self, request):
+        user = request.user
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
