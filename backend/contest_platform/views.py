@@ -39,6 +39,16 @@ class PersonViewSet(ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
 
+    @action(detail=True, methods=['get'])
+    def max_rating_sum(self, request, pk=None):
+        """
+        Returns the sum of max_rating for all AssessmentCriteria related to the contest.
+        """
+        contest = self.get_object()
+        total_max_rating = AssessmentCriterion.objects.filter(
+            contest=contest).aggregate(Sum('max_rating'))['max_rating__sum']
+        return Response({'total_max_rating': total_max_rating or 0})
+
 
 class EntryViewSet(ModelViewSet):
     queryset = Entry.objects.all()
@@ -53,6 +63,11 @@ class EntryViewSet(ModelViewSet):
         if contest_id is not None:
             queryset = queryset.filter(contest=contest_id)
         return queryset
+
+    def destroy(self, request, *args, **kwargs):
+        entry = self.get_object()
+        entry.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AddressViewSet(ModelViewSet):
