@@ -48,6 +48,7 @@ class EntrySerializer(serializers.ModelSerializer):
         model = Entry
         fields = ("id",
                   "contest",
+                  "user",
                   "contestants",
                   "address",
                   "email",

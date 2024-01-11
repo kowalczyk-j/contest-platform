@@ -39,14 +39,15 @@ class Person(models.Model):
     surname = models.CharField(max_length=50)
 
 
+class User(AbstractUser):
+    is_jury = models.BooleanField(default=False)
+
+
 class Entry(models.Model):
     contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     contestants = models.ManyToManyField(Person)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
     email = models.EmailField(null=True)
     entry_title = models.CharField(max_length=100)
     entry_file = models.URLField(max_length=300, null=True)
-
-
-class User(AbstractUser):
-    is_jury = models.BooleanField(default=False)

@@ -71,11 +71,8 @@ class EntryPermission(permissions.BasePermission):
     def has_object_permission(
         self, request: Request, view: GenericAPIView, obj: models.Model
     ) -> bool:
-        if view.action == "retrieve":
-            # @TODO change for user to only retrieve own entries
-            return request.user.is_authenticated
-        elif view.action in ["update", "partial_update", "destroy"]:
-            # @TODO change for user to only update own entry
+        if view.action in ["retrieve", "update", "partial_update", "destroy"]:
+            # @TODO change for user to only access own entry
             return request.user.is_authenticated
         else:
             return False
@@ -87,4 +84,3 @@ class AssessmentCriterion(permissions.BasePermission):
             return request.user.is_authenticated and request.user.is_staff
         if view.action == "create":
             return request.user.is_authenticated and request.user.is_staff
-        

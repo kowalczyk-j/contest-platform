@@ -64,6 +64,24 @@ function EntryForm({ contestId, onSubmit }) {
 
   const navigate = useNavigate();
 
+  // add user
+  const currentUser = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/current_user/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+      });
+      const user = response.data;
+      console.log(user);
+      return user;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // add person
   const [persons, setPersons] = React.useState([{ name: "", surname: "" }]);
   const handlePersonChange = (index, personData) => {
@@ -100,9 +118,12 @@ function EntryForm({ contestId, onSubmit }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const user = await currentUser();
+
     try {
       const response = await onSubmit({
         contest: contestId,
+        user: user.id,
         contestants: persons,
         email,
         entry_title: entryTitle,
@@ -155,7 +176,7 @@ function EntryForm({ contestId, onSubmit }) {
         <TextButton
           style={{ fontSize: "1rem", color: "#95C21E" }}
           endIcon={<ArrowForwardIcon />}
-          href={contest.rules_pdf.slice(2, contest.rules_pdf.length - 1)}
+          href={contest.rules_pdf}
         >
           Regulamin
         </TextButton>
