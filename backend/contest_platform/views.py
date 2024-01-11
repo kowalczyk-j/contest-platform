@@ -55,7 +55,28 @@ class EntryViewSet(ModelViewSet):
     serializer_class = EntrySerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [EntryPermission]
-    # TODO
+
+    def create(self, request, *args, **kwargs):
+        entry_data = request.data
+        persons_data = entry_data.pop('contestants')
+        entry_serializer = self.get_serializer(data=entry_data)
+        entry_serializer.is_valid()
+
+        contestants = []
+        if 'contestants' in entry_serializer.errors and len(entry_serializer.errors.keys()) == 1:
+            for person_data in persons_data:
+                person_serializer = PersonSerializer(data=person_data)
+                if person_serializer.is_valid():
+                    person = Person.objects.create(**person_serializer.validated_data)
+                    contestants.append(person.id)
+
+        entry_data['contestants'] = contestants
+        entry_serializer = self.get_serializer(data=entry_data)
+        if entry_serializer.is_valid():
+            self.perform_create(entry_serializer)
+            headers = self.get_success_headers(entry_serializer.data)
+            return Response(entry_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(entry_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
         queryset = Entry.objects.all()

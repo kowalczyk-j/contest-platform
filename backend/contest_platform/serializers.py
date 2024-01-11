@@ -59,15 +59,14 @@ class EntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Entry
-        fields = (
-            "id",
-            "contest",
-            "contestants",
-            "address",
-            "email",
-            "entry_title",
-            "entry_file",
-        )
+        fields = ("id",
+                  "contest",
+                  "user",
+                  "contestants",
+                  "address",
+                  "email",
+                  "entry_title",
+                  "entry_file")
 
 
 class AddressSerializer(serializers.ModelSerializer):
