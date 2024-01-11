@@ -86,6 +86,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-top: 15px;
+    margin-left: -40px;
 }
 
 .circle {
@@ -104,6 +105,15 @@ body {
 
 .criterion .description {
     width: 380px;
+}
+
+.person {
+    display: flex;
+    justify-content: space-between;
+}
+
+.name, .surname {
+    width: 290px;
 }
 
 .max-rating {

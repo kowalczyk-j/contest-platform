@@ -38,11 +38,7 @@ class ContestPermission(permissions.BasePermission):
 
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
 
-        if view.action == "list":
-            return True
-        if view.action == "create":
-            return request.user.is_authenticated and request.user.is_staff
-        elif view.action in ["retrieve", "update", "partial_update", "destroy"]:
+        if view.action in ["list", "max_rating_sum", "retrieve", "update", "partial_update", "destroy"]:
             return True
         else:
             return False
@@ -53,7 +49,34 @@ class ContestPermission(permissions.BasePermission):
 
         if view.action == "retrieve":
             return True
-        elif view.action in ["update", "partial_update", "destroy"]:
-            return request.user.is_authenticated and request.user.is_staff
+        elif view.action in ["update", "partial_update", "destroy", "max_rating_sum"]:
+            return request.user.is_authenticated and (request.user.is_staff or request.user.is_jury)
         else:
             return False
+
+
+class EntryPermission(permissions.BasePermission):
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
+        if view.action == "list":
+            return request.user.is_authenticated and request.user.is_staff
+        if view.action == "create":
+            return request.user.is_authenticated
+        if view.action in ["retrieve", "update", "partial_update", "destroy"]:
+            return True
+
+    def has_object_permission(
+        self, request: Request, view: GenericAPIView, obj: models.Model
+    ) -> bool:
+        if view.action in ["retrieve", "update", "partial_update", "destroy"]:
+            # @TODO change for user to only access own entry
+            return request.user.is_authenticated
+        else:
+            return False
+
+
+class AssessmentCriterion(permissions.BasePermission):
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
+        if view.action == "list":
+            return request.user.is_authenticated and request.user.is_staff
+        if view.action == "create":
+            return request.user.is_authenticated and request.user.is_staff

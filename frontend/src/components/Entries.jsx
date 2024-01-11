@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Typography, Box } from "@mui/material";
+import { Card, Typography, Box, Select, MenuItem, Button } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate, useParams } from "react-router-dom";
-import Header from "./Header";
+import Navbar from "./Navbar";
 import BackButton from "./BackButton";
 import montserrat from "../static/theme";
 import EntryInfo from "./EntryInfo";
@@ -12,26 +12,103 @@ import EntryScore from "./EntryScore";
 export default function Entries() {
   const [entries, setEntries] = useState([]);
   const [contest, setContest] = useState({});
+  const [maxScore, setMaxScore] = useState(10);
+  const [sortOrder, setSortOrder] = useState("asc");
   const navigate = useNavigate();
   const { contestId } = useParams();
 
   useEffect(() => {
+    // const currentUser = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       `${import.meta.env.VITE_API_URL}api/users/current_user/`,
+    //       {
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //           Authorization: "Token " + sessionStorage.getItem("accessToken"),
+    //         },
+    //       }
+    //     );
+    //     const user = response.data;
+    //     console.log(user);
+    //     return user;
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
     axios
-      .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`)
-      .then((response) => setEntries(response.data))
+      .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        const sortedEntries = response.data.sort((a, b) =>
+          sortOrder === "asc" ? a.score - b.score : b.score - a.score
+        );
+        setEntries(sortedEntries);
+      })
       .catch((error) => console.error("Error fetching data: ", error));
 
     axios
-      .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`)
+      .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+      })
       .then((response) => setContest(response.data))
       .catch((error) => console.error("Error fetching data: ", error));
-  }, [contestId]);
+
+    axios
+      .get(
+        `${
+          import.meta.env.VITE_API_URL
+        }api/contests/${contestId}/max_rating_sum/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+        }
+      )
+      .then((response) => {
+        setMaxScore(response.data.total_max_rating);
+      })
+      .catch((error) => console.error("Error fetching max score: ", error));
+  }, [contestId, sortOrder]);
+
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value);
+  };
 
   const handleBackClick = () => {
     navigate("/");
   };
+
+  const handleDeleteClick = (id) => {
+    if (
+      window.confirm(
+        "Czy na pewno chcesz usunąć te zgłoszenie? UWAGA, akcja jest nieodwracalna."
+      )
+    ) {
+      axios
+        .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+        })
+        .then(() => {
+          setEntries(entries.filter((entry) => entry.id !== id));
+        })
+        .catch((error) => console.error("Error deleting entry: ", error));
+    }
+  };
   return (
     <ThemeProvider theme={montserrat}>
+      <Navbar />
       <Box
         sx={{
           px: 4,
@@ -41,7 +118,6 @@ export default function Entries() {
         }}
       >
         <Box sx={{ textAlign: "center", my: 2, mx: "auto" }}>
-          <Header />
           <Typography
             style={{ fontWeight: "bold", marginTop: "20px" }}
             variant="h4"
@@ -49,32 +125,57 @@ export default function Entries() {
           >
             Prace konkursowe: {contest.title}
           </Typography>
+          <Select value={sortOrder} onChange={handleSortChange} sx={{ mt: 2 }}>
+            <MenuItem value={"asc"}>
+              Od nieocenionych/najniżej ocenionych
+            </MenuItem>
+            <MenuItem value={"desc"}>Od najwyżej ocenionych</MenuItem>
+          </Select>
         </Box>
         <BackButton clickHandler={handleBackClick} />
-        {entries.map((entry) => (
-          <Card
-            key={entry.id}
-            sx={{
-              p: 4,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 2,
-              maxWidth: "50%",
-              boxShadow: "0 0 3px 1px #95C21E",
-            }}
-          >
-            <EntryInfo
-              id={entry.id}
-              name={entry.contestant_name}
-              surname={entry.contestant_surname}
-              age="12"
-              school="Szkoła Podstawowa nr 1 w Głogowie"
-            />
-            <EntryScore badgeColor="success.main" score={22} />
-          </Card>
-        ))}
+        {entries.map((entry) => {
+          console.log(entry.score, maxScore);
+          const badgeColor = getBadgeColor(entry.score, maxScore);
+          return (
+            <Card
+              key={entry.id}
+              sx={{
+                p: 4,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 2,
+                maxWidth: "50%",
+                boxShadow: "0 0 3px 1px #95C21E",
+              }}
+            >
+              <EntryInfo
+                id={entry.id}
+                title={entry.entry_title}
+                name={entry.contestants}
+                surname={entry.contestants}
+                age="12"
+                school="Szkoła Podstawowa nr 1 w Głogowie"
+                onDeleteClick={handleDeleteClick}
+              />
+
+              <EntryScore badgeColor={badgeColor} score={entry.score} />
+            </Card>
+          );
+        })}
       </Box>
     </ThemeProvider>
   );
+}
+
+function getBadgeColor(score, maxScore) {
+  if (score === null || score === undefined) {
+    return "grey";
+  } else if (score < 0.5 * maxScore) {
+    return "red";
+  } else if (score < 0.9 * maxScore) {
+    return "yellow";
+  } else {
+    return "green";
+  }
 }
