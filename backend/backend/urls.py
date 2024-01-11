@@ -18,13 +18,12 @@ from django.contrib import admin
 from django.urls import include, path
 from contest_platform.urls import router
 from rest_framework.authtoken.views import obtain_auth_token
-from contest_platform.views import logout
-from contest_platform.views import UserViewSet
+from contest_platform.views import Logout
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
     path("api/login/", obtain_auth_token),
-    path("api/logout/", logout)
+    path("api/logout/", Logout.as_view()),
 ]

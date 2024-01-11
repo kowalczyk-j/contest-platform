@@ -27,7 +27,9 @@ function CreateEntryPage() {
     });
   };
 
-  const handleBack = () => { navigate("/"); };
+  const handleBack = () => {
+    navigate("/");
+  };
 
   return (
     <div>
@@ -41,7 +43,7 @@ function CreateEntryPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default CreateEntryPage;

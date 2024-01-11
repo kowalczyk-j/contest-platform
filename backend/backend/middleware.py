@@ -7,10 +7,9 @@ logger = logging.getLogger(__name__)
 
 class RequestLoggingMiddleware(MiddlewareMixin):
     def process_request(self, request: Request):
+        user = request.user if request.user.is_authenticated else 'Anonymous'
         logger.info(
             f"Method: {request.method}, Path: {request.path}, "
             f"GET Data: {request.GET}, POST Data: {request.POST}, "
-            f"Headers: {request.headers}, User: {
-                request.user if request.user.is_authenticated else 'Anonymous'}"
-            "\n"
+            f"Headers: {request.headers}, User: {user}\n"
         )
