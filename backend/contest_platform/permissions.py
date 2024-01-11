@@ -40,6 +40,8 @@ class ContestPermission(permissions.BasePermission):
 
         if view.action in ["list", "max_rating_sum", "retrieve", "update", "partial_update", "destroy"]:
             return True
+        elif view.action == "create":
+            return request.user.is_authenticated and request.user.is_staff
         else:
             return False
 

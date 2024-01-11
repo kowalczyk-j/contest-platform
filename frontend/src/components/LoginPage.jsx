@@ -33,7 +33,7 @@ const LoginPage = () => {
       password: password,
     };
 
-    const loginLink = `${import.meta.env.VITE_API_URL}/api/login/`;
+    const loginLink = `${import.meta.env.VITE_API_URL}api/login/`;
     const headersLogin = { headers: { "Content-Type": "application/json" } };
 
     axios
@@ -44,9 +44,8 @@ const LoginPage = () => {
         const token = responseData.token;
         sessionStorage.setItem("accessToken", token);
 
-        const currentUserLink = `${
-          import.meta.env.VITE_API_URL
-        }/api/users/current_user/`;
+        const currentUserLink = `${import.meta.env.VITE_API_URL
+          }api/users/current_user/`;
         const headersCurrentUser = {
           headers: {
             "Content-Type": "application/json",
