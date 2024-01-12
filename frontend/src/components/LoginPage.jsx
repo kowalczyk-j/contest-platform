@@ -17,14 +17,15 @@ import { styled } from "@mui/material/styles";
 import Logo from "../static/assets/Logo.png";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+import ConfirmationWindow from "./ConfirmationWindow";
 import axios from "axios";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState("");
-  const [loginErrorMessage, setLoginErrorMessage] = useState("");
+  const [openSuccess, setOpenSuccess] = useState(false);
   const navigate = useNavigate();
+
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -33,20 +34,19 @@ const LoginPage = () => {
       password: password,
     };
 
-    const loginLink = `${import.meta.env.VITE_API_URL}/api/login/`;
+    const loginLink = `${import.meta.env.VITE_API_URL}api/login/`;
     const headersLogin = { headers: { "Content-Type": "application/json" } };
 
     axios
       .post(loginLink, postData, headersLogin)
       .then((response) => {
-        setLoginError(false);
         const responseData = response.data;
         const token = responseData.token;
         sessionStorage.setItem("accessToken", token);
 
         const currentUserLink = `${
           import.meta.env.VITE_API_URL
-        }/api/users/current_user/`;
+        }api/users/current_user/`;
         const headersCurrentUser = {
           headers: {
             "Content-Type": "application/json",
@@ -65,8 +65,6 @@ const LoginPage = () => {
       })
       .catch((error) => {
         console.log("Login failed:", error.message);
-        setLoginError(true);
-        setLoginErrorMessage(JSON.stringify(error.response.data, null, 2));
       });
   };
 
@@ -131,66 +129,26 @@ const LoginPage = () => {
                 <div
                   style={{ display: "flex", justifyContent: "space-evenly" }}
                 >
-                  <Popup
-                    trigger={
-                      <Button
-                        variant="contained"
-                        style={{
-                          backgroundColor: "#95C21E",
-                          color: "white",
-                          width: "225px",
-                        }}
-                        type="submit"
-                        onClick={loginError ? close : () => handleBack()}
-                      >
-                        Zaloguj się
-                      </Button>
-                    }
-                    modal
-                    contentStyle={{
-                      maxWidth: "300px",
-                      borderRadius: "10px",
-                      padding: "20px",
-                      textAlign: "center",
-                      fontFamily: "Arial",
+                  <Button
+                    variant="contained"
+                    style={{
+                      backgroundColor: "#95C21E",
+                      color: "white",
+                      width: "225px",
                     }}
+                    type="submit"
+                    onClick={() => setOpenSuccess(true)}
                   >
-                    {(close) => (
-                      <div className="modal">
-                        <div className="content">
-                          {loginError ? (
-                            <React.Fragment>
-                              Logowanie nieudane, spróbuj ponownie.
-                              <br />
-                              <br />
-                              {loginErrorMessage}
-                            </React.Fragment>
-                          ) : (
-                            "Pomyślnie zalogowano!"
-                          )}
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            marginTop: "20px",
-                          }}
-                        >
-                          <Button
-                            variant="contained"
-                            style={{
-                              backgroundColor: "#95C21E",
-                              color: "white",
-                              width: "80px",
-                            }}
-                            onClick={loginError ? close : () => handleBack()}
-                          >
-                            OK
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </Popup>
+                    Zaloguj się
+                  </Button>
+                  <ConfirmationWindow
+                    open={openSuccess}
+                    setOpen={setOpenSuccess}
+                    title="Czy na pewno chcesz usunąć to zgłoszenie?"
+                    message="Ta akcja jest nieodwracalna"
+                    onConfirm={console.log("OK clicked")}
+                    showCancelButton={false}
+                  />
                 </div>
               </form>
             </CardContent>
