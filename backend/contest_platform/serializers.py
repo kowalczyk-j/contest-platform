@@ -1,4 +1,4 @@
-from .models import Address, GradeCriterion, Contest, Entry, Person
+from .models import Address, GradeCriterion, Contest, Entry, Person, Grade
 from .models import User
 from rest_framework import serializers
 
@@ -86,3 +86,12 @@ class GradeCriterionSerializer(serializers.ModelSerializer):
                   "contest",
                   "description",
                   "max_rating")
+
+
+class GradeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Grade
+        fields = ("id",
+                  "criterion",
+                  "entry",
+                  "value")

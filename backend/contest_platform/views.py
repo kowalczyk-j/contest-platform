@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Address, GradeCriterion, Contest, Entry, User, Person
+from .models import Address, GradeCriterion, Contest, Entry, User, Person, Grade
 from .serializers import (
     AddressSerializer,
     GradeCriterionSerializer,
@@ -8,10 +8,11 @@ from .serializers import (
     EntrySerializer,
     UserSerializer,
     PersonSerializer,
+    GradeSerializer
 )
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import TokenAuthentication
-from .permissions import UserPermission, ContestPermission, EntryPermission, GradeCriterionPermissions
+from .permissions import UserPermission, ContestPermission, EntryPermission, GradeCriterionPermissions, GradePermissions
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -35,13 +36,6 @@ class ContestViewSet(ModelViewSet):
     serializer_class = ContestSerializer
     # authentication_classes = [TokenAuthentication]
     # permission_classes = [ContestPermission]
-
-    @action(detail=True, methods=["get"])
-    def entries(self, request, pk=None):
-        contest_id = self.get_object().id
-        queryset = Entry.objects.filter(contest=contest_id)
-        serializer = EntrySerializer(queryset, many=True)
-        return Response(serializer.data)
 
     @action(detail=True, methods=['get'])
     def max_rating_sum(self, request, pk=None):
@@ -120,6 +114,13 @@ class AddressViewSet(ModelViewSet):
 class GradeCriterionViewSet(ModelViewSet):
     queryset = GradeCriterion.objects.all()
     serializer_class = GradeCriterionSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [GradeCriterionPermissions]
+
+
+class GradeViewSet(ModelViewSet):
+    queryset = Grade.objects.all()
+    serializer_class = GradeSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [GradeCriterionPermissions]
 
