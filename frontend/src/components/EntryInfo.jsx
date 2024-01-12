@@ -60,3 +60,14 @@ export default function EntryInfo({
     </Box>
   );
 }
+
+{
+  /* <ConfirmationWindow
+          open={open}
+          setOpen={setOpen}
+          title="Czy na pewno chcesz usunąć to zgłoszenie?"
+          message="Ta akcja jest nieodwracalna"
+          onConfirm={handleDeleteClick}
+          showCancelButton={false}
+        /> */
+}

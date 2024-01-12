@@ -16,6 +16,7 @@ from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
+from django.core.mail import send_mail
 
 
 class Logout(GenericAPIView):
@@ -32,8 +33,8 @@ class Logout(GenericAPIView):
 class ContestViewSet(ModelViewSet):
     queryset = Contest.objects.all()
     serializer_class = ContestSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [ContestPermission]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [ContestPermission]
 
     @action(detail=True, methods=['get'])
     def max_rating_sum(self, request, pk=None):
@@ -44,6 +45,26 @@ class ContestViewSet(ModelViewSet):
         total_max_rating = AssessmentCriterion.objects.filter(
             contest=contest).aggregate(Sum('max_rating'))['max_rating__sum']
         return Response({'total_max_rating': total_max_rating or 0})
+
+    @action(detail=True, methods=['post'])
+    def send_email(self, request, pk=None):
+        contest = self.get_object()
+        subject = request.data.get('subject')
+        message = request.data.get('message')
+
+        recipients = ['jakubkow505@gmail.com']
+        # recipients = User.objects.filter(
+        #     groups__name=group_name).values_list('email', flat=True)
+
+        send_mail(
+            subject,
+            message,
+            'konkursy.bowarto@gmail.com',  # Adres e-mail nadawcy
+            recipients,
+            fail_silently=False,
+        )
+
+        return Response({'status': 'success'}, status=status.HTTP_200_OK)
 
 
 class PersonViewSet(ModelViewSet):
