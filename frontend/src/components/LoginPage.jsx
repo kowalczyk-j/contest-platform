@@ -23,12 +23,14 @@ import axios from "axios";
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [openSuccess, setOpenSuccess] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [loginError, setLoginError] = useState(false);
+  const [loginErrorMessage, setLoginErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
+    setLoginError(false);
     const postData = {
       username: username,
       password: password,
@@ -61,13 +63,19 @@ const LoginPage = () => {
           .catch((error) => {
             console.log("Error:", error);
           });
+        setOpenPopup(true);
       })
       .catch((error) => {
         console.log("Login failed:", error.message);
+        setLoginError(true);
+        setLoginErrorMessage(error.message);
+        setOpenPopup(true);
       });
   };
 
   const handleBack = () => {
+    setLoginError(false);
+    setOpenPopup(false)
     navigate("/");
   };
 
@@ -136,16 +144,15 @@ const LoginPage = () => {
                       width: "225px",
                     }}
                     type="submit"
-                    onClick={() => setOpenSuccess(true)}
                   >
                     Zaloguj się
                   </Button>
                   <ConfirmationWindow
-                    open={openSuccess}
-                    setOpen={setOpenSuccess}
-                    title="Czy na pewno chcesz usunąć to zgłoszenie?"
-                    message="Ta akcja jest nieodwracalna"
-                    onConfirm={console.log("OK clicked")}
+                    open={openPopup}
+                    setOpen={setOpenPopup}
+                    title={loginError ? "Logowanie nieudane" : "Pomyślnie zalogwano"}
+                    message={loginError ? loginErrorMessage : null}
+                    onConfirm={() => loginError ? setOpenPopup(false) : handleBack()}
                     showCancelButton={false}
                   />
                 </div>
