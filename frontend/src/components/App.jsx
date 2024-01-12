@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CreateContestPage from "./CreateContestPage";
 import ContestListPage from "./ContestListPage";
-import AvailableEntries from "./AvailableEntries";
-import HomePage from "./HomePage";
 import GradeEntry from './GradeEntry';
 import CreateEntryPage from "./CreateEntryPage";
 import Entries from "./Entries";

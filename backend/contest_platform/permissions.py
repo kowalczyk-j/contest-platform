@@ -76,7 +76,7 @@ class EntryPermission(permissions.BasePermission):
             return False
 
 
-class AssessmentCriterion(permissions.BasePermission):
+class GradeCriterionPermissions(permissions.BasePermission):
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
         if view.action == "list":
             return request.user.is_authenticated and request.user.is_staff
