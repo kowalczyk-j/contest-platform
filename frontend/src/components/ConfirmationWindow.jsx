@@ -19,7 +19,14 @@ const StyledDialog = styled(Dialog)({
   },
 });
 
-const ConfirmationWindow = ({ open, setOpen, title, message, onConfirm }) => {
+const ConfirmationWindow = ({
+  open,
+  setOpen,
+  title,
+  message,
+  onConfirm,
+  showCancelButton = true,
+}) => {
   const handleClose = () => {
     setOpen(false);
   };
@@ -44,9 +51,11 @@ const ConfirmationWindow = ({ open, setOpen, title, message, onConfirm }) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Anuluj
-          </Button>
+          {showCancelButton && (
+            <Button onClick={handleClose} color="primary">
+              Anuluj
+            </Button>
+          )}
           <Button
             onClick={handleConfirm}
             variant="contained"
