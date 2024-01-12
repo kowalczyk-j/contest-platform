@@ -8,10 +8,12 @@ import BackButton from "./BackButton";
 import montserrat from "../static/theme";
 import EntryInfo from "./EntryInfo";
 import EntryScore from "./EntryScore";
+import ConfirmationWindow from "./ConfirmationWindow";
 
 export default function Entries() {
   const [entries, setEntries] = useState([]);
   const [contest, setContest] = useState({});
+  const [open, setOpen] = useState(false);
   const [maxScore, setMaxScore] = useState(10);
   const [sortOrder, setSortOrder] = useState("asc");
   const navigate = useNavigate();
@@ -88,23 +90,18 @@ export default function Entries() {
   };
 
   const handleDeleteClick = (id) => {
-    if (
-      window.confirm(
-        "Czy na pewno chcesz usunąć te zgłoszenie? UWAGA, akcja jest nieodwracalna."
-      )
-    ) {
-      axios
-        .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + sessionStorage.getItem("accessToken"),
-          },
-        })
-        .then(() => {
-          setEntries(entries.filter((entry) => entry.id !== id));
-        })
-        .catch((error) => console.error("Error deleting entry: ", error));
-    }
+    axios
+      .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then(() => {
+        setEntries(entries.filter((entry) => entry.id !== id));
+      })
+      .catch((error) => console.error("Error deleting entry: ", error));
+    setOpen(false);
   };
   return (
     <ThemeProvider theme={montserrat}>
@@ -158,7 +155,6 @@ export default function Entries() {
                 school="Szkoła Podstawowa nr 1 w Głogowie"
                 onDeleteClick={handleDeleteClick}
               />
-
               <EntryScore badgeColor={badgeColor} score={entry.score} />
             </Card>
           );
