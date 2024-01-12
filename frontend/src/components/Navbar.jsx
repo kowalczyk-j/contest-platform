@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,7 +14,8 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Header from "./Header";
 import { Link } from "react-router-dom";
-import { handleLogout } from "./Logout";
+import ConfirmationWindow from "./ConfirmationWindow";
+import Logout from "../components/Logout";
 
 const pages = ["Konkursy", "Wydarzenia", "Blog", "użytkownicy"];
 const settings = ["Profil", "Moje prace", "Dashboard"];
@@ -29,9 +30,10 @@ const pagesLinks = {
 };
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [userData, setUserData] = React.useState(
+  const [openPopup, setOpenPopup] = useState(false);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [userData, setUserData] = useState(
     JSON.parse(sessionStorage.getItem("userData")) || {},
   );
 
@@ -151,9 +153,7 @@ function ResponsiveAppBar() {
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
-                <MenuItem key="logout" onClick={handleLogout}>
-                  <Typography textAlign="center">Wyloguj</Typography>
-                </MenuItem>
+                <Logout></Logout>
               </Menu>
             </Box>
           ) : (
