@@ -11,7 +11,7 @@ from .serializers import (
 )
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import TokenAuthentication
-from .permissions import UserPermission, ContestPermission, EntryPermission
+from .permissions import UserPermission, ContestPermission, EntryPermission, GradeCriterionPermissions
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -36,7 +36,7 @@ class ContestViewSet(ModelViewSet):
     permission_classes = [ContestPermission]
 
     @action(detail=True, methods=['get'])
-    def max_rating_sum(self, request, pk=None):
+    def max_rating_sum(self, request):
         """
         Returns the sum of max_rating for all GradeCriteria related to the contest.
         """
@@ -80,17 +80,11 @@ class EntryViewSet(ModelViewSet):
             return Response(entry_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         return Response(entry_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get_queryset(self):
-        queryset = Entry.objects.all()
-        contest_id = self.request.query_params.get("contest", None)
-        if contest_id is not None:
-            queryset = queryset.filter(contest=contest_id)
-        return queryset
-
-    def destroy(self, request, *args, **kwargs):
-        entry = self.get_object()
-        entry.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    @action(detail=False, methods=["get"])
+    def by_contest_id(self, request, contest_id):
+        queryset = Entry.objects.filter(contest=contest_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class AddressViewSet(ModelViewSet):
@@ -104,9 +98,8 @@ class AddressViewSet(ModelViewSet):
 class GradeCriterionViewSet(ModelViewSet):
     queryset = GradeCriterion.objects.all()
     serializer_class = GradeCriterionSerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [GradeCriterionPermissions]
-    # TODO
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [GradeCriterionPermissions]
 
 
 class UserViewSet(ModelViewSet):

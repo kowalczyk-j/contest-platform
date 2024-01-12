@@ -9,7 +9,3 @@ router.register(r"addresses", AddressViewSet)
 router.register(r"criterions", GradeCriterionViewSet)
 router.register(r"users", UserViewSet),
 router.register(r"person", PersonViewSet)
-
-urlpatterns = [
-    path("", include(router.urls)),
-]

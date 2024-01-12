@@ -72,10 +72,17 @@ class EntrySerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        fields = ("id", "street", "number", "postal_code", "city")
+        fields = ("id",
+                  "street",
+                  "number",
+                  "postal_code",
+                  "city")
 
 
 class GradeCriterionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GradeCriterion
-        fields = ("id", "contest", "description", "max_rating")
+        fields = ("id",
+                  "contest",
+                  "description",
+                  "max_rating")

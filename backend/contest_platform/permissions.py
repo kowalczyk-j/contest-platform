@@ -59,26 +59,40 @@ class ContestPermission(permissions.BasePermission):
 
 class EntryPermission(permissions.BasePermission):
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
-        if view.action == "list":
+        if view.action in ["list", "by_contest_id"]:
             return request.user.is_authenticated and request.user.is_staff
         if view.action == "create":
             return request.user.is_authenticated
         if view.action in ["retrieve", "update", "partial_update", "destroy"]:
             return True
+        else:
+            return False
 
     def has_object_permission(
         self, request: Request, view: GenericAPIView, obj: models.Model
     ) -> bool:
-        if view.action in ["retrieve", "update", "partial_update", "destroy"]:
-            # @TODO change for user to only access own entry
-            return request.user.is_authenticated
+        if view.action in ["retrieve", "update", "partial_update", "destroy", "by_contest_id"]:
+            return request.user.is_authenticated and (request.user == obj.user or request.user.is_staff)
         else:
             return False
 
 
 class GradeCriterionPermissions(permissions.BasePermission):
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
-        if view.action == "list":
+        if view.action in ["retrieve", "update", "partial_update", "destroy"]:
+            return request.user.is_authenticated
+        elif view.action in ["list", "create"]:
             return request.user.is_authenticated and request.user.is_staff
-        if view.action == "create":
-            return request.user.is_authenticated and request.user.is_staff
+        else:
+            return False
+
+    def has_object_permission(
+        self, request: Request, view: GenericAPIView, obj: models.Model
+    ) -> bool:
+
+        if view.action == "retrieve":
+            return request.user.is_staff or request.user.is_jury
+        elif view.action in ["update", "partial_update", "destroy"]:
+            return request.user.is_staff
+        else:
+            return False
