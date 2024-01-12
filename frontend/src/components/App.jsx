@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CreateContestPage from "./CreateContestPage";
 import ContestListPage from "./ContestListPage";
-import AvailableEntries from "./AvailableEntries";
+import GradeEntry from './GradeEntry';
 import CreateEntryPage from "./CreateEntryPage";
 import Entries from "./Entries";
 import RegistrationPage from "./RegistrationPage";
@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ContestListPage />} />
         <Route path="/create-contest" element={<CreateContestPage />} />
-        <Route path="/available-entries" element={<AvailableEntries />} />
+        <Route path="/grade-entry" element={<GradeEntry />} />
         <Route path="/contest/:contestId" element={<CreateEntryPage />} />
         <Route
           path="/entries/:contestId"
