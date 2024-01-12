@@ -68,7 +68,7 @@ const LoginPage = () => {
       .catch((error) => {
         console.log("Login failed:", error.message);
         setLoginError(true);
-        setLoginErrorMessage(error.message);
+        setLoginErrorMessage(JSON.stringify(error.response.data, null, 2));
         setOpenPopup(true);
       });
   };
