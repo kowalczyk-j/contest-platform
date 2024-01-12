@@ -38,7 +38,7 @@ class ContestPermission(permissions.BasePermission):
 
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
 
-        if view.action in ["list", "max_rating_sum", "retrieve", "update", "partial_update", "destroy"]:
+        if view.action in ["list", "max_rating_sum", "retrieve", "update", "partial_update", "destroy", "entries"]:
             return True
         elif view.action == "create":
             return request.user.is_authenticated and request.user.is_staff

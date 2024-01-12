@@ -92,6 +92,7 @@ const LoginPage = () => {
       </div>
       <Button
         style={{
+          color: "black",
           display: "flex",
           flexDirection: "row",
           marginInline: "22%",
@@ -161,7 +162,7 @@ const LoginPage = () => {
           </Card>
         </Grid>
       </Grid>
-    </div>
+    </div >
   );
 };
 
