@@ -36,8 +36,15 @@ class ContestViewSet(ModelViewSet):
     # authentication_classes = [TokenAuthentication]
     # permission_classes = [ContestPermission]
 
+    @action(detail=True, methods=["get"])
+    def entries(self, request, pk=None):
+        contest_id = self.get_object().id
+        queryset = Entry.objects.filter(contest=contest_id)
+        serializer = EntrySerializer(queryset, many=True)
+        return Response(serializer.data)
+
     @action(detail=True, methods=['get'])
-    def max_rating_sum(self, request):
+    def max_rating_sum(self, request, pk=None):
         """
         Returns the sum of max_rating for all GradeCriteria related to the contest.
         """
@@ -100,12 +107,6 @@ class EntryViewSet(ModelViewSet):
             headers = self.get_success_headers(entry_serializer.data)
             return Response(entry_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         return Response(entry_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=False, methods=["get"])
-    def by_contest_id(self, request, contest_id):
-        queryset = Entry.objects.filter(contest=contest_id)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
 
 
 class AddressViewSet(ModelViewSet):
