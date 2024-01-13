@@ -8,6 +8,7 @@ import RegistrationPage from "./RegistrationPage";
 import LoginPage from "./LoginPage";
 import UserProfilePage from "./UserProfilePage";
 import PrivateRoute from "./PrivateRoute";
+import EmailForm from "./EmailForm";
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
+        <Route
+          path="/contest/:contestId/email"
+          element={
+            <PrivateRoute forStaff={true}>
+              <EmailForm />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );

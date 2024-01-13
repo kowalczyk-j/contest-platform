@@ -1,5 +1,7 @@
 import { Box, Typography, Button } from "@mui/material";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ConfirmationWindow from "./ConfirmationWindow";
 
 export default function EntryInfo({
   id,
@@ -11,6 +13,7 @@ export default function EntryInfo({
   onDeleteClick,
 }) {
   const navigate = useNavigate();
+  const [openPopUp, setOpenPopUp] = useState(false);
   const handleEditClick = (entryId) => {
     navigate("/contest/1");
   };
@@ -43,9 +46,16 @@ export default function EntryInfo({
         <Button color="warning" onClick={() => handleEditClick(id)}>
           Edytuj
         </Button>
-        <Button color="error" onClick={handleDeleteClick}>
+        <Button color="error" onClick={() => setOpenPopUp(true)}>
           Usuń
         </Button>
+        <ConfirmationWindow
+          open={openPopUp}
+          setOpen={setOpenPopUp}
+          title="Czy na pewno chcesz usunąć to zgłoszenie?"
+          message="Ta akcja jest nieodwracalna"
+          onConfirm={handleDeleteClick}
+        />
       </Box>
     </Box>
   );

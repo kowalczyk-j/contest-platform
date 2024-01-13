@@ -1,41 +1,27 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Typography, Box, Select, MenuItem, Button } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
+import { Card, Typography, Box, Select, MenuItem } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import { ThemeProvider } from "@mui/material/styles";
+import montserrat from "../static/theme";
 import Navbar from "./Navbar";
 import BackButton from "./BackButton";
-import montserrat from "../static/theme";
 import EntryInfo from "./EntryInfo";
 import EntryScore from "./EntryScore";
+import ConfirmationWindow from "./ConfirmationWindow";
 
 export default function Entries() {
   const [entries, setEntries] = useState([]);
   const [contest, setContest] = useState({});
+  const [openPopUp, setOpenPopUp] = useState(false);
+  const [reviewDeleteErrorMessage, setReviewDeleteErrorMessage] = useState("");
+
   const [maxScore, setMaxScore] = useState(10);
   const [sortOrder, setSortOrder] = useState("asc");
   const navigate = useNavigate();
   const { contestId } = useParams();
 
   useEffect(() => {
-    // const currentUser = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       `${import.meta.env.VITE_API_URL}api/users/current_user/`,
-    //       {
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //           Authorization: "Token " + sessionStorage.getItem("accessToken"),
-    //         },
-    //       }
-    //     );
-    //     const user = response.data;
-    //     console.log(user);
-    //     return user;
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // };
     axios
       .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`, {
         headers: {
@@ -88,23 +74,23 @@ export default function Entries() {
   };
 
   const handleDeleteClick = (id) => {
-    if (
-      window.confirm(
-        "Czy na pewno chcesz usunąć te zgłoszenie? UWAGA, akcja jest nieodwracalna."
-      )
-    ) {
-      axios
-        .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + sessionStorage.getItem("accessToken"),
-          },
-        })
-        .then(() => {
-          setEntries(entries.filter((entry) => entry.id !== id));
-        })
-        .catch((error) => console.error("Error deleting entry: ", error));
-    }
+    axios
+      .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then(() => {
+        setEntries(entries.filter((entry) => entry.id !== id));
+      })
+      .catch((error) => {
+        console.log(error);
+        setReviewDeleteErrorMessage(
+          JSON.stringify(error.response.data, null, 2)
+        );
+      });
+    setOpenPopUp(true);
   };
   return (
     <ThemeProvider theme={montserrat}>
@@ -158,12 +144,23 @@ export default function Entries() {
                 school="Szkoła Podstawowa nr 1 w Głogowie"
                 onDeleteClick={handleDeleteClick}
               />
-
               <EntryScore badgeColor={badgeColor} score={entry.score} />
             </Card>
           );
         })}
       </Box>
+      <ConfirmationWindow
+        open={openPopUp}
+        setOpen={setOpenPopUp}
+        title={
+          reviewDeleteErrorMessage
+            ? "Usuwanie zgłoszenia nieudane"
+            : "Pomyślnie usunięto zgłoszenie"
+        }
+        message={reviewDeleteErrorMessage || null}
+        onConfirm={() => setOpenPopUp(false)}
+        showCancelButton={false}
+      />
     </ThemeProvider>
   );
 }
