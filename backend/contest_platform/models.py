@@ -19,23 +19,6 @@ class Contest(models.Model):
         return f"{self.title, self.description}"
 
 
-class GradeCriterion(models.Model):
-    contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
-    description = models.CharField(max_length=500)
-    max_rating = models.IntegerField()
-
-
-class Grade(models.Model):
-    criterion = models.ForeignKey(GradeCriterion, on_delete=models.CASCADE)
-    entry = models.ForeignKey('Entry', on_delete=models.CASCADE)
-    value = models.IntegerField(null=True)
-
-    def clean(self):
-        if self.value > self.criterion.max_rating:
-            raise ValidationError(
-                {'value': 'Value must be less than or equal to the max rating of the criterion.'})
-
-
 class Address(models.Model):
     street = models.CharField(max_length=50)
     number = models.CharField(max_length=10)
@@ -63,3 +46,20 @@ class Entry(models.Model):
     email = models.EmailField(null=True)
     entry_title = models.CharField(max_length=100)
     entry_file = models.URLField(max_length=300, null=True)
+
+
+class GradeCriterion(models.Model):
+    contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
+    description = models.CharField(max_length=500)
+    max_rating = models.IntegerField()
+
+
+class Grade(models.Model):
+    criterion = models.ForeignKey(GradeCriterion, on_delete=models.CASCADE)
+    entry = models.ForeignKey(Entry, on_delete=models.CASCADE)
+    value = models.IntegerField(null=True)
+
+    def clean(self):
+        if self.value > self.criterion.max_rating:
+            raise ValidationError(
+                {'value': 'Value must be less than or equal to the max rating of the criterion.'})

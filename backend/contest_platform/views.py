@@ -97,10 +97,27 @@ class EntryViewSet(ModelViewSet):
         entry_data['contestants'] = contestants
         entry_serializer = self.get_serializer(data=entry_data)
         if entry_serializer.is_valid():
-            self.perform_create(entry_serializer)
+            entry_instance = self.perform_create(entry_serializer)
+
+            # Create Grade instances based on GradeCriterions
+            contest = entry_instance.contest
+            grade_criterions = GradeCriterion.objects.filter(contest=contest)
+            for criterion in grade_criterions:
+                Grade.objects.create(criterion=criterion, entry=entry_instance)
+
             headers = self.get_success_headers(entry_serializer.data)
             return Response(entry_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         return Response(entry_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def get_queryset(self):
+    #     user_param = self.request.query_params.get('user', None)
+    #     contest_param = self.request.query_params.get('contest', None)
+
+    #     if user_param:
+    #         return Entry.objects.filter(user=user_param)
+    #     if contest_param:
+    #         return Entry.objects.filter(contest=contest_param)
+    #     return self.get_queryset()
 
 
 class AddressViewSet(ModelViewSet):
