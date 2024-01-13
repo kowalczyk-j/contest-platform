@@ -35,7 +35,6 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [userData, setUserData] = useState({});
-
   const accessToken = sessionStorage.getItem("accessToken");
 
   const handleOpenNavMenu = (event) => {
