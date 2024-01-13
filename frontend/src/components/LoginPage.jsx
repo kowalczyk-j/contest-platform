@@ -75,6 +75,7 @@ const LoginPage = () => {
 
   const handleBack = () => {
     setLoginError(false);
+    setLoginErrorMessage("");
     setOpenPopup(false)
     navigate("/");
   };

@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ContestListPage />} />
         <Route path="/create-contest" element={<CreateContestPage />} />
-        <Route path="/grade-entry" element={<GradeEntry />} />
+        <Route path="/grade-entry/:entryId" element={<GradeEntry />} />
         <Route path="/contest/:contestId" element={<CreateEntryPage />} />
         <Route
           path="/entries/:contestId"
