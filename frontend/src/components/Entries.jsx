@@ -31,7 +31,7 @@ export default function Entries() {
       })
       .then((response) => {
         const sortedEntries = response.data.sort((a, b) =>
-          sortOrder === "asc" ? a.score - b.score : b.score - a.score
+          sortOrder === "asc" ? a.score - b.score : b.score - a.score,
         );
         setEntries(sortedEntries);
       })
@@ -57,7 +57,7 @@ export default function Entries() {
             "Content-Type": "application/json",
             Authorization: "Token " + sessionStorage.getItem("accessToken"),
           },
-        }
+        },
       )
       .then((response) => {
         setMaxScore(response.data.total_max_rating);
@@ -87,7 +87,7 @@ export default function Entries() {
       .catch((error) => {
         console.log(error);
         setReviewDeleteErrorMessage(
-          JSON.stringify(error.response.data, null, 2)
+          JSON.stringify(error.response.data, null, 2),
         );
       });
     setOpenPopUp(true);
