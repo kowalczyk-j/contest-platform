@@ -78,7 +78,6 @@ function EntryForm({ contestId, onSubmit }) {
         }
       );
       const user = response.data;
-      console.log(user);
       return user;
     } catch (error) {
       console.error(error);

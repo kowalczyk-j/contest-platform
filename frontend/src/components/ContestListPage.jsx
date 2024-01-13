@@ -124,9 +124,9 @@ const ContestIndexPage = () => {
               >
                 <CardHeader title={contest.title} />
                 {/* jezeli jest zdjecie to nalezy je tu dodać */}
-                {contest.image && (
+                {contest.poster_img && (
                   <img
-                    src={contest.image}
+                    src={contest.poster_img}
                     alt="Contest"
                     style={{ width: "100%", maxHeight: "80%" }}
                   />
@@ -159,6 +159,7 @@ const ContestIndexPage = () => {
                     color: "#95C21E",
                   }}
                   endIcon={<ArrowForwardIcon />}
+                  href={contest.rules_pdf}
                 >
                   Regulamin
                 </TextButton>
@@ -199,6 +200,7 @@ const ContestIndexPage = () => {
             <TextButton
               style={{ fontSize: "1rem", color: "#95C21E" }}
               endIcon={<ArrowForwardIcon />}
+              href={selectedContest?.rules_pdf}
             >
               Regulamin
             </TextButton>
