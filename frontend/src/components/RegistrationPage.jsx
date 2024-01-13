@@ -24,7 +24,7 @@ const RegistrationPage = () => {
             password: password,
         };
 
-        axios.post(`${import.meta.env.VITE_API_URL}/api/users/`, postData, {
+        axios.post(`${import.meta.env.VITE_API_URL}api/users/`, postData, {
             headers: {
                 'Content-Type': 'application/json',
             }

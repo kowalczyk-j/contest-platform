@@ -15,9 +15,10 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Logo from "../static/assets/Logo.png";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import FileUploadButton from "./FileUploadButton"; /* TODO: stwórz FileDownload zamiast FileUpload */
-import MineCard from "./MineCard";
+import GradeEntryForm from "./GradeEntryForm";
+import BackButton from './BackButton';
 
 const GreenButton = styled(Button)({
   backgroundColor: "#95C21E",
@@ -27,7 +28,9 @@ const GreenButton = styled(Button)({
   },
 });
 
-const AvailableEntries = () => {
+const GradeEntry = () => {
+  const navigate = useNavigate();
+
   const [contests, setContests] = useState([]);
   const [selectedContest, setSelectedContest] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -49,25 +52,25 @@ const AvailableEntries = () => {
     fetchContests();
   }, []);
 
-  const handleBack = () => { Navigate("/"); };
+  const handleBack = () => { navigate("/entries/:contestId"); };
 
   return (
     <div>
 
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px"}}>
         <img style={{ width: "200px" }} src={Logo} alt="Logo" />
       </div>
 
-      <Button onClick={handleBack} style={{ display: "flex", flexDirection: "row", marginInline: "47%", alignItems: "baseline" }}>Powrót</Button>
+      <div className="back-btn">
+        <BackButton clickHandler={handleBack} />
+      </div>
 
       <Grid container justifyContent="center" alignItems="center">
-        <MineCard />
+        <GradeEntryForm />
       </Grid>
-      <>
-      </>
 
     </div>
   );
 };
 
-export default AvailableEntries;
+export default GradeEntry;

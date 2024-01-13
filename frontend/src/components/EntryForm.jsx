@@ -35,7 +35,7 @@ function EntryForm({ contestId, onSubmit }) {
       .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          Authorization: "Token " + sessionStorage.getItem("accessToken")
         },
       })
       .then((response) => {
@@ -48,6 +48,7 @@ function EntryForm({ contestId, onSubmit }) {
         setLoading(false);
       });
   }, [contestId]);
+  // TODO actual error handling
 
   // pop up after submiting
   const [open, setOpen] = React.useState(false);
@@ -77,7 +78,6 @@ function EntryForm({ contestId, onSubmit }) {
         }
       );
       const user = response.data;
-      console.log(user);
       return user;
     } catch (error) {
       console.error(error);

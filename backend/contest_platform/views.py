@@ -1,9 +1,9 @@
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Address, AssessmentCriterion, Contest, Entry, User, Person
+from .models import Address, GradeCriterion, Contest, Entry, User, Person
 from .serializers import (
     AddressSerializer,
-    AssessmentCriterionSerializer,
+    GradeCriterionSerializer,
     ContestSerializer,
     EntrySerializer,
     UserSerializer,
@@ -39,10 +39,10 @@ class ContestViewSet(ModelViewSet):
     @action(detail=True, methods=['get'])
     def max_rating_sum(self, request, pk=None):
         """
-        Returns the sum of max_rating for all AssessmentCriteria related to the contest.
+        Returns the sum of max_rating for all GradeCriteria related to the contest.
         """
         contest = self.get_object()
-        total_max_rating = AssessmentCriterion.objects.filter(
+        total_max_rating = GradeCriterion.objects.filter(
             contest=contest).aggregate(Sum('max_rating'))['max_rating__sum']
         return Response({'total_max_rating': total_max_rating or 0})
 
@@ -122,11 +122,11 @@ class AddressViewSet(ModelViewSet):
     # TODO
 
 
-class AssessmentCriterionViewSet(ModelViewSet):
-    queryset = AssessmentCriterion.objects.all()
-    serializer_class = AssessmentCriterionSerializer
+class GradeCriterionViewSet(ModelViewSet):
+    queryset = GradeCriterion.objects.all()
+    serializer_class = GradeCriterionSerializer
     # authentication_classes = [TokenAuthentication]
-    # permission_classes = [AssesmentPermission]
+    # permission_classes = [GradeCriterionPermissions]
     # TODO
 
 
