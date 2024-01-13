@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   Typography,
   TextField,
-  Button,
   Select,
   MenuItem,
   FormControl,
@@ -14,7 +13,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
 import SubmitButton from "./SubmitButton";
 import GenerateTextButton from "./GenerateTextButton";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import axios from "axios";
 import ConfirmationWindow from "./ConfirmationWindow";
@@ -50,11 +49,16 @@ export default function EmailForm() {
     axios
       .post(
         `${import.meta.env.VITE_API_URL}api/contests/1/send_email/`,
-        emailData
+        emailData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+        }
       )
       .then((res) => console.log(res.data))
       .catch((err) => console.error(err));
-    setOpenPopUp(false);
   };
 
   const generateEmailMessage = () => {
@@ -178,17 +182,17 @@ Zespół Fundacji "BoWarto"`;
                   onClick={generateEmailMessage}
                 />
               </Box>
-              <ConfirmationWindow
-                open={openPopUp}
-                setOpen={setOpenPopUp}
-                title="Pomyślnie wysłano maile"
-                message=""
-                onConfirm={handleSubmit}
-                showCancelButton={false}
-              />
             </form>
           </Card>
         </Box>
+        <ConfirmationWindow
+          open={openPopUp}
+          setOpen={setOpenPopUp}
+          title="Pomyślnie wysłano maile"
+          message=""
+          onConfirm={() => setOpenPopUp(false)}
+          showCancelButton={false}
+        />
       </ThemeProvider>
     </>
   );
