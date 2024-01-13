@@ -245,6 +245,7 @@ function EntryForm({ contestId, onSubmit }) {
             <FileUploadButton
               name="Załącz pracę"
               onFileChange={handleFileChange}
+              fileType={contest && contest.type === "plastyczne" ? "image/*" : contest && contest.type === "literackie" ? "application/pdf" : ["image/*", "application/pdf"]}
             />
           </div>
 

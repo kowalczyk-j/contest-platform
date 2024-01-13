@@ -294,6 +294,7 @@ function ContestForm({ onSubmit }) {
           <FileUploadButton
             name="Załącz regulamin"
             onFileChange={handleRulesFileChange}
+            fileType="application/pdf"
           />
           <Typography variant="body1" style={{ fontWeight: "lighter", marginTop: "15px" }}>{rulesText}</Typography>
         </div>
@@ -302,6 +303,7 @@ function ContestForm({ onSubmit }) {
           <FileUploadButton
             name="Załącz plakat" 
             onFileChange={handlePosterChange}
+            fileType="image/*"
           />
           <Typography variant="body1" style={{ fontWeight: "lighter", marginTop: "15px" }}>{posterText}</Typography>
         </div>
