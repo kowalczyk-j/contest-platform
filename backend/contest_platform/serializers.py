@@ -34,10 +34,11 @@ class ContestSerializer(serializers.ModelSerializer):
     date_end = serializers.DateField(input_formats=["%Y-%m-%d"])
 
     def validate(self, data):
-        if data["date_start"] > data["date_end"]:
-            raise serializers.ValidationError(
-                {"date_start": "Date start must be before date end."}
-            )
+        if data.get("date_start") and data.get("date_end"):
+            if data["date_start"] > data["date_end"]:
+                raise serializers.ValidationError(
+                    {"date_start": "Date start must be before date end."}
+                )
         return data
 
     class Meta:
