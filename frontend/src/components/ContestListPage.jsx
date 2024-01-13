@@ -60,7 +60,7 @@ const ContestIndexPage = () => {
       <Navbar></Navbar>
 
       <Typography
-        variant="h4"
+        variant="h3"
         align="center"
         gutterBottom
         style={{ marginTop: "20px" }}

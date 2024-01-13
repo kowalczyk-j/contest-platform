@@ -65,8 +65,7 @@ export default function Entries() {
 
     axios
       .get(
-        `${
-          import.meta.env.VITE_API_URL
+        `${import.meta.env.VITE_API_URL
         }api/contests/${contestId}/max_rating_sum/`,
         {
           headers: {
