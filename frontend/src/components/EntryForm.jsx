@@ -4,13 +4,7 @@ import axios from "axios";
 import {
   TextField,
   FormControl,
-  Button,
   Typography,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
@@ -20,6 +14,7 @@ import FileUploadButton from "./FileUploadButton";
 import SubmitButton from "./SubmitButton";
 import TextButton from "./TextButton";
 import CreatePerson from "./CreatePerson";
+import ConfirmationWindow from "./ConfirmationWindow";
 import { uploadFile } from "./uploadFile";
 
 function EntryForm({ contestId, onSubmit }) {
@@ -29,6 +24,8 @@ function EntryForm({ contestId, onSubmit }) {
   // get contest info
   const [contest, setContest] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -52,18 +49,16 @@ function EntryForm({ contestId, onSubmit }) {
 
   // pop up after submiting
   const [open, setOpen] = React.useState(false);
-  const [openError, setOpenError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const handleClose = () => {
     setOpen(false);
-    navigate("/");
+    if (errorMessage === "") {
+      navigate("/");
+    } else {
+      setErrorMessage("");
+    }
   };
-
-  const handleCloseError = () => {
-    setOpenError(false);
-  };
-
-  const navigate = useNavigate();
 
   // add user
   const currentUser = async () => {
@@ -78,7 +73,6 @@ function EntryForm({ contestId, onSubmit }) {
         }
       );
       const user = response.data;
-      console.log(user);
       return user;
     } catch (error) {
       console.error(error);
@@ -158,7 +152,8 @@ function EntryForm({ contestId, onSubmit }) {
         }
       }
     } catch (error) {
-      setOpenError(true);
+      setErrorMessage(JSON.stringify(error.response.data, null, 2));
+      setOpen(true);
       console.error("Error: ", error);
     }
   };
@@ -250,55 +245,24 @@ function EntryForm({ contestId, onSubmit }) {
             <FileUploadButton
               name="Załącz pracę"
               onFileChange={handleFileChange}
+              fileType={contest && contest.type === "plastyczne" ? "image/*" : contest && contest.type === "literackie" ? "application/pdf" : ["image/*", "application/pdf"]}
             />
           </div>
 
           <div className="submit">
-            <SubmitButton text="Zgłoś swoją pracę" />
-            <Dialog
+            <SubmitButton text="Zgłoś swoją pracę" onClick={() => {}}/>
+            <ConfirmationWindow 
               open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {" "}
-                {"Dodano nowe zgłoszenie konkursowe"}{" "}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Zostaniesz przekierowany do strony głównej
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose} autoFocus>
-                  {" "}
-                  Ok{" "}
-                </Button>
-              </DialogActions>
-            </Dialog>
-            <Dialog
-              open={openError}
-              onClose={handleCloseError}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {" "}
-                {"Wystąpił błąd przy dodawaniu zgłoszenia"}{" "}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Upewnij się, że wszystkie pola są wypełnione poprawnie
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleCloseError} autoFocus>
-                  {" "}
-                  Ok{" "}
-                </Button>
-              </DialogActions>
-            </Dialog>
+              setOpen={setOpen}
+              title={
+                errorMessage
+                  ? "Wystąpił błąd przy dodawaniu zgłoszenia"
+                  : "Dodano nowe zgłoszenie"
+              }
+              message={errorMessage || "Zostaniesz przekierowany do strony głównej"}
+              onConfirm={handleClose}
+              showCancelButton={false}
+            />
           </div>
         </div>
 

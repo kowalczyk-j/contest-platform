@@ -6,14 +6,18 @@ from django.db import models
 
 
 class UserPermission(permissions.BasePermission):
-
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
-
         if view.action == "create":
             return True
         if view.action == "list":
             return request.user.is_authenticated and request.user.is_staff
-        elif view.action in ["retrieve", "update", "partial_update", "destroy", "current_user"]:
+        elif view.action in [
+            "retrieve",
+            "update",
+            "partial_update",
+            "destroy",
+            "current_user",
+        ]:
             return True
         else:
             return False
@@ -21,11 +25,15 @@ class UserPermission(permissions.BasePermission):
     def has_object_permission(
         self, request: Request, view: GenericAPIView, obj: models.Model
     ) -> bool:
-
         if not request.user.is_authenticated:
             return False
 
-        if view.action in ["retrieve", "update", "partial_update", "current_user"]:
+        if view.action in [
+            "retrieve",
+            "update",
+            "partial_update",
+            "current_user",
+        ]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
         elif view.action == "destroy":
@@ -35,10 +43,16 @@ class UserPermission(permissions.BasePermission):
 
 
 class ContestPermission(permissions.BasePermission):
-
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
-
-        if view.action in ["list", "max_rating_sum", "retrieve", "update", "partial_update", "destroy", "entries"]:
+        if view.action in [
+            "list",
+            "max_rating_sum",
+            "retrieve",
+            "update",
+            "partial_update",
+            "destroy",
+            "send_email",
+        ]:
             return True
         elif view.action == "create":
             return request.user.is_authenticated and request.user.is_staff
@@ -48,11 +62,19 @@ class ContestPermission(permissions.BasePermission):
     def has_object_permission(
         self, request: Request, view: GenericAPIView, obj: models.Model
     ) -> bool:
-
         if view.action == "retrieve":
             return True
-        elif view.action in ["update", "partial_update", "destroy", "max_rating_sum"]:
-            return request.user.is_authenticated and (request.user.is_staff or request.user.is_jury)
+        elif view.action == "send_email":
+            return request.user.is_authenticated and request.user.is_staff
+        elif view.action in [
+            "update",
+            "partial_update",
+            "destroy",
+            "max_rating_sum",
+        ]:
+            return request.user.is_authenticated and (
+                request.user.is_staff or request.user.is_jury
+            )
         else:
             return False
 
@@ -71,8 +93,16 @@ class EntryPermission(permissions.BasePermission):
     def has_object_permission(
         self, request: Request, view: GenericAPIView, obj: models.Model
     ) -> bool:
-        if view.action in ["retrieve", "update", "partial_update", "destroy", "by_contest_id"]:
-            return request.user.is_authenticated and (request.user == obj.user or request.user.is_staff)
+        if view.action in [
+            "retrieve",
+            "update",
+            "partial_update",
+            "destroy",
+            "by_contest_id",
+        ]:
+            return request.user.is_authenticated and (
+                request.user == obj.user or request.user.is_staff
+            )
         else:
             return False
 
@@ -89,7 +119,6 @@ class GradeCriterionPermissions(permissions.BasePermission):
     def has_object_permission(
         self, request: Request, view: GenericAPIView, obj: models.Model
     ) -> bool:
-
         if view.action == "retrieve":
             return request.user.is_staff or request.user.is_jury
         elif view.action in ["update", "partial_update", "destroy"]:

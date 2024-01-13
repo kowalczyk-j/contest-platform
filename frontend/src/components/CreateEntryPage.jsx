@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import Header from "./Header";
 import BackButton from "./BackButton";
+import Navbar from "./Navbar";
 import EntryForm from "./EntryForm";
 
 function CreateEntryPage() {
@@ -33,7 +33,7 @@ function CreateEntryPage() {
 
   return (
     <div>
-      <Header />
+      <Navbar />
       <div className="main">
         <div className="back-btn">
           <BackButton clickHandler={handleBack} />

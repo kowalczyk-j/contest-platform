@@ -141,9 +141,9 @@ const ContestIndexPage = () => {
               >
                 <CardHeader title={contest.title} />
                 {/* jezeli jest zdjecie to nalezy je tu dodać */}
-                {contest.image && (
+                {contest.poster_img && (
                   <img
-                    src={contest.image}
+                    src={contest.poster_img}
                     alt="Contest"
                     style={{ width: "100%", maxHeight: "80%" }}
                   />
