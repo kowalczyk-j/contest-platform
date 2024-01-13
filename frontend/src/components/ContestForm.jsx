@@ -9,13 +9,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
-  Typography,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText
+  Typography
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -26,10 +20,12 @@ import CreateCriterion from "./CreateCriterion";
 import TextButton from "./TextButton";
 import FileUploadButton from "./FileUploadButton";
 import { uploadFile } from "./uploadFile";
+import ConfirmationWindow from "./ConfirmationWindow";
 
 function ContestForm({ onSubmit }) {
   const navigate = useNavigate();
 
+  // contest data
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dateStart, setDateStart] = useState(dayjs().format("YYYY-MM-DD"));
@@ -37,25 +33,27 @@ function ContestForm({ onSubmit }) {
   const [individual, setIndividual] = useState("");
   const [type, setType] = useState("");
   const [otherType, setOtherType] = useState("");
-
-  // pop up after submiting
-  const [open, setOpen] = React.useState(false);
-  const [openError, setOpenError] = React.useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-    navigate("/");
-  };
-
-  const handleCloseError = () => {
-    setOpenError(false);
-  };
-
-  // adding new criterion
+  // contest grade criteria
   const [criteria, setCriteria] = useState([
     { contest: "", description: "", maxRating: "" },
   ]);
 
+  // pop up after submiting
+  const [open, setOpen] = React.useState(false);
+  // error message if submit failed
+  const [errorMessage, setErrorMessage] = React.useState("");
+
+  // closing pop-up
+  const handleClose = () => {
+    setOpen(false);
+    if (errorMessage === "") {
+      navigate("/");
+    } else {
+      setErrorMessage("");
+    }
+  };
+  
+  // handler for changing criterion
   const handleCriterionChange = (index, criterionData) => {
     setCriteria((prevCriteria) => {
       const newCriteria = [...prevCriteria];
@@ -64,7 +62,8 @@ function ContestForm({ onSubmit }) {
     });
   };
 
-  const [criterionComponents, setCriterionComponents] = useState([
+  // list of criterion components generated on page
+  const [criteriaComponents, setCriteriaComponents] = useState([
     <CreateCriterion
       index="1"
       onCriterionChange={handleCriterionChange}
@@ -72,8 +71,9 @@ function ContestForm({ onSubmit }) {
     />,
   ]);
 
+  // handler for removing criterion
   const handleClickRemoveCriterion = (index) => {
-    setCriterionComponents((prevComponents) => {
+    setCriteriaComponents((prevComponents) => {
       const newComponents = prevComponents.slice(0, index);
       for (let i = index; i < prevComponents.length - 1; i++) {
         newComponents.push(
@@ -97,16 +97,17 @@ function ContestForm({ onSubmit }) {
     });
   };
 
+  // handler for adding new criterion
   const handleClickAddCriterion = () => {
-    setCriterionComponents((prevComponents) => [
+    setCriteriaComponents((prevComponents) => [
       ...prevComponents,
       <CreateCriterion
-        index={criterionComponents.length + 1}
+        index={criteriaComponents.length + 1}
         onCriterionChange={handleCriterionChange}
         onCriterionRemove={() => {
-          handleClickRemoveCriterion(criterionComponents.length);
+          handleClickRemoveCriterion(criteriaComponents.length);
         }}
-        key={criterionComponents.length}
+        key={criteriaComponents.length}
       />,
     ]);
   };
@@ -152,7 +153,7 @@ function ContestForm({ onSubmit }) {
         setOpen(true);
         const posterPath = await uploadFile("posters", poster);
         const rulesPath = await uploadFile("rules", rulesFile);
-        const updateResponse = await axios.patch(
+        await axios.patch(
           `${import.meta.env.VITE_API_URL}api/contests/${contestResponse.data.id}/`,
           {
             poster_img: posterPath,
@@ -164,14 +165,14 @@ function ContestForm({ onSubmit }) {
               Authorization: "Token " + sessionStorage.getItem("accessToken"),
             },
           }
-        );
-        if (updateResponse.status !== 200) {
-          console.error("Error updating contest:", updateResponse.status);
-        }
+        ).catch((error) => {
+          setErrorMessage(JSON.stringify(error.response.data, null, 2));
+          setOpen(true);
+        });
       }
     } catch (error) {
-      setOpenError(true);
-      console.error("Error:", error);
+      setErrorMessage(JSON.stringify(error.response.data, null, 2))
+      setOpen(true);
     }
   };
 
@@ -278,7 +279,7 @@ function ContestForm({ onSubmit }) {
 
       <div className="criteria">
         <Typography variant="body1" style={{ fontWeight: "lighter" }}>Kryteria oceny:</Typography>
-        {criterionComponents}
+        {criteriaComponents}
         <TextButton
           style={{ fontSize: 16, marginTop: "10px" }}
           startIcon={<AddCircleOutline style={{ color: "#95C21E" }} />}
@@ -307,51 +308,19 @@ function ContestForm({ onSubmit }) {
       </div>
 
       <div className="submit">
-        <SubmitButton text="Utwórz konkurs" />
-        <Dialog
+        <SubmitButton text="Utwórz konkurs" onClick={() => {}}/>
+        <ConfirmationWindow 
           open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {" "}
-            {"Dodano nowy konkurs"}{" "}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Zostaniesz przekierowany do strony głównej
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} autoFocus>
-              {" "}
-              Ok{" "}
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog
-          open={openError}
-          onClose={handleCloseError}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {" "}
-            {"Wystąpił błąd przy dodawaniu konkursu"}{" "}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Upewnij się, że wszystkie pola są wypełnione
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseError} autoFocus>
-              {" "}
-              Ok{" "}
-            </Button>
-          </DialogActions>
-        </Dialog>
+          setOpen={setOpen}
+          title={
+            errorMessage
+              ? "Wystąpił błąd przy dodawaniu konkursu"
+              : "Dodano nowy konkurs"
+          }
+          message={errorMessage || "Zostaniesz przekierowany do strony głównej"}
+          onConfirm={handleClose}
+          showCancelButton={false}
+        />
       </div>
     </form>
   );
