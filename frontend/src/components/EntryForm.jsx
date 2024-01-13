@@ -18,11 +18,16 @@ import ConfirmationWindow from "./ConfirmationWindow";
 import { uploadFile } from "./uploadFile";
 
 function EntryForm({ contestId, onSubmit }) {
+  // get contest info
+  const [contest, setContest] = useState(null);
+
+  // get user info
+  const [user, setUser] = useState(null);
+
+  // entry info
   const [email, setEmail] = useState("");
   const [entryTitle, setEntryTitle] = useState("");
 
-  // get contest info
-  const [contest, setContest] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -38,6 +43,22 @@ function EntryForm({ contestId, onSubmit }) {
       .then((response) => {
         console.log(response.data);
         setContest(response.data);
+        axios
+          .get(
+            `${import.meta.env.VITE_API_URL}api/users/current_user/`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Token " + sessionStorage.getItem("accessToken"),
+              },
+          })
+          .then((response) => {
+            setUser(response.data);
+            setEmail(response.data.email);
+          })
+          .catch((error) => {
+            console.error(error);
+            setLoading(false);
+          });
         setLoading(false);
       })
       .catch((error) => {
@@ -57,25 +78,6 @@ function EntryForm({ contestId, onSubmit }) {
       navigate("/");
     } else {
       setErrorMessage("");
-    }
-  };
-
-  // add user
-  const currentUser = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}api/users/current_user/`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + sessionStorage.getItem("accessToken"),
-          },
-        }
-      );
-      const user = response.data;
-      return user;
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -118,7 +120,6 @@ function EntryForm({ contestId, onSubmit }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const user = await currentUser();
 
     try {
       const response = await onSubmit({
