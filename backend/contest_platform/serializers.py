@@ -67,6 +67,17 @@ class EntrySerializer(serializers.ModelSerializer):
         # Create the entry instance
         contestants = validated_data.pop("contestants")
         entry = Entry(**validated_data)
+
+        user = validated_data["user"]
+        contest = validated_data["contest"]
+        existing_entry = Entry.objects.filter(user=user,
+                                              contest=contest).exists()
+
+        if existing_entry and not (user.is_staff or user.is_coordinating_unit):
+            raise serializers.ValidationError(
+                {"user": "User cannot have more than one entry."}
+            )
+
         entry.save()
         person_list = []
         # Iterate over the contestants data and add them to the entry
