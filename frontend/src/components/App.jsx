@@ -29,7 +29,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
-        <Route path="/email" element={<EmailForm />} />
+        <Route path="/contest/:contestId/email" element={<EmailForm />} />
       </Routes>
     </Router>
   );
