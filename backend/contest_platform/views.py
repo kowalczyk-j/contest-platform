@@ -33,8 +33,8 @@ class Logout(GenericAPIView):
 class ContestViewSet(ModelViewSet):
     queryset = Contest.objects.all()
     serializer_class = ContestSerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [ContestPermission]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [ContestPermission]
 
     @action(detail=True, methods=['get'])
     def max_rating_sum(self, request, pk=None):
@@ -48,11 +48,11 @@ class ContestViewSet(ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def send_email(self, request, pk=None):
-        contest = self.get_object()
         subject = request.data.get('subject')
         message = request.data.get('message')
 
         recipients = ['jakubkow505@gmail.com']
+        # TODO : Add recipients from group
         # recipients = User.objects.filter(
         #     groups__name=group_name).values_list('email', flat=True)
 

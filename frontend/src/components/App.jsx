@@ -29,7 +29,14 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
-        <Route path="/contest/:contestId/email" element={<EmailForm />} />
+        <Route
+          path="/contest/:contestId/email"
+          element={
+            <PrivateRoute forStaff={true}>
+              <EmailForm />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );
