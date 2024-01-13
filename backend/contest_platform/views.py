@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Address, GradeCriterion, Contest, Entry, User, Person
+from .models import Address, GradeCriterion, Contest, Entry, User, Person, Grade
 from .serializers import (
     AddressSerializer,
     GradeCriterionSerializer,
@@ -8,14 +8,16 @@ from .serializers import (
     EntrySerializer,
     UserSerializer,
     PersonSerializer,
+    GradeSerializer
 )
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import TokenAuthentication
-from .permissions import UserPermission, ContestPermission, EntryPermission
+from .permissions import UserPermission, ContestPermission, EntryPermission, GradeCriterionPermissions, GradePermissions
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
+from django.core.mail import send_mail
 
 
 class Logout(GenericAPIView):
@@ -32,8 +34,8 @@ class Logout(GenericAPIView):
 class ContestViewSet(ModelViewSet):
     queryset = Contest.objects.all()
     serializer_class = ContestSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [ContestPermission]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [ContestPermission]
 
     @action(detail=True, methods=['get'])
     def max_rating_sum(self, request, pk=None):
@@ -44,6 +46,26 @@ class ContestViewSet(ModelViewSet):
         total_max_rating = GradeCriterion.objects.filter(
             contest=contest).aggregate(Sum('max_rating'))['max_rating__sum']
         return Response({'total_max_rating': total_max_rating or 0})
+
+    @action(detail=True, methods=['post'])
+    def send_email(self, request, pk=None):
+        contest = self.get_object()
+        subject = request.data.get('subject')
+        message = request.data.get('message')
+
+        recipients = ['jakubkow505@gmail.com']
+        # recipients = User.objects.filter(
+        #     groups__name=group_name).values_list('email', flat=True)
+
+        send_mail(
+            subject,
+            message,
+            'konkursy.bowarto@gmail.com',  # Adres e-mail nadawcy
+            recipients,
+            fail_silently=False,
+        )
+
+        return Response({'status': 'success'}, status=status.HTTP_200_OK)
 
 
 class PersonViewSet(ModelViewSet):
@@ -80,18 +102,6 @@ class EntryViewSet(ModelViewSet):
             return Response(entry_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         return Response(entry_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get_queryset(self):
-        queryset = Entry.objects.all()
-        contest_id = self.request.query_params.get("contest", None)
-        if contest_id is not None:
-            queryset = queryset.filter(contest=contest_id)
-        return queryset
-
-    def destroy(self, request, *args, **kwargs):
-        entry = self.get_object()
-        entry.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class AddressViewSet(ModelViewSet):
     queryset = Address.objects.all()
@@ -104,9 +114,15 @@ class AddressViewSet(ModelViewSet):
 class GradeCriterionViewSet(ModelViewSet):
     queryset = GradeCriterion.objects.all()
     serializer_class = GradeCriterionSerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [GradeCriterionPermissions]
-    # TODO
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [GradeCriterionPermissions]
+
+
+class GradeViewSet(ModelViewSet):
+    queryset = Grade.objects.all()
+    serializer_class = GradeSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [GradeCriterionPermissions]
 
 
 class UserViewSet(ModelViewSet):

@@ -163,7 +163,7 @@ function ResponsiveAppBar() {
               to="/login"
               sx={{ color: "black" }}
             >
-              Login
+              Zaloguj się
             </Button>
           )}
         </Toolbar>

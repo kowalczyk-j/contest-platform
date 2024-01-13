@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import date
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 
 
 class Contest(models.Model):
@@ -22,6 +23,17 @@ class GradeCriterion(models.Model):
     contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
     description = models.CharField(max_length=500)
     max_rating = models.IntegerField()
+
+
+class Grade(models.Model):
+    criterion = models.ForeignKey(GradeCriterion, on_delete=models.CASCADE)
+    entry = models.ForeignKey('Entry', on_delete=models.CASCADE)
+    value = models.IntegerField(null=True)
+
+    def clean(self):
+        if self.value > self.criterion.max_rating:
+            raise ValidationError(
+                {'value': 'Value must be less than or equal to the max rating of the criterion.'})
 
 
 class Address(models.Model):

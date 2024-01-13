@@ -19,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import FileUploadButton from "./FileUploadButton"; /* TODO: stwórz FileDownload zamiast FileUpload */
 import GradeEntryForm from "./GradeEntryForm";
 import BackButton from './BackButton';
+import { ThemeProvider } from '@mui/material/styles';
+import montserrat from "../static/theme";
 
 const GreenButton = styled(Button)({
   backgroundColor: "#95C21E",
@@ -35,41 +37,26 @@ const GradeEntry = () => {
   const [selectedContest, setSelectedContest] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchContests = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}api/contests`);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        setContests(result);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
-    fetchContests();
-  }, []);
-
   const handleBack = () => { navigate("/entries/:contestId"); };
 
   return (
-    <div>
+    <ThemeProvider theme={montserrat}>
+      <div>
 
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px"}}>
-        <img style={{ width: "200px" }} src={Logo} alt="Logo" />
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px" }}>
+          <img style={{ width: "200px" }} src={Logo} alt="Logo" />
+        </div>
+
+        <div className="back-btn">
+          <BackButton clickHandler={handleBack} />
+        </div>
+
+        <Grid container justifyContent="center" alignItems="center">
+          <GradeEntryForm />
+        </Grid>
+
       </div>
-
-      <div className="back-btn">
-        <BackButton clickHandler={handleBack} />
-      </div>
-
-      <Grid container justifyContent="center" alignItems="center">
-        <GradeEntryForm />
-      </Grid>
-
-    </div>
+    </ThemeProvider>
   );
 };
 
