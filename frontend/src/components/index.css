@@ -1,47 +1,47 @@
 .card {
-  border: 1px solid #95C21E;
-  border-radius: 10px;
-  box-shadow: 1px 1px 4px #95C21E;
-  padding: 20px;
-  margin: 1px;
-  max-width: 900px;
+    border: 1px solid #95C21E;
+    border-radius: 10px;
+    box-shadow: 1px 1px 4px #95C21E;
+    padding: 20px;
+    margin: 1px;
+    max-width: 900px;
 }
 
 /* .card .cardFont1 {
-  font-family: "Montserrat";
-  font-weight: 700;
-  font-size: 36;
-} */
+    font-family: "Montserrat";
+    font-weight: 700;
+    font-size: 36;
+  } */
 
 .card .upperCard {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .card .cardPhoto {
-  margin-left: 20px;
-  padding: 15px;
+    margin-left: 20px;
+    padding: 15px;
 }
 
 .card .cardUpperText {
-  flex: 1;
+    flex: 1;
 }
 
 .card .cardTextUnder {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .card .cardNumberedCircle {
-  display: flex;
-  width: 50px;
-  height: 50px;
-  background-color: #95C21E;
-  border-radius: 50%;
+    display: flex;
+    width: 50px;
+    height: 50px;
+    background-color: #95C21E;
+    border-radius: 50%;
 }
 
 .card .cardTextUnder1 {
-  flex: 1;
-  margin-left: 20px;
-  font-family: "Montserrat";
+    flex: 1;
+    margin-left: 20px;
+    font-family: "Montserrat";
 }

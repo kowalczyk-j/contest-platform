@@ -3,7 +3,7 @@ import axios from "axios";
 import { Card, Typography, Box, Select, MenuItem, Button } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate, useParams } from "react-router-dom";
-import Header from "./Header";
+import Navbar from "./Navbar";
 import BackButton from "./BackButton";
 import montserrat from "../static/theme";
 import EntryInfo from "./EntryInfo";
@@ -12,34 +12,37 @@ import EntryScore from "./EntryScore";
 export default function Entries() {
   const [entries, setEntries] = useState([]);
   const [contest, setContest] = useState({});
-  const [maxScore, setMaxScore] = useState(null);
+  const [maxScore, setMaxScore] = useState(10);
   const [sortOrder, setSortOrder] = useState("asc");
   const navigate = useNavigate();
   const { contestId } = useParams();
 
   useEffect(() => {
-    const accessToken = sessionStorage.getItem("accessToken");
-
-    if (!accessToken) {
-      console.error("Access token not found in session.");
-      return;
-    }
-
-    const entriesLink = `${
-      import.meta.env.VITE_API_URL
-    }api/entries/?contest=${contestId}`;
-    const headers = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + accessToken,
-      },
-    };
-    const contestLink = `${
-      import.meta.env.VITE_API_URL
-    }api/contests/${contestId}/`;
-
+    // const currentUser = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       `${import.meta.env.VITE_API_URL}api/users/current_user/`,
+    //       {
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //           Authorization: "Token " + sessionStorage.getItem("accessToken"),
+    //         },
+    //       }
+    //     );
+    //     const user = response.data;
+    //     console.log(user);
+    //     return user;
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
     axios
-      .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`)
+      .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+      })
       .then((response) => {
         const sortedEntries = response.data.sort((a, b) =>
           sortOrder === "asc" ? a.score - b.score : b.score - a.score
@@ -49,7 +52,12 @@ export default function Entries() {
       .catch((error) => console.error("Error fetching data: ", error));
 
     axios
-      .get(contestLink)
+      .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+      })
       .then((response) => setContest(response.data))
       .catch((error) => console.error("Error fetching data: ", error));
 
@@ -57,7 +65,13 @@ export default function Entries() {
       .get(
         `${
           import.meta.env.VITE_API_URL
-        }api/contests/${contestId}/max_rating_sum/`
+        }api/contests/${contestId}/max_rating_sum/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+        }
       )
       .then((response) => {
         setMaxScore(response.data.total_max_rating);
@@ -80,7 +94,12 @@ export default function Entries() {
       )
     ) {
       axios
-        .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`)
+        .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+        })
         .then(() => {
           setEntries(entries.filter((entry) => entry.id !== id));
         })
@@ -89,6 +108,7 @@ export default function Entries() {
   };
   return (
     <ThemeProvider theme={montserrat}>
+      <Navbar />
       <Box
         sx={{
           px: 4,
@@ -98,7 +118,6 @@ export default function Entries() {
         }}
       >
         <Box sx={{ textAlign: "center", my: 2, mx: "auto" }}>
-          <Header />
           <Typography
             style={{ fontWeight: "bold", marginTop: "20px" }}
             variant="h4"
@@ -132,8 +151,9 @@ export default function Entries() {
             >
               <EntryInfo
                 id={entry.id}
-                name={entry.contestant_name}
-                surname={entry.contestant_surname}
+                title={entry.entry_title}
+                name={entry.contestants}
+                surname={entry.contestants}
                 age="12"
                 school="Szkoła Podstawowa nr 1 w Głogowie"
                 onDeleteClick={handleDeleteClick}
@@ -150,7 +170,7 @@ export default function Entries() {
 
 function getBadgeColor(score, maxScore) {
   if (score === null || score === undefined) {
-    return "blue";
+    return "grey";
   } else if (score < 0.5 * maxScore) {
     return "red";
   } else if (score < 0.9 * maxScore) {

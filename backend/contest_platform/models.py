@@ -18,7 +18,7 @@ class Contest(models.Model):
         return f"{self.title, self.description}"
 
 
-class AssessmentCriterion(models.Model):
+class GradeCriterion(models.Model):
     contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
     description = models.CharField(max_length=500)
     max_rating = models.IntegerField()

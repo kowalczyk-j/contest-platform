@@ -35,7 +35,7 @@ function EntryForm({ contestId, onSubmit }) {
       .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          Authorization: "Token " + sessionStorage.getItem("accessToken")
         },
       })
       .then((response) => {
@@ -48,6 +48,7 @@ function EntryForm({ contestId, onSubmit }) {
         setLoading(false);
       });
   }, [contestId]);
+  // TODO actual error handling
 
   // pop up after submiting
   const [open, setOpen] = React.useState(false);
@@ -67,13 +68,15 @@ function EntryForm({ contestId, onSubmit }) {
   // add user
   const currentUser = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/current_user/`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}api/users/current_user/`,
         {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Token " + sessionStorage.getItem("accessToken"),
           },
-      });
+        }
+      );
       const user = response.data;
       console.log(user);
       return user;
@@ -112,7 +115,10 @@ function EntryForm({ contestId, onSubmit }) {
   const handleFileChange = (event) => {
     const uploadedFile = event.target.files[0];
     setFile(uploadedFile);
-    const filename = uploadedFile.name.length > 25 ? `${uploadedFile.name.slice(0, 25)}...` :  uploadedFile.name;
+    const filename =
+      uploadedFile.name.length > 25
+        ? `${uploadedFile.name.slice(0, 25)}...`
+        : uploadedFile.name;
     setFileText(`Załączono pracę: ${filename}`);
   };
 
@@ -296,8 +302,16 @@ function EntryForm({ contestId, onSubmit }) {
           </div>
         </div>
 
-        <Typography variant="body1" style={{ fontWeight: "lighter", marginTop: "15px", marginLeft: "40px" }}>{fileText}</Typography>
-
+        <Typography
+          variant="body1"
+          style={{
+            fontWeight: "lighter",
+            marginTop: "15px",
+            marginLeft: "40px",
+          }}
+        >
+          {fileText}
+        </Typography>
       </form>
     </>
   );

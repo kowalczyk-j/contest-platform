@@ -38,7 +38,7 @@ function CreateContestPage() {
           c.contest = contestId;
           return axios
             .post(
-              `${import.meta.env.VITE_API_URL}api/assessment-criterion/`,
+              `${import.meta.env.VITE_API_URL}api/criterions/`,
               c,
               {
                 headers: {
