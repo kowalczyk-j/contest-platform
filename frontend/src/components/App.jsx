@@ -17,7 +17,13 @@ function App() {
         <Route path="/" element={<ContestListPage />} />
         <Route path="/create-contest" element={<CreateContestPage />} />
         <Route path="/grade-entry" element={<GradeEntry />} />
-        <Route path="/contest/:contestId" element={<CreateEntryPage />} />
+        <Route path="/create-entry/:contestId"
+          element={
+            <PrivateRoute forAuthenticated={true}>
+              <CreateEntryPage />
+            </PrivateRoute>
+          } 
+        />
         <Route
           path="/entries/:contestId"
           element={

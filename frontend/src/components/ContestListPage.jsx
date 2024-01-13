@@ -128,7 +128,7 @@ const ContestIndexPage = () => {
                   <img
                     src={contest.poster_img}
                     alt="Contest"
-                    style={{ width: "100%", maxHeight: "80%" }}
+                    style={{ maxHeight: "300px" }}
                   />
                 )}
               </div>
@@ -223,7 +223,7 @@ const ContestIndexPage = () => {
           {/* Add other details as needed */}
         </DialogContent>
         <DialogActions>
-          <Link to={`/contest/${selectedContest?.id}`}>
+          <Link to={`/create-entry/${selectedContest?.id}`}>
             <GreenButton>
               <Typography align="center" style={{ color: "white" }}>
                 Weź udział
