@@ -104,7 +104,7 @@ class GradePermissions(permissions.BasePermission):
             return request.user.is_authenticated
         elif view.action == "list":
             return request.user.is_authenticated and (request.user.is_staff or request.user.is_jury)
-        elif view.action in ["create"]:
+        elif view.action == "create":
             return request.user.is_authenticated and request.user.is_staff
         else:
             return False
@@ -115,7 +115,7 @@ class GradePermissions(permissions.BasePermission):
 
         if view.action == "retrieve":
             return request.user.is_staff or request.user.is_jury or obj.entry.user == request.user
-        if view.action in ["update", "partial_update"]:
+        elif view.action in ["update", "partial_update"]:
             return request.user.is_staff or request.user.is_jury
         elif view.action in ["destroy"]:
             return request.user.is_staff
