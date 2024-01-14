@@ -34,8 +34,8 @@ class Logout(GenericAPIView):
 class ContestViewSet(ModelViewSet):
     queryset = Contest.objects.all()
     serializer_class = ContestSerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [ContestPermission]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [ContestPermission]
 
     @action(detail=True, methods=['get'])
     def max_rating_sum(self, request, pk=None):
@@ -49,11 +49,11 @@ class ContestViewSet(ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def send_email(self, request, pk=None):
-        contest = self.get_object()
         subject = request.data.get('subject')
         message = request.data.get('message')
 
         recipients = ['jakubkow505@gmail.com']
+        # TODO : Add recipients from group
         # recipients = User.objects.filter(
         #     groups__name=group_name).values_list('email', flat=True)
 
@@ -79,35 +79,12 @@ class EntryViewSet(ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [EntryPermission]
 
-    def create(self, request, *args, **kwargs):
-        entry_data = request.data
-        persons_data = entry_data.pop('contestants')
-        entry_serializer = self.get_serializer(data=entry_data)
-        entry_serializer.is_valid()
-
-        contestants = []
-        if 'contestants' in entry_serializer.errors and len(entry_serializer.errors.keys()) == 1:
-            for person_data in persons_data:
-                person_serializer = PersonSerializer(data=person_data)
-                if person_serializer.is_valid():
-                    person = Person.objects.create(
-                        **person_serializer.validated_data)
-                    contestants.append(person.id)
-
-        entry_data['contestants'] = contestants
-        entry_serializer = self.get_serializer(data=entry_data)
-        if entry_serializer.is_valid():
-            entry_instance = self.perform_create(entry_serializer)
-
-            # Create Grade instances based on GradeCriterions
-            contest = entry_instance.contest
-            grade_criterions = GradeCriterion.objects.filter(contest=contest)
-            for criterion in grade_criterions:
-                Grade.objects.create(criterion=criterion, entry=entry_instance)
-
-            headers = self.get_success_headers(entry_serializer.data)
-            return Response(entry_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        return Response(entry_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        queryset = Entry.objects.all()
+        contest_id = self.request.query_params.get("contest", None)
+        if contest_id is not None:
+            queryset = queryset.filter(contest=contest_id)
+        return queryset
 
     # def get_queryset(self):
     #     user_param = self.request.query_params.get('user', None)

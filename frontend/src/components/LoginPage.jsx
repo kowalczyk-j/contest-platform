@@ -48,6 +48,7 @@ const LoginPage = () => {
 
         const currentUserLink = `${import.meta.env.VITE_API_URL
           }api/users/current_user/`;
+
         const headersCurrentUser = {
           headers: {
             "Content-Type": "application/json",

@@ -33,6 +33,12 @@ class ContestSerializer(serializers.ModelSerializer):
     date_start = serializers.DateField(input_formats=["%Y-%m-%d"])
     date_end = serializers.DateField(input_formats=["%Y-%m-%d"])
 
+    def validate(self, data):
+        if data.get("date_start") and data.get("date_end"):
+            if data['date_start'] > data['date_end']:
+                raise serializers.ValidationError({'date_start': 'Date start must be before date end.'})
+        return data
+
     class Meta:
         model = Contest
         fields = (
@@ -55,7 +61,38 @@ class PersonSerializer(serializers.ModelSerializer):
 
 
 class EntrySerializer(serializers.ModelSerializer):
-    contestants = PersonSerializer(many=True, read_only=True)
+    contestants = PersonSerializer(many=True, read_only=False)
+
+    def create(self, validated_data):
+        # Create the entry instance
+        contestants = validated_data.pop("contestants")
+        entry = Entry(**validated_data)
+
+        user = validated_data["user"]
+        contest = validated_data["contest"]
+        existing_entry = Entry.objects.filter(user=user,
+                                              contest=contest).exists()
+
+        if existing_entry and not (user.is_staff or user.is_coordinating_unit):
+            raise serializers.ValidationError(
+                {"user": "User cannot have more than one entry."}
+            )
+
+        entry.save()
+        person_list = []
+        # Iterate over the contestants data and add them to the entry
+        for contestant_data in contestants:
+            contestant = Person.objects.create(**contestant_data)
+            person_list.append(contestant)
+
+        entry.contestants.set(person_list)
+
+        # Create Grade instances based on GradeCriterions
+        grade_criterions = GradeCriterion.objects.filter(contest=contest)
+        for criterion in grade_criterions:
+            Grade.objects.create(criterion=criterion, entry=entry)
+
+        return entry
 
     class Meta:
         model = Entry
@@ -63,7 +100,7 @@ class EntrySerializer(serializers.ModelSerializer):
                   "contest",
                   "user",
                   "contestants",
-                  "address",
+                  "date_submitted",
                   "email",
                   "entry_title",
                   "entry_file")

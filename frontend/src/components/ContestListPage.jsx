@@ -124,11 +124,11 @@ const ContestIndexPage = () => {
               >
                 <CardHeader title={contest.title} />
                 {/* jezeli jest zdjecie to nalezy je tu dodać */}
-                {contest.image && (
+                {contest.poster_img && (
                   <img
-                    src={contest.image}
+                    src={contest.poster_img}
                     alt="Contest"
-                    style={{ width: "100%", maxHeight: "80%" }}
+                    style={{ maxHeight: "300px" }}
                   />
                 )}
               </div>
@@ -159,6 +159,7 @@ const ContestIndexPage = () => {
                     color: "#95C21E",
                   }}
                   endIcon={<ArrowForwardIcon />}
+                  href={contest.rules_pdf}
                 >
                   Regulamin
                 </TextButton>
@@ -199,6 +200,7 @@ const ContestIndexPage = () => {
             <TextButton
               style={{ fontSize: "1rem", color: "#95C21E" }}
               endIcon={<ArrowForwardIcon />}
+              href={selectedContest?.rules_pdf}
             >
               Regulamin
             </TextButton>
@@ -221,7 +223,7 @@ const ContestIndexPage = () => {
           {/* Add other details as needed */}
         </DialogContent>
         <DialogActions>
-          <Link to={`/contest/${selectedContest?.id}`}>
+          <Link to={`/create-entry/${selectedContest?.id}`}>
             <GreenButton>
               <Typography align="center" style={{ color: "white" }}>
                 Weź udział
