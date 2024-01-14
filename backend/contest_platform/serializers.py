@@ -14,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "password",
             "is_staff",
+            "is_coordinating_unit",
             "is_superuser",
             "is_active",
             "date_joined",
@@ -22,7 +23,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User(
-            username=validated_data["username"], email=validated_data["email"]
+            username=validated_data["username"], email=validated_data["email"],
+            is_coordinating_unit=validated_data["is_coordinating_unit"]
         )
         user.set_password(validated_data["password"])
         user.save()

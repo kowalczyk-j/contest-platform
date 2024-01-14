@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardHeader, CardContent, Typography, TextField, Button, FormControl, FormControlLabel, Radio, RadioGroup, Grid } from '@mui/material';
+import { Card, CardHeader, CardContent, Typography, TextField, Button, FormControl, FormControlLabel, Checkbox, Grid } from '@mui/material';
 import Logo from '../static/assets/Logo.png';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css'
@@ -11,6 +11,7 @@ const RegistrationPage = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isCoordinatingUnit, setCoordinatingUnit] = useState(false);
     const [registrationError, setRegistrationError] = useState('');
     const [registrationErrorMessage, setRegistrationErrorMessage] = useState('');
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ const RegistrationPage = () => {
             username: username,
             email: email,
             password: password,
+            is_coordinating_unit: isCoordinatingUnit,
         };
 
         axios.post(`${import.meta.env.VITE_API_URL}api/users/`, postData, {
@@ -29,7 +31,11 @@ const RegistrationPage = () => {
                 'Content-Type': 'application/json',
             }
         })
-            .then(setRegistrationError(false))
+            .then((response) => {
+                setRegistrationError(false);
+                console.log(postData);
+                console.log(response);
+            })
             .catch(error => {
                 console.log(error);
                 setRegistrationError(true);
@@ -68,6 +74,20 @@ const RegistrationPage = () => {
                                         <TextField id="password" label="Hasło" value={password} onChange={(e) => setPassword(e.target.value)} />
                                     </FormControl>
                                 </div>
+
+                                <div className="checkbox">
+                                    <FormControlLabel
+                                        control={<Checkbox />}
+                                        style={{ margin: "15px" }}
+                                        onChange={(e) => setCoordinatingUnit(e.target.checked)}
+                                        label={
+                                        <Typography style={{ maxWidth: "400px", fontWeight: "lighter" }}>
+                                            Zarejestruj mnie jako jednostkę koordynującą.
+                                        </Typography>
+                                        }
+                                    />
+                                </div>
+
                                 <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                                     <Popup
                                         trigger={
