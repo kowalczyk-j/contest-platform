@@ -151,8 +151,14 @@ function ContestForm({ onSubmit }) {
         criterionResponse.every((response) => response.status === 201)
       ) {
         setOpen(true);
-        const posterPath = await uploadFile("posters", poster);
-        const rulesPath = await uploadFile("rules", rulesFile);
+        let posterPath = null;
+        if (poster) {
+          posterPath = await uploadFile("posters", poster);
+        }
+        let rulesPath = null;
+        if (rulesFile) {
+          rulesPath = await uploadFile("rules", rulesFile);
+        }
         await axios.patch(
           `${import.meta.env.VITE_API_URL}api/contests/${contestResponse.data.id}/`,
           {
@@ -171,7 +177,8 @@ function ContestForm({ onSubmit }) {
         });
       }
     } catch (error) {
-      setErrorMessage(JSON.stringify(error.response.data, null, 2))
+      console.error(error);
+      setErrorMessage(JSON.stringify(error.response.data, null, 2));
       setOpen(true);
     }
   };
