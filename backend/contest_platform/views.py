@@ -18,6 +18,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from django.core.mail import send_mail
+import json
 
 
 class Logout(GenericAPIView):
@@ -60,8 +61,13 @@ class ContestViewSet(ModelViewSet):
     def send_email(self, request, pk=None):
         subject = request.data.get("subject")
         message = request.data.get("message")
+        print(request.data.get("receivers"))
+        # receivers = request.data.get("receivers")
+        receivers = [receiver['email']
+                     for receiver in request.data.get("receivers")]
+        print(f"PO: {receivers}")
 
-        recipients = ["jakubkow505@gmail.com"]
+        # recipients = ["jakubkow505@gmail.com"]
         # TODO : Add recipients from group
         # recipients = User.objects.filter(
         #     groups__name=group_name).values_list('email', flat=True)
@@ -70,7 +76,7 @@ class ContestViewSet(ModelViewSet):
             subject,
             message,
             "konkursy.bowarto@gmail.com",  # Adres e-mail nadawcy
-            recipients,
+            receivers,
             fail_silently=False,
         )
 
@@ -139,3 +145,8 @@ class UserViewSet(ModelViewSet):
         user = request.user
         serializer = self.get_serializer(user)
         return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def emails(self, request):
+        emails = User.objects.values('email')[:500]
+        return Response(emails)
