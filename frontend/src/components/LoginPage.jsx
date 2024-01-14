@@ -47,8 +47,9 @@ const LoginPage = () => {
         const token = responseData.token;
         sessionStorage.setItem("accessToken", token);
 
-        const currentUserLink = `${import.meta.env.VITE_API_URL
-          }api/users/current_user/`;
+        const currentUserLink = `${
+          import.meta.env.VITE_API_URL
+        }api/users/current_user/`;
 
         const headersCurrentUser = {
           headers: {
@@ -78,12 +79,8 @@ const LoginPage = () => {
 
   const handleBack = () => {
     setLoginError(false);
-<<<<<<< HEAD
     setLoginErrorMessage("");
-    setOpenPopup(false)
-=======
     setOpenPopup(false);
->>>>>>> fe904d7759d1aadfa11d50b33a6fb8029f56c61d
     navigate("/");
   };
 
