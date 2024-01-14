@@ -26,6 +26,7 @@ const LoginPage = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
+  const [isStaff, setIsStaff] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
@@ -58,8 +59,9 @@ const LoginPage = () => {
         axios
           .get(currentUserLink, headersCurrentUser)
           .then((res) => {
-            const responseData = res.data;
-            sessionStorage.setItem("userData", JSON.stringify(responseData));
+            console.log(res.data);
+            setIsStaff(res.data.is_staff);
+            sessionStorage.setItem("isStaff", isStaff);
           })
           .catch((error) => {
             console.log("Error:", error);
@@ -76,8 +78,12 @@ const LoginPage = () => {
 
   const handleBack = () => {
     setLoginError(false);
+<<<<<<< HEAD
     setLoginErrorMessage("");
     setOpenPopup(false)
+=======
+    setOpenPopup(false);
+>>>>>>> fe904d7759d1aadfa11d50b33a6fb8029f56c61d
     navigate("/");
   };
 
@@ -153,9 +159,13 @@ const LoginPage = () => {
                   <ConfirmationWindow
                     open={openPopup}
                     setOpen={setOpenPopup}
-                    title={loginError ? "Logowanie nieudane" : "Pomyślnie zalogwano"}
+                    title={
+                      loginError ? "Logowanie nieudane" : "Pomyślnie zalogwano"
+                    }
                     message={loginError ? loginErrorMessage : null}
-                    onConfirm={() => loginError ? setOpenPopup(false) : handleBack()}
+                    onConfirm={() =>
+                      loginError ? setOpenPopup(false) : handleBack()
+                    }
                     showCancelButton={false}
                   />
                 </div>
@@ -164,7 +174,7 @@ const LoginPage = () => {
           </Card>
         </Grid>
       </Grid>
-    </div >
+    </div>
   );
 };
 

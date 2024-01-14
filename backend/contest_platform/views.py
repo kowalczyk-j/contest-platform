@@ -37,22 +37,31 @@ class ContestViewSet(ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [ContestPermission]
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
+    def entries(self, request, pk=None):
+        contest_id = self.get_object().id
+        queryset = Entry.objects.filter(contest=contest_id)
+        serializer = EntrySerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["get"])
     def max_rating_sum(self, request, pk=None):
         """
-        Returns the sum of max_rating for all GradeCriteria related to the contest.
+        Returns the sum of max_rating for all GradeCriteria
+        related to the contest.
         """
         contest = self.get_object()
         total_max_rating = GradeCriterion.objects.filter(
-            contest=contest).aggregate(Sum('max_rating'))['max_rating__sum']
-        return Response({'total_max_rating': total_max_rating or 0})
+            contest=contest
+        ).aggregate(Sum("max_rating"))["max_rating__sum"]
+        return Response({"total_max_rating": total_max_rating or 0})
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=["post"])
     def send_email(self, request, pk=None):
-        subject = request.data.get('subject')
-        message = request.data.get('message')
+        subject = request.data.get("subject")
+        message = request.data.get("message")
 
-        recipients = ['jakubkow505@gmail.com']
+        recipients = ["jakubkow505@gmail.com"]
         # TODO : Add recipients from group
         # recipients = User.objects.filter(
         #     groups__name=group_name).values_list('email', flat=True)
@@ -60,12 +69,12 @@ class ContestViewSet(ModelViewSet):
         send_mail(
             subject,
             message,
-            'konkursy.bowarto@gmail.com',  # Adres e-mail nadawcy
+            "konkursy.bowarto@gmail.com",  # Adres e-mail nadawcy
             recipients,
             fail_silently=False,
         )
 
-        return Response({'status': 'success'}, status=status.HTTP_200_OK)
+        return Response({"status": "success"}, status=status.HTTP_200_OK)
 
 
 class PersonViewSet(ModelViewSet):
