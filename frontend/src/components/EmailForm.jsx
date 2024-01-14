@@ -13,10 +13,11 @@ import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
 import SubmitButton from "./SubmitButton";
 import GenerateTextButton from "./GenerateTextButton";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import axios from "axios";
 import ConfirmationWindow from "./ConfirmationWindow";
+import BackButton from "./BackButton";
 
 export default function EmailForm() {
   const { contestId } = useParams();
@@ -29,6 +30,7 @@ export default function EmailForm() {
   });
   const [emailList, setEmailList] = useState([]);
   const [emailSendingError, setEmailSendingError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -76,6 +78,10 @@ export default function EmailForm() {
       });
   };
 
+  const handleBackClick = () => {
+    navigate("/");
+  };
+
   const generateEmailMessage = () => {
     const emailSubject = `Zaproszenie do udziału w konkursie "${contest.title}"`;
     const emailMessage = `Szanowni Państwo,
@@ -107,6 +113,7 @@ Zespół Fundacji "BoWarto"`;
   return (
     <>
       <Navbar />
+      <BackButton clickHandler={handleBackClick} />
       <ThemeProvider theme={montserrat}>
         <Box
           sx={{
@@ -143,7 +150,7 @@ Zespół Fundacji "BoWarto"`;
             </Typography>
             <form onSubmit={handleSubmit} style={{ width: "100%" }}>
               <FormControl fullWidth margin="normal">
-                <InputLabel id="receivers-label">Receivers</InputLabel>
+                <InputLabel id="receivers-label">Odbiorcy</InputLabel>
                 <Select
                   labelId="receivers-label"
                   id="receivers"

@@ -213,17 +213,30 @@ const ContestIndexPage = () => {
             )}
 
             {userData.is_staff === true ? (
-              <Link
-                to={`/entries/${selectedContest?.id}`}
-                style={{ textDecoration: "none" }}
-              >
-                <TextButton
-                  style={{ fontSize: "1rem", color: "#95C21E" }}
-                  endIcon={<ArrowForwardIcon />}
+              <>
+                <Link
+                  to={`/entries/${selectedContest?.id}`}
+                  style={{ textDecoration: "none" }}
                 >
-                  Nadesłane prace
-                </TextButton>
-              </Link>
+                  <TextButton
+                    style={{ fontSize: "1rem", color: "#95C21E" }}
+                    endIcon={<ArrowForwardIcon />}
+                  >
+                    Nadesłane prace
+                  </TextButton>
+                </Link>
+                <Link
+                  to={`/contest/${selectedContest?.id}/email`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <TextButton
+                    style={{ fontSize: "1rem", color: "#95C21E" }}
+                    endIcon={<ArrowForwardIcon />}
+                  >
+                    Wysyłka maili
+                  </TextButton>
+                </Link>
+              </>
             ) : null}
           </div>
 
