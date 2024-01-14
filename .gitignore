@@ -1,4 +1,6 @@
 backend/.idea/
+backend/.env
+frontend/.env
 
 backend/backend/__pycache__/
 backend/contest_platform/__pycache__/

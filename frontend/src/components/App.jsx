@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CreateContestPage from "./CreateContestPage";
 import ContestListPage from "./ContestListPage";
-import GradeEntry from './GradeEntry';
+import GradeEntry from "./GradeEntry";
 import CreateEntryPage from "./CreateEntryPage";
 import Entries from "./Entries";
 import RegistrationPage from "./RegistrationPage";
@@ -16,13 +16,14 @@ function App() {
       <Routes>
         <Route path="/" element={<ContestListPage />} />
         <Route path="/create-contest" element={<CreateContestPage />} />
-        <Route path="/grade-entry" element={<GradeEntry />} />
-        <Route path="/create-entry/:contestId"
+        <Route path="/grade-entry/:entryId" element={<GradeEntry />} />
+        <Route
+          path="/create-entry/:contestId"
           element={
             <PrivateRoute forAuthenticated={true}>
               <CreateEntryPage />
             </PrivateRoute>
-          } 
+          }
         />
         <Route
           path="/entries/:contestId"

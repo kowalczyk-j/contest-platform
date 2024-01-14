@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,7 +14,9 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Header from "./Header";
 import { Link } from "react-router-dom";
-import { handleLogout } from "./Logout";
+import ConfirmationWindow from "./ConfirmationWindow";
+import Logout from "../components/Logout";
+import axios from "axios";
 
 const pages = ["Konkursy", "Wydarzenia", "Blog", "użytkownicy"];
 const settings = ["Profil", "Moje prace", "Dashboard"];
@@ -29,12 +31,10 @@ const pagesLinks = {
 };
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [userData, setUserData] = React.useState(
-    JSON.parse(sessionStorage.getItem("userData")) || {},
-  );
-
+  const [openPopup, setOpenPopup] = useState(false);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [userData, setUserData] = useState({});
   const accessToken = sessionStorage.getItem("accessToken");
 
   const handleOpenNavMenu = (event) => {
@@ -51,6 +51,27 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  useEffect(() => {
+    const currentUserLink = `${
+      import.meta.env.VITE_API_URL
+    }api/users/current_user/`;
+    const headersCurrentUser = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + accessToken,
+      },
+    };
+    axios
+      .get(currentUserLink, headersCurrentUser)
+      .then((res) => {
+        const responseData = res.data;
+        setUserData(responseData);
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  }, []);
 
   const isStaff = userData.is_staff === true;
   const filteredPages = isStaff
@@ -151,9 +172,7 @@ function ResponsiveAppBar() {
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
-                <MenuItem key="logout" onClick={handleLogout}>
-                  <Typography textAlign="center">Wyloguj</Typography>
-                </MenuItem>
+                <Logout></Logout>
               </Menu>
             </Box>
           ) : (
@@ -163,7 +182,7 @@ function ResponsiveAppBar() {
               to="/login"
               sx={{ color: "black" }}
             >
-              Login
+              Zaloguj się
             </Button>
           )}
         </Toolbar>

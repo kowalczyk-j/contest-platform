@@ -23,12 +23,15 @@ import axios from "axios";
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [openSuccess, setOpenSuccess] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [loginError, setLoginError] = useState(false);
+  const [loginErrorMessage, setLoginErrorMessage] = useState("");
+  const [isStaff, setIsStaff] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
+    setLoginError(false);
     const postData = {
       username: username,
       password: password,
@@ -47,6 +50,7 @@ const LoginPage = () => {
         const currentUserLink = `${
           import.meta.env.VITE_API_URL
         }api/users/current_user/`;
+
         const headersCurrentUser = {
           headers: {
             "Content-Type": "application/json",
@@ -56,19 +60,27 @@ const LoginPage = () => {
         axios
           .get(currentUserLink, headersCurrentUser)
           .then((res) => {
-            const responseData = res.data;
-            sessionStorage.setItem("userData", JSON.stringify(responseData));
+            console.log(res.data);
+            setIsStaff(res.data.is_staff);
+            sessionStorage.setItem("isStaff", isStaff);
           })
           .catch((error) => {
             console.log("Error:", error);
           });
+        setOpenPopup(true);
       })
       .catch((error) => {
         console.log("Login failed:", error.message);
+        setLoginError(true);
+        setLoginErrorMessage(JSON.stringify(error.response.data, null, 2));
+        setOpenPopup(true);
       });
   };
 
   const handleBack = () => {
+    setLoginError(false);
+    setLoginErrorMessage("");
+    setOpenPopup(false);
     navigate("/");
   };
 
@@ -85,6 +97,7 @@ const LoginPage = () => {
       </div>
       <Button
         style={{
+          color: "black",
           display: "flex",
           flexDirection: "row",
           marginInline: "22%",
@@ -137,16 +150,19 @@ const LoginPage = () => {
                       width: "225px",
                     }}
                     type="submit"
-                    onClick={() => setOpenSuccess(true)}
                   >
                     Zaloguj się
                   </Button>
                   <ConfirmationWindow
-                    open={openSuccess}
-                    setOpen={setOpenSuccess}
-                    title="Czy na pewno chcesz usunąć to zgłoszenie?"
-                    message="Ta akcja jest nieodwracalna"
-                    onConfirm={console.log("OK clicked")}
+                    open={openPopup}
+                    setOpen={setOpenPopup}
+                    title={
+                      loginError ? "Logowanie nieudane" : "Pomyślnie zalogwano"
+                    }
+                    message={loginError ? loginErrorMessage : null}
+                    onConfirm={() =>
+                      loginError ? setOpenPopup(false) : handleBack()
+                    }
                     showCancelButton={false}
                   />
                 </div>

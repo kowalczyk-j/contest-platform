@@ -1,4 +1,4 @@
-from .models import Address, GradeCriterion, Contest, Entry, Person
+from .models import Address, GradeCriterion, Contest, Entry, Person, Grade
 from .models import User
 from rest_framework import serializers
 
@@ -35,8 +35,10 @@ class ContestSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data.get("date_start") and data.get("date_end"):
-            if data['date_start'] > data['date_end']:
-                raise serializers.ValidationError({'date_start': 'Date start must be before date end.'})
+            if data["date_start"] > data["date_end"]:
+                raise serializers.ValidationError(
+                    {"date_start": "Date start must be before date end."}
+                )
         return data
 
     class Meta:
@@ -87,18 +89,25 @@ class EntrySerializer(serializers.ModelSerializer):
 
         entry.contestants.set(person_list)
 
+        # Create Grade instances based on GradeCriterions
+        grade_criterions = GradeCriterion.objects.filter(contest=contest)
+        for criterion in grade_criterions:
+            Grade.objects.create(criterion=criterion, entry=entry)
+
         return entry
 
     class Meta:
         model = Entry
-        fields = ("id",
-                  "contest",
-                  "user",
-                  "contestants",
-                  "date_submitted",
-                  "email",
-                  "entry_title",
-                  "entry_file")
+        fields = (
+            "id",
+            "contest",
+            "user",
+            "contestants",
+            "date_submitted",
+            "email",
+            "entry_title",
+            "entry_file",
+        )
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -110,4 +119,16 @@ class AddressSerializer(serializers.ModelSerializer):
 class GradeCriterionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GradeCriterion
-        fields = ("id", "contest", "description", "max_rating")
+        fields = ("id",
+                  "contest",
+                  "description",
+                  "max_rating")
+
+
+class GradeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Grade
+        fields = ("id",
+                  "criterion",
+                  "entry",
+                  "value")

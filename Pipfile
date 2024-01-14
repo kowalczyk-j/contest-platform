@@ -11,6 +11,7 @@ djangorestframework = "*"
 django-cors-headers = "*"
 psycopg = "*"
 pre-commit = "*"
+python-dotenv = "*"
 
 [dev-packages]
 sphinx = "*"

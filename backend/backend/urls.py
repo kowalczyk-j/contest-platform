@@ -25,5 +25,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
     path("api/login/", obtain_auth_token),
-    path("api/logout/", Logout.as_view()),
+    path("api/logout/", Logout.as_view())
 ]

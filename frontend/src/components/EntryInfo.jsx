@@ -22,8 +22,8 @@ export default function EntryInfo({
     onDeleteClick(id);
   };
 
-  const handleRateClick = () => {
-    navigate("/login");
+  const handleRateClick = (entryId) => {
+    navigate(`/grade-entry/${entryId}`);
   };
   return (
     <Box sx={{ mr: 2 }}>
