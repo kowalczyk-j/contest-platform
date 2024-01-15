@@ -1,6 +1,15 @@
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Address, GradeCriterion, Contest, Entry, User, Person, Grade
+from .models import (
+    Address,
+    GradeCriterion,
+    Contest,
+    Entry,
+    User,
+    Person,
+    Grade,
+    School,
+)
 from .serializers import (
     AddressSerializer,
     GradeCriterionSerializer,
@@ -8,16 +17,25 @@ from .serializers import (
     EntrySerializer,
     UserSerializer,
     PersonSerializer,
-    GradeSerializer
+    GradeSerializer,
+    SchoolSerializer,
 )
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import TokenAuthentication
-from .permissions import UserPermission, ContestPermission, EntryPermission, GradeCriterionPermissions, GradePermissions
+from .permissions import (
+    UserPermission,
+    ContestPermission,
+    EntryPermission,
+    GradeCriterionPermissions,
+)
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from django.core.mail import send_mail
+from .utils.import_schools_csv import upload_schools_data
+
+from rest_framework.decorators import api_view
 
 
 class Logout(GenericAPIView):
@@ -139,3 +157,23 @@ class UserViewSet(ModelViewSet):
         user = request.user
         serializer = self.get_serializer(user)
         return Response(serializer.data)
+
+
+#
+class SchoolViewSet(ModelViewSet):
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+
+
+@api_view(["POST"])
+def import_schools(request):
+    if request.method == "POST" and "csv_file" in request.FILES:
+        file = request.FILES["csv_file"]
+        upload_schools_data(file)
+        return Response(
+            {"message": "Upload successful"}, status=status.HTTP_201_CREATED
+        )
+    else:
+        return Response(
+            {"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
+        )
