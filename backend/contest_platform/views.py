@@ -91,8 +91,8 @@ class PersonViewSet(ModelViewSet):
 class EntryViewSet(ModelViewSet):
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [EntryPermission]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [EntryPermission]
 
     def get_queryset(self):
         queryset = Entry.objects.all()
@@ -100,6 +100,12 @@ class EntryViewSet(ModelViewSet):
         if contest_id is not None:
             queryset = queryset.filter(contest=contest_id)
         return queryset
+
+    @action(detail=True, methods=["get"])
+    def total_grade_value(self, request, pk=None):
+        total_value = Grade.objects.filter(
+            entry=pk).aggregate(Sum("value"))["value__sum"]
+        return Response({"total_value": total_value})
 
     # def get_queryset(self):
     #     user_param = self.request.query_params.get('user', None)
@@ -130,15 +136,36 @@ class GradeCriterionViewSet(ModelViewSet):
 class GradeViewSet(ModelViewSet):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [GradeCriterionPermissions]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [GradeCriterionPermissions]
+
+    def get_queryset(self):
+        queryset = Grade.objects.all()
+        contest_id = self.request.query_params.get("contest", None)
+        if contest_id is not None:
+            queryset = queryset.filter(entry__contest=contest_id)
+        return queryset
+
+    @action(detail=True, methods=["get"], url_path='contest-grades')
+    def contest_grades(self, request, pk=None):
+        """
+        Returns the grades for a specific contest.
+        """
+        contest_grades = self.queryset.filter(entry__contest_id=pk)
+        page = self.paginate_queryset(contest_grades)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(contest_grades, many=True)
+        return Response(serializer.data)
 
 
 class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [UserPermission]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [UserPermission]
 
     @action(detail=False, methods=["get"])
     def current_user(self, request):
