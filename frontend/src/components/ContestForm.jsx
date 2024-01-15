@@ -9,7 +9,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
-  Typography
+  Typography,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -52,7 +52,7 @@ function ContestForm({ onSubmit }) {
       setErrorMessage("");
     }
   };
-  
+
   // handler for changing criterion
   const handleCriterionChange = (index, criterionData) => {
     setCriteria((prevCriteria) => {
@@ -84,7 +84,7 @@ function ContestForm({ onSubmit }) {
               handleClickRemoveCriterion(i);
             }}
             key={i}
-          />
+          />,
         );
       }
       return newComponents;
@@ -118,17 +118,19 @@ function ContestForm({ onSubmit }) {
   const handlePosterChange = (event) => {
     const file = event.target.files[0];
     setPoster(file);
-    const filename = file.name.length > 25 ? `${file.name.slice(0, 23)}...` :  file.name;
-    setPosterText(filename)
-  }
+    const filename =
+      file.name.length > 25 ? `${file.name.slice(0, 23)}...` : file.name;
+    setPosterText(filename);
+  };
   const [rulesFile, setRulesFile] = React.useState(null);
   const [rulesText, setRulesText] = React.useState("Nie załączono regulaminu");
   const handleRulesFileChange = (event) => {
     const file = event.target.files[0];
     setRulesFile(file);
-    const filename = file.name.length > 25 ? `${file.name.slice(0, 23)}...` :  file.name;
+    const filename =
+      file.name.length > 25 ? `${file.name.slice(0, 23)}...` : file.name;
     setRulesText(filename);
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -153,25 +155,29 @@ function ContestForm({ onSubmit }) {
         setOpen(true);
         const posterPath = await uploadFile("posters", poster);
         const rulesPath = await uploadFile("rules", rulesFile);
-        await axios.patch(
-          `${import.meta.env.VITE_API_URL}api/contests/${contestResponse.data.id}/`,
-          {
-            poster_img: posterPath,
-            rules_pdf: rulesPath,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        await axios
+          .patch(
+            `${import.meta.env.VITE_API_URL}api/contests/${
+              contestResponse.data.id
+            }/`,
+            {
+              poster_img: posterPath,
+              rules_pdf: rulesPath,
             },
-          }
-        ).catch((error) => {
-          setErrorMessage(JSON.stringify(error.response.data, null, 2));
-          setOpen(true);
-        });
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Token " + sessionStorage.getItem("accessToken"),
+              },
+            },
+          )
+          .catch((error) => {
+            setErrorMessage(JSON.stringify(error.response.data, null, 2));
+            setOpen(true);
+          });
       }
     } catch (error) {
-      setErrorMessage(JSON.stringify(error.response.data, null, 2))
+      setErrorMessage(JSON.stringify(error.response.data, null, 2));
       setOpen(true);
     }
   };
@@ -227,7 +233,9 @@ function ContestForm({ onSubmit }) {
 
       <div className="contest-type">
         <FormControl component="fieldset" className="flex flex-col space-y-2">
-          <Typography variant="body1" style={{ fontWeight: "lighter" }}>Typ konkursu:</Typography>
+          <Typography variant="body1" style={{ fontWeight: "lighter" }}>
+            Typ konkursu:
+          </Typography>
           <RadioGroup
             row
             aria-label="type"
@@ -248,7 +256,9 @@ function ContestForm({ onSubmit }) {
 
       <div className="contest-type">
         <FormControl component="fieldset" className="flex flex-col space-y-2">
-          <Typography variant="body1" style={{ fontWeight: "lighter" }}>Typ zgłoszeń:</Typography>
+          <Typography variant="body1" style={{ fontWeight: "lighter" }}>
+            Typ zgłoszeń:
+          </Typography>
           <RadioGroup
             row
             aria-label="type"
@@ -278,7 +288,9 @@ function ContestForm({ onSubmit }) {
       </div>
 
       <div className="criteria">
-        <Typography variant="body1" style={{ fontWeight: "lighter" }}>Kryteria oceny:</Typography>
+        <Typography variant="body1" style={{ fontWeight: "lighter" }}>
+          Kryteria oceny:
+        </Typography>
         {criteriaComponents}
         <TextButton
           style={{ fontSize: 16, marginTop: "10px" }}
@@ -296,22 +308,32 @@ function ContestForm({ onSubmit }) {
             onFileChange={handleRulesFileChange}
             fileType="application/pdf"
           />
-          <Typography variant="body1" style={{ fontWeight: "lighter", marginTop: "15px" }}>{rulesText}</Typography>
+          <Typography
+            variant="body1"
+            style={{ fontWeight: "lighter", marginTop: "15px" }}
+          >
+            {rulesText}
+          </Typography>
         </div>
-        
+
         <div className="poster">
           <FileUploadButton
-            name="Załącz plakat" 
+            name="Załącz plakat"
             onFileChange={handlePosterChange}
             fileType="image/*"
           />
-          <Typography variant="body1" style={{ fontWeight: "lighter", marginTop: "15px" }}>{posterText}</Typography>
+          <Typography
+            variant="body1"
+            style={{ fontWeight: "lighter", marginTop: "15px" }}
+          >
+            {posterText}
+          </Typography>
         </div>
       </div>
 
       <div className="submit">
-        <SubmitButton text="Utwórz konkurs" onClick={() => {}}/>
-        <ConfirmationWindow 
+        <SubmitButton text="Utwórz konkurs" onClick={() => {}} />
+        <ConfirmationWindow
           open={open}
           setOpen={setOpen}
           title={

@@ -1,4 +1,12 @@
-from .models import Address, GradeCriterion, Contest, Entry, Person, Grade
+from .models import (
+    Address,
+    GradeCriterion,
+    Contest,
+    Entry,
+    Person,
+    Grade,
+    School,
+)
 from .models import User
 from rest_framework import serializers
 
@@ -72,8 +80,9 @@ class EntrySerializer(serializers.ModelSerializer):
 
         user = validated_data["user"]
         contest = validated_data["contest"]
-        existing_entry = Entry.objects.filter(user=user,
-                                              contest=contest).exists()
+        existing_entry = Entry.objects.filter(
+            user=user, contest=contest
+        ).exists()
 
         if existing_entry and not (user.is_staff or user.is_coordinating_unit):
             raise serializers.ValidationError(
@@ -119,16 +128,16 @@ class AddressSerializer(serializers.ModelSerializer):
 class GradeCriterionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GradeCriterion
-        fields = ("id",
-                  "contest",
-                  "description",
-                  "max_rating")
+        fields = ("id", "contest", "description", "max_rating")
 
 
 class GradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grade
-        fields = ("id",
-                  "criterion",
-                  "entry",
-                  "value")
+        fields = ("id", "criterion", "entry", "value")
+
+
+class SchoolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = School
+        fields = "__all__"

@@ -63,4 +63,34 @@ class Grade(models.Model):
     def clean(self):
         if self.value > self.criterion.max_rating:
             raise ValidationError(
-                {'value': 'Value must be less than or equal to the max rating of the criterion.'})
+                {
+                    "value": "Value must be less than or equal to the max \
+            rating of the criterion."
+                }
+            )
+
+
+class School(models.Model):
+    name = models.CharField(max_length=255)
+    street = models.CharField(max_length=255)
+    building_number = models.CharField(max_length=10)
+    apartment_number = models.CharField(max_length=10, blank=True, null=True)
+    postal_code = models.CharField(max_length=20)
+    city = models.CharField(max_length=255)
+    phone = models.CharField(max_length=20)
+    fax = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+    audience_status = models.CharField(max_length=20)
+    institution_specifics = models.CharField(max_length=255)
+    director_name = models.CharField(max_length=255)
+
+    class Meta:
+        unique_together = (
+            "name",
+            "street",
+            "building_number",
+        )
+
+    def __str__(self):
+        return f"{self.lp}. {self.name}"
