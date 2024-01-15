@@ -30,10 +30,31 @@ export default function Entries() {
         },
       })
       .then((response) => {
-        const sortedEntries = response.data.sort((a, b) =>
-          sortOrder === "asc" ? a.score - b.score : b.score - a.score,
-        );
-        setEntries(sortedEntries);
+        const entriesWithScores = response.data.map((entry) => {
+          return axios
+            .get(
+              `${import.meta.env.VITE_API_URL}api/entries/${
+                entry.id
+              }/total_grade_value/`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization:
+                    "Token " + sessionStorage.getItem("accessToken"),
+                },
+              }
+            )
+            .then((scoreResponse) => {
+              return { ...entry, score: scoreResponse.data.total_value };
+            });
+        });
+
+        Promise.all(entriesWithScores).then((completed) => {
+          const sortedEntries = completed.sort((a, b) =>
+            sortOrder === "asc" ? a.score - b.score : b.score - a.score
+          );
+          setEntries(sortedEntries);
+        });
       })
       .catch((error) => console.error("Error fetching data: ", error));
 
@@ -49,14 +70,15 @@ export default function Entries() {
 
     axios
       .get(
-        `${import.meta.env.VITE_API_URL
+        `${
+          import.meta.env.VITE_API_URL
         }api/contests/${contestId}/max_rating_sum/`,
         {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Token " + sessionStorage.getItem("accessToken"),
           },
-        },
+        }
       )
       .then((response) => {
         setMaxScore(response.data.total_max_rating);
@@ -86,7 +108,7 @@ export default function Entries() {
       .catch((error) => {
         console.log(error);
         setReviewDeleteErrorMessage(
-          JSON.stringify(error.response.data, null, 2),
+          JSON.stringify(error.response.data, null, 2)
         );
       });
     setOpenPopUp(true);
@@ -119,7 +141,6 @@ export default function Entries() {
         </Box>
         <BackButton clickHandler={handleBackClick} />
         {entries.map((entry) => {
-          console.log(entry.score, maxScore);
           const badgeColor = getBadgeColor(entry.score, maxScore);
           return (
             <Card
@@ -137,13 +158,17 @@ export default function Entries() {
               <EntryInfo
                 id={entry.id}
                 title={entry.entry_title}
-                name={entry.contestants}
-                surname={entry.contestants}
-                age="12"
-                school="Szkoła Podstawowa nr 1 w Głogowie"
+                name={"Michał"}
+                surname={"Michałowski"}
+                date={entry.date_submitted}
+                score={entry.score}
                 onDeleteClick={handleDeleteClick}
               />
-              <EntryScore badgeColor={badgeColor} score={entry.score} />
+              <EntryScore
+                badgeColor={badgeColor}
+                score={entry.score}
+                maxScore={maxScore}
+              />
             </Card>
           );
         })}
@@ -168,9 +193,9 @@ function getBadgeColor(score, maxScore) {
   if (score === null || score === undefined) {
     return "grey";
   } else if (score < 0.5 * maxScore) {
-    return "red";
-  } else if (score < 0.9 * maxScore) {
-    return "yellow";
+    return "#900020";
+  } else if (score < 0.8 * maxScore) {
+    return "#FFD700";
   } else {
     return "green";
   }

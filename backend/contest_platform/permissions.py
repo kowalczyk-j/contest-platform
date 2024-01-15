@@ -17,6 +17,7 @@ class UserPermission(permissions.BasePermission):
             "partial_update",
             "destroy",
             "current_user",
+            "emails",
         ]:
             return True
         else:
@@ -36,7 +37,7 @@ class UserPermission(permissions.BasePermission):
         ]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
-        elif view.action == "destroy":
+        elif view.action in ["destroy", "emails"]:
             return request.user.is_staff
         else:
             return False
@@ -77,7 +78,7 @@ class EntryPermission(permissions.BasePermission):
             return request.user.is_authenticated and request.user.is_staff
         if view.action == "create":
             return request.user.is_authenticated
-        if view.action in ["retrieve", "update", "partial_update", "destroy"]:
+        if view.action in ["retrieve", "update", "partial_update", "destroy", "total_grade_value"]:
             return True
         else:
             return False
@@ -89,12 +90,14 @@ class EntryPermission(permissions.BasePermission):
             "retrieve",
             "update",
             "partial_update",
-            "destroy",
             "by_contest_id",
+            "total_grade_value"
         ]:
             return request.user.is_authenticated and (
-                request.user == obj.user or request.user.is_staff
+                request.user == obj.user or request.user.is_staff or request.user.is_jury
             )
+        if view.action in ["destroy"]:
+            return request.user.is_authenticated and request.user.is_staff
         else:
             return False
 

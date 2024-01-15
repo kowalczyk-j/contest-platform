@@ -9,6 +9,7 @@ import LoginPage from "./LoginPage";
 import UserProfilePage from "./UserProfilePage";
 import PrivateRoute from "./PrivateRoute";
 import EmailForm from "./EmailForm";
+import UsersListPage from "./UsersListPage";
 
 function App() {
   return (
@@ -36,6 +37,14 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
+        <Route
+          path="/users"
+          element={
+            <PrivateRoute forStaff={true}>
+              <UsersListPage />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/contest/:contestId/email"
           element={
