@@ -1,5 +1,5 @@
 import * as React from 'react';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { styled } from '@mui/material/styles';
 import ColorButton from './ColorButton';
 
@@ -15,18 +15,18 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-function FileUploadButton({ name, onFileChange, fileType }) {
+function FileDownloadButton({ name, onFileChange }) {
   return (
     <>
       <ColorButton component="label"
-                   style={{width: "225px"}}
-                   variant="contained"
-                   startIcon={<CloudUploadIcon />}>
+        style={{ width: "225px" }}
+        variant="contained"
+        startIcon={<CloudDownloadIcon />}>
         {name}
-        <VisuallyHiddenInput type="file" onChange={onFileChange} accept={fileType} />
+        <VisuallyHiddenInput type="file" onChange={onFileChange} />
       </ColorButton>
     </>
   );
 }
 
-export default FileUploadButton;
+export default FileDownloadButton;

@@ -32,18 +32,35 @@ const ContestIndexPage = () => {
   const [contests, setContests] = useState([]);
   const [selectedContest, setSelectedContest] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [userData, setUserData] = useState(
-    JSON.parse(sessionStorage.getItem("userData")) || {},
-  );
+  const [userData, setUserData] = useState({});
+  const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
     const contestsLink = `${import.meta.env.VITE_API_URL}api/contests/`;
     const headers = { headers: { "Content-Type": "application/json" } };
-
+    const currentUserLink = `${
+      import.meta.env.VITE_API_URL
+    }api/users/current_user/`;
+    const headersCurrentUser = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + accessToken,
+      },
+    };
     axios
       .get(contestsLink, headers)
       .then((ret) => setContests(ret.data))
       .catch((error) => console.error("Error:", error));
+
+    axios
+      .get(currentUserLink, headersCurrentUser)
+      .then((res) => {
+        const responseData = res.data;
+        setUserData(responseData);
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
   }, []);
 
   const handleContestClick = (contest) => {
@@ -124,45 +141,34 @@ const ContestIndexPage = () => {
               >
                 <CardHeader title={contest.title} />
                 {/* jezeli jest zdjecie to nalezy je tu dodać */}
-                {contest.image && (
+                {contest.poster_img && (
                   <img
-                    src={contest.image}
+                    src={contest.poster_img}
                     alt="Contest"
-                    style={{ width: "100%", maxHeight: "80%" }}
+                    style={{ maxHeight: "300px" }}
                   />
                 )}
               </div>
-
-              <div style={{ flex: 0.1, display: "flex", flexDirection: "row" }}>
+              <div
+                style={{
+                  flex: 0.1,
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <TextButton
                   className="contest-title"
                   onClick={() => handleContestClick(contest)}
                   style={{
-                    flex: 0.5,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
                     fontSize: "1rem",
                     color: "#95C21E",
                   }}
                 >
                   Zobacz więcej
                 </TextButton>
-
-                <TextButton
-                  style={{
-                    flex: 0.5,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontSize: "1rem",
-                    color: "#95C21E",
-                  }}
-                  endIcon={<ArrowForwardIcon />}
-                >
-                  Regulamin
-                </TextButton>
-              </div>
+              </div>{" "}
             </Card>
           </Grid>
         ))}
@@ -196,12 +202,15 @@ const ContestIndexPage = () => {
               alignItems: "flex-start",
             }}
           >
-            <TextButton
-              style={{ fontSize: "1rem", color: "#95C21E" }}
-              endIcon={<ArrowForwardIcon />}
-            >
-              Regulamin
-            </TextButton>
+            {selectedContest?.rules_pdf && (
+              <TextButton
+                style={{ fontSize: "1rem", color: "#95C21E" }}
+                endIcon={<ArrowForwardIcon />}
+                href={selectedContest?.rules_pdf}
+              >
+                Regulamin
+              </TextButton>
+            )}
 
             {userData.is_staff === true ? (
               <Link
@@ -221,7 +230,7 @@ const ContestIndexPage = () => {
           {/* Add other details as needed */}
         </DialogContent>
         <DialogActions>
-          <Link to={`/contest/${selectedContest?.id}`}>
+          <Link to={`/create-entry/${selectedContest?.id}`}>
             <GreenButton>
               <Typography align="center" style={{ color: "white" }}>
                 Weź udział

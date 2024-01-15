@@ -26,6 +26,7 @@ const LoginPage = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
+  const [isStaff, setIsStaff] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
@@ -46,8 +47,10 @@ const LoginPage = () => {
         const token = responseData.token;
         sessionStorage.setItem("accessToken", token);
 
-        const currentUserLink = `${import.meta.env.VITE_API_URL
-          }api/users/current_user/`;
+        const currentUserLink = `${
+          import.meta.env.VITE_API_URL
+        }api/users/current_user/`;
+
         const headersCurrentUser = {
           headers: {
             "Content-Type": "application/json",
@@ -57,8 +60,9 @@ const LoginPage = () => {
         axios
           .get(currentUserLink, headersCurrentUser)
           .then((res) => {
-            const responseData = res.data;
-            sessionStorage.setItem("userData", JSON.stringify(responseData));
+            console.log(res.data);
+            setIsStaff(res.data.is_staff);
+            sessionStorage.setItem("isStaff", isStaff);
           })
           .catch((error) => {
             console.log("Error:", error);
@@ -75,7 +79,8 @@ const LoginPage = () => {
 
   const handleBack = () => {
     setLoginError(false);
-    setOpenPopup(false)
+    setLoginErrorMessage("");
+    setOpenPopup(false);
     navigate("/");
   };
 
@@ -151,9 +156,13 @@ const LoginPage = () => {
                   <ConfirmationWindow
                     open={openPopup}
                     setOpen={setOpenPopup}
-                    title={loginError ? "Logowanie nieudane" : "Pomyślnie zalogwano"}
+                    title={
+                      loginError ? "Logowanie nieudane" : "Pomyślnie zalogwano"
+                    }
                     message={loginError ? loginErrorMessage : null}
-                    onConfirm={() => loginError ? setOpenPopup(false) : handleBack()}
+                    onConfirm={() =>
+                      loginError ? setOpenPopup(false) : handleBack()
+                    }
                     showCancelButton={false}
                   />
                 </div>
@@ -162,7 +171,7 @@ const LoginPage = () => {
           </Card>
         </Grid>
       </Grid>
-    </div >
+    </div>
   );
 };
 

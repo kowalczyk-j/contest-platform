@@ -13,7 +13,7 @@ export default function EntryInfo({
   onDeleteClick,
 }) {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const [openPopUp, setOpenPopUp] = useState(false);
   const handleEditClick = (entryId) => {
     navigate("/contest/1");
   };
@@ -22,8 +22,8 @@ export default function EntryInfo({
     onDeleteClick(id);
   };
 
-  const handleRateClick = () => {
-    navigate("/login");
+  const handleRateClick = (entryId) => {
+    navigate(`/grade-entry/${entryId}`);
   };
   return (
     <Box sx={{ mr: 2 }}>
@@ -46,12 +46,12 @@ export default function EntryInfo({
         <Button color="warning" onClick={() => handleEditClick(id)}>
           Edytuj
         </Button>
-        <Button color="error" onClick={() => setOpen(true)}>
+        <Button color="error" onClick={() => setOpenPopUp(true)}>
           Usuń
         </Button>
         <ConfirmationWindow
-          open={open}
-          setOpen={setOpen}
+          open={openPopUp}
+          setOpen={setOpenPopUp}
           title="Czy na pewno chcesz usunąć to zgłoszenie?"
           message="Ta akcja jest nieodwracalna"
           onConfirm={handleDeleteClick}
@@ -59,15 +59,4 @@ export default function EntryInfo({
       </Box>
     </Box>
   );
-}
-
-{
-  /* <ConfirmationWindow
-          open={open}
-          setOpen={setOpen}
-          title="Czy na pewno chcesz usunąć to zgłoszenie?"
-          message="Ta akcja jest nieodwracalna"
-          onConfirm={handleDeleteClick}
-          showCancelButton={false}
-        /> */
 }

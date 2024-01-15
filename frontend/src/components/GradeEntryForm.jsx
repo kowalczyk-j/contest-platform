@@ -1,44 +1,64 @@
 import { ThemeProvider } from '@mui/material/styles';
 import Piesio_hr from '../static/assets/piesio_hr.jpg';
-import '@fontsource/montserrat/700.css'
-import '@fontsource/montserrat/500.css'
-// import montserrat from '../static/theme';
+import '@fontsource/montserrat/700.css';
+import '@fontsource/montserrat/500.css';
 import { Typography } from '@mui/material';
-import FileUploadButton from './FileUploadButton';
-
+import FileDownloadButton from './FileDownloadButton';
 import SubmitButton from './SubmitButton';
 import GradeUpperCardInfo from './GradeUpperCardInfo';
 import GradeCriterionCard from './GradeCriterionCard';
 import montserrat from "../static/theme";
+import { useState } from "react";
+import { useEffect } from "react";
 
-function GradeEntryForm() {
+
+function GradeEntryForm({ entryName, authorName, age, applicant, gradesAndCriterions, handleGradeUpload }) {
+  const [updatedGradesAndCriterions, setUpdatedGradesAndCriterions] = useState(gradesAndCriterions);
+
+  const handleGradeChange = (index, value) => {
+    const newArray = [...updatedGradesAndCriterions];
+    newArray[index].grade.value = value;
+    setUpdatedGradesAndCriterions(newArray);
+  };
+
+  const handleGradeUploadClick = () => {
+    handleGradeUpload(updatedGradesAndCriterions);
+  }
+
+  useEffect(() => { setUpdatedGradesAndCriterions(gradesAndCriterions) }, [gradesAndCriterions]);
+
   return (
     <>
       <div className="grade-entry-card">
         <div className="upper-grade-entry-card">
           <div className="upper-grade-entry-card-text">
             <Typography variant="h3">O pracy</Typography>
-            <GradeUpperCardInfo entryName={"Mój piękny piesek"} authorName={"Jan Pan"} age={21} applicant={"MSCZ Pruszków"} />
+            <GradeUpperCardInfo entryName={entryName} authorName={authorName} age={age} applicant={applicant} />
           </div>
           <div className='grade-entry-card-photo'>
             <img src={Piesio_hr} alt="zdjęcie pracy" width={200} size={200}></img>
           </div>
         </div>
-        <FileUploadButton name='Pobierz pracę' />
+        <FileDownloadButton name='Pobierz pracę' />
         <div>
           <Typography variant="h3">Kryteria oceny</Typography>
         </div>
 
-        <GradeCriterionCard number={1} gradeCategory={"Zgodność z tematem/przedmiotem Konkursu"} minGrade={0} maxGrade={3} />
-        <GradeCriterionCard number={2} gradeCategory={"Atrakcyjność i bogactwo opisu"} minGrade={0} maxGrade={3} />
-        <GradeCriterionCard number={3} gradeCategory={"Atrakcyjność zdjęcia"} minGrade={0} maxGrade={3} />
+        {gradesAndCriterions.map((pair, index) => (
+          <GradeCriterionCard
+            key={index}
+            positionNumber={index + 1}
+            grade={pair.grade}
+            gradeCriterion={pair.criterion}
+            setUpdatedGradesAndCriterions
+            onGradeChange={(value) => handleGradeChange(index, value)}
+          />
+        ))}
 
-        <SubmitButton className="grade-entry-card-commit-button" text="Zatwierdź ocenę" />
-
+        <SubmitButton className="grade-entry-card-commit-button" text="Zatwierdź ocenę" onClick={handleGradeUploadClick} />
       </div>
-    </ >
+    </>
   );
-} // TODO: dodać przyciski pobierania i zatwierdzania oceny, przetestować z dużym zdjęciem, odstęp z lewej strony dla przycisku, stopień ocen
-// !!! TODO: Dodać handleChange do przycisku (zakładka)
+}
 
-export default GradeEntryForm
+export default GradeEntryForm;
