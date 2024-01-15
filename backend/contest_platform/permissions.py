@@ -45,7 +45,16 @@ class UserPermission(permissions.BasePermission):
 
 class ContestPermission(permissions.BasePermission):
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
-        if view.action in ["list", "max_rating_sum", "retrieve", "update", "partial_update", "destroy", "entries", "send_email"]:
+        if view.action in [
+            "list",
+            "max_rating_sum",
+            "retrieve",
+            "update",
+            "partial_update",
+            "destroy",
+            "entries",
+            "send_email",
+        ]:
             return True
         elif view.action == "create":
             return request.user.is_authenticated and request.user.is_staff
@@ -78,7 +87,13 @@ class EntryPermission(permissions.BasePermission):
             return request.user.is_authenticated and request.user.is_staff
         if view.action == "create":
             return request.user.is_authenticated
-        if view.action in ["retrieve", "update", "partial_update", "destroy", "total_grade_value"]:
+        if view.action in [
+            "retrieve",
+            "update",
+            "partial_update",
+            "destroy",
+            "total_grade_value",
+        ]:
             return True
         else:
             return False
@@ -91,10 +106,12 @@ class EntryPermission(permissions.BasePermission):
             "update",
             "partial_update",
             "by_contest_id",
-            "total_grade_value"
+            "total_grade_value",
         ]:
             return request.user.is_authenticated and (
-                request.user == obj.user or request.user.is_staff or request.user.is_jury
+                request.user == obj.user
+                or request.user.is_staff
+                or request.user.is_jury
             )
         if view.action in ["destroy"]:
             return request.user.is_authenticated and request.user.is_staff
@@ -127,7 +144,9 @@ class GradePermissions(permissions.BasePermission):
         if view.action in ["retrieve", "update", "partial_update", "destroy"]:
             return request.user.is_authenticated
         elif view.action == "list":
-            return request.user.is_authenticated and (request.user.is_staff or request.user.is_jury)
+            return request.user.is_authenticated and (
+                request.user.is_staff or request.user.is_jury
+            )
         elif view.action == "create":
             return request.user.is_authenticated and request.user.is_staff
         else:
@@ -136,9 +155,12 @@ class GradePermissions(permissions.BasePermission):
     def has_object_permission(
         self, request: Request, view: GenericAPIView, obj: models.Model
     ) -> bool:
-
         if view.action == "retrieve":
-            return request.user.is_staff or request.user.is_jury or obj.entry.user == request.user
+            return (
+                request.user.is_staff
+                or request.user.is_jury
+                or obj.entry.user == request.user
+            )
         elif view.action in ["update", "partial_update"]:
             return request.user.is_staff or request.user.is_jury
         elif view.action in ["destroy"]:

@@ -1,6 +1,14 @@
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Address, GradeCriterion, Contest, Entry, User, Person, Grade
+from .models import (
+    Address,
+    GradeCriterion,
+    Contest,
+    Entry,
+    User,
+    Person,
+    Grade,
+)
 from .serializers import (
     AddressSerializer,
     GradeCriterionSerializer,
@@ -8,17 +16,22 @@ from .serializers import (
     EntrySerializer,
     UserSerializer,
     PersonSerializer,
-    GradeSerializer
+    GradeSerializer,
 )
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import TokenAuthentication
-from .permissions import UserPermission, ContestPermission, EntryPermission, GradeCriterionPermissions, GradePermissions
+from .permissions import (
+    UserPermission,
+    ContestPermission,
+    EntryPermission,
+    GradeCriterionPermissions,
+    GradePermissions,
+)
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from django.core.mail import send_mail
-import json
 
 
 class Logout(GenericAPIView):
@@ -61,8 +74,9 @@ class ContestViewSet(ModelViewSet):
     def send_email(self, request, pk=None):
         subject = request.data.get("subject")
         message = request.data.get("message")
-        receivers = [receiver['email']
-                     for receiver in request.data.get("receivers")]
+        receivers = [
+            receiver["email"] for receiver in request.data.get("receivers")
+        ]
 
         send_mail(
             subject,
@@ -89,25 +103,19 @@ class EntryViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = Entry.objects.all()
         contest_id = self.request.query_params.get("contest", None)
+        user_id = self.request.query_params.get("user", None)
         if contest_id is not None:
             queryset = queryset.filter(contest=contest_id)
+        if user_id is not None:
+            queryset = queryset.filter(user=user_id)
         return queryset
 
     @action(detail=True, methods=["get"])
     def total_grade_value(self, request, pk=None):
-        total_value = Grade.objects.filter(
-            entry=pk).aggregate(Sum("value"))["value__sum"]
+        total_value = Grade.objects.filter(entry=pk).aggregate(Sum("value"))[
+            "value__sum"
+        ]
         return Response({"total_value": total_value})
-
-    # def get_queryset(self):
-    #     user_param = self.request.query_params.get('user', None)
-    #     contest_param = self.request.query_params.get('contest', None)
-
-    #     if user_param:
-    #         return Entry.objects.filter(user=user_param)
-    #     if contest_param:
-    #         return Entry.objects.filter(contest=contest_param)
-    #     return self.get_queryset()
 
 
 class AddressViewSet(ModelViewSet):
@@ -129,28 +137,14 @@ class GradeViewSet(ModelViewSet):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [GradeCriterionPermissions]
+    permission_classes = [GradePermissions]
 
     def get_queryset(self):
         queryset = Grade.objects.all()
-        contest_id = self.request.query_params.get("contest", None)
-        if contest_id is not None:
-            queryset = queryset.filter(entry__contest=contest_id)
+        entry_id = self.request.query_params.get("entry", None)
+        if entry_id is not None:
+            queryset = queryset.filter(entry=entry_id)
         return queryset
-
-    @action(detail=True, methods=["get"], url_path='contest-grades')
-    def contest_grades(self, request, pk=None):
-        """
-        Returns the grades for a specific contest.
-        """
-        contest_grades = self.queryset.filter(entry__contest_id=pk)
-        page = self.paginate_queryset(contest_grades)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(contest_grades, many=True)
-        return Response(serializer.data)
 
 
 class UserViewSet(ModelViewSet):
@@ -167,5 +161,5 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=["get"])
     def emails(self, request):
-        emails = User.objects.values('email')[:500]
+        emails = User.objects.values("email")[:500]
         return Response(emails)
