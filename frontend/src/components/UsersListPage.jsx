@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Box, Typography, Card, Avatar } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
 import Navbar from "./Navbar";
+import BackButton from "./BackButton";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
-
+  const navigate = useNavigate();
+  const handleBackClick = () => {
+    navigate("/");
+  };
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}api/users`, {
@@ -25,6 +30,7 @@ export default function Users() {
   return (
     <ThemeProvider theme={montserrat}>
       <Navbar />
+      <BackButton clickHandler={handleBackClick} />
       <Box
         sx={{
           px: 4,

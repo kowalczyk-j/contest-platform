@@ -18,7 +18,6 @@ export default function Entries() {
 
   const [maxScore, setMaxScore] = useState(10);
   const [sortOrder, setSortOrder] = useState("asc");
-  const [totalGradeValues, setTotalGradeValues] = useState({});
   const navigate = useNavigate();
   const { contestId } = useParams();
 
@@ -68,30 +67,6 @@ export default function Entries() {
       })
       .then((response) => setContest(response.data))
       .catch((error) => console.error("Error fetching data: ", error));
-
-    // entries.forEach((entry) => {
-    //   axios
-    //     .get(
-    //       `${import.meta.env.VITE_API_URL}api/entries/${
-    //         entry.id
-    //       }/total_grade_value/`,
-    //       {
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //           Authorization: "Token " + sessionStorage.getItem("accessToken"),
-    //         },
-    //       }
-    //     )
-    //     .then((response) => {
-    //       setTotalGradeValues((prevValues) => ({
-    //         ...prevValues,
-    //         [entry.id]: response.data.total_value,
-    //       }));
-    //     })
-    //     .catch((error) =>
-    //       console.error("Error fetching total grade value: ", error)
-    //     );
-    // });
 
     axios
       .get(
@@ -184,11 +159,10 @@ export default function Entries() {
               <EntryInfo
                 id={entry.id}
                 title={entry.entry_title}
-                name={entry.contestants}
-                surname={entry.contestants}
+                name={"Michał"}
+                surname={"Michałowski"}
+                date={entry.date_submitted}
                 score={entry.score}
-                age="12"
-                school="Szkoła Podstawowa nr 1 w Głogowie"
                 onDeleteClick={handleDeleteClick}
               />
               <EntryScore
