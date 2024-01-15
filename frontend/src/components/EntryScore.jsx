@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-export default function EntryScore({ badgeColor, score }) {
+export default function EntryScore({ badgeColor, score, maxScore = "suma" }) {
   return (
     <Box
       sx={{
@@ -24,13 +24,13 @@ export default function EntryScore({ badgeColor, score }) {
         <Typography
           variant="body1"
           component="div"
-          style={{ fontWeight: "bold" }}
+          style={{ fontWeight: "bold", fontSize: "20px" }}
         >
-          {score}
+          {score || "-"}
         </Typography>
       </Box>
       <Typography variant="body2" component="div">
-        suma
+        max. {maxScore}
       </Typography>
     </Box>
   );

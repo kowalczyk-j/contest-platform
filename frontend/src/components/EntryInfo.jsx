@@ -10,13 +10,14 @@ export default function EntryInfo({
   surname,
   age,
   school,
+  score,
   onDeleteClick,
 }) {
   const navigate = useNavigate();
   const [openPopUp, setOpenPopUp] = useState(false);
-  const handleEditClick = (entryId) => {
-    navigate("/contest/1");
-  };
+  // const handleEditClick = (entryId) => {
+  //   navigate("/contest/1");
+  // };
 
   const handleDeleteClick = () => {
     onDeleteClick(id);
@@ -41,11 +42,11 @@ export default function EntryInfo({
       </Typography>
       <Box sx={{ mt: 0.5, ml: -1 }}>
         <Button color="success" onClick={() => handleRateClick(id)}>
-          Oceń
+          {score ? "Edytuj ocenę" : "Oceń"}
         </Button>
-        <Button color="warning" onClick={() => handleEditClick(id)}>
+        {/* <Button color="warning" onClick={() => handleEditClick(id)}>
           Edytuj
-        </Button>
+        </Button> */}
         <Button color="error" onClick={() => setOpenPopUp(true)}>
           Usuń
         </Button>
