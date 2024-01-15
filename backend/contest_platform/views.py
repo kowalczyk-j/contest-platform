@@ -61,16 +61,8 @@ class ContestViewSet(ModelViewSet):
     def send_email(self, request, pk=None):
         subject = request.data.get("subject")
         message = request.data.get("message")
-        print(request.data.get("receivers"))
-        # receivers = request.data.get("receivers")
         receivers = [receiver['email']
                      for receiver in request.data.get("receivers")]
-        print(f"PO: {receivers}")
-
-        # recipients = ["jakubkow505@gmail.com"]
-        # TODO : Add recipients from group
-        # recipients = User.objects.filter(
-        #     groups__name=group_name).values_list('email', flat=True)
 
         send_mail(
             subject,
@@ -91,8 +83,8 @@ class PersonViewSet(ModelViewSet):
 class EntryViewSet(ModelViewSet):
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [EntryPermission]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [EntryPermission]
 
     def get_queryset(self):
         queryset = Entry.objects.all()
@@ -136,8 +128,8 @@ class GradeCriterionViewSet(ModelViewSet):
 class GradeViewSet(ModelViewSet):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [GradeCriterionPermissions]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [GradeCriterionPermissions]
 
     def get_queryset(self):
         queryset = Grade.objects.all()
@@ -164,8 +156,8 @@ class GradeViewSet(ModelViewSet):
 class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [UserPermission]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [UserPermission]
 
     @action(detail=False, methods=["get"])
     def current_user(self, request):
