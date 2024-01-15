@@ -95,9 +95,7 @@ Zapraszamy serdecznie do wzięcia udziału w konkursie "${
 Opis:
 ${contest.description}
 
-Zachęcamy do sprawdzenia szczegółów na naszej platformie: http://localhost:5173/contest/${
-      contest.id
-    }
+Zachęcamy do sprawdzenia szczegółów na naszej platformie: http://localhost:5173
 Czekamy na Państwa zgłoszenia!
 
 Z poważaniem,
@@ -211,8 +209,15 @@ Zespół Fundacji "BoWarto"`;
               ? "Wysyłka maili nie powiodła się."
               : "Pomyślnie wysłano maile"
           }
-          message={emailSendingError ? "Sprawdź ustawienia poczty" : null}
-          onConfirm={() => setOpenPopUp(false)}
+          message={
+            emailSendingError
+              ? "Sprawdź ustawienia poczty"
+              : "Zostaniesz przeniesiony do strony głównej"
+          }
+          onConfirm={() => {
+            setOpenPopUp(false);
+            handleBackClick();
+          }}
           showCancelButton={false}
         />
       </ThemeProvider>

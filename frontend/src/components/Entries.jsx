@@ -141,7 +141,6 @@ export default function Entries() {
         </Box>
         <BackButton clickHandler={handleBackClick} />
         {entries.map((entry) => {
-          console.log(entry.score, maxScore);
           const badgeColor = getBadgeColor(entry.score, maxScore);
           return (
             <Card
