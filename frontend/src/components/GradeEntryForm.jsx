@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 
-function GradeEntryForm({ entryName, authorName, age, applicant, gradesAndCriterions, handleGradeUpload }) {
+function GradeEntryForm({ entryName, authorName, age, applicant, entryFile, gradesAndCriterions, handleGradeUpload }) {
   const [updatedGradesAndCriterions, setUpdatedGradesAndCriterions] = useState(gradesAndCriterions);
 
   const handleGradeChange = (index, value) => {
@@ -34,12 +34,17 @@ function GradeEntryForm({ entryName, authorName, age, applicant, gradesAndCriter
           <div className="upper-grade-entry-card-text">
             <Typography variant="h3">O pracy</Typography>
             <GradeUpperCardInfo entryName={entryName} authorName={authorName} age={age} applicant={applicant} />
+            {entryFile && (
+              <FileDownloadButton text='Pobierz pracę' link={new URL(entryFile)}/>
+            )}
           </div>
           <div className='grade-entry-card-photo'>
-            <img src={Piesio_hr} alt="zdjęcie pracy" width={200} size={200}></img>
+            {entryFile && entryFile.slice(-4) != ".pdf" && (
+              <img src={entryFile} alt="zdjęcie pracy" width={200} size={200}></img>
+            )}
           </div>
         </div>
-        <FileDownloadButton name='Pobierz pracę' />
+        
         <div>
           <Typography variant="h3">Kryteria oceny</Typography>
         </div>
