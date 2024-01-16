@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+
+<html lang="pl" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Wymagania projektu &#8212; Platforma Konkursowa  - dokumentacja</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <link rel="stylesheet" type="text/css" href="_static/assets/jsonview.bundle.css?v=f6ef2277" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/styles.css?v=6c8eb985" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=ffa536d2" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/layouts.css?v=448c382f" />
+    <script src="_static/jquery.js?v=5d32c60e"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="_static/documentation_options.js?v=9893e7ba"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=a186e9ce"></script>
+    <script src="_static/assets/jsonview.bundle.js?v=18cd53c5"></script>
+    <script src="_static/assets/jsonview_loader.js?v=f7ff7e7d"></script>
+    <script src="_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+    <script src="_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+    <script src="_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=f783d6a5"></script>
+    <link rel="index" title="Indeks" href="genindex.html" />
+    <link rel="search" title="Szukaj" href="search.html" />
+    <link rel="prev" title="Dokumentacja kodu Platformy Konkursowej dla fundacji BoWarto." href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="wymagania-projektu">
+<h1>Wymagania projektu<a class="headerlink" href="#wymagania-projektu" title="Link to this heading">¶</a></h1>
+<section id="integracja-ze-strona-internetowa">
+<h2>1. Integracja ze stroną internetową:<a class="headerlink" href="#integracja-ze-strona-internetowa" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-2bb68055">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_01">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System ma umożliwiać prostą integrację z aktualną stroną internetową Fundacji. (https://www.fundacjabowarto.pl/)</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_01" title="REQ_01">REQ_01</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_osoba"><span class="needs_label">osoba: </span><span class="needs_data">Jakub Kowalczyk</span></span></div>
+<div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>Na stronie internetowej powinna znajdować się zakładka “Konkursy”; po jej kliknięciu użytkownik ma zostać przekierowany na specjalnie przygotowaną platformę konkursową.</p>
+<section id="kod-realizujacy-wymaganie">
+<h3>Kod realizujący wymaganie:<a class="headerlink" href="#kod-realizujacy-wymaganie" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run administrative tasks.&quot;&quot;&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;DJANGO_SETTINGS_MODULE&#39;</span><span class="p">,</span> <span class="s1">&#39;backend.settings&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">django.core.management</span> <span class="kn">import</span> <span class="n">execute_from_command_line</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;Couldn&#39;t import Django. Are you sure it&#39;s installed and &quot;</span>
+            <span class="s2">&quot;available on your PYTHONPATH environment variable? Did you &quot;</span>
+            <span class="s2">&quot;forget to activate a virtual environment?&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
+    <span class="n">execute_from_command_line</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="integracja-z-baza-adresowa">
+<h2>2. Integracja z bazą adresową:<a class="headerlink" href="#integracja-z-baza-adresowa" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-32fb0c5d">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_02">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System ma wspierać import danych z pliku csv do bazy danych.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_02" title="REQ_02">REQ_02</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-b021e3bf">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_03">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System ma umożliwiać dodawanie nowych rekordów do bazy danych a w szczególności osób/szkół/organizacji wraz z danymi kontaktowymi.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_03" title="REQ_03">REQ_03</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-651c79fc">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_04">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System musi umożliwiać usuwanie rekordów z bazy.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_04" title="REQ_04">REQ_04</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-de43d488">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_05">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System powinien umożliwić automatyczne dodawanie uczestnika konkursu do bazy adresowej, jeśli wyrazi on taką zgodę przy rejestracji zgłoszenia.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_05" title="REQ_05">REQ_05</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>Zgoda na zapisanie do bazy adresowej realizowana jest poprzez zaznaczenie checkboxa.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="rejestracja-administratorow-i-uzytkownikow">
+<h2>3. Rejestracja administratorów i użytkowników:<a class="headerlink" href="#rejestracja-administratorow-i-uzytkownikow" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-c7ad5a2a">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_06">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System ma umożliwiać rejestrację członkom jury oraz osobom zgłaszającym prace.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_06" title="REQ_06">REQ_06</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>Członkowie jury, uczestnicy indywidualni, liderzy zespołów, koordynatorzy szkół logują się do systemu za pomocą e-maila i hasła.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-9d765807">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_07">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Uczestnicy mogą edytować swoje dane, które automatycznie będą pobierane do formularza zgłoszeniowego.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_07" title="REQ_07">REQ_07</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-024a3854">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_08">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Administrator systemu musi mieć możliwość nadawania roli innym użytkownikom (koordynator szkoły, juror, administrator).</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_08" title="REQ_08">REQ_08</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><ul class="simple">
+<li><p>Koordynator posiada możliwość wprowadzania kilku zgłoszeń jednocześnie w imieniu uczniów.</p></li>
+<li><p>Juror posiada jedynie możliwość oceniania i komentowania prac oraz ma dostęp do statystyk.</p></li>
+<li><p>Administrator posiada dodatkowo możliwość zamieszczania konkursów, wysyłki maili i modyfikowania/usuwania danych.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="zarzadzanie-konkursami">
+<h2>4. Zarządzanie konkursami:<a class="headerlink" href="#zarzadzanie-konkursami" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-150cf873">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_09">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System ma umożliwiać dodawanie nowych konkursów z określonymi parametrami.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_09" title="REQ_09">REQ_09</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>Parametry to nazwa, opis konkursu, harmonogram, regulamin, wyraźnie zaznaczona grupa docelowa, maksymalna liczba prac na uczestnika, dodatkowe dane wymagane w formularzu zgłoszeniowym, wyszczególniona informacja o konieczności wysyłki fizycznej pracy, nieobowiązkowe - nagrody, kategorie oceny dla jury i skład zespołów jury.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-401ddc63">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_10">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Harmonogram składa się z par danych (data/zakres dat, opis wydarzenia) w tym musi uwzględniać termin składania prac i ogłoszenia wyników.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_10" title="REQ_10">REQ_10</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-2917dd5d">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_11">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Regulamin wgrywany jest jako plik pdf lub docx.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_11" title="REQ_11">REQ_11</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-dd374e01">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_12">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Wybór grupy docelowej odbywa się poprzez wybranie jednego checkboxa z dostępnych: konkurs wyłącznie indywidualny, konkurs grupowy (wymaga zdefiniowania dozwolonej minimalnej i maksymalnej liczby uczestników). (podstawowa wersja obsługuje tylko zgłoszenia indywidualne)</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_12" title="REQ_12">REQ_12</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-2fe6f5af">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_13">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Dodatkowe dane wymagane w formularzu uczestnika (takie jak adres, data urodzenia) wybierane są z listy.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_13" title="REQ_13">REQ_13</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">niski</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-93872bcd">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_14">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Kategorie ocen dla jury definiuje się jako elementy pracy podlegające ocenie (np. kompozycja, czasochłonność itp.). Wymagane jest wtedy także podanie skali ocen dla wszystkich parametrów jednocześnie. Zdefiniowanie kategorii nie jest obowiązkowe - wówczas jury dokonuje oceny prac wyłącznie poprzez pole tekstowe uwagi i komentarze.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_14" title="REQ_14">REQ_14</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-d5b2d156">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_15">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Skład jury wybiera się z listy administratorów systemu o statusie jury. Istnieje możliwość podzielenia ich na zespoły. W przypadku braku wypełnienia tego parametru, każdy użytkownik o statusie jury lub administrator może oceniać prace konkursowe.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_15" title="REQ_15">REQ_15</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">niski</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-2fc4b030">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_16">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Platforma ma pozwalać na edytowanie szczegółów związanych z konkursem w dowolnym momencie jego trwania.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_16" title="REQ_16">REQ_16</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">niski</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="powiadomienia-mailingowe">
+<h2>5. Powiadomienia mailingowe:<a class="headerlink" href="#powiadomienia-mailingowe" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-99784ab2">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_17">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System powinien umożliwiać masową wysyłkę maili do odbiorców z bazy danych w celu poinformowania o nowym konkursie.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_17" title="REQ_17">REQ_17</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-ce2e891f">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_18">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Administrator wysyłający maile powinien móc wybrać grupę odbiorców oraz wpisać temat maila i treść z informacją o konkursie i linkiem do platformy konkursowej.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_18" title="REQ_18">REQ_18</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-fe17a922">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_19">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">*Grupa odbiorców może być posortowana w zależności od obszaru zamieszkania; wówczas system umożliwiałby wysłanie maila do wszystkich odbiorców z danego obszaru (np. zaznaczonego na mapie).</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_19" title="REQ_19">REQ_19</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">niski</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-ab8adb85">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_20">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System powinien wysyłać mailowe potwierdzenie poprawnego zarejestrowania zgłoszenia po każdym wypełnieniu formularza przez uczestnika.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_20" title="REQ_20">REQ_20</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="zbieranie-i-obsluga-zgloszen">
+<h2>6. Zbieranie i obsługa zgłoszeń:<a class="headerlink" href="#zbieranie-i-obsluga-zgloszen" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-8e589292">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_21">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Platforma konkursowa na stronie głównej powinna prezentować kafelki z krótkim opisem aktualnie trwających konkursów.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_21" title="REQ_21">REQ_21</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><ul class="simple">
+<li><p>Każdy kafelek posiada widoczny przycisk z napisem “Szczegóły i zgłoszenia”</p></li>
+<li><p>Po kliknięciu przycisku użytkownik zostaje przeniesiony na stronę poświęconą danemu konkursowi</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-5a63f884">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_22">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Każdy konkurs posiada własną stronę, która składa się z dwóch części:</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_22" title="REQ_22">REQ_22</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><ul class="simple">
+<li><p>Informacje o konkursie: nazwa, opis konkursu, harmonogram wraz z terminami nadsyłania prac i ogłoszenia wyników, regulamin widoczny po rozwinięciu, wyraźnie zaznaczona grupa docelowa.</p></li>
+<li><p>Formularz zgłoszeniowy z polami do wypełnienia.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-4b8d87b1">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_23">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Formularz zgłoszeniowy wyświetlany jest w zależności od parametrów podanych przy tworzeniu konkursu na platformie oraz rodzaju osoby zgłaszającej.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_23" title="REQ_23">REQ_23</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><ul class="simple">
+<li><p>Pierwszym krokiem do wypełnienia zgłoszenia i wyświetlenia odpowiedniego formularza jest zaznaczenie jednego z 3 checkboxów: uczestnik indywidualny, dowódca zespołu, koordynator szkoły.</p></li>
+<li><p>Domyślnie zaznaczony i wyświetlany jest formularz dla uczestnika indywidualnego, chyba że dany konkurs dopuszcza jedynie uczestnictwo grupowe - wówczas domyślną opcją jest dowódca zespołu. W przypadku zarejestrowanego użytkownika system podpowiada automatycznie, którą opcję zaznaczyć.</p></li>
+<li><p>Uczestnik indywidualny widzi formularz standardowy opisany poniżej.</p></li>
+<li><p>Dowódca zespołu posiada dodatkowo możliwość podania danych osobowych pozostałych członków zespołu.</p></li>
+<li><p>Koordynator szkoły posiada możliwość zamieszczenia większej liczby prac wraz z danymi uczniów/zespołów, którzy je wykonali. Status koordynatora nadawany jest zarejestrowanym użytkownikom przez administratora systemu.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-140b5377">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_24">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Standardowy formularz zgłoszeniowy obowiązkowo składa się z pól: imię i nazwisko, adres e-mail, załączona praca, zgoda na przetwarzanie danych osobowych i akceptacja regulaminu.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_24" title="REQ_24">REQ_24</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-b3843ed1">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_25">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System musi umożliwiać wgrywanie prac w formatach png, jpg, … o maksymalnym rozmiarze do 20 MB (definiowanym dla każdej pracy).</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_25" title="REQ_25">REQ_25</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-ebccf0c9">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_26">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Pozostałe dane takie jak nazwa szkoły, adres zamieszkania, data urodzenia uczestnika itp. wyświetlane są w formularzu w zależności od specyfikacji konkursu na etapie ogłaszania go na platformie.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_26" title="REQ_26">REQ_26</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-46540633">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_27">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Zgoda RODO i akceptacja regulaminu realizowana jest w formie zaznaczenia checkboxa. (* Przy wdrożeniu systemu wymagana jest konsultacja z działem prawnym odnośnie przyjętego rozwiązania)</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_27" title="REQ_27">REQ_27</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-9bb64daa">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_28">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System powinien prawidłowo rozróżniać indywidualnych użytkowników i nie pozwalać im na więcej zgłoszeń niż zdefiniowano dla danego konkursu.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_28" title="REQ_28">REQ_28</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><ul class="simple">
+<li><p>Unikalność użytkowników rozróżniana jest na podstawie adresów e-mail.</p></li>
+<li><p>W przypadku kolejnego zgłoszenia przez tę samą osobę (adres e-mail), które jest niedozwolone, wyświetlany jest stosowny komunikat.</p></li>
+<li><p>W przypadku zgłoszeń przez koordynatora szkoły, to on odpowiada za regulaminowe zgłoszenie swoich podopiecznych. Przypadki naruszeń regulaminu są rozpatrywane przez jury indywidualnie.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-852380d3">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_29">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Formularz posiada funkcjonalność aktywnego sprawdzania poprawności wpisanych danych (np. sprawdza poprawność maila bądź czy imię nie zawiera cyfr).</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_29" title="REQ_29">REQ_29</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-9599e9d1">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_30">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System powinien umożliwić administratorom dowolne edytowanie i zarządzanie zgłoszeniami</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_30" title="REQ_30">REQ_30</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><ul class="simple">
+<li><p>Administrator może dowolnie przeglądać zgłoszenia</p></li>
+<li><p>Może wypełniać i zmieniać zawartość pól w bazie danych</p></li>
+<li><p>Administrator może dodać zgłoszenie ręcznie na przykład za indywidualną prośbą uczestnika</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-66f60520">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_31">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System pozwala na pobieranie (ewentualnie wyświetlanie podglądu) plików nadesłanych przez uczestników</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_31" title="REQ_31">REQ_31</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="ocenianie-i-jury">
+<h2>7. Ocenianie i jury<a class="headerlink" href="#ocenianie-i-jury" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-39a3dd87">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_32">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System ma umożliwiać przypisywanie jurorów do konkretnych konkursów w dowolnym momencie jego trwania.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_32" title="REQ_32">REQ_32</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>Jury mogą być podzieleni na zespoły. Wówczas wystarczy ocena wszystkich członków jednego zespołu, aby praca została zaklasyfikowana jako oceniona.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-4c2c228b">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_33">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System ma wyświetlać każdemu z jury prace konkursowe w przystępnej formie.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_33" title="REQ_33">REQ_33</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><ul class="simple">
+<li><p>Praca konkursowa opatrzona jest danymi autora, które są widoczne dopiero po kliknięciu przycisku, aby nie sugerować się nimi przy ocenie.</p></li>
+<li><p>Istnieje możliwość filtrowania prac oznaczonych gwiazdką (faworyci), krzyżykiem (odrzuceni) oraz prac jeszcze nieocenionych przez danego jurora.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-4355b3b8">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_34">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System ma umożliwiać ocenę pracy zgodnie z przyjętymi kryteriami.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_34" title="REQ_34">REQ_34</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span></span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><ul class="simple">
+<li><p>Juror wpisuje wartość zgodnie z ustaloną skalą dla każdego kryterium.</p></li>
+<li><p>Zawsze dostępne jest pole “Uwagi” na komentarz tekstowy.</p></li>
+<li><p>Jurorzy mają możliwość segregowania prac poprzez oznaczenie je gwiazdką (takie, które przejdą do finału) oraz czerwonym krzyżykiem (wstępnie odrzucone).</p></li>
+<li><p>Oznaczenie pracy krzyżykiem lub gwiazdką można zmieniać w dowolnym momencie.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-f29f40ef">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_35">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Po ocenie pracy przez każdego jurora system oblicza i wyświetla przy niej średnią i medianę ocen dla każdej kategorii oraz łącznie.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_35" title="REQ_35">REQ_35</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="raportowanie">
+<h2>8. Raportowanie<a class="headerlink" href="#raportowanie" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-fc290f86">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_36">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System ma umożliwiać generowanie statystyk na temat uczestnictwa w konkursie zawierające: liczbę uczestników konkursu, liczbę zgłoszeń prac konkursowych, *liczbę szkół biorących udział, *regiony pochodzenia uczestników, *dane statystyczne na temat wieku uczestników.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_36" title="REQ_36">REQ_36</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">średni</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-167ce8b5">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_37">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">System ma umożliwiać generowanie raportu o zwycięzcach konkursu zawierające: dane osobowe zwycięzców możliwe do upublicznienia, ich prace konkursowe, zajęte miejsce / informacje o wyróżnieniu, *średnie ocen prac</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_37" title="REQ_37">REQ_37</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">niski</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-057cf360">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_38">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">*System może umożliwiać automatyczne generowanie dyplomu dla zwycięzców.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_38" title="REQ_38">REQ_38</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">niski</span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Platforma Konkursowa</a></h1>
+
+
+
+
+
+
+
+
+<h3>Nawigacja</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Wymagania projektu</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#integracja-ze-strona-internetowa">1. Integracja ze stroną internetową:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integracja-z-baza-adresowa">2. Integracja z bazą adresową:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rejestracja-administratorow-i-uzytkownikow">3. Rejestracja administratorów i użytkowników:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#zarzadzanie-konkursami">4. Zarządzanie konkursami:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#powiadomienia-mailingowe">5. Powiadomienia mailingowe:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#zbieranie-i-obsluga-zgloszen">6. Zbieranie i obsługa zgłoszeń:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ocenianie-i-jury">7. Ocenianie i jury</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raportowanie">8. Raportowanie</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="poprzedni rozdział">Dokumentacja kodu Platformy Konkursowej dla fundacji BoWarto.</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Szybkie wyszukiwanie</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Szukaj" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2023, Kinga Świderek, Filip Budzyński, Jan Filipecki, Jakub Kowalczyk, Jakub Podrażka.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/requirements.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

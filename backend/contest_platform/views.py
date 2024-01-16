@@ -1,6 +1,15 @@
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Address, GradeCriterion, Contest, Entry, User, Person
+from .models import (
+    Address,
+    GradeCriterion,
+    Contest,
+    Entry,
+    User,
+    Person,
+    Grade,
+    School,
+)
 from .serializers import (
     AddressSerializer,
     GradeCriterionSerializer,
@@ -8,14 +17,28 @@ from .serializers import (
     EntrySerializer,
     UserSerializer,
     PersonSerializer,
+    GradeSerializer,
+    SchoolSerializer,
 )
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import TokenAuthentication
-from .permissions import UserPermission, ContestPermission, EntryPermission
+from .permissions import (
+    UserPermission,
+    ContestPermission,
+    EntryPermission,
+    GradeCriterionPermissions,
+    GradePermissions,
+)
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
+from django.core.mail import send_mail
+from .utils.import_schools_csv import upload_schools_data
+
+from rest_framework.decorators import api_view
+from datetime import date
+from rest_framework.permissions import AllowAny
 
 
 class Logout(GenericAPIView):
@@ -35,15 +58,43 @@ class ContestViewSet(ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [ContestPermission]
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def max_rating_sum(self, request, pk=None):
         """
-        Returns the sum of max_rating for all GradeCriteria related to the contest.
+        Returns the sum of max_rating for all GradeCriteria
+        related to the contest.
         """
         contest = self.get_object()
         total_max_rating = GradeCriterion.objects.filter(
-            contest=contest).aggregate(Sum('max_rating'))['max_rating__sum']
-        return Response({'total_max_rating': total_max_rating or 0})
+            contest=contest
+        ).aggregate(Sum("max_rating"))["max_rating__sum"]
+        return Response({"total_max_rating": total_max_rating or 0})
+
+    @action(detail=True, methods=["post"])
+    def send_email(self, request, pk=None):
+        subject = request.data.get("subject")
+        message = request.data.get("message")
+        receivers = [
+            receiver["email"] for receiver in request.data.get("receivers")
+        ]
+
+        send_mail(
+            subject,
+            message,
+            "konkursy.bowarto@gmail.com",  # Adres e-mail nadawcy
+            receivers,
+            fail_silently=False,
+        )
+
+        return Response({"status": "success"}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["get"])
+    def current_contests(self, request):
+        queryset = Contest.objects.filter(date_start__lte=date.today()
+                                          ).filter(date_end__gte=date.today())
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class PersonViewSet(ModelViewSet):
@@ -55,42 +106,24 @@ class EntryViewSet(ModelViewSet):
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [EntryPermission]
-
-    def create(self, request, *args, **kwargs):
-        entry_data = request.data
-        persons_data = entry_data.pop('contestants')
-        entry_serializer = self.get_serializer(data=entry_data)
-        entry_serializer.is_valid()
-
-        contestants = []
-        if 'contestants' in entry_serializer.errors and len(entry_serializer.errors.keys()) == 1:
-            for person_data in persons_data:
-                person_serializer = PersonSerializer(data=person_data)
-                if person_serializer.is_valid():
-                    person = Person.objects.create(
-                        **person_serializer.validated_data)
-                    contestants.append(person.id)
-
-        entry_data['contestants'] = contestants
-        entry_serializer = self.get_serializer(data=entry_data)
-        if entry_serializer.is_valid():
-            self.perform_create(entry_serializer)
-            headers = self.get_success_headers(entry_serializer.data)
-            return Response(entry_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        return Response(entry_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Entry.objects.all()
         contest_id = self.request.query_params.get("contest", None)
+        user_id = self.request.query_params.get("user", None)
         if contest_id is not None:
             queryset = queryset.filter(contest=contest_id)
+        if user_id is not None:
+            queryset = queryset.filter(user=user_id)
         return queryset
 
-    def destroy(self, request, *args, **kwargs):
-        entry = self.get_object()
-        entry.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    @action(detail=True, methods=["get"])
+    def total_grade_value(self, request, pk=None):
+        total_value = Grade.objects.filter(entry=pk).aggregate(Sum("value"))[
+            "value__sum"
+        ]
+        return Response({"total_value": total_value})
 
 
 class AddressViewSet(ModelViewSet):
@@ -104,9 +137,22 @@ class AddressViewSet(ModelViewSet):
 class GradeCriterionViewSet(ModelViewSet):
     queryset = GradeCriterion.objects.all()
     serializer_class = GradeCriterionSerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [GradeCriterionPermissions]
-    # TODO
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [GradeCriterionPermissions]
+
+
+class GradeViewSet(ModelViewSet):
+    queryset = Grade.objects.all()
+    serializer_class = GradeSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [GradePermissions]
+
+    def get_queryset(self):
+        queryset = Grade.objects.all()
+        entry_id = self.request.query_params.get("entry", None)
+        if entry_id is not None:
+            queryset = queryset.filter(entry=entry_id)
+        return queryset
 
 
 class UserViewSet(ModelViewSet):
@@ -120,3 +166,27 @@ class UserViewSet(ModelViewSet):
         user = request.user
         serializer = self.get_serializer(user)
         return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def emails(self, request):
+        emails = User.objects.values("email")[:500]
+        return Response(emails)
+
+
+class SchoolViewSet(ModelViewSet):
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+
+
+@api_view(["POST"])
+def import_schools(request):
+    if request.method == "POST" and "csv_file" in request.FILES:
+        file = request.FILES["csv_file"]
+        upload_schools_data(file)
+        return Response(
+            {"message": "Upload successful"}, status=status.HTTP_201_CREATED
+        )
+    else:
+        return Response(
+            {"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
+        )

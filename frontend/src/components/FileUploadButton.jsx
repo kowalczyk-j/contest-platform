@@ -15,7 +15,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-function FileUploadButton({ name, onFileChange }) {
+function FileUploadButton({ name, onFileChange, fileType }) {
   return (
     <>
       <ColorButton component="label"
@@ -23,7 +23,7 @@ function FileUploadButton({ name, onFileChange }) {
                    variant="contained"
                    startIcon={<CloudUploadIcon />}>
         {name}
-        <VisuallyHiddenInput type="file" onChange={onFileChange} />
+        <VisuallyHiddenInput type="file" onChange={onFileChange} accept={fileType} />
       </ColorButton>
     </>
   );

@@ -15,6 +15,11 @@ import {
 import { styled } from "@mui/material/styles";
 import axios from "axios";
 import Logo from "../static/assets/Logo.png";
+import { ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from 'react-router-dom';
+import montserrat from "../static/theme";
+import Navbar from "./Navbar";
+import BackButton from "./BackButton";
 
 const GreenButton = styled(Button)({
     backgroundColor: "#95C21E",
@@ -26,7 +31,7 @@ const GreenButton = styled(Button)({
 
 const UserProfilePage = () => {
     const [user, setUser] = useState({});
-    const [isModalOpen, setModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Fetch user data from an API
@@ -42,49 +47,48 @@ const UserProfilePage = () => {
             .catch(error => console.error("Error:", error));
     }, []);
 
-    const handleModalClose = () => {
-        setModalOpen(false);
+
+    const handleBack = () => {
+        navigate("/");
     };
 
     return (
-        <div>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-            >
-                <img style={{ width: "200px" }} src={Logo} alt="Logo" />
+        <ThemeProvider theme={montserrat}>
+
+            <div>
+                <Navbar />
+                <div className="back-btn">
+                    <BackButton clickHandler={handleBack} />
+                </div>
+
+                <Typography
+                    variant="h4"
+                    align="center"
+                    gutterBottom
+                    style={{ marginTop: "20px" }}
+                >
+                    Profil użytkownika
+                </Typography>
+
+                <Card
+                    style={{
+                        width: "300px",
+                        margin: "0 auto",
+                        marginTop: "20px",
+                        padding: "20px",
+                    }}
+                >
+                    <CardContent>
+                        <Typography variant="subtitle1">
+                            Nazwa użytkownika: {user.username}
+                        </Typography>
+                        <Typography variant="subtitle1">
+                            email: {user.email}
+                        </Typography>
+                    </CardContent>
+                </Card>
             </div>
-
-            <Typography
-                variant="h4"
-                align="center"
-                gutterBottom
-                style={{ marginTop: "20px" }}
-            >
-                Profil użytkownika
-            </Typography>
-
-            <Card
-                style={{
-                    width: "300px",
-                    margin: "0 auto",
-                    marginTop: "20px",
-                    padding: "20px",
-                }}
-            >
-                <CardContent>
-                    <Typography variant="subtitle1">
-                        Nazwa użytkownika: {user.username}
-                    </Typography>
-                    <Typography variant="subtitle1">
-                        email: {user.email}
-                    </Typography>
-                </CardContent>
-            </Card>
-        </div>
+        </ThemeProvider>
     );
 };
 

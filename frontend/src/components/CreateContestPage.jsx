@@ -37,17 +37,12 @@ function CreateContestPage() {
         const criterionPromises = criterion.map((c) => {
           c.contest = contestId;
           return axios
-            .post(
-              `${import.meta.env.VITE_API_URL}api/criterions/`,
-              c,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization:
-                    "Token " + sessionStorage.getItem("accessToken"),
-                },
+            .post(`${import.meta.env.VITE_API_URL}api/criterions/`, c, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Token " + sessionStorage.getItem("accessToken"),
               },
-            )
+            })
             .then((response) => {
               if (response.status !== 201) {
                 throw new Error("Network response was not ok");

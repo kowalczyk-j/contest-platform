@@ -13,7 +13,6 @@ import {
   Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Logo from "../static/assets/Logo.png";
 import axios from "axios";
 import Navbar from "./Navbar.jsx";
 import TextButton from "./TextButton";
@@ -32,18 +31,42 @@ const ContestIndexPage = () => {
   const [contests, setContests] = useState([]);
   const [selectedContest, setSelectedContest] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [userData, setUserData] = useState(
-    JSON.parse(sessionStorage.getItem("userData")) || {},
-  );
+  const [userData, setUserData] = useState({});
+  const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
-    const contestsLink = `${import.meta.env.VITE_API_URL}api/contests/`;
+    let contestsLink = `${import.meta.env.VITE_API_URL}api/contests/current_contests`;
     const headers = { headers: { "Content-Type": "application/json" } };
-
+    const currentUserLink = `${
+      import.meta.env.VITE_API_URL
+    }api/users/current_user/`;
+    const headersCurrentUser = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + accessToken,
+      },
+    };
     axios
       .get(contestsLink, headers)
       .then((ret) => setContests(ret.data))
       .catch((error) => console.error("Error:", error));
+
+    axios
+      .get(currentUserLink, headersCurrentUser)
+      .then((res) => {
+        const responseData = res.data;
+        setUserData(responseData);
+        if (responseData.is_staff || responseData.is_jury) {
+          contestsLink = `${import.meta.env.VITE_API_URL}api/contests/`;
+          axios
+            .get(contestsLink, headers)
+            .then((ret) => setContests(ret.data))
+            .catch((error) => console.error("Error:", error));
+        }
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
   }, []);
 
   const handleContestClick = (contest) => {
@@ -60,7 +83,7 @@ const ContestIndexPage = () => {
       <Navbar></Navbar>
 
       <Typography
-        variant="h4"
+        variant="h3"
         align="center"
         gutterBottom
         style={{ marginTop: "20px" }}
@@ -81,7 +104,6 @@ const ContestIndexPage = () => {
                 alignItems: "center",
               }}
             >
-              <CardHeader title="Dodaj konkurs" />
               <CardContent>
                 <Link to={"/create-contest"} style={{ textDecoration: "none" }}>
                   <TextButton
@@ -91,7 +113,7 @@ const ContestIndexPage = () => {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      fontSize: "1rem",
+                      fontSize: "1.5rem",
                       color: "#95C21E",
                     }}
                   >
@@ -122,47 +144,34 @@ const ContestIndexPage = () => {
                   justifyContent: "center",
                 }}
               >
-                <CardHeader title={contest.title} />
-                {/* jezeli jest zdjecie to nalezy je tu dodać */}
-                {contest.image && (
+                {contest.poster_img && (
                   <img
-                    src={contest.image}
+                    src={contest.poster_img}
                     alt="Contest"
-                    style={{ width: "100%", maxHeight: "80%" }}
+                    style={{ maxHeight: "350px", maxWidth: "300px" }}
                   />
                 )}
               </div>
-
-              <div style={{ flex: 0.1, display: "flex", flexDirection: "row" }}>
+              <div
+                style={{
+                  flex: 0.1,
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <TextButton
                   className="contest-title"
                   onClick={() => handleContestClick(contest)}
                   style={{
-                    flex: 0.5,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
                     fontSize: "1rem",
                     color: "#95C21E",
                   }}
                 >
                   Zobacz więcej
                 </TextButton>
-
-                <TextButton
-                  style={{
-                    flex: 0.5,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontSize: "1rem",
-                    color: "#95C21E",
-                  }}
-                  endIcon={<ArrowForwardIcon />}
-                >
-                  Regulamin
-                </TextButton>
-              </div>
+              </div>{" "}
             </Card>
           </Grid>
         ))}
@@ -196,32 +205,48 @@ const ContestIndexPage = () => {
               alignItems: "flex-start",
             }}
           >
-            <TextButton
-              style={{ fontSize: "1rem", color: "#95C21E" }}
-              endIcon={<ArrowForwardIcon />}
-            >
-              Regulamin
-            </TextButton>
+            {selectedContest?.rules_pdf && (
+              <TextButton
+                style={{ fontSize: "1rem", color: "#95C21E" }}
+                endIcon={<ArrowForwardIcon />}
+                href={selectedContest?.rules_pdf}
+              >
+                Regulamin
+              </TextButton>
+            )}
 
             {userData.is_staff === true ? (
-              <Link
-                to={`/entries/${selectedContest?.id}`}
-                style={{ textDecoration: "none" }}
-              >
-                <TextButton
-                  style={{ fontSize: "1rem", color: "#95C21E" }}
-                  endIcon={<ArrowForwardIcon />}
+              <>
+                <Link
+                  to={`/entries/${selectedContest?.id}`}
+                  style={{ textDecoration: "none" }}
                 >
-                  Nadesłane prace
-                </TextButton>
-              </Link>
+                  <TextButton
+                    style={{ fontSize: "1rem", color: "#95C21E" }}
+                    endIcon={<ArrowForwardIcon />}
+                  >
+                    Nadesłane prace
+                  </TextButton>
+                </Link>
+                <Link
+                  to={`/contest/${selectedContest?.id}/email`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <TextButton
+                    style={{ fontSize: "1rem", color: "#95C21E" }}
+                    endIcon={<ArrowForwardIcon />}
+                  >
+                    Wysyłka maili
+                  </TextButton>
+                </Link>
+              </>
             ) : null}
           </div>
 
           {/* Add other details as needed */}
         </DialogContent>
         <DialogActions>
-          <Link to={`/contest/${selectedContest?.id}`}>
+          <Link to={`/create-entry/${selectedContest?.id}`}>
             <GreenButton>
               <Typography align="center" style={{ color: "white" }}>
                 Weź udział

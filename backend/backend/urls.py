@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from contest_platform.urls import router
+from contest_platform.views import import_schools
 from rest_framework.authtoken.views import obtain_auth_token
 from contest_platform.views import Logout
 
@@ -26,4 +27,5 @@ urlpatterns = [
     path("api/", include(router.urls)),
     path("api/login/", obtain_auth_token),
     path("api/logout/", Logout.as_view()),
+    path("api/import/", import_schools),
 ]

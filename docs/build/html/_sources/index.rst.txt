@@ -1,59 +1,29 @@
-Witamy w dokumentacji Platformy Konkursowej dla fundacji BoWarto.
+Dokumentacja kodu Platformy Konkursowej dla fundacji BoWarto.
 =================================================================
 .. Tutaj dodajemy elementy do dokumentowania
-.. automodule:: backend.manage
-    :members:
+.. .. automodule:: backend.manage
+..     :members:
 
-.. automodule::  backend.backend.settings
-    :members:
+.. .. automodule::  backend.backend.settings
+..     :members:
 
-.. automodule::  backend.contest_platform.urls
-    :members:
+.. .. automodule::  backend.contest_platform.urls
+..     :members:
+
+Cel projektu
+==================
+Implementacja internetowej platformy konkursowej do rejestracji zgłoszeń uczestników, które zawierają prace artystyczne.
+Aplikacja webowa umożliwi właścicielom fundacji "Bo Warto" powiadomienie odbiorców z bazy mailingowej o nowym konkursie,
+zarządzanie trwającymi konkursami, weryfikację formularzy zgłoszeniowych, ocenę prac i generowanie statystyk.
+System ma być dostępny po przekierowaniu z zakładki istniejącej już strony www.fundacjabowarto.pl.
+
+Podstrony
+==================
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-
-.. req:: My first requirement
-
-  :id: REQ_001
-
-  :integrity: ASIL-D
-
-
-
-   A requirement
-
-
-
-.. spec:: My first specification
-
-   :id: SPEC_001
-
-   :assignee: Mr. Nice Guy
-
-   :implements: REQ_001
-
-
-
-   A specification
-
-
-
-.. test:: Test case for spec
-
-   :id: TEST_001
-
-   :checks: SPEC_001
-
-
-
-   A test case
-
-
-Indices and tables
-==================
+   requirements
 
 * :ref:`genindex`
 * :ref:`modindex`
