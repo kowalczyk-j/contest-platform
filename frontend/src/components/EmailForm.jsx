@@ -13,10 +13,11 @@ import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
 import SubmitButton from "./SubmitButton";
 import GenerateTextButton from "./GenerateTextButton";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import axios from "axios";
 import ConfirmationWindow from "./ConfirmationWindow";
+import BackButton from "./BackButton";
 
 export default function EmailForm() {
   const { contestId } = useParams();
@@ -27,6 +28,9 @@ export default function EmailForm() {
     subject: "",
     message: "",
   });
+  const [emailList, setEmailList] = useState([]);
+  const [emailSendingError, setEmailSendingError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -38,6 +42,16 @@ export default function EmailForm() {
       })
       .then((response) => setContest(response.data))
       .catch((error) => console.error("Error fetching data: ", error));
+
+    axios
+      .get(`${import.meta.env.VITE_API_URL}api/users/emails/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => setEmailList(response.data))
+      .catch((error) => console.error("Error fetching email list: ", error));
   }, [contestId]);
 
   const handleChange = (event) => {
@@ -58,27 +72,28 @@ export default function EmailForm() {
         }
       )
       .then((res) => console.log(res.data))
-      .catch((err) => console.error(err));
+      .catch((error) => {
+        console.log(error);
+        setEmailSendingError(JSON.stringify(error.response.data, null, 2));
+      });
+  };
+
+  const handleBackClick = () => {
+    navigate("/");
   };
 
   const generateEmailMessage = () => {
     const emailSubject = `Zaproszenie do udziału w konkursie "${contest.title}"`;
     const emailMessage = `Szanowni Państwo,
 
-Zapraszamy serdecznie do wzięcia udziału w konkursie "${
-      contest.title
-    }" organizowanym przez Fundację "BoWarto". Konkurs ${
-      contest.individual ? "indywidualny" : "zespołowy"
-    }, ${contest.type} rozpoczyna się ${contest.date_start} i potrwa do ${
-      contest.date_end
-    }.
+Zapraszamy serdecznie do wzięcia udziału w konkursie "${contest.title
+      }" organizowanym przez Fundację "BoWarto". Konkurs ${contest.individual ? "indywidualny" : "zespołowy"
+      } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
 
 Opis:
 ${contest.description}
 
-Zachęcamy do sprawdzenia szczegółów na naszej platformie: http://localhost:5173/contest/${
-      contest.id
-    }
+Zachęcamy do sprawdzenia szczegółów na naszej platformie: http://localhost:5173
 Czekamy na Państwa zgłoszenia!
 
 Z poważaniem,
@@ -94,6 +109,7 @@ Zespół Fundacji "BoWarto"`;
   return (
     <>
       <Navbar />
+      <BackButton clickHandler={handleBackClick} />
       <ThemeProvider theme={montserrat}>
         <Box
           sx={{
@@ -130,7 +146,7 @@ Zespół Fundacji "BoWarto"`;
             </Typography>
             <form onSubmit={handleSubmit} style={{ width: "100%" }}>
               <FormControl fullWidth margin="normal">
-                <InputLabel id="receivers-label">Receivers</InputLabel>
+                <InputLabel id="receivers-label">Odbiorcy</InputLabel>
                 <Select
                   labelId="receivers-label"
                   id="receivers"
@@ -139,9 +155,7 @@ Zespół Fundacji "BoWarto"`;
                   label="Receivers"
                   onChange={handleChange}
                 >
-                  <MenuItem value="all">All Subscribers</MenuItem>
-                  <MenuItem value="new">New Subscribers</MenuItem>
-                  <MenuItem value="inactive">Inactive Subscribers</MenuItem>
+                  <MenuItem value={emailList}>Wszyscy odbiorcy z bazy</MenuItem>
                 </Select>
               </FormControl>
               <TextField
@@ -149,8 +163,8 @@ Zespół Fundacji "BoWarto"`;
                 margin="normal"
                 id="subject"
                 name="subject"
-                label="Title"
-                placeholder="Enter the title of your newsletter"
+                label="Tytuł"
+                placeholder="Wprowadź tytuł newslettera"
                 value={emailData.subject}
                 onChange={handleChange}
               />
@@ -159,8 +173,8 @@ Zespół Fundacji "BoWarto"`;
                 margin="normal"
                 id="message"
                 name="message"
-                label="Message"
-                placeholder="Enter the content of your newsletter"
+                label="Treść e-mail"
+                placeholder="Wpisz treść wiadomości"
                 multiline
                 rows={15}
                 value={emailData.message}
@@ -188,9 +202,20 @@ Zespół Fundacji "BoWarto"`;
         <ConfirmationWindow
           open={openPopUp}
           setOpen={setOpenPopUp}
-          title="Pomyślnie wysłano maile"
-          message=""
-          onConfirm={() => setOpenPopUp(false)}
+          title={
+            emailSendingError
+              ? "Wysyłka maili nie powiodła się."
+              : "Pomyślnie wysłano maile"
+          }
+          message={
+            emailSendingError
+              ? "Sprawdź ustawienia poczty"
+              : "Zostaniesz przeniesiony do strony głównej"
+          }
+          onConfirm={() => {
+            setOpenPopUp(false);
+            emailSendingError ? null : handleBackClick();
+          }}
           showCancelButton={false}
         />
       </ThemeProvider>

@@ -10,79 +10,62 @@ import EntryInfo from "./EntryInfo";
 import EntryScore from "./EntryScore";
 import ConfirmationWindow from "./ConfirmationWindow";
 
-export default function Entries() {
+export default function UserEntries() {
   const [entries, setEntries] = useState([]);
-  const [contest, setContest] = useState({});
   const [openPopUp, setOpenPopUp] = useState(false);
   const [reviewDeleteErrorMessage, setReviewDeleteErrorMessage] = useState("");
 
-  const [maxScore, setMaxScore] = useState(10);
   const [sortOrder, setSortOrder] = useState("asc");
   const navigate = useNavigate();
-  const { contestId } = useParams();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + sessionStorage.getItem("accessToken"),
-        },
-      })
+    axios.get(`${import.meta.env.VITE_API_URL}api/users/current_user/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.getItem("accessToken")
+      }
+    })
       .then((response) => {
-        const entriesWithScores = response.data.map((entry) => {
-          return axios
-            .get(
-              `${import.meta.env.VITE_API_URL}api/entries/${entry.id
-              }/total_grade_value/`,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization:
-                    "Token " + sessionStorage.getItem("accessToken"),
-                },
-              }
-            )
-            .then((scoreResponse) => {
-              return { ...entry, score: scoreResponse.data.total_value };
+        axios
+          .get(`${import.meta.env.VITE_API_URL}api/entries/?user=${response.data.id}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Token " + sessionStorage.getItem("accessToken"),
+            },
+          })
+          .then((response) => {
+            const entriesWithScores = response.data.map((entry) => {
+              return axios
+                .get(
+                  `${import.meta.env.VITE_API_URL}api/entries/${entry.id
+                  }/total_grade_value/`,
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization:
+                        "Token " + sessionStorage.getItem("accessToken"),
+                    },
+                  }
+                )
+                .then((scoreResponse) => {
+                  return { ...entry, score: scoreResponse.data.total_value };
+                });
             });
-        });
 
-        Promise.all(entriesWithScores).then((completed) => {
-          const sortedEntries = completed.sort((a, b) =>
-            sortOrder === "asc" ? a.score - b.score : b.score - a.score
-          );
-          setEntries(sortedEntries);
-        });
+            Promise.all(entriesWithScores).then((completed) => {
+              const sortedEntries = completed.sort((a, b) =>
+                sortOrder === "asc" ? a.score - b.score : b.score - a.score
+              );
+              setEntries(sortedEntries);
+              setLoading(false);
+            });
+          })
+          .catch((error) => console.error("Error fetching data: ", error));
       })
-      .catch((error) => console.error("Error fetching data: ", error));
+      .catch(error => console.error("Error:", error));
 
-    axios
-      .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + sessionStorage.getItem("accessToken"),
-        },
-      })
-      .then((response) => setContest(response.data))
-      .catch((error) => console.error("Error fetching data: ", error));
-
-    axios
-      .get(
-        `${import.meta.env.VITE_API_URL
-        }api/contests/${contestId}/max_rating_sum/`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + sessionStorage.getItem("accessToken"),
-          },
-        }
-      )
-      .then((response) => {
-        setMaxScore(response.data.total_max_rating);
-      })
-      .catch((error) => console.error("Error fetching max score: ", error));
-  }, [contestId, sortOrder]);
+  }, [sortOrder]);
 
   const handleSortChange = (event) => {
     setSortOrder(event.target.value);
@@ -111,6 +94,11 @@ export default function Entries() {
       });
     setOpenPopUp(true);
   };
+
+  if (loading) {
+    return (<div></div>);
+  };
+
   return (
     <ThemeProvider theme={montserrat}>
       <Navbar />
@@ -128,7 +116,7 @@ export default function Entries() {
             variant="h4"
             component="h1"
           >
-            Prace konkursowe: {contest.title}
+            Twoje zgłoszenia
           </Typography>
           <Select value={sortOrder} onChange={handleSortChange} sx={{ mt: 2 }}>
             <MenuItem value={"asc"}>
@@ -139,7 +127,6 @@ export default function Entries() {
         </Box>
         <BackButton clickHandler={handleBackClick} />
         {entries.map((entry) => {
-          const badgeColor = getBadgeColor(entry.score, maxScore);
           return (
             <Card
               key={entry.id}
@@ -156,16 +143,11 @@ export default function Entries() {
               <EntryInfo
                 id={entry.id}
                 title={entry.entry_title}
-                name={entry.contestants[0].name}
-                surname={entry.contestants[0].surname}
+                name={"Michał"}
+                surname={"Michałowski"}
                 date={entry.date_submitted}
                 score={entry.score}
                 onDeleteClick={handleDeleteClick}
-              />
-              <EntryScore
-                badgeColor={badgeColor}
-                score={entry.score}
-                maxScore={maxScore}
               />
             </Card>
           );
@@ -185,16 +167,4 @@ export default function Entries() {
       />
     </ThemeProvider>
   );
-}
-
-function getBadgeColor(score, maxScore) {
-  if (score === null || score === undefined) {
-    return "grey";
-  } else if (score < 0.5 * maxScore) {
-    return "#900020";
-  } else if (score < 0.8 * maxScore) {
-    return "#FFD700";
-  } else {
-    return "green";
-  }
 }

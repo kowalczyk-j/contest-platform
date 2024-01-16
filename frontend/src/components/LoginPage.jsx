@@ -47,9 +47,8 @@ const LoginPage = () => {
         const token = responseData.token;
         sessionStorage.setItem("accessToken", token);
 
-        const currentUserLink = `${
-          import.meta.env.VITE_API_URL
-        }api/users/current_user/`;
+        const currentUserLink = `${import.meta.env.VITE_API_URL
+          }api/users/current_user/`;
 
         const headersCurrentUser = {
           headers: {
@@ -135,6 +134,7 @@ const LoginPage = () => {
                       id="password"
                       label="Hasło"
                       value={password}
+                      type="password"
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </FormControl>
