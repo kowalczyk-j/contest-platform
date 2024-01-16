@@ -18,6 +18,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from django.core.mail import send_mail
+from datetime import date
 
 
 class Logout(GenericAPIView):
@@ -75,6 +76,13 @@ class ContestViewSet(ModelViewSet):
         )
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["get"])
+    def current_contests(self, request):
+        queryset = Contest.objects.filter(date_start__lte=date.today()).filter(date_end__gte=date.today())
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class PersonViewSet(ModelViewSet):

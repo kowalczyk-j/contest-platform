@@ -13,7 +13,6 @@ import {
   Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Logo from "../static/assets/Logo.png";
 import axios from "axios";
 import Navbar from "./Navbar.jsx";
 import TextButton from "./TextButton";
@@ -36,7 +35,7 @@ const ContestIndexPage = () => {
   const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
-    const contestsLink = `${import.meta.env.VITE_API_URL}api/contests/`;
+    let contestsLink = `${import.meta.env.VITE_API_URL}api/contests/current_contests`;
     const headers = { headers: { "Content-Type": "application/json" } };
     const currentUserLink = `${
       import.meta.env.VITE_API_URL
@@ -57,6 +56,13 @@ const ContestIndexPage = () => {
       .then((res) => {
         const responseData = res.data;
         setUserData(responseData);
+        if (responseData.is_staff || responseData.is_jury) {
+          contestsLink = `${import.meta.env.VITE_API_URL}api/contests/`;
+          axios
+            .get(contestsLink, headers)
+            .then((ret) => setContests(ret.data))
+            .catch((error) => console.error("Error:", error));
+        }
       })
       .catch((error) => {
         console.log("Error:", error);
