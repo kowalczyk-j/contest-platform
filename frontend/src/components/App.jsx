@@ -10,6 +10,7 @@ import UserProfilePage from "./UserProfilePage";
 import PrivateRoute from "./PrivateRoute";
 import EmailForm from "./EmailForm";
 import UsersListPage from "./UsersListPage";
+import UserEntries from "./UserEntries";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
+        <Route path="/user-entries" element={<UserEntries />} />
         <Route
           path="/users"
           element={

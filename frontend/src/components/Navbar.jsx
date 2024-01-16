@@ -25,16 +25,16 @@ import {
   DialogActions,
 } from "@mui/material";
 
-const pages = ["Konkursy", "Wydarzenia", "Strona Główna", "użytkownicy"];
+const pages = ["Konkursy", "Strona Główna", "Użytkownicy"];
 const settings = ["Profil", "Moje prace", "Importuj"];
 const settingsLinks = {
   Profil: "/profile",
+  "Moje prace": "/user-entries",
 };
 const pagesLinks = {
-  Konkursy: "/",
-  Wydarzenia: "/",
+  "Konkursy": "/",
   "Strona Główna": "https://www.fundacjabowarto.pl/",
-  użytkownicy: "/users",
+  "Użytkownicy": "/users",
 };
 
 function ResponsiveAppBar() {
@@ -60,9 +60,8 @@ function ResponsiveAppBar() {
   };
 
   useEffect(() => {
-    const currentUserLink = `${
-      import.meta.env.VITE_API_URL
-    }api/users/current_user/`;
+    const currentUserLink = `${import.meta.env.VITE_API_URL
+      }api/users/current_user/`;
     const headersCurrentUser = {
       headers: {
         "Content-Type": "application/json",
@@ -83,7 +82,7 @@ function ResponsiveAppBar() {
   const isStaff = userData.is_staff === true;
   const filteredPages = isStaff
     ? pages
-    : pages.filter((page) => page !== "użytkownicy");
+    : pages.filter((page) => page !== "Użytkownicy");
 
   const handleImportModalClose = () => {
     setShowImportModal(false);

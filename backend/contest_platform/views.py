@@ -57,13 +57,6 @@ class ContestViewSet(ModelViewSet):
     permission_classes = [ContestPermission]
 
     @action(detail=True, methods=["get"])
-    def entries(self, request, pk=None):
-        contest_id = self.get_object().id
-        queryset = Entry.objects.filter(contest=contest_id)
-        serializer = EntrySerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    @action(detail=True, methods=["get"])
     def max_rating_sum(self, request, pk=None):
         """
         Returns the sum of max_rating for all GradeCriteria

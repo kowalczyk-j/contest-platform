@@ -24,6 +24,7 @@ import montserrat from "../static/theme";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import ConfirmationWindow from "./ConfirmationWindow";
+import Navbar from "./Navbar";
 
 const GreenButton = styled(Button)({
   backgroundColor: "#95C21E",
@@ -124,23 +125,13 @@ const GradeEntry = () => {
     setUploadError(false);
     setUploadErrorMessage("");
     setOpenPopup(false);
-    navigate("/");
+    navigate(-1);
   };
 
   return (
     <ThemeProvider theme={montserrat}>
       <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "20px",
-          }}
-        >
-          <img style={{ width: "200px" }} src={Logo} alt="Logo" />
-        </div>
-
+        <Navbar />
         <div className="back-btn">
           <BackButton clickHandler={handleBack} />
         </div>

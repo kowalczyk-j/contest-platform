@@ -86,11 +86,9 @@ export default function EmailForm() {
     const emailSubject = `Zaproszenie do udziału w konkursie "${contest.title}"`;
     const emailMessage = `Szanowni Państwo,
 
-Zapraszamy serdecznie do wzięcia udziału w konkursie "${
-      contest.title
-    }" organizowanym przez Fundację "BoWarto". Konkurs ${
-      contest.individual ? "indywidualny" : "zespołowy"
-    } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
+Zapraszamy serdecznie do wzięcia udziału w konkursie "${contest.title
+      }" organizowanym przez Fundację "BoWarto". Konkurs ${contest.individual ? "indywidualny" : "zespołowy"
+      } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
 
 Opis:
 ${contest.description}
@@ -216,7 +214,7 @@ Zespół Fundacji "BoWarto"`;
           }
           onConfirm={() => {
             setOpenPopUp(false);
-            handleBackClick();
+            emailSendingError ? null : handleBackClick();
           }}
           showCancelButton={false}
         />

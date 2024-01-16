@@ -92,6 +92,15 @@ export default function Users() {
                   Admin
                 </Typography>
               )}
+              {user.is_jury && (
+                <Typography
+                  variant="body2"
+                  component="div"
+                  sx={{ color: "purple" }}
+                >
+                  Jury
+                </Typography>
+              )}
             </Box>
           </Card>
         ))}

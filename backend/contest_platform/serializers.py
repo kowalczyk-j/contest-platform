@@ -22,6 +22,8 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "password",
             "is_staff",
+            "is_jury",
+            "is_coordinating_unit",
             "is_superuser",
             "is_active",
             "date_joined",
