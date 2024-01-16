@@ -104,7 +104,6 @@ const ContestIndexPage = () => {
                 alignItems: "center",
               }}
             >
-              <CardHeader title="Dodaj konkurs" />
               <CardContent>
                 <Link to={"/create-contest"} style={{ textDecoration: "none" }}>
                   <TextButton
@@ -114,7 +113,7 @@ const ContestIndexPage = () => {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      fontSize: "1rem",
+                      fontSize: "1.5rem",
                       color: "#95C21E",
                     }}
                   >
@@ -145,13 +144,11 @@ const ContestIndexPage = () => {
                   justifyContent: "center",
                 }}
               >
-                <CardHeader title={contest.title} />
-                {/* jezeli jest zdjecie to nalezy je tu dodać */}
                 {contest.poster_img && (
                   <img
                     src={contest.poster_img}
                     alt="Contest"
-                    style={{ maxHeight: "300px" }}
+                    style={{ maxHeight: "350px", maxWidth: "300px" }}
                   />
                 )}
               </div>
