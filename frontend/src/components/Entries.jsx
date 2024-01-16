@@ -156,8 +156,8 @@ export default function Entries() {
               <EntryInfo
                 id={entry.id}
                 title={entry.entry_title}
-                // name={entry.contestants[0].name}
-                // surname={entry.contestants[0].surname}
+                name={entry.contestants[0].name}
+                surname={entry.contestants[0].surname}
                 date={entry.date_submitted}
                 score={entry.score}
                 onDeleteClick={handleDeleteClick}
