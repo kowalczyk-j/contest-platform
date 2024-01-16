@@ -29,21 +29,21 @@ INSERT INTO contest_platform_user (password, is_superuser, first_name, last_name
 
 -- zgłoszenia
 
-INSERT INTO contest_platform_entry (date_submitted, email, entry_title, entry_file, contest_id, user_id) VALUES ('2024-01-15', 'marek_uzytkownik@gmail.com', 'Piękna kartka Bożonarodzeniowa', '', 1, 1);
-INSERT INTO contest_platform_entry (date_submitted, email, entry_title, entry_file, contest_id, user_id) VALUES ('2024-01-15', 'janek_uzytkownik@gmail.com', 'Kartka', '', 1, 2);
-INSERT INTO contest_platform_entry (date_submitted, email, entry_title, entry_file, contest_id, user_id) VALUES ('2024-01-15', 'arek_uzytkownik@gmail.com', 'Wesołych Świąt!', '', 1, 3);
-INSERT INTO contest_platform_entry (date_submitted, email, entry_title, entry_file, contest_id, user_id) VALUES ('2024-01-15', 'pawel_uzytkownik@gmail.com', 'Kartka Świąteczna', '', 1, 4);
+-- INSERT INTO contest_platform_entry (date_submitted, email, entry_title, entry_file, contest_id, user_id) VALUES ('2024-01-15', 'marek_uzytkownik@gmail.com', 'Piękna kartka Bożonarodzeniowa', '', 1, 1);
+-- INSERT INTO contest_platform_entry (date_submitted, email, entry_title, entry_file, contest_id, user_id) VALUES ('2024-01-15', 'janek_uzytkownik@gmail.com', 'Kartka', '', 1, 2);
+-- INSERT INTO contest_platform_entry (date_submitted, email, entry_title, entry_file, contest_id, user_id) VALUES ('2024-01-15', 'arek_uzytkownik@gmail.com', 'Wesołych Świąt!', '', 1, 3);
+-- INSERT INTO contest_platform_entry (date_submitted, email, entry_title, entry_file, contest_id, user_id) VALUES ('2024-01-15', 'pawel_uzytkownik@gmail.com', 'Kartka Świąteczna', '', 1, 4);
 
 -- oceny
 
-INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (2, 1, 1);
-INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (1, 1, 2);
-INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (2, 1, 3);
+-- INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (2, 1, 1);
+-- INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (1, 1, 2);
+-- INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (2, 1, 3);
 
-INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (4, 2, 1);
-INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (1, 2, 2);
-INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (3, 2, 3);
+-- INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (4, 2, 1);
+-- INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (1, 2, 2);
+-- INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (3, 2, 3);
 
-INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (6, 3, 1);
-INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (2, 3, 2);
-INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (4, 3, 3);
+-- INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (6, 3, 1);
+-- INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (2, 3, 2);
+-- INSERT INTO contest_platform_grade (value, entry_id, criterion_id) VALUES (4, 3, 3);

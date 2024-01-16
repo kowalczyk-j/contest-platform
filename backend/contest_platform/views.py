@@ -38,6 +38,7 @@ from .utils.import_schools_csv import upload_schools_data
 
 from rest_framework.decorators import api_view
 from datetime import date
+from rest_framework.permissions import AllowAny
 
 
 class Logout(GenericAPIView):
@@ -105,7 +106,7 @@ class EntryViewSet(ModelViewSet):
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [EntryPermission]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Entry.objects.all()
