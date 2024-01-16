@@ -37,6 +37,7 @@ from django.core.mail import send_mail
 from .utils.import_schools_csv import upload_schools_data
 
 from rest_framework.decorators import api_view
+from datetime import date
 
 
 class Logout(GenericAPIView):
@@ -85,6 +86,14 @@ class ContestViewSet(ModelViewSet):
         )
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["get"])
+    def current_contests(self, request):
+        queryset = Contest.objects.filter(date_start__lte=date.today()
+                                          ).filter(date_end__gte=date.today())
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class PersonViewSet(ModelViewSet):

@@ -153,30 +153,34 @@ function ContestForm({ onSubmit }) {
         criterionResponse.every((response) => response.status === 201)
       ) {
         setOpen(true);
-        const posterPath = await uploadFile("posters", poster);
-        const rulesPath = await uploadFile("rules", rulesFile);
-        await axios
-          .patch(
-            `${import.meta.env.VITE_API_URL}api/contests/${
-              contestResponse.data.id
-            }/`,
-            {
-              poster_img: posterPath,
-              rules_pdf: rulesPath,
+        let posterPath = null;
+        if (poster) {
+          posterPath = await uploadFile("posters", poster);
+        }
+        let rulesPath = null;
+        if (rulesFile) {
+          rulesPath = await uploadFile("rules", rulesFile);
+        }
+        await axios.patch(
+          `${import.meta.env.VITE_API_URL}api/contests/${contestResponse.data.id}/`,
+          {
+            poster_img: posterPath,
+            rules_pdf: rulesPath,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Token " + sessionStorage.getItem("accessToken"),
             },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Token " + sessionStorage.getItem("accessToken"),
-              },
-            },
-          )
+          },
+        )
           .catch((error) => {
             setErrorMessage(JSON.stringify(error.response.data, null, 2));
             setOpen(true);
           });
       }
     } catch (error) {
+      console.error(error);
       setErrorMessage(JSON.stringify(error.response.data, null, 2));
       setOpen(true);
     }
@@ -332,7 +336,7 @@ function ContestForm({ onSubmit }) {
       </div>
 
       <div className="submit">
-        <SubmitButton text="Utwórz konkurs" onClick={() => {}} />
+        <SubmitButton text="Utwórz konkurs" onClick={() => { }} />
         <ConfirmationWindow
           open={open}
           setOpen={setOpen}
