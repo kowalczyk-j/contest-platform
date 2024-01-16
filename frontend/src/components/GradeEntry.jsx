@@ -142,6 +142,7 @@ const GradeEntry = () => {
             authorName={entry.user}
             age={entry.user}
             applicant={entry.user}
+            entryFile={entry.entry_file}
             gradesAndCriterions={gradesAndCriterions}
             handleGradeUpload={handleGradeUpload}
           />
