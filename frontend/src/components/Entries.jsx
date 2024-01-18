@@ -33,7 +33,8 @@ export default function Entries() {
         const entriesWithScores = response.data.map((entry) => {
           return axios
             .get(
-              `${import.meta.env.VITE_API_URL}api/entries/${entry.id
+              `${import.meta.env.VITE_API_URL}api/entries/${
+                entry.id
               }/total_grade_value/`,
               {
                 headers: {
@@ -69,7 +70,8 @@ export default function Entries() {
 
     axios
       .get(
-        `${import.meta.env.VITE_API_URL
+        `${
+          import.meta.env.VITE_API_URL
         }api/contests/${contestId}/max_rating_sum/`,
         {
           headers: {
@@ -159,7 +161,8 @@ export default function Entries() {
                 name={entry.contestants[0].name}
                 surname={entry.contestants[0].surname}
                 date={entry.date_submitted}
-                score={entry.score}
+                userView={false}
+                entry_file={entry.entry_file}
                 onDeleteClick={handleDeleteClick}
               />
               <EntryScore
