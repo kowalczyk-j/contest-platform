@@ -12,6 +12,7 @@ import {
   Checkbox,
   Grid,
 } from "@mui/material";
+import Logo from "../static/assets/Logo.png";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import axios from "axios";
@@ -75,7 +76,7 @@ const RegistrationPage = () => {
             alignItems: "center",
           }}
         >
-          <img style={{ width: "200px" }} src={"Logo.png"} alt="Logo" />
+          <img style={{ width: "200px" }} src={Logo} alt="Logo" />
         </div>
         <Button
           style={{
@@ -127,9 +128,9 @@ const RegistrationPage = () => {
                     >
                       <TextField
                         id="password"
-                        type="password"
                         label="Hasło"
                         value={password}
+                        type="password"
                         onChange={(e) => setPassword(e.target.value)}
                       />
                     </FormControl>
