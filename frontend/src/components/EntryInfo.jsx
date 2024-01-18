@@ -9,6 +9,7 @@ export default function EntryInfo({
   name,
   surname,
   date,
+  entryFile,
   contestTitle,
   userView,
   onDeleteClick,
@@ -50,9 +51,12 @@ export default function EntryInfo({
       )}
 
       <Box sx={{ mt: 0.5, ml: -1 }}>
-        <Button color="primary" onClick={handleViewWorkClick}>
-          Zobacz pracę
-        </Button>
+        {entryFile ? (
+          <Button color="primary" onClick={handleViewWorkClick}>
+            Zobacz pracę
+          </Button>
+        ) : null}
+
         {userView ? null : (
           <>
             <Button color="success" onClick={() => handleRateClick(id)}>

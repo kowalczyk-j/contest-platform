@@ -14,7 +14,6 @@ import {
   Grid,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Logo from "../static/assets/Logo.png";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import ConfirmationWindow from "./ConfirmationWindow";
@@ -47,8 +46,9 @@ const LoginPage = () => {
         const token = responseData.token;
         sessionStorage.setItem("accessToken", token);
 
-        const currentUserLink = `${import.meta.env.VITE_API_URL
-          }api/users/current_user/`;
+        const currentUserLink = `${
+          import.meta.env.VITE_API_URL
+        }api/users/current_user/`;
 
         const headersCurrentUser = {
           headers: {
@@ -92,7 +92,7 @@ const LoginPage = () => {
           alignItems: "center",
         }}
       >
-        <img style={{ width: "200px" }} src={Logo} alt="Logo" />
+        <img style={{ width: "200px" }} src={"Logo.png"} alt="Logo" />
       </div>
       <Button
         style={{

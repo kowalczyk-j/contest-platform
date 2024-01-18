@@ -161,6 +161,7 @@ export default function Entries() {
                 name={entry.contestants[0].name}
                 surname={entry.contestants[0].surname}
                 date={entry.date_submitted}
+                entryFile={entry.entry_file}
                 userView={false}
                 entry_file={entry.entry_file}
                 onDeleteClick={handleDeleteClick}

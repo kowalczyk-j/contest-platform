@@ -14,7 +14,6 @@ import {
   FormControl,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Logo from "../static/assets/Logo.png";
 import { useNavigate } from "react-router-dom";
 import FileUploadButton from "./FileUploadButton"; /* TODO: stwórz FileDownload zamiast FileUpload */
 import GradeEntryForm from "./GradeEntryForm";
@@ -58,21 +57,21 @@ const GradeEntry = () => {
 
       const entryResponse = await axios.get(
         `${import.meta.env.VITE_API_URL}api/entries/${entryId}`,
-        headers,
+        headers
       );
       const entry = entryResponse.data;
       setEntry(entry);
 
       const gradeResponse = await axios.get(
         `${import.meta.env.VITE_API_URL}api/grades/?entry=${entryId}`,
-        headers,
+        headers
       );
       const grades = gradeResponse.data;
 
       const gradeCriterionsPromises = grades.map(async (grade) => {
         const criterionResponse = await axios.get(
           `${import.meta.env.VITE_API_URL}api/criterions/${grade.criterion}`,
-          headers,
+          headers
         );
         const criterion = criterionResponse.data;
 
@@ -102,7 +101,7 @@ const GradeEntry = () => {
         await axios.patch(
           `${import.meta.env.VITE_API_URL}api/grades/${pair.grade.id}/`,
           pair.grade,
-          headers,
+          headers
         );
       }
       console.log("Grades updated successfully");

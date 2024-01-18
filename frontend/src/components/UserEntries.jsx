@@ -112,6 +112,7 @@ export default function UserEntries() {
                 title={entry.entry_title}
                 name={entry.contestTitle}
                 date={entry.date_submitted}
+                entryFile={entry.entry_file}
                 userView={true}
                 contestTitle={entry.contestTitle}
                 entry_file={entry.entry_file}

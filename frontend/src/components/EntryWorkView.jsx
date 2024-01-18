@@ -79,7 +79,8 @@ export default function EntryWorkView() {
                 />
               ) : (
                 <Typography variant="body1" component="div">
-                  Zgłoszenie nie zawiera żadnego dołączonego pliku.
+                  Zgłoszenie nie zawiera żadnego dołączonego pliku. Praca mogła
+                  zostać dostarczona jedynie w formie fizycznej.
                 </Typography>
               )}
             </Box>

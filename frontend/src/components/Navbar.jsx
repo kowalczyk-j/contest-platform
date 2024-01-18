@@ -32,9 +32,9 @@ const settingsLinks = {
   "Moje prace": "/user-entries",
 };
 const pagesLinks = {
-  "Konkursy": "/",
+  Konkursy: "/",
   "Strona Główna": "https://www.fundacjabowarto.pl/",
-  "Użytkownicy": "/users",
+  Użytkownicy: "/users",
 };
 
 function ResponsiveAppBar() {
@@ -60,8 +60,9 @@ function ResponsiveAppBar() {
   };
 
   useEffect(() => {
-    const currentUserLink = `${import.meta.env.VITE_API_URL
-      }api/users/current_user/`;
+    const currentUserLink = `${
+      import.meta.env.VITE_API_URL
+    }api/users/current_user/`;
     const headersCurrentUser = {
       headers: {
         "Content-Type": "application/json",
@@ -96,7 +97,7 @@ function ResponsiveAppBar() {
         sx={{ backgroundColor: "#f5f5f5", borderBottom: "1px solid #ddd" }}
       >
         <Container maxWidth="xl">
-          <Toolbar disableGutters sx={{ padding: "10px" }}>
+          <Toolbar disableGutters sx={{ padding: "2px" }}>
             <div style={{ paddingRight: "20px" }}>
               <Header logoSize="150px"></Header>
             </div>

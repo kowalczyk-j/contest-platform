@@ -35,7 +35,9 @@ const ContestIndexPage = () => {
   const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
-    let contestsLink = `${import.meta.env.VITE_API_URL}api/contests/current_contests`;
+    let contestsLink = `${
+      import.meta.env.VITE_API_URL
+    }api/contests/current_contests`;
     const headers = { headers: { "Content-Type": "application/json" } };
     const currentUserLink = `${
       import.meta.env.VITE_API_URL
@@ -215,31 +217,32 @@ const ContestIndexPage = () => {
               </TextButton>
             )}
 
-            {userData.is_staff === true ? (
-              <>
-                <Link
-                  to={`/entries/${selectedContest?.id}`}
-                  style={{ textDecoration: "none" }}
+            {userData.is_jury || userData.is_staff ? (
+              <Link
+                to={`/entries/${selectedContest?.id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <TextButton
+                  style={{ fontSize: "1rem", color: "#95C21E" }}
+                  endIcon={<ArrowForwardIcon />}
                 >
-                  <TextButton
-                    style={{ fontSize: "1rem", color: "#95C21E" }}
-                    endIcon={<ArrowForwardIcon />}
-                  >
-                    Nadesłane prace
-                  </TextButton>
-                </Link>
-                <Link
-                  to={`/contest/${selectedContest?.id}/email`}
-                  style={{ textDecoration: "none" }}
+                  Nadesłane prace
+                </TextButton>
+              </Link>
+            ) : null}
+
+            {userData.is_staff ? (
+              <Link
+                to={`/contest/${selectedContest?.id}/email`}
+                style={{ textDecoration: "none" }}
+              >
+                <TextButton
+                  style={{ fontSize: "1rem", color: "#95C21E" }}
+                  endIcon={<ArrowForwardIcon />}
                 >
-                  <TextButton
-                    style={{ fontSize: "1rem", color: "#95C21E" }}
-                    endIcon={<ArrowForwardIcon />}
-                  >
-                    Wysyłka maili
-                  </TextButton>
-                </Link>
-              </>
+                  Wysyłka maili
+                </TextButton>
+              </Link>
             ) : null}
           </div>
 
