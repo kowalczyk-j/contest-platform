@@ -26,7 +26,7 @@ import {
 } from "@mui/material";
 
 const pages = ["Konkursy", "Strona Główna", "Użytkownicy"];
-const settings = ["Profil", "Moje prace", "Importuj"];
+const settings = ["Profil", "Moje prace", "Importuj dane"];
 const settingsLinks = {
   Profil: "/profile",
   "Moje prace": "/user-entries",
@@ -80,7 +80,7 @@ function ResponsiveAppBar() {
       });
   }, []);
 
-  const isStaff = userData.is_staff === true;
+  const isStaff = userData.is_staff;
   const filteredPages = isStaff
     ? pages
     : pages.filter((page) => page !== "Użytkownicy");
@@ -174,20 +174,25 @@ function ResponsiveAppBar() {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem
-                      key={setting}
-                      onClick={
-                        setting === "Importuj"
-                          ? setShowImportModal
-                          : handleCloseUserMenu
-                      }
-                      component={Link}
-                      to={settingsLinks[setting]}
-                    >
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  ))}{" "}
+                  {settings.map((setting) => {
+                    if (setting === "Importuj dane" && !isStaff) {
+                      return null;
+                    }
+                    return (
+                      <MenuItem
+                        key={setting}
+                        onClick={
+                          setting === "Importuj dane"
+                            ? setShowImportModal
+                            : handleCloseUserMenu
+                        }
+                        component={Link}
+                        to={settingsLinks[setting] || "#"}
+                      >
+                        <Typography textAlign="center">{setting}</Typography>
+                      </MenuItem>
+                    );
+                  })}
                   <Logout></Logout>
                 </Menu>
               </Box>
