@@ -35,13 +35,11 @@ const ContestIndexPage = () => {
   const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
-    let contestsLink = `${
-      import.meta.env.VITE_API_URL
-    }api/contests/current_contests`;
+    let contestsLink = `${import.meta.env.VITE_API_URL
+      }api/contests/current_contests`;
     const headers = { headers: { "Content-Type": "application/json" } };
-    const currentUserLink = `${
-      import.meta.env.VITE_API_URL
-    }api/users/current_user/`;
+    const currentUserLink = `${import.meta.env.VITE_API_URL
+      }api/users/current_user/`;
     const headersCurrentUser = {
       headers: {
         "Content-Type": "application/json",
