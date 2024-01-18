@@ -18,6 +18,8 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import ConfirmationWindow from "./ConfirmationWindow";
 import axios from "axios";
+import Header from "./Header";
+import BackButton from "./BackButton";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -46,9 +48,8 @@ const LoginPage = () => {
         const token = responseData.token;
         sessionStorage.setItem("accessToken", token);
 
-        const currentUserLink = `${
-          import.meta.env.VITE_API_URL
-        }api/users/current_user/`;
+        const currentUserLink = `${import.meta.env.VITE_API_URL
+          }api/users/current_user/`;
 
         const headersCurrentUser = {
           headers: {
@@ -85,27 +86,8 @@ const LoginPage = () => {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <img style={{ width: "200px" }} src={"Logo.png"} alt="Logo" />
-      </div>
-      <Button
-        style={{
-          color: "black",
-          display: "flex",
-          flexDirection: "row",
-          marginInline: "22%",
-          alignItems: "baseline",
-        }}
-        onClick={() => handleBack()}
-      >
-        Powrót
-      </Button>
+      <Header logoSize="150px" />
+      <BackButton clickHandler={handleBack} />
       <Grid container justifyContent="center" alignItems="center">
         <Grid item>
           <Card>

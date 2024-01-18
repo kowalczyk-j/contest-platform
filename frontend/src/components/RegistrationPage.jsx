@@ -12,7 +12,6 @@ import {
   Checkbox,
   Grid,
 } from "@mui/material";
-import Logo from "../static/assets/Logo.png";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import axios from "axios";
@@ -20,6 +19,7 @@ import Navbar from "./Navbar";
 import BackButton from "./BackButton";
 import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
+import Header from "./Header";
 
 const RegistrationPage = () => {
   const [username, setUsername] = useState("");
@@ -69,26 +69,8 @@ const RegistrationPage = () => {
   return (
     <ThemeProvider theme={montserrat}>
       <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img style={{ width: "200px" }} src={Logo} alt="Logo" />
-        </div>
-        <Button
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            marginInline: "22%",
-            alignItems: "baseline",
-          }}
-          onClick={() => handleBack()}
-        >
-          Powrót
-        </Button>
+        <Header logoSize="150px" />
+        <BackButton clickHandler={handleBack} />
         <Grid container justifyContent="center" alignItems="center">
           <Grid item>
             <Card>
