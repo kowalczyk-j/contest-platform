@@ -51,7 +51,7 @@ function GradeEntryForm({
             {entryFile && (
               <FileDownloadButton
                 text="Pobierz pracę"
-                link={new URL(entryFile)}
+                link={new URL(entryFile).toString()}
               />
             )}
           </div>

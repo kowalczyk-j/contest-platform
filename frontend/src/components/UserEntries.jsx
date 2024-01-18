@@ -24,8 +24,7 @@ export default function UserEntries() {
       .then((response) => {
         axios
           .get(
-            `${import.meta.env.VITE_API_URL}api/entries/?user=${
-              response.data.id
+            `${import.meta.env.VITE_API_URL}api/entries/?user=${response.data.id
             }`,
             {
               headers: {
@@ -38,8 +37,7 @@ export default function UserEntries() {
             const entriesWithContest = response.data.map((entry) => {
               return axios
                 .get(
-                  `${import.meta.env.VITE_API_URL}api/contests/${
-                    entry.contest
+                  `${import.meta.env.VITE_API_URL}api/contests/${entry.contest
                   }/`,
                   {
                     headers: {

@@ -24,7 +24,12 @@ export default function EntryWorkView() {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_URL}api/entries/${entryId}`)
+      .get(`${import.meta.env.VITE_API_URL}api/entries/${entryId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        }
+      })
       .then((response) => {
         setEntryData(response.data);
         setLoading(false);

@@ -76,8 +76,10 @@ class ContestPermission(permissions.BasePermission):
 
 class EntryPermission(permissions.BasePermission):
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
-        if view.action in ["list", "by_contest_id"]:
-            return request.user.is_authenticated and request.user.is_staff
+        if view.action == "list":
+            # VUNERABILITY HERE, TODO FIX, DONT ALLOW USERS TO LIST ALL ENTRIES
+            # JUST THEIR OWN ENTRIES, but this requires to rebuild the frontend
+            return request.user.is_authenticated
         if view.action == "create":
             return request.user.is_authenticated
         if view.action in [
@@ -98,7 +100,6 @@ class EntryPermission(permissions.BasePermission):
             "retrieve",
             "update",
             "partial_update",
-            "by_contest_id",
             "total_grade_value",
         ]:
             return request.user.is_authenticated and (
