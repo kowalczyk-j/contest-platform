@@ -122,6 +122,8 @@ function ContestForm({ onSubmit }) {
       file.name.length > 25 ? `${file.name.slice(0, 23)}...` : file.name;
     setPosterText(filename);
   };
+
+  // # REQ_11
   const [rulesFile, setRulesFile] = React.useState(null);
   const [rulesText, setRulesText] = React.useState("Nie załączono regulaminu");
   const handleRulesFileChange = (event) => {
@@ -131,6 +133,7 @@ function ContestForm({ onSubmit }) {
       file.name.length > 25 ? `${file.name.slice(0, 23)}...` : file.name;
     setRulesText(filename);
   };
+  // # REQ_11_END
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -153,30 +156,35 @@ function ContestForm({ onSubmit }) {
         criterionResponse.every((response) => response.status === 201)
       ) {
         setOpen(true);
-        const posterPath = await uploadFile("posters", poster);
-        const rulesPath = await uploadFile("rules", rulesFile);
-        await axios
-          .patch(
-            `${import.meta.env.VITE_API_URL}api/contests/${
-              contestResponse.data.id
-            }/`,
-            {
-              poster_img: posterPath,
-              rules_pdf: rulesPath,
+        // if contest is added succesfully, selected files are uploaded to cloud storage
+        let posterPath = null;
+        if (poster) {
+          posterPath = await uploadFile("posters", poster);
+        }
+        let rulesPath = null;
+        if (rulesFile) {
+          rulesPath = await uploadFile("rules", rulesFile);
+        }
+        await axios.patch(
+          `${import.meta.env.VITE_API_URL}api/contests/${contestResponse.data.id}/`,
+          {
+            poster_img: posterPath,
+            rules_pdf: rulesPath,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Token " + sessionStorage.getItem("accessToken"),
             },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Token " + sessionStorage.getItem("accessToken"),
-              },
-            },
-          )
+          },
+        )
           .catch((error) => {
             setErrorMessage(JSON.stringify(error.response.data, null, 2));
             setOpen(true);
           });
       }
     } catch (error) {
+      console.error(error);
       setErrorMessage(JSON.stringify(error.response.data, null, 2));
       setOpen(true);
     }
@@ -244,12 +252,18 @@ function ContestForm({ onSubmit }) {
             value={individual}
             onChange={(e) => setIndividual(e.target.value)}
           >
+            {/* # REQ_12*/}
             <FormControlLabel
               value="1"
               control={<Radio />}
               label="indywidualny"
             />
-            <FormControlLabel value="0" control={<Radio />} label="grupowy" />
+            <FormControlLabel 
+              value="0"
+              control={<Radio />}
+              label="grupowy" 
+            />
+            {/* # REQ_12_END */}
           </RadioGroup>
         </FormControl>
       </div>
@@ -332,7 +346,7 @@ function ContestForm({ onSubmit }) {
       </div>
 
       <div className="submit">
-        <SubmitButton text="Utwórz konkurs" onClick={() => {}} />
+        <SubmitButton text="Utwórz konkurs" onClick={() => { }} />
         <ConfirmationWindow
           open={open}
           setOpen={setOpen}

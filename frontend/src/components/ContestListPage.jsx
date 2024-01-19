@@ -13,7 +13,6 @@ import {
   Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Logo from "../static/assets/Logo.png";
 import axios from "axios";
 import Navbar from "./Navbar.jsx";
 import TextButton from "./TextButton";
@@ -36,11 +35,11 @@ const ContestIndexPage = () => {
   const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
-    const contestsLink = `${import.meta.env.VITE_API_URL}api/contests/`;
+    let contestsLink = `${import.meta.env.VITE_API_URL
+      }api/contests/current_contests`;
     const headers = { headers: { "Content-Type": "application/json" } };
-    const currentUserLink = `${
-      import.meta.env.VITE_API_URL
-    }api/users/current_user/`;
+    const currentUserLink = `${import.meta.env.VITE_API_URL
+      }api/users/current_user/`;
     const headersCurrentUser = {
       headers: {
         "Content-Type": "application/json",
@@ -57,6 +56,13 @@ const ContestIndexPage = () => {
       .then((res) => {
         const responseData = res.data;
         setUserData(responseData);
+        if (responseData.is_staff || responseData.is_jury) {
+          contestsLink = `${import.meta.env.VITE_API_URL}api/contests/`;
+          axios
+            .get(contestsLink, headers)
+            .then((ret) => setContests(ret.data))
+            .catch((error) => console.error("Error:", error));
+        }
       })
       .catch((error) => {
         console.log("Error:", error);
@@ -98,7 +104,6 @@ const ContestIndexPage = () => {
                 alignItems: "center",
               }}
             >
-              <CardHeader title="Dodaj konkurs" />
               <CardContent>
                 <Link to={"/create-contest"} style={{ textDecoration: "none" }}>
                   <TextButton
@@ -108,7 +113,7 @@ const ContestIndexPage = () => {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      fontSize: "1rem",
+                      fontSize: "1.5rem",
                       color: "#95C21E",
                     }}
                   >
@@ -139,13 +144,11 @@ const ContestIndexPage = () => {
                   justifyContent: "center",
                 }}
               >
-                <CardHeader title={contest.title} />
-                {/* jezeli jest zdjecie to nalezy je tu dodać */}
                 {contest.poster_img && (
                   <img
                     src={contest.poster_img}
                     alt="Contest"
-                    style={{ maxHeight: "300px" }}
+                    style={{ maxHeight: "350px", maxWidth: "300px" }}
                   />
                 )}
               </div>
@@ -212,7 +215,7 @@ const ContestIndexPage = () => {
               </TextButton>
             )}
 
-            {userData.is_staff === true ? (
+            {userData.is_jury || userData.is_staff ? (
               <Link
                 to={`/entries/${selectedContest?.id}`}
                 style={{ textDecoration: "none" }}
@@ -225,11 +228,26 @@ const ContestIndexPage = () => {
                 </TextButton>
               </Link>
             ) : null}
+
+            {userData.is_staff ? (
+              <Link
+                to={`/contest/${selectedContest?.id}/email`}
+                style={{ textDecoration: "none" }}
+              >
+                <TextButton
+                  style={{ fontSize: "1rem", color: "#95C21E" }}
+                  endIcon={<ArrowForwardIcon />}
+                >
+                  Wysyłka maili
+                </TextButton>
+              </Link>
+            ) : null}
           </div>
 
           {/* Add other details as needed */}
         </DialogContent>
         <DialogActions>
+          {/* # REQ_21 */}
           <Link to={`/create-entry/${selectedContest?.id}`}>
             <GreenButton>
               <Typography align="center" style={{ color: "white" }}>
@@ -237,6 +255,7 @@ const ContestIndexPage = () => {
               </Typography>
             </GreenButton>
           </Link>
+          {/* # REQ_21_END */}
           <GreenButton onClick={handleModalClose}>
             <Typography align="center" style={{ color: "white" }}>
               Zamknij

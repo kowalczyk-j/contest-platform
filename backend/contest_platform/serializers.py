@@ -11,6 +11,7 @@ from .models import User
 from rest_framework import serializers
 
 
+# REQ_06C
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -22,15 +23,19 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "password",
             "is_staff",
+            "is_jury",
+            "is_coordinating_unit",
             "is_superuser",
             "is_active",
             "date_joined",
         ]
         extra_kwargs = {"password": {"write_only": True}}
+# REQ_06C_END
 
     def create(self, validated_data):
         user = User(
-            username=validated_data["username"], email=validated_data["email"]
+            username=validated_data["username"], email=validated_data["email"],
+            is_coordinating_unit=validated_data["is_coordinating_unit"]
         )
         user.set_password(validated_data["password"])
         user.save()
@@ -41,6 +46,7 @@ class ContestSerializer(serializers.ModelSerializer):
     date_start = serializers.DateField(input_formats=["%Y-%m-%d"])
     date_end = serializers.DateField(input_formats=["%Y-%m-%d"])
 
+    # REQ_10
     def validate(self, data):
         if data.get("date_start") and data.get("date_end"):
             if data["date_start"] > data["date_end"]:
@@ -48,6 +54,7 @@ class ContestSerializer(serializers.ModelSerializer):
                     {"date_start": "Date start must be before date end."}
                 )
         return data
+    # REQ_10_END
 
     class Meta:
         model = Contest
@@ -75,6 +82,7 @@ class EntrySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Create the entry instance
+        # Before adding contestants, validity check of entry data is performed
         contestants = validated_data.pop("contestants")
         entry = Entry(**validated_data)
 
@@ -84,10 +92,12 @@ class EntrySerializer(serializers.ModelSerializer):
             user=user, contest=contest
         ).exists()
 
+        # REQ_23
         if existing_entry and not (user.is_staff or user.is_coordinating_unit):
             raise serializers.ValidationError(
                 {"user": "User cannot have more than one entry."}
             )
+        # REQ_23_END
 
         entry.save()
         person_list = []

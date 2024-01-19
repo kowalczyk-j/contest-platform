@@ -9,6 +9,9 @@ import LoginPage from "./LoginPage";
 import UserProfilePage from "./UserProfilePage";
 import PrivateRoute from "./PrivateRoute";
 import EmailForm from "./EmailForm";
+import UsersListPage from "./UsersListPage";
+import UserEntries from "./UserEntries";
+import EntryWorkView from "./EntryWorkView";
 
 function App() {
   return (
@@ -36,6 +39,16 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
+        <Route path="/user-entries" element={<UserEntries />} />
+        <Route path="/view-work/:entryId" element={<EntryWorkView />} />
+        <Route
+          path="/users"
+          element={
+            <PrivateRoute forStaff={true}>
+              <UsersListPage />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/contest/:contestId/email"
           element={

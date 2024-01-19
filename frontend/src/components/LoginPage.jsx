@@ -14,11 +14,12 @@ import {
   Grid,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Logo from "../static/assets/Logo.png";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import ConfirmationWindow from "./ConfirmationWindow";
 import axios from "axios";
+import Header from "./Header";
+import BackButton from "./BackButton";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -29,6 +30,7 @@ const LoginPage = () => {
   const [isStaff, setIsStaff] = useState(false);
   const navigate = useNavigate();
 
+  // REQ_06D
   const handleLogin = async (event) => {
     event.preventDefault();
     setLoginError(false);
@@ -47,9 +49,8 @@ const LoginPage = () => {
         const token = responseData.token;
         sessionStorage.setItem("accessToken", token);
 
-        const currentUserLink = `${
-          import.meta.env.VITE_API_URL
-        }api/users/current_user/`;
+        const currentUserLink = `${import.meta.env.VITE_API_URL
+          }api/users/current_user/`;
 
         const headersCurrentUser = {
           headers: {
@@ -76,6 +77,7 @@ const LoginPage = () => {
         setOpenPopup(true);
       });
   };
+  // REQ_06D_END
 
   const handleBack = () => {
     setLoginError(false);
@@ -86,27 +88,8 @@ const LoginPage = () => {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <img style={{ width: "200px" }} src={Logo} alt="Logo" />
-      </div>
-      <Button
-        style={{
-          color: "black",
-          display: "flex",
-          flexDirection: "row",
-          marginInline: "22%",
-          alignItems: "baseline",
-        }}
-        onClick={() => handleBack()}
-      >
-        Powrót
-      </Button>
+      <Header logoSize="150px" />
+      <BackButton clickHandler={handleBack} />
       <Grid container justifyContent="center" alignItems="center">
         <Grid item>
           <Card>
@@ -135,6 +118,7 @@ const LoginPage = () => {
                       id="password"
                       label="Hasło"
                       value={password}
+                      type="password"
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </FormControl>

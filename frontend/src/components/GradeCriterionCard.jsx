@@ -27,7 +27,7 @@ function GradeCriterionCard({ positionNumber, grade, gradeCriterion, onGradeChan
           value={selectedValue}
           onChange={handleChange}
         >
-          <MenuItem value={-1}>-</MenuItem>
+          <MenuItem value={null}>-</MenuItem>
           {Array.from({ length: gradeCriterion.max_rating + 1 }, (_, index) => (
             <MenuItem key={index} value={index}>
               {index}

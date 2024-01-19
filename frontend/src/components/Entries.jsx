@@ -30,10 +30,31 @@ export default function Entries() {
         },
       })
       .then((response) => {
-        const sortedEntries = response.data.sort((a, b) =>
-          sortOrder === "asc" ? a.score - b.score : b.score - a.score,
-        );
-        setEntries(sortedEntries);
+        const entriesWithScores = response.data.map((entry) => {
+          return axios
+            .get(
+              `${import.meta.env.VITE_API_URL}api/entries/${
+                entry.id
+              }/total_grade_value/`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization:
+                    "Token " + sessionStorage.getItem("accessToken"),
+                },
+              }
+            )
+            .then((scoreResponse) => {
+              return { ...entry, score: scoreResponse.data.total_value };
+            });
+        });
+
+        Promise.all(entriesWithScores).then((completed) => {
+          const sortedEntries = completed.sort((a, b) =>
+            sortOrder === "asc" ? a.score - b.score : b.score - a.score
+          );
+          setEntries(sortedEntries);
+        });
       })
       .catch((error) => console.error("Error fetching data: ", error));
 
@@ -49,14 +70,15 @@ export default function Entries() {
 
     axios
       .get(
-        `${import.meta.env.VITE_API_URL
+        `${
+          import.meta.env.VITE_API_URL
         }api/contests/${contestId}/max_rating_sum/`,
         {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Token " + sessionStorage.getItem("accessToken"),
           },
-        },
+        }
       )
       .then((response) => {
         setMaxScore(response.data.total_max_rating);
@@ -71,7 +93,7 @@ export default function Entries() {
   const handleBackClick = () => {
     navigate("/");
   };
-
+  // REQ_04
   const handleDeleteClick = (id) => {
     axios
       .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
@@ -86,11 +108,12 @@ export default function Entries() {
       .catch((error) => {
         console.log(error);
         setReviewDeleteErrorMessage(
-          JSON.stringify(error.response.data, null, 2),
+          JSON.stringify(error.response.data, null, 2)
         );
       });
     setOpenPopUp(true);
   };
+  // REQ_04_END
   return (
     <ThemeProvider theme={montserrat}>
       <Navbar />
@@ -103,6 +126,7 @@ export default function Entries() {
         }}
       >
         <Box sx={{ textAlign: "center", my: 2, mx: "auto" }}>
+          {/* REQ_33 */}
           <Typography
             style={{ fontWeight: "bold", marginTop: "20px" }}
             variant="h4"
@@ -118,8 +142,8 @@ export default function Entries() {
           </Select>
         </Box>
         <BackButton clickHandler={handleBackClick} />
+        {/* REQ_33_END*/}
         {entries.map((entry) => {
-          console.log(entry.score, maxScore);
           const badgeColor = getBadgeColor(entry.score, maxScore);
           return (
             <Card
@@ -137,13 +161,21 @@ export default function Entries() {
               <EntryInfo
                 id={entry.id}
                 title={entry.entry_title}
-                name={entry.contestants}
-                surname={entry.contestants}
-                age="12"
-                school="Szkoła Podstawowa nr 1 w Głogowie"
+                name={entry.contestants[0].name}
+                surname={entry.contestants[0].surname}
+                date={entry.date_submitted}
+                entryFile={entry.entry_file}
+                userView={false}
+                entry_file={entry.entry_file}
                 onDeleteClick={handleDeleteClick}
               />
-              <EntryScore badgeColor={badgeColor} score={entry.score} />
+              {/* REQ_35 */}
+              <EntryScore
+                badgeColor={badgeColor}
+                score={entry.score}
+                maxScore={maxScore}
+              />
+              {/* REQ_35_END */}
             </Card>
           );
         })}
@@ -168,9 +200,9 @@ function getBadgeColor(score, maxScore) {
   if (score === null || score === undefined) {
     return "grey";
   } else if (score < 0.5 * maxScore) {
-    return "red";
-  } else if (score < 0.9 * maxScore) {
-    return "yellow";
+    return "#900020";
+  } else if (score < 0.8 * maxScore) {
+    return "#FFD700";
   } else {
     return "green";
   }

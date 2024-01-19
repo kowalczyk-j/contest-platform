@@ -1,19 +1,26 @@
-import { ThemeProvider } from '@mui/material/styles';
-import Piesio_hr from '../static/assets/piesio_hr.jpg';
-import '@fontsource/montserrat/700.css';
-import '@fontsource/montserrat/500.css';
-import { Typography } from '@mui/material';
-import FileDownloadButton from './FileDownloadButton';
-import SubmitButton from './SubmitButton';
-import GradeUpperCardInfo from './GradeUpperCardInfo';
-import GradeCriterionCard from './GradeCriterionCard';
+import { ThemeProvider } from "@mui/material/styles";
+import "@fontsource/montserrat/700.css";
+import "@fontsource/montserrat/500.css";
+import { Typography } from "@mui/material";
+import FileDownloadButton from "./FileDownloadButton";
+import SubmitButton from "./SubmitButton";
+import GradeUpperCardInfo from "./GradeUpperCardInfo";
+import GradeCriterionCard from "./GradeCriterionCard";
 import montserrat from "../static/theme";
 import { useState } from "react";
 import { useEffect } from "react";
 
-
-function GradeEntryForm({ entryName, authorName, age, applicant, gradesAndCriterions, handleGradeUpload }) {
-  const [updatedGradesAndCriterions, setUpdatedGradesAndCriterions] = useState(gradesAndCriterions);
+function GradeEntryForm({
+  entryName,
+  authorName,
+  age,
+  applicant,
+  entryFile,
+  gradesAndCriterions,
+  handleGradeUpload,
+}) {
+  const [updatedGradesAndCriterions, setUpdatedGradesAndCriterions] =
+    useState(gradesAndCriterions);
 
   const handleGradeChange = (index, value) => {
     const newArray = [...updatedGradesAndCriterions];
@@ -23,9 +30,11 @@ function GradeEntryForm({ entryName, authorName, age, applicant, gradesAndCriter
 
   const handleGradeUploadClick = () => {
     handleGradeUpload(updatedGradesAndCriterions);
-  }
+  };
 
-  useEffect(() => { setUpdatedGradesAndCriterions(gradesAndCriterions) }, [gradesAndCriterions]);
+  useEffect(() => {
+    setUpdatedGradesAndCriterions(gradesAndCriterions);
+  }, [gradesAndCriterions]);
 
   return (
     <>
@@ -33,13 +42,31 @@ function GradeEntryForm({ entryName, authorName, age, applicant, gradesAndCriter
         <div className="upper-grade-entry-card">
           <div className="upper-grade-entry-card-text">
             <Typography variant="h3">O pracy</Typography>
-            <GradeUpperCardInfo entryName={entryName} authorName={authorName} age={age} applicant={applicant} />
+            <GradeUpperCardInfo
+              entryName={entryName}
+              authorName={authorName}
+              age={age}
+              applicant={applicant}
+            />
+            {entryFile && (
+              <FileDownloadButton
+                text="Pobierz pracę"
+                link={new URL(entryFile).toString()}
+              />
+            )}
           </div>
-          <div className='grade-entry-card-photo'>
-            <img src={Piesio_hr} alt="zdjęcie pracy" width={200} size={200}></img>
+          <div className="grade-entry-card-photo">
+            {entryFile && entryFile.slice(-4) != ".pdf" && (
+              <img
+                src={entryFile}
+                alt="zdjęcie pracy"
+                width={200}
+                size={200}
+              ></img>
+            )}
           </div>
         </div>
-        <FileDownloadButton name='Pobierz pracę' />
+
         <div>
           <Typography variant="h3">Kryteria oceny</Typography>
         </div>
@@ -55,7 +82,11 @@ function GradeEntryForm({ entryName, authorName, age, applicant, gradesAndCriter
           />
         ))}
 
-        <SubmitButton className="grade-entry-card-commit-button" text="Zatwierdź ocenę" onClick={handleGradeUploadClick} />
+        <SubmitButton
+          className="grade-entry-card-commit-button"
+          text="Zatwierdź ocenę"
+          onClick={handleGradeUploadClick}
+        />
       </div>
     </>
   );

@@ -24,19 +24,19 @@ import {
   DialogTitle,
   DialogActions,
 } from "@mui/material";
-
-const pages = ["Konkursy", "Wydarzenia", "Strona Główna", "użytkownicy"];
-const settings = ["Profil", "Moje prace", "Importuj"];
+// REQ_01
+const pages = ["Konkursy", "Strona Główna", "Użytkownicy"];
+const settings = ["Profil", "Moje prace", "Importuj dane"];
 const settingsLinks = {
   Profil: "/profile",
+  "Moje prace": "/user-entries",
 };
 const pagesLinks = {
   Konkursy: "/",
-  Wydarzenia: "/",
   "Strona Główna": "https://www.fundacjabowarto.pl/",
-  użytkownicy: "/users",
+  Użytkownicy: "/users",
 };
-
+// REQ_01_END
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -80,10 +80,10 @@ function ResponsiveAppBar() {
       });
   }, []);
 
-  const isStaff = userData.is_staff === true;
+  const isStaff = userData.is_staff;
   const filteredPages = isStaff
     ? pages
-    : pages.filter((page) => page !== "użytkownicy");
+    : pages.filter((page) => page !== "Użytkownicy");
 
   const handleImportModalClose = () => {
     setShowImportModal(false);
@@ -97,7 +97,7 @@ function ResponsiveAppBar() {
         sx={{ backgroundColor: "#f5f5f5", borderBottom: "1px solid #ddd" }}
       >
         <Container maxWidth="xl">
-          <Toolbar disableGutters sx={{ padding: "10px" }}>
+          <Toolbar disableGutters sx={{ padding: "2px" }}>
             <div style={{ paddingRight: "20px" }}>
               <Header logoSize="150px"></Header>
             </div>
@@ -174,20 +174,25 @@ function ResponsiveAppBar() {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem
-                      key={setting}
-                      onClick={
-                        setting === "Importuj"
-                          ? setShowImportModal
-                          : handleCloseUserMenu
-                      }
-                      component={Link}
-                      to={settingsLinks[setting]}
-                    >
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  ))}{" "}
+                  {settings.map((setting) => {
+                    if (setting === "Importuj dane" && !isStaff) {
+                      return null;
+                    }
+                    return (
+                      <MenuItem
+                        key={setting}
+                        onClick={
+                          setting === "Importuj dane"
+                            ? setShowImportModal
+                            : handleCloseUserMenu
+                        }
+                        component={Link}
+                        to={settingsLinks[setting] || "#"}
+                      >
+                        <Typography textAlign="center">{setting}</Typography>
+                      </MenuItem>
+                    );
+                  })}
                   <Logout></Logout>
                 </Menu>
               </Box>

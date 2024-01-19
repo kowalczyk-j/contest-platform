@@ -28,6 +28,7 @@ function EntryForm({ contestId, onSubmit }) {
   const [email, setEmail] = useState("");
   const [entryTitle, setEntryTitle] = useState("");
 
+  // loading - set to true until contest info is loaded
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -53,6 +54,7 @@ function EntryForm({ contestId, onSubmit }) {
           })
           .then((response) => {
             setUser(response.data);
+            // automatically set email to logged users email
             setEmail(response.data.email);
           })
           .catch((error) => {
@@ -66,7 +68,6 @@ function EntryForm({ contestId, onSubmit }) {
         setLoading(false);
       });
   }, [contestId]);
-  // TODO actual error handling
 
   // pop up after submiting
   const [open, setOpen] = React.useState(false);
@@ -81,7 +82,7 @@ function EntryForm({ contestId, onSubmit }) {
     }
   };
 
-  // add person
+  // add person - only for group contests
   const [persons, setPersons] = React.useState([{ name: "", surname: "" }]);
   const handlePersonChange = (index, personData) => {
     setPersons((prevPersons) => {
@@ -106,6 +107,7 @@ function EntryForm({ contestId, onSubmit }) {
   };
 
   // file upload
+  // # REQ_25
   const [file, setFile] = React.useState(null);
   const [fileText, setFileText] = React.useState("Nie załączono pliku");
   const handleFileChange = (event) => {
@@ -117,6 +119,7 @@ function EntryForm({ contestId, onSubmit }) {
         : uploadedFile.name;
     setFileText(`Załączono pracę: ${filename}`);
   };
+  // # REQ_25_END
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -133,6 +136,7 @@ function EntryForm({ contestId, onSubmit }) {
       if (response && response.status === 201) {
         setOpen(true);
         if (file) {
+          // file is uploaded to cloud storage only after making sure entry is valid
           const filePath = await uploadFile("entries", file);
           console.log(filePath);
           const updateResponse = await axios.patch(
@@ -160,7 +164,7 @@ function EntryForm({ contestId, onSubmit }) {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   return (
@@ -185,6 +189,7 @@ function EntryForm({ contestId, onSubmit }) {
       )}
 
       <form className="space-y-4" onSubmit={handleSubmit}>
+        {/* # REQ_23 */}
         {personComponents}
         {!contest.individual && (
           <TextButton
@@ -195,6 +200,7 @@ function EntryForm({ contestId, onSubmit }) {
             Dodaj uczestnika
           </TextButton>
         )}
+        {/* # REQ_23_END */}
 
         <div className="email">
           <FormControl className="flex flex-col space-y-4" fullWidth={true}>
@@ -218,6 +224,7 @@ function EntryForm({ contestId, onSubmit }) {
           </FormControl>
         </div>
 
+        {/* # REQ_27 */}
         <div className="checkbox">
           <FormControlLabel
             required
@@ -240,6 +247,7 @@ function EntryForm({ contestId, onSubmit }) {
             }
           />
         </div>
+        {/* # REQ_27_END */}
 
         <div className="entry-buttons">
           <div className="uploads">
