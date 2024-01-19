@@ -247,6 +247,7 @@ const ContestIndexPage = () => {
           {/* Add other details as needed */}
         </DialogContent>
         <DialogActions>
+          {/* # REQ_21 */}
           <Link to={`/create-entry/${selectedContest?.id}`}>
             <GreenButton>
               <Typography align="center" style={{ color: "white" }}>
@@ -254,6 +255,7 @@ const ContestIndexPage = () => {
               </Typography>
             </GreenButton>
           </Link>
+          {/* # REQ_21_END */}
           <GreenButton onClick={handleModalClose}>
             <Typography align="center" style={{ color: "white" }}>
               Zamknij
