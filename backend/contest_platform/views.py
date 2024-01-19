@@ -76,12 +76,12 @@ class ContestViewSet(ModelViewSet):
         message = request.data.get("message")
         receivers = [
             receiver["email"] for receiver in request.data.get("receivers")
-        ]
+        ]  # Selected mailing list passed in form
 
         send_mail(
             subject,
             message,
-            "konkursy.bowarto@gmail.com",  # Adres e-mail nadawcy
+            "konkursy.bowarto@gmail.com",  # E-mail address of the sender
             receivers,
             fail_silently=False,
         )
@@ -175,6 +175,10 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=["get"])
     def emails(self, request):
+        """
+        Returns a list of first 500 emails in the database.
+        500 is max SMTP gmail daily limit.
+        """
         emails = User.objects.values("email")[:500]
         return Response(emails)
 # REQ_06B_END

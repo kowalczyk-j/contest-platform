@@ -55,9 +55,9 @@ export default function Users() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              mb: 2, // Ensure consistent margin-bottom for each card
-              maxWidth: "700px", // Adjusted to match the design
-              mx: "auto", // Center the card
+              mb: 2,
+              maxWidth: "700px",
+              mx: "auto",
               boxShadow: "0 0 3px 1px #95C21E",
             }}
           >
