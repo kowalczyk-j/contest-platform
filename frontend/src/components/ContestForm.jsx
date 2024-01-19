@@ -156,6 +156,7 @@ function ContestForm({ onSubmit }) {
         criterionResponse.every((response) => response.status === 201)
       ) {
         setOpen(true);
+        // if contest is added succesfully, selected files are uploaded to cloud storage
         let posterPath = null;
         if (poster) {
           posterPath = await uploadFile("posters", poster);

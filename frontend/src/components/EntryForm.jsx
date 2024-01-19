@@ -28,6 +28,7 @@ function EntryForm({ contestId, onSubmit }) {
   const [email, setEmail] = useState("");
   const [entryTitle, setEntryTitle] = useState("");
 
+  // loading - set to true until contest info is loaded
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -53,6 +54,7 @@ function EntryForm({ contestId, onSubmit }) {
           })
           .then((response) => {
             setUser(response.data);
+            // automatically set email to logged users email
             setEmail(response.data.email);
           })
           .catch((error) => {
@@ -66,7 +68,6 @@ function EntryForm({ contestId, onSubmit }) {
         setLoading(false);
       });
   }, [contestId]);
-  // TODO actual error handling
 
   // pop up after submiting
   const [open, setOpen] = React.useState(false);
@@ -81,7 +82,7 @@ function EntryForm({ contestId, onSubmit }) {
     }
   };
 
-  // add person
+  // add person - only for group contests
   const [persons, setPersons] = React.useState([{ name: "", surname: "" }]);
   const handlePersonChange = (index, personData) => {
     setPersons((prevPersons) => {
@@ -135,6 +136,7 @@ function EntryForm({ contestId, onSubmit }) {
       if (response && response.status === 201) {
         setOpen(true);
         if (file) {
+          // file is uploaded to cloud storage only after making sure entry is valid
           const filePath = await uploadFile("entries", file);
           console.log(filePath);
           const updateResponse = await axios.patch(

@@ -80,6 +80,7 @@ class EntrySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Create the entry instance
+        # Before adding contestants, validity check of entry data is performed
         contestants = validated_data.pop("contestants")
         entry = Entry(**validated_data)
 

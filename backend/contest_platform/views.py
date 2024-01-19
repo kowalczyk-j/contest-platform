@@ -90,6 +90,9 @@ class ContestViewSet(ModelViewSet):
 
     @action(detail=False, methods=["get"])
     def current_contests(self, request):
+        """
+        Returns only contests that are after their start date but before end date.
+        """
         queryset = Contest.objects.filter(date_start__lte=date.today()
                                           ).filter(date_end__gte=date.today())
 

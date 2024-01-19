@@ -62,7 +62,7 @@ function CreateContestPage() {
       })
       .catch((error) => {
         console.error("Error:", error);
-        throw error; // Rethrow the error to be caught by the calling function
+        throw error; 
       });
   };
 
