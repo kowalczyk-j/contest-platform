@@ -33,7 +33,8 @@ export default function Entries() {
         const entriesWithScores = response.data.map((entry) => {
           return axios
             .get(
-              `${import.meta.env.VITE_API_URL}api/entries/${entry.id
+              `${import.meta.env.VITE_API_URL}api/entries/${
+                entry.id
               }/total_grade_value/`,
               {
                 headers: {
@@ -69,7 +70,8 @@ export default function Entries() {
 
     axios
       .get(
-        `${import.meta.env.VITE_API_URL
+        `${
+          import.meta.env.VITE_API_URL
         }api/contests/${contestId}/max_rating_sum/`,
         {
           headers: {
@@ -91,7 +93,7 @@ export default function Entries() {
   const handleBackClick = () => {
     navigate("/");
   };
-
+  // REQ_04
   const handleDeleteClick = (id) => {
     axios
       .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
@@ -111,6 +113,7 @@ export default function Entries() {
       });
     setOpenPopUp(true);
   };
+  // REQ_04_END
   return (
     <ThemeProvider theme={montserrat}>
       <Navbar />
@@ -123,6 +126,7 @@ export default function Entries() {
         }}
       >
         <Box sx={{ textAlign: "center", my: 2, mx: "auto" }}>
+          {/* REQ_33 */}
           <Typography
             style={{ fontWeight: "bold", marginTop: "20px" }}
             variant="h4"
@@ -138,6 +142,7 @@ export default function Entries() {
           </Select>
         </Box>
         <BackButton clickHandler={handleBackClick} />
+        {/* REQ_33_END*/}
         {entries.map((entry) => {
           const badgeColor = getBadgeColor(entry.score, maxScore);
           return (
@@ -162,11 +167,13 @@ export default function Entries() {
                 score={entry.score}
                 onDeleteClick={handleDeleteClick}
               />
+              {/* REQ_35 */}
               <EntryScore
                 badgeColor={badgeColor}
                 score={entry.score}
                 maxScore={maxScore}
               />
+              {/* REQ_35_END */}
             </Card>
           );
         })}

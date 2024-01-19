@@ -38,9 +38,11 @@ function CreateEntryPage() {
         <div className="back-btn">
           <BackButton clickHandler={handleBack} />
         </div>
+        {/* # REQ_22 */}
         <div className="form">
           <EntryForm contestId={contestId} onSubmit={handleFormSubmit} />
         </div>
+        {/* # REQ_22_END */}
       </div>
     </div>
   );

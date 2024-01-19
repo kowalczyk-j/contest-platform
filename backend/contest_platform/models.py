@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 
 
+# REQ_09A
 class Contest(models.Model):
     title = models.CharField(max_length=200, default="")
     description = models.CharField(max_length=1800, default="")
@@ -17,6 +18,7 @@ class Contest(models.Model):
 
     def __str__(self):
         return f"{self.title, self.description}"
+# REQ_09A_END
 
 
 class Address(models.Model):
@@ -29,16 +31,21 @@ class Address(models.Model):
         return f"{self.street} {self.number}, {self.postal_code} {self.city}"
 
 
+# REQ_23
 class Person(models.Model):
     name = models.CharField(max_length=20)
     surname = models.CharField(max_length=50)
+# REQ_23_END
 
 
+# REQ_23B
 class User(AbstractUser):
     is_jury = models.BooleanField(default=False)
     is_coordinating_unit = models.BooleanField(default=False)
+# REQ_23B_END
 
 
+# REQ_24
 class Entry(models.Model):
     contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -47,12 +54,15 @@ class Entry(models.Model):
     email = models.EmailField(null=True)
     entry_title = models.CharField(max_length=100)
     entry_file = models.URLField(max_length=300, null=True)
+# REQ_24_END
 
 
+# REQ_09B
 class GradeCriterion(models.Model):
     contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
     description = models.CharField(max_length=500)
     max_rating = models.IntegerField()
+# REQ_09B_END
 
 
 class Grade(models.Model):

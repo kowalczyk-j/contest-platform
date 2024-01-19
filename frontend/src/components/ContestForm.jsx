@@ -122,6 +122,8 @@ function ContestForm({ onSubmit }) {
       file.name.length > 25 ? `${file.name.slice(0, 23)}...` : file.name;
     setPosterText(filename);
   };
+
+  // # REQ_11
   const [rulesFile, setRulesFile] = React.useState(null);
   const [rulesText, setRulesText] = React.useState("Nie załączono regulaminu");
   const handleRulesFileChange = (event) => {
@@ -131,6 +133,7 @@ function ContestForm({ onSubmit }) {
       file.name.length > 25 ? `${file.name.slice(0, 23)}...` : file.name;
     setRulesText(filename);
   };
+  // # REQ_11_END
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -153,6 +156,7 @@ function ContestForm({ onSubmit }) {
         criterionResponse.every((response) => response.status === 201)
       ) {
         setOpen(true);
+        // if contest is added succesfully, selected files are uploaded to cloud storage
         let posterPath = null;
         if (poster) {
           posterPath = await uploadFile("posters", poster);
@@ -248,12 +252,18 @@ function ContestForm({ onSubmit }) {
             value={individual}
             onChange={(e) => setIndividual(e.target.value)}
           >
+            {/* # REQ_12*/}
             <FormControlLabel
               value="1"
               control={<Radio />}
               label="indywidualny"
             />
-            <FormControlLabel value="0" control={<Radio />} label="grupowy" />
+            <FormControlLabel 
+              value="0"
+              control={<Radio />}
+              label="grupowy" 
+            />
+            {/* # REQ_12_END */}
           </RadioGroup>
         </FormControl>
       </div>
