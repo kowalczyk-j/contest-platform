@@ -12,6 +12,7 @@ django-cors-headers = "*"
 psycopg = "*"
 pre-commit = "*"
 python-dotenv = "*"
+pipfile = "*"
 
 [dev-packages]
 sphinx = "*"

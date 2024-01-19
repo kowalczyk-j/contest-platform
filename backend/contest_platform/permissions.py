@@ -2,15 +2,21 @@ from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.request import Request
 
+
 from django.db import models
 
 
 class UserPermission(permissions.BasePermission):
-    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
+    def has_permission(
+        self, request: Request, view: GenericAPIView
+    ) -> bool:
         if view.action == "create":
             return True
         if view.action == "list":
-            return request.user.is_authenticated and request.user.is_staff
+            return (
+                request.user.is_authenticated
+                and request.user.is_staff
+            )
         elif view.action in [
             "retrieve",
             "update",
@@ -24,7 +30,10 @@ class UserPermission(permissions.BasePermission):
             return False
 
     def has_object_permission(
-        self, request: Request, view: GenericAPIView, obj: models.Model
+        self,
+        request: Request,
+        view: GenericAPIView,
+        obj: models.Model,
     ) -> bool:
         if not request.user.is_authenticated:
             return False
@@ -44,23 +53,42 @@ class UserPermission(permissions.BasePermission):
 
 
 class ContestPermission(permissions.BasePermission):
-    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
-        if view.action in ["list", "max_rating_sum", "retrieve", "update",
-                           "partial_update", "destroy", "entries",
-                           "send_email", "current_contests"]:
+    def has_permission(
+        self, request: Request, view: GenericAPIView
+    ) -> bool:
+        if view.action in [
+            "list",
+            "max_rating_sum",
+            "retrieve",
+            "update",
+            "partial_update",
+            "destroy",
+            "entries",
+            "send_email",
+            "current_contests",
+        ]:
             return True
         elif view.action == "create":
-            return request.user.is_authenticated and request.user.is_staff
+            return (
+                request.user.is_authenticated
+                and request.user.is_staff
+            )
         else:
             return False
 
     def has_object_permission(
-        self, request: Request, view: GenericAPIView, obj: models.Model
+        self,
+        request: Request,
+        view: GenericAPIView,
+        obj: models.Model,
     ) -> bool:
         if view.action == "retrieve":
             return True
         elif view.action == "send_email":
-            return request.user.is_authenticated and request.user.is_staff
+            return (
+                request.user.is_authenticated
+                and request.user.is_staff
+            )
         elif view.action in [
             "update",
             "partial_update",
@@ -75,7 +103,9 @@ class ContestPermission(permissions.BasePermission):
 
 
 class EntryPermission(permissions.BasePermission):
-    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
+    def has_permission(
+        self, request: Request, view: GenericAPIView
+    ) -> bool:
         if view.action == "list":
             # VUNERABILITY HERE, TODO FIX, DONT ALLOW USERS TO LIST ALL ENTRIES
             # JUST THEIR OWN ENTRIES, but this requires to rebuild the frontend
@@ -94,7 +124,10 @@ class EntryPermission(permissions.BasePermission):
             return False
 
     def has_object_permission(
-        self, request: Request, view: GenericAPIView, obj: models.Model
+        self,
+        request: Request,
+        view: GenericAPIView,
+        obj: models.Model,
     ) -> bool:
         if view.action in [
             "retrieve",
@@ -108,22 +141,38 @@ class EntryPermission(permissions.BasePermission):
                 or request.user.is_jury
             )
         if view.action in ["destroy"]:
-            return request.user.is_authenticated and request.user.is_staff
+            return (
+                request.user.is_authenticated
+                and request.user.is_staff
+            )
         else:
             return False
 
 
 class GradeCriterionPermissions(permissions.BasePermission):
-    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
-        if view.action in ["retrieve", "update", "partial_update", "destroy"]:
+    def has_permission(
+        self, request: Request, view: GenericAPIView
+    ) -> bool:
+        if view.action in [
+            "retrieve",
+            "update",
+            "partial_update",
+            "destroy",
+        ]:
             return request.user.is_authenticated
         elif view.action in ["list", "create"]:
-            return request.user.is_authenticated and request.user.is_staff
+            return (
+                request.user.is_authenticated
+                and request.user.is_staff
+            )
         else:
             return False
 
     def has_object_permission(
-        self, request: Request, view: GenericAPIView, obj: models.Model
+        self,
+        request: Request,
+        view: GenericAPIView,
+        obj: models.Model,
     ) -> bool:
         if view.action == "retrieve":
             return request.user.is_staff or request.user.is_jury
@@ -134,20 +183,33 @@ class GradeCriterionPermissions(permissions.BasePermission):
 
 
 class GradePermissions(permissions.BasePermission):
-    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
-        if view.action in ["retrieve", "update", "partial_update", "destroy"]:
+    def has_permission(
+        self, request: Request, view: GenericAPIView
+    ) -> bool:
+        if view.action in [
+            "retrieve",
+            "update",
+            "partial_update",
+            "destroy",
+        ]:
             return request.user.is_authenticated
         elif view.action == "list":
             return request.user.is_authenticated and (
                 request.user.is_staff or request.user.is_jury
             )
         elif view.action == "create":
-            return request.user.is_authenticated and request.user.is_staff
+            return (
+                request.user.is_authenticated
+                and request.user.is_staff
+            )
         else:
             return False
 
     def has_object_permission(
-        self, request: Request, view: GenericAPIView, obj: models.Model
+        self,
+        request: Request,
+        view: GenericAPIView,
+        obj: models.Model,
     ) -> bool:
         if view.action == "retrieve":
             return (
