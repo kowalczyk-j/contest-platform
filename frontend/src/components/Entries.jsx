@@ -93,7 +93,7 @@ export default function Entries() {
   const handleBackClick = () => {
     navigate("/");
   };
-
+  // REQ_04
   const handleDeleteClick = (id) => {
     axios
       .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
@@ -113,6 +113,7 @@ export default function Entries() {
       });
     setOpenPopUp(true);
   };
+  // REQ_04_END
   return (
     <ThemeProvider theme={montserrat}>
       <Navbar />
@@ -125,6 +126,7 @@ export default function Entries() {
         }}
       >
         <Box sx={{ textAlign: "center", my: 2, mx: "auto" }}>
+          {/* REQ_33 */}
           <Typography
             style={{ fontWeight: "bold", marginTop: "20px" }}
             variant="h4"
@@ -140,6 +142,7 @@ export default function Entries() {
           </Select>
         </Box>
         <BackButton clickHandler={handleBackClick} />
+        {/* REQ_33_END*/}
         {entries.map((entry) => {
           const badgeColor = getBadgeColor(entry.score, maxScore);
           return (
@@ -166,11 +169,13 @@ export default function Entries() {
                 entry_file={entry.entry_file}
                 onDeleteClick={handleDeleteClick}
               />
+              {/* REQ_35 */}
               <EntryScore
                 badgeColor={badgeColor}
                 score={entry.score}
                 maxScore={maxScore}
               />
+              {/* REQ_35_END */}
             </Card>
           );
         })}

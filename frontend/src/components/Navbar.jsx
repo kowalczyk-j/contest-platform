@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogActions,
 } from "@mui/material";
-
+// REQ_01
 const pages = ["Konkursy", "Strona Główna", "Użytkownicy"];
 const settings = ["Profil", "Moje prace", "Importuj dane"];
 const settingsLinks = {
@@ -36,7 +36,7 @@ const pagesLinks = {
   "Strona Główna": "https://www.fundacjabowarto.pl/",
   Użytkownicy: "/users",
 };
-
+// REQ_01_END
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);

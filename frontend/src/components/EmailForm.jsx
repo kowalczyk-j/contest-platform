@@ -42,7 +42,7 @@ export default function EmailForm() {
       })
       .then((response) => setContest(response.data))
       .catch((error) => console.error("Error fetching data: ", error));
-
+    // REQ_05
     axios
       .get(`${import.meta.env.VITE_API_URL}api/users/emails/`, {
         headers: {
@@ -52,6 +52,7 @@ export default function EmailForm() {
       })
       .then((response) => setEmailList(response.data))
       .catch((error) => console.error("Error fetching email list: ", error));
+    // REQ_05_END
   }, [contestId]);
 
   const handleChange = (event) => {
@@ -86,9 +87,11 @@ export default function EmailForm() {
     const emailSubject = `Zaproszenie do udziału w konkursie "${contest.title}"`;
     const emailMessage = `Szanowni Państwo,
 
-Zapraszamy serdecznie do wzięcia udziału w konkursie "${contest.title
-      }" organizowanym przez Fundację "BoWarto". Konkurs ${contest.individual ? "indywidualny" : "zespołowy"
-      } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
+Zapraszamy serdecznie do wzięcia udziału w konkursie "${
+      contest.title
+    }" organizowanym przez Fundację "BoWarto". Konkurs ${
+      contest.individual ? "indywidualny" : "zespołowy"
+    } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
 
 Opis:
 ${contest.description}
@@ -144,6 +147,7 @@ Zespół Fundacji "BoWarto"`;
               gdy wybrana lista liczy więcej odbiorców, system wyśle wiadomość
               do pierwszych 500 osób.
             </Typography>
+            {/*REQ_18*/}
             <form onSubmit={handleSubmit} style={{ width: "100%" }}>
               <FormControl fullWidth margin="normal">
                 <InputLabel id="receivers-label">Odbiorcy</InputLabel>
@@ -180,6 +184,7 @@ Zespół Fundacji "BoWarto"`;
                 value={emailData.message}
                 onChange={handleChange}
               />
+              {/*REQ_18_END*/}
               <Box
                 sx={{
                   display: "flex",
