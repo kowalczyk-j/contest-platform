@@ -70,6 +70,7 @@ class ContestViewSet(ModelViewSet):
         ).aggregate(Sum("max_rating"))["max_rating__sum"]
         return Response({"total_max_rating": total_max_rating or 0})
 
+    # REQ_17
     @action(detail=True, methods=["post"])
     def send_email(self, request, pk=None):
         subject = request.data.get("subject")
@@ -87,6 +88,7 @@ class ContestViewSet(ModelViewSet):
         )
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
+    # REQ_17_END
 
     @action(detail=False, methods=["get"])
     def current_contests(self, request):

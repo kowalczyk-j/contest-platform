@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogActions,
 } from "@mui/material";
-
+// REQ_01
 const pages = ["Konkursy", "Strona Główna", "Użytkownicy"];
 const settings = ["Profil", "Moje prace", "Importuj"];
 const settingsLinks = {
@@ -32,11 +32,11 @@ const settingsLinks = {
   "Moje prace": "/user-entries",
 };
 const pagesLinks = {
-  "Konkursy": "/",
+  Konkursy: "/",
   "Strona Główna": "https://www.fundacjabowarto.pl/",
-  "Użytkownicy": "/users",
+  Użytkownicy: "/users",
 };
-
+// REQ_01_END
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -60,8 +60,9 @@ function ResponsiveAppBar() {
   };
 
   useEffect(() => {
-    const currentUserLink = `${import.meta.env.VITE_API_URL
-      }api/users/current_user/`;
+    const currentUserLink = `${
+      import.meta.env.VITE_API_URL
+    }api/users/current_user/`;
     const headersCurrentUser = {
       headers: {
         "Content-Type": "application/json",
