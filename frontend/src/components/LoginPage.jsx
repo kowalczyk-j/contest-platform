@@ -30,6 +30,7 @@ const LoginPage = () => {
   const [isStaff, setIsStaff] = useState(false);
   const navigate = useNavigate();
 
+  // REQ_06D
   const handleLogin = async (event) => {
     event.preventDefault();
     setLoginError(false);
@@ -76,6 +77,7 @@ const LoginPage = () => {
         setOpenPopup(true);
       });
   };
+  // REQ_06D_END
 
   const handleBack = () => {
     setLoginError(false);

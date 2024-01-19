@@ -38,10 +38,12 @@ class Person(models.Model):
 # REQ_23_END
 
 
+# REQ_06A
 # REQ_23B
 class User(AbstractUser):
     is_jury = models.BooleanField(default=False)
     is_coordinating_unit = models.BooleanField(default=False)
+# REQ_06A_END
 # REQ_23B_END
 
 

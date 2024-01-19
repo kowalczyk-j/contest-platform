@@ -11,6 +11,7 @@ from .models import User
 from rest_framework import serializers
 
 
+# REQ_06C
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -29,6 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
             "date_joined",
         ]
         extra_kwargs = {"password": {"write_only": True}}
+# REQ_06C_END
 
     def create(self, validated_data):
         user = User(

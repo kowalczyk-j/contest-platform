@@ -90,7 +90,8 @@ class ContestViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def current_contests(self, request):
         """
-        Returns only contests that are after their start date but before end date.
+        Returns only contests that are after their start date but before end
+        date.
         """
         queryset = Contest.objects.filter(date_start__lte=date.today()
                                           ).filter(date_end__gte=date.today())
@@ -157,6 +158,7 @@ class GradeViewSet(ModelViewSet):
         return queryset
 
 
+# REQ_06B
 class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
@@ -173,6 +175,7 @@ class UserViewSet(ModelViewSet):
     def emails(self, request):
         emails = User.objects.values("email")[:500]
         return Response(emails)
+# REQ_06B_END
 
 
 class SchoolViewSet(ModelViewSet):

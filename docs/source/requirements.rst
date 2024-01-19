@@ -11,13 +11,6 @@ Wymagania projektu
 
     Na stronie internetowej powinna znajdować się zakładka “Konkursy”; po jej kliknięciu użytkownik ma zostać przekierowany na specjalnie przygotowaną platformę konkursową.
 
-    Kod realizujący wymaganie:
-    --------------------------
-
-    .. literalinclude:: ../../backend/manage.py
-        :start-after: REQ_01
-        :end-before: REQ_01_END
-
 2. Integracja z bazą adresową:
 ------------------------------
 
@@ -52,6 +45,35 @@ Wymagania projektu
     :priorytet: średni
 
     Członkowie jury, uczestnicy indywidualni, liderzy zespołów, koordynatorzy szkół logują się do systemu za pomocą e-maila i hasła.
+
+    Kod frontendu realizujący wymaganie:
+    ------------------------------------
+
+    .. literalinclude:: ../../frontend/src/components/LoginPage.jsx
+        :start-after: REQ_06D
+        :end-before: REQ_06D_END
+
+
+    Kod backendu realizujący wymaganie:
+    -----------------------------------
+
+    Modele
+
+    .. literalinclude:: ../../backend/contest_platform/models.py
+        :start-after: REQ_06A
+        :end-before: REQ_06A_END
+
+    Widoki
+
+    .. literalinclude:: ../../backend/contest_platform/views.py
+        :start-after: REQ_06B
+        :end-before: REQ_06B_END
+
+    Serializery
+
+    .. literalinclude:: ../../backend/contest_platform/serializers.py
+        :start-after: REQ_06C
+        :end-before: REQ_06C_END
 
 .. req:: Uczestnicy mogą edytować swoje dane, które automatycznie będą pobierane do formularza zgłoszeniowego.
     :id: REQ_07
