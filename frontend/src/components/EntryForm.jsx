@@ -106,6 +106,7 @@ function EntryForm({ contestId, onSubmit }) {
   };
 
   // file upload
+  // # REQ_25
   const [file, setFile] = React.useState(null);
   const [fileText, setFileText] = React.useState("Nie załączono pliku");
   const handleFileChange = (event) => {
@@ -117,6 +118,7 @@ function EntryForm({ contestId, onSubmit }) {
         : uploadedFile.name;
     setFileText(`Załączono pracę: ${filename}`);
   };
+  // # REQ_25_END
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -185,6 +187,7 @@ function EntryForm({ contestId, onSubmit }) {
       )}
 
       <form className="space-y-4" onSubmit={handleSubmit}>
+        {/* # REQ_23 */}
         {personComponents}
         {!contest.individual && (
           <TextButton
@@ -195,6 +198,7 @@ function EntryForm({ contestId, onSubmit }) {
             Dodaj uczestnika
           </TextButton>
         )}
+        {/* # REQ_23_END */}
 
         <div className="email">
           <FormControl className="flex flex-col space-y-4" fullWidth={true}>
@@ -218,6 +222,7 @@ function EntryForm({ contestId, onSubmit }) {
           </FormControl>
         </div>
 
+        {/* # REQ_27 */}
         <div className="checkbox">
           <FormControlLabel
             required
@@ -240,6 +245,7 @@ function EntryForm({ contestId, onSubmit }) {
             }
           />
         </div>
+        {/* # REQ_27_END */}
 
         <div className="entry-buttons">
           <div className="uploads">
