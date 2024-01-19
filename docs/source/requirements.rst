@@ -389,6 +389,13 @@ Wymagania projektu
     :osoba:
     :priorytet: wysoki
 
+    Kod realizujący wymaganie:
+    ---------------------------
+
+    .. literalinclude:: ../../frontend/src/components/EntryWorkView.jsx
+        :start-after: REQ_31
+        :end-before: REQ_31_END
+
 7. Ocenianie i jury
 --------------------
 
@@ -420,9 +427,11 @@ Wymagania projektu
     :priorytet:
 
     - Juror wpisuje wartość zgodnie z ustaloną skalą dla każdego kryterium.
-    - Zawsze dostępne jest pole “Uwagi” na komentarz tekstowy.
-    - Jurorzy mają możliwość segregowania prac poprzez oznaczenie je gwiazdką (takie, które przejdą do finału) oraz czerwonym krzyżykiem (wstępnie odrzucone).
-    - Oznaczenie pracy krzyżykiem lub gwiazdką można zmieniać w dowolnym momencie.
+    - Opcjonalnie dostępne jest pole “Uwagi” na komentarz tekstowy.
+
+    .. literalinclude:: ../../frontend/src/components/GradeEntry.jsx
+        :start-after: REQ_34
+        :end-before: REQ_34_END
 
 .. req:: Po ocenie pracy przez każdego jurora system oblicza i wyświetla przy niej średnią ocen.
     :id: REQ_35
@@ -433,7 +442,7 @@ Wymagania projektu
         :start-after: REQ_35
         :end-before: REQ_35_END
 
-8. Raportowanie
+8. Raportowanie*
 --------------------
 
 .. req:: System ma umożliwiać generowanie statystyk na temat uczestnictwa w konkursie zawierające: liczbę uczestników konkursu, liczbę zgłoszeń prac konkursowych, *liczbę szkół biorących udział, *regiony pochodzenia uczestników, *dane statystyczne na temat wieku uczestników.

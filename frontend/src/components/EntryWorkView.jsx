@@ -28,7 +28,7 @@ export default function EntryWorkView() {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Token " + sessionStorage.getItem("accessToken"),
-        }
+        },
       })
       .then((response) => {
         setEntryData(response.data);
@@ -68,6 +68,7 @@ export default function EntryWorkView() {
             boxShadow: "0 0 3px 1px #95C21E",
           }}
         >
+          {/*REQ_31*/}
           <CardContent sx={{ width: "100%" }}>
             <Box
               sx={{
@@ -80,7 +81,7 @@ export default function EntryWorkView() {
                 <img
                   src={entryData.entry_file}
                   alt="Nie można wyświetlić tej pracy. Pobierz plik."
-                  style={{ maxWidth: "600px", width: "100%", height: "auto" }} // Adjusted size for images
+                  style={{ maxWidth: "600px", width: "100%", height: "auto" }}
                 />
               ) : (
                 <Typography variant="body1" component="div">
@@ -94,6 +95,7 @@ export default function EntryWorkView() {
             text="Pobierz pracę"
             link={entryData.entry_file}
           />
+          {/*REQ_31_END*/}
         </Card>
       </Box>
     </>

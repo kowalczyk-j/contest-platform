@@ -87,7 +87,7 @@ const GradeEntry = () => {
       setOpenPopup(true);
     }
   };
-
+  // REQ_34
   const handleGradeUpload = async (updatedGradesAndCriterions) => {
     setUploadError(false);
     try {
@@ -106,6 +106,7 @@ const GradeEntry = () => {
       }
       console.log("Grades updated successfully");
       setOpenPopup(true);
+      // REQ_34_END
     } catch (error) {
       console.error("Grade update failed:", error.message);
       setUploadError(true);
