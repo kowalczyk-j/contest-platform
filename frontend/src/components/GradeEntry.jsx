@@ -61,6 +61,7 @@ const GradeEntry = () => {
         headers,
       );
       const entry = entryResponse.data;
+      console.log(entry);
       setEntry(entry);
 
       const gradeResponse = await axios.get(
@@ -137,15 +138,18 @@ const GradeEntry = () => {
         </div>
 
         <Grid container justifyContent="center" alignItems="center">
-          <GradeEntryForm
+          {entry && (
+            <GradeEntryForm
             entryName={entry.entry_title}
-            authorName={entry.user}
+            authorName={`${entry.contestants[0].name} ${entry.contestants[0].surname}`}
             age={entry.user}
             applicant={entry.user}
             entryFile={entry.entry_file}
             gradesAndCriterions={gradesAndCriterions}
             handleGradeUpload={handleGradeUpload}
           />
+          )}
+          
         </Grid>
         <ConfirmationWindow
           open={openPopup}

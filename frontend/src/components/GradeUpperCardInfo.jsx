@@ -13,16 +13,6 @@ function GradeUpperCardInfo({ entryName, authorName, age, applicant }) {
           Autor Pracy:
         </span> {authorName}</Typography>
       </div>
-      <div>
-        <Typography variant="body1"><span className="green-bold">
-          Wiek:
-        </span> {age}</Typography>
-      </div>
-      <div>
-        <Typography variant="body1"><span className="green-bold">
-          Jednostka koordynująca:
-        </span> {applicant}</Typography>
-      </div>
     </>
   );
 }
