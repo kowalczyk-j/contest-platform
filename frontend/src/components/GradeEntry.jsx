@@ -57,21 +57,22 @@ const GradeEntry = () => {
 
       const entryResponse = await axios.get(
         `${import.meta.env.VITE_API_URL}api/entries/${entryId}`,
-        headers
+        headers,
       );
       const entry = entryResponse.data;
+      console.log(entry);
       setEntry(entry);
 
       const gradeResponse = await axios.get(
         `${import.meta.env.VITE_API_URL}api/grades/?entry=${entryId}`,
-        headers
+        headers,
       );
       const grades = gradeResponse.data;
 
       const gradeCriterionsPromises = grades.map(async (grade) => {
         const criterionResponse = await axios.get(
           `${import.meta.env.VITE_API_URL}api/criterions/${grade.criterion}`,
-          headers
+          headers,
         );
         const criterion = criterionResponse.data;
 
@@ -101,7 +102,7 @@ const GradeEntry = () => {
         await axios.patch(
           `${import.meta.env.VITE_API_URL}api/grades/${pair.grade.id}/`,
           pair.grade,
-          headers
+          headers,
         );
       }
       console.log("Grades updated successfully");
@@ -137,15 +138,17 @@ const GradeEntry = () => {
         </div>
 
         <Grid container justifyContent="center" alignItems="center">
-          <GradeEntryForm
-            entryName={entry.entry_title}
-            authorName={entry.user}
-            age={entry.user}
-            applicant={entry.user}
-            entryFile={entry.entry_file}
-            gradesAndCriterions={gradesAndCriterions}
-            handleGradeUpload={handleGradeUpload}
-          />
+          {entry && (
+            <GradeEntryForm
+              entryName={entry.entry_title}
+              authorName={`${entry.contestants[0].name} ${entry.contestants[0].surname}`}
+              age={entry.user}
+              applicant={entry.user}
+              entryFile={entry.entry_file}
+              gradesAndCriterions={gradesAndCriterions}
+              handleGradeUpload={handleGradeUpload}
+            />
+          )}
         </Grid>
         <ConfirmationWindow
           open={openPopup}
