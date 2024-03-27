@@ -13,6 +13,7 @@ psycopg = "*"
 pre-commit = "*"
 python-dotenv = "*"
 pipfile = "*"
+selenium = "*"
 
 [dev-packages]
 sphinx = "*"
