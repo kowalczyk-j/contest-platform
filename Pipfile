@@ -13,6 +13,8 @@ psycopg = "*"
 pre-commit = "*"
 python-dotenv = "*"
 pipfile = "*"
+drf-spectacular = "*"
+drf-spectacular-sidecar = "*"
 
 [dev-packages]
 sphinx = "*"
@@ -20,4 +22,4 @@ sphinx = "*"
 sphinxcontrib-mermaid = "*"
 
 [requires]
-python_version = "3.12"
+python_version = "3.8"

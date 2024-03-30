@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
     "contest_platform",
 ]
 
@@ -110,8 +112,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "contest_platform_database",
-        "USER": "admin",
-        "PASSWORD": "admin",
+        "USER": "admin1",
+        "PASSWORD": "haslo1",
         "HOST": "localhost",
         "PORT": "5432",
     }
@@ -166,3 +168,19 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'konkursy.bowarto@gmail.com'
 EMAIL_HOST_PASSWORD = os.getenv('GMAIL_HOST_PASSWORD')
+
+
+# rest framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Contest platform API',
+    'DESCRIPTION': 'API of the contest platform website for the "Bo Warto" foundation',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+}
