@@ -112,8 +112,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "contest_platform_database",
-        "USER": "admin1",
-        "PASSWORD": "haslo1",
+        "USER": "admin",
+        "PASSWORD": "admin",
         "HOST": "localhost",
         "PORT": "5432",
     }
