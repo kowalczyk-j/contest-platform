@@ -1,0 +1,18 @@
+FROM python:3.12
+
+WORKDIR /app
+
+COPY . /app
+
+RUN pip install pipenv
+
+# instalacja zależności z pliku Pipfile
+RUN pipenv install --system --deploy
+
+EXPOSE 8000
+
+# migracje bazy danych
+CMD ["python", "manage.py", "makemigrations"]
+CMD ["python", "manage.py", "migrate"]
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
