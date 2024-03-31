@@ -14,6 +14,7 @@ pre-commit = "*"
 python-dotenv = "*"
 pipfile = "*"
 selenium = "*"
+pytest = "*"
 
 [dev-packages]
 sphinx = "*"
