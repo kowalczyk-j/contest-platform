@@ -1,18 +1,6 @@
-import pytest
-from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-@pytest.fixture
-def driver():
-    test_url = "http://localhost:5173"
-    chrome_options = Options()
-    chrome_options.add_experimental_option("detach", True)
-    driver = webdriver.Chrome(keep_alive=True, options=chrome_options)
-    yield driver
-    driver.quit()
 
 def test_failed_login(driver):
     driver.get("http://localhost:5173")

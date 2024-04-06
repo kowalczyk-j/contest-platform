@@ -1,4 +1,5 @@
 #!/bin/bash
+# run via pipenv
 
 pg_ctl start
 PID_POSTGRES=$!
