@@ -15,6 +15,7 @@ python-dotenv = "*"
 pipfile = "*"
 selenium = "*"
 pytest = "*"
+sentry-sdk[django] = "*"
 
 [dev-packages]
 sphinx = "*"
