@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.viewsets import ViewSet
 from .models import (
     Address,
     GradeCriterion,
@@ -201,3 +202,8 @@ def import_schools(request):
         return Response(
             {"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
         )
+
+class SentryError(ViewSet):
+    def list(self, request):
+        undefined_variable = 1 / 0
+        return Response("To nigdy się nie wykona!", status=status.HTTP_200_OK)
