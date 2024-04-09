@@ -15,6 +15,9 @@ python-dotenv = "*"
 pipfile = "*"
 drf-spectacular = "*"
 drf-spectacular-sidecar = "*"
+selenium = "*"
+pytest = "*"
+sentry-sdk[django] = "*"
 
 [dev-packages]
 sphinx = "*"
