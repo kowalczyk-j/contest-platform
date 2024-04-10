@@ -1,9 +1,12 @@
-[[source]]
-url = "https://pypi.org/simple"
-verify_ssl = true
-name = "pypi"
+[tool.poetry]
+name = "contest-platform"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
 
-[packages]
+[tool.poetry.dependencies]
+python = "^3.10"
 django = "*"
 sphinx-needs = "*"
 "sphinxcontrib.plantuml" = "*"
@@ -17,12 +20,14 @@ drf-spectacular = "*"
 drf-spectacular-sidecar = "*"
 selenium = "*"
 pytest = "*"
-sentry-sdk[django] = "*"
+sentry-sdk = "*"
 
-[dev-packages]
+
+[tool.poetry.group.dev.dependencies]
 sphinx = "*"
 "sphinxcontrib.httpdomain" = "*"
 sphinxcontrib-mermaid = "*"
 
-[requires]
-python_version = "3.12"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

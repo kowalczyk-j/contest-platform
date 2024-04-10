@@ -1,18 +1,18 @@
 FROM python:3.12
 
-WORKDIR /app
+WORKDIR /backend
 
-COPY . /app
+COPY ./backend .
 
-RUN pip install pipenv
+RUN pip install pipx && \
+    pipx install poetry && \
+    export PATH=$PATH:/root/.local/bin && \
+    poetry install
 
-# instalacja zależności z pliku Pipfile
-RUN pipenv install --system --deploy
+ENV PATH=/root/.local/bin:$PATH
 
 EXPOSE 8000
 
 # migracje bazy danych
-CMD ["python", "manage.py", "makemigrations"]
-CMD ["python", "manage.py", "migrate"]
+CMD ["poetry", "run", "python", "manage.py", "makemigrations", "&&", "poetry", "run", "python", "manage.py", "migrate", "&&", "poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

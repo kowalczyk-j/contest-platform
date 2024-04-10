@@ -8,9 +8,8 @@ sudo service postgresql start &
 PID_POSTGRES=$!
 
 # Migracje bazy danych
-cd backend
-pipenv run python manage.py makemigrations
-pipenv run python manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 
 # Uruchomienie serwera backendowego Django w tle
 python manage.py runserver &
