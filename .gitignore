@@ -6,7 +6,7 @@ backend/backend/__pycache__/
 backend/contest_platform/__pycache__/
 
 backend/contest_platform/migrations/__pycache__/
-
+backend/contest_platform/utils/__pycache__/
 *.env
 .DS_Store
 

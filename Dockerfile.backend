@@ -3,6 +3,11 @@ FROM python:3.12
 WORKDIR /backend
 
 COPY ./backend .
+COPY ./backend/entrypoint.sh /backend
+
+RUN chmod +x /backend/entrypoint.sh
+
+RUN apt-get update && apt-get install -y postgresql-client
 
 RUN pip install pipx && \
     pipx install poetry && \
@@ -11,8 +16,8 @@ RUN pip install pipx && \
 
 ENV PATH=/root/.local/bin:$PATH
 
+
 EXPOSE 8000
 
-# migracje bazy danych
-CMD ["poetry", "run", "python", "manage.py", "makemigrations", "&&", "poetry", "run", "python", "manage.py", "migrate", "&&", "poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["./entrypoint.sh"] 
 
