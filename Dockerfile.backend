@@ -1,18 +1,23 @@
 FROM python:3.12
 
-WORKDIR /app
+WORKDIR /backend
 
-COPY . /app
+COPY ./backend .
+COPY ./backend/entrypoint.sh /backend
 
-RUN pip install pipenv
+RUN chmod +x /backend/entrypoint.sh
 
-# instalacja zależności z pliku Pipfile
-RUN pipenv install --system --deploy
+RUN apt-get update && apt-get install -y postgresql-client
+
+RUN pip install pipx && \
+    pipx install poetry && \
+    export PATH=$PATH:/root/.local/bin && \
+    poetry install
+
+ENV PATH=/root/.local/bin:$PATH
+
 
 EXPOSE 8000
 
-# migracje bazy danych
-CMD ["python", "manage.py", "makemigrations"]
-CMD ["python", "manage.py", "migrate"]
+ENTRYPOINT ["./entrypoint.sh"] 
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

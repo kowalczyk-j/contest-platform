@@ -10,7 +10,7 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/app
+      - ./backend:/backend
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
@@ -25,7 +25,7 @@ services:
     ports:
       - "5173:5173"
     volumes:
-      - .:/app
+      - ./frontend:/frontend
 
   db:
     image: postgres

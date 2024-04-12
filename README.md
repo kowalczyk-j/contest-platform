@@ -6,124 +6,53 @@ Implementacja internetowej platformy konkursowej do rejestracji zgłoszeń uczes
 
 ## Konfiguracja środowiska
 
-W projekcie korzystamy z Pipenv, który jest narzędziem do zarządzania zależnościami w projekcie Pythona, łączące w sobie funkcje pip (do instalacji pakietów) i virtualenv (do izolowania środowiska).
+W projekcie korzystamy z Poetry, opartego o pyproject.toml, który jest narzędziem do zarządzania zależnościami w projekcie Pythona.
 
-1. **Instalacja Pipenv**: Upewnij się, że masz zainstalowany Python w wersji 3.12, lub `pyenv`, którego pipenv użyje do zainstalowania odpowiedniej wersji pythona. Następnie zainstaluj Pipenv za pomocą polecenia pip:
-
-   ```bash
-   pip install pipenv
-   ```
-
-2. **Inicjacja projektu**: Przejdź do głównego katalogu swojego projektu w terminalu i uruchom:
+1. **Instalacja Poetry**: Upewnij się, że masz zainstalowany Python w wersji 3.10. Następnie zainstaluj Poetry za pomocą polecenia pipx, które przeprowadzi instalację w wyizolowanym środowisku wirtualnym:
 
    ```bash
-   pipenv install
+   pip install pipx
+   pipx ensurepath
+   pipx install poetry
    ```
 
-   Komenda ta z wykorzystaniem `Pipfile` stworzy odpowiednie środowisko wirtualne do pracy z projektem.
-
-3. **Aktywacja środowiska wirtualnego**: Aby aktywować środowisko wirtualne stworzone przez Pipenv, użyj:
+2. **Inicjacja środowiska wirtualnego**: Przejdź do katalogu backend w terminalu i uruchom:
 
    ```bash
-   pipenv shell
+   poetry env list
    ```
-
-4. **Uruchamianie skryptów**: Aby uruchomić skrypty w środowisku Pipenv, użyj:
+   Jeśli żadne środowisko wirtualne nie zostało wylistowane, utwórz je i aktywuj za pomocą polecenia:
 
    ```bash
-   pipenv run nazwa_skryptu.py
+   poetry env use python3
    ```
 
-   lub jeśli aktywne jest środowisko po wcześniejszeym użyciu `pipenv shell`, po prostu
+3. **Przygotowanie bazy danych i pakietów frontendowych**: Upewnij się, że contest_platform_database została prawidłowo utworzona i skonfigurowana zgodnie z instrukcją podaną poniżej.
+
+4. **Instalacja pakietów**: W celu instalacji pakietów użyj komendy:
 
    ```bash
-   python nazwa_skryptu.py
-
+   poetry install
    ```
 
-5. **Dezaktywacja środowiska wirtualnego**: Aby wyjść z wirtualnego środowiska, użyj komendy:
+5. **Uruchamianie projektu skryptem**: Aby uruchomić projekt w środowisku wirtualnym zarządzanym automatycznie przez Poetry, wywołaj skrypt run.sh z katalogu backend:
 
    ```bash
-   exit
+   poetry run ./run.sh
    ```
-
-6. **Instalacja pakietów**: W celu instalacji pakietów i tym samym dodawania ich do paczki użyj komendy
+   Skrypt może wymagać jednorazowo nadania mu praw do wykonywania za pomocą komendy:
 
    ```bash
-   pipenv install nazwa_pakietu
+   chmod +x run.sh
    ```
 
-   Wykonanie tej komendy zmieni Pipfile i Pipfile.lock. Możesz również wprowadzać ręczne zmiany do Pipfile, lecz pamiętaj, by każdorazowo po takowej zmianie uruchamiać komendę `pipenv install` by wygenerować `Pipfile.lock` i stworzyć odpowiednie, aktualne środowisko.
-
-Pamiętaj, że plik `Pipfile.lock` automatycznie zapisuje dokładne wersje zainstalowanych pakietów, aby zapewnić spójność środowiska na różnych maszynach. Przy kolejnych uruchomieniach projektu, zaleca się używanie poleceń `pipenv install` w celu zainstalowania zależności zdefiniowanych w pliku `Pipfile`.
-
-## Uruchomienie serwera backend
-
-W projekcie backend piszemy w Django. 
-
-### **UWAGA**
-Pamiętaj, że żeby serwer backendu mógł zadziałać, musisz najpierw skonfigurować i uruchomić serwer bazy danych. W tym celu skieruj się do kolejnego punktu. Po skończeniu tamtych instrukcji, podążaj dalej za poniższymi instrukcjami.
-
-Aby uruchomić serwer Django, wykonaj następujące kroki:
-
-1. **Migracje bazy danych**: Wykonaj migracje, aby zastosować zmiany w bazie danych:
+5. **Dodawanie zależności**: Aby dodać zależności do pliku pyproject.toml, użyj komend:
 
    ```bash
-   python manage.py makemigrations
-   python manage.py migrate
+   poetry add <nazwa pakietu>
+   poetry lock
    ```
-
-2. **Uruchomienie serwera**: Aby uruchomić serwer deweloperski, wpisz poniższą komendę:
-
-   ```bash
-   python manage.py runserver
-   ```
-
-   Serwer będzie dostępny pod adresem domyślnym `http://127.0.0.1:8000/`.
-
-3. **Otwórz aplikację w przeglądarce**: Wejdź na `http://127.0.0.1:8000/` w przeglądarce internetowej, aby zobaczyć działającą aplikację Django.
-
-4. **Zmiana portu**:Możesz zmienić port, na którym działa serwer, dodając parametr `-p` lub `--port`. Na przykład, aby uruchomić serwer na porcie 8080, wpisz:
-
-   ```bash
-   python manage.py runserver 8080
-   ```
-
-- W trybie deweloperskim serwer automatycznie przeładowuje się po wprowadzeniu zmian w kodzie, więc nie musisz ręcznie ponownie uruchamiać serwera za każdym razem.
-
-## Uruchomienie serwera frontend
-
-W projekcie frontend piszemy w React. Aby uruchomić serwer React, wykonaj następujące kroki:
-
-1. **Sprawdź czy masz zainstalowany Nodejs i npm**: Aby sprawdzić użyj poniższych komend w terminalu:
-
-   ```
-   node -v
-   npm -v
-   ```
-
-   Jeżeli pokazuje ci się zainstalowa wersja to znaczy, że node i npm są zainstalowane.
-   Jeżęli Nodejs i npm nie są zainstalowane, użyj:
-   ```bash
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-   ```
-   Po pobraniu zrestartuj terminal, następnie:
-   ```bash
-   nvm install node
-   ```
-   
-   Node i npm powinny być już zainstalowane, teraz należy pobrać przypisane do projektu pakiety poprzez:
-   ```bash
-   npm install
-   ```
-   
-   Następnie uruchamiamy serwer react:
-   ```bash
-   npm run dev
-   ```
-   
-   Serwer powinien być uruchomiony i dostępny na porcie: localhost:5173
-
+   Pamiętaj, że plik `Poetry.lock` automatycznie zapisuje dokładne wersje zainstalowanych pakietów, aby zapewnić spójność środowiska na różnych maszynach. Przy kolejnych uruchomieniach projektu, zaleca się używanie poleceń `poetry install` w celu zainstalowania zależności zdefiniowanych w pliku `pyproject.toml`.
 
 ## Baza danych
 
@@ -169,26 +98,80 @@ Projekt skonfigurowany jest do pracy z bazą PostgreSQL. Aby aplikacja instancja
 
    2. Stwórz bazę o zadanych bądź wybranych atrybutach. Aby to zrobić, po wejściu do klienta `psql` wykonaj:
       ```sql
-      CREATE DATABASE '<nazwa_bazy_danych>';
+      CREATE DATABASE contest_platform_database;
       ```
-      Następnie stwórz odpowieniego użytkownika, z odpowiednimi uprawnieniami:
+      Następnie stwórz odpowieniego użytkownika, z odpowiednimi uprawnieniami (hasło przykładowe używane tylko w środowisku testowym):
 
       ```sql
-      CREATE ROLE '<nazwa_użytkownika>' WITH SUPERUSER LOGIN ENCRYPTED PASSWORD '<hasło>';
+      CREATE ROLE admin WITH SUPERUSER LOGIN ENCRYPTED PASSWORD 'admin';
       ```
       Po poprawnym wykonaniu powyższych instrukcji, django serwerdjango powinien być w stanie połączyć się z bazą danych.
-
+      
+      UWAGA! Do poprawnego zalogowania się na konto administratora Django, wymagane jest utworzenie superużytkownika za pomocą komendy
+      ```python
+      python manage.py createsuperuser
+      ```
    3. Jeśli chcesz wykonwyać polecenia `SQL` w bazie danych, użyj następującego polecenia by połączyć się z nią przez klienta `psql`:
       ```sql
       \c '<nazwa_bazy_danych>'
       ```
 
-
-   
 5. **Zatrzymanie serwera**: Aby zatrzymać serwer po zakończeniu pracy, użyj:
    ```bash
    sudo service postgresql stop
    ```
+
+## Serwer frontend
+
+W projekcie frontend piszemy w React. Aby uruchomić serwer React, wykonaj następujące kroki:
+
+1. **Konfiguracja Nodejs i npm**: Aby sprawdzić użyj poniższych komend w terminalu:
+
+   ```
+   node -v
+   npm -v
+   ```
+
+   Jeżeli pokazuje ci się zainstalowa wersja to znaczy, że node i npm są zainstalowane.
+   Jeżęli Nodejs i npm nie są zainstalowane, użyj:
+   ```bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+   ```
+   Po pobraniu zrestartuj terminal, następnie:
+   ```bash
+   nvm install node
+   ```
+   W tym momencie powinieneś być w stanie uruchomić skrypt run.sh w katalogu backend.
+
+1. **Ręczne uruchamianie serwera frontend**
+
+   Node i npm powinny być już zainstalowane, teraz należy pobrać przypisane do projektu pakiety poprzez:
+   ```bash
+   npm install
+   ```
+   
+   Następnie uruchamiamy serwer react:
+   ```bash
+   npm run dev
+   ```
+   
+   Serwer powinien być uruchomiony i dostępny na porcie: localhost:5173
+
+## Konteneryzacja
+Aby uruchomić kontener, dostosuj ustawienia bazy danych do hosta, który jest domyślnym serwerem PostgreSQL w dockerze. W tym celu znajdź plik `contest-platform/backend/backend/settings.py`. W tym pliku odnajdź sekcję `DATABASES`i zmień parametr HOST z 'localhost' na 'db'.
+   ```python
+      DATABASES = {
+      "default": {
+         "HOST": "db",
+         }
+      }
+   ```
+Następnie zbuduj obrazy i uruchom kontenery z katalogu głównego projektu (zaleca się przy włączonym Docker Desktop) za pomocą komendy:
+```bash
+   docker-compose up --build
+```
+
+Jeżeli obrazy kontenerów zostały już zbudowane, wywołuj komendę bez flagi '--build'.
 
 ## Dokumentacja
 
@@ -212,13 +195,3 @@ W celu tworzenia dokumentacji używamy modułu Sphinx. Poniżej widnieje krótka
    open build/html/index.html
    ```
    bądź znajdź nawiguj do pliku i otwórz w dowolnej przeglądarce.
-
-## Konwencja
-
-Dokumentacja, docstringi, komentarze - w języku polskim
-
-Kod i nazwy plików - w języku angielskim
-
-Nazwy zmiennych i metod - snake_case
-
-Nazwy klas - PascalCase
