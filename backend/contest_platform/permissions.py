@@ -193,6 +193,7 @@ class GradePermissions(permissions.BasePermission):
             "update",
             "partial_update",
             "destroy",
+            "to_evaluate"
         ]:
             return request.user.is_authenticated
         elif view.action == "list":
