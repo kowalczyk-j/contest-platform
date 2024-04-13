@@ -64,6 +64,7 @@ class GradeCriterion(models.Model):
     contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
     description = models.CharField(max_length=500)
     max_rating = models.IntegerField()
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 # REQ_09B_END
 
 
@@ -71,6 +72,7 @@ class Grade(models.Model):
     criterion = models.ForeignKey(GradeCriterion, on_delete=models.CASCADE)
     entry = models.ForeignKey(Entry, on_delete=models.CASCADE)
     value = models.IntegerField(null=True)
+    description = models.CharField(max_length = 255, null=True)
 
     def clean(self):
         if self.value > self.criterion.max_rating:

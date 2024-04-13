@@ -35,7 +35,7 @@ function ContestForm({ onSubmit }) {
   const [otherType, setOtherType] = useState("");
   // contest grade criteria
   const [criteria, setCriteria] = useState([
-    { contest: "", description: "", maxRating: "" },
+    { contest: "", description: "", maxRating: "", user: "" },
   ]);
 
   // pop up after submiting

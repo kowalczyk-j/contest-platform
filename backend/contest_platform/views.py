@@ -182,6 +182,12 @@ class UserViewSet(ModelViewSet):
         """
         emails = User.objects.values("email")[:500]
         return Response(emails)
+    
+    @action(detail=False, methods=["get"])
+    def jury_users(self, request):
+        jury_users = self.queryset.filter(is_jury=True)
+        serializer = self.get_serializer(jury_users, many=True)
+        return Response(serializer.data)
 # REQ_06B_END
 
 

@@ -24,6 +24,7 @@ class UserPermission(permissions.BasePermission):
             "destroy",
             "current_user",
             "emails",
+            "jury_users"
         ]:
             return True
         else:
@@ -43,6 +44,7 @@ class UserPermission(permissions.BasePermission):
             "update",
             "partial_update",
             "current_user",
+            "jury_users"
         ]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
