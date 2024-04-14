@@ -18,6 +18,7 @@ PID_DJANGO=$!
 # Uruchomienie serwera frontendowego React
 cd ../frontend
 npm install
+npm install --save @sentry/react
 npm run dev &
 PID_REACT=$!
 
