@@ -153,6 +153,14 @@ class GradeViewSet(ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [GradePermissions]
 
+    @action(detail=False, methods=["get"])
+    def to_evaluate(self, request):
+        user = request.user
+        queryset_criterion = GradeCriterion.objects.all().filter(user=user)
+        qs = [grade for grade in self.queryset if grade.criterion in queryset_criterion]
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)
+
     def get_queryset(self):
         queryset = Grade.objects.all()
         entry_id = self.request.query_params.get("entry", None)
@@ -182,6 +190,12 @@ class UserViewSet(ModelViewSet):
         """
         emails = User.objects.values("email")[:500]
         return Response(emails)
+    
+    @action(detail=False, methods=["get"])
+    def jury_users(self, request):
+        jury_users = self.queryset.filter(is_jury=True)
+        serializer = self.get_serializer(jury_users, many=True)
+        return Response(serializer.data)
 # REQ_06B_END
 
 
@@ -207,3 +221,6 @@ class SentryError(ViewSet):
     def list(self, request):
         undefined_variable = 1 / 0
         return Response("To nigdy się nie wykona!", status=status.HTTP_200_OK)
+
+
+
