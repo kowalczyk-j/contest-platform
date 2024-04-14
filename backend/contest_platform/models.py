@@ -49,8 +49,8 @@ class User(AbstractUser):
 
 # REQ_24
 class Entry(models.Model):
-    contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    contest = models.ForeignKey(Contest, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     contestants = models.ManyToManyField(Person)
     date_submitted = models.DateField(default=date.today)
     email = models.EmailField(null=True)
@@ -72,7 +72,7 @@ class Grade(models.Model):
     criterion = models.ForeignKey(GradeCriterion, on_delete=models.CASCADE)
     entry = models.ForeignKey(Entry, on_delete=models.CASCADE)
     value = models.IntegerField(null=True)
-    description = models.CharField(max_length = 255, null=True)
+    description = models.CharField(max_length=255, null=True)
 
     def clean(self):
         if self.value > self.criterion.max_rating:
