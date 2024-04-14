@@ -26,10 +26,9 @@ import {
 } from "@mui/material";
 // REQ_01
 const pages = ["Konkursy", "Strona Główna", "Użytkownicy"];
-const settings = ["Profil", "Moje prace", "Importuj dane"];
+const settings = ["Profil", "Importuj dane"];
 const settingsLinks = {
   Profil: "/profile",
-  "Moje prace": "/user-entries",
 };
 const pagesLinks = {
   Konkursy: "/",

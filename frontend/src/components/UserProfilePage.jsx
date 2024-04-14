@@ -15,6 +15,9 @@ import montserrat from "../static/theme";
 import UserEntries from "./UserEntries";
 import Navbar from "./Navbar";
 import BackButton from "./buttons/BackButton";
+import handleLogout from "./Logout";
+import ColorButton from "./buttons/ColorButton";
+import Logout from "./Logout";
 
 const UserProfilePage = () => {
   const [user, setUser] = useState({});
@@ -50,12 +53,12 @@ const UserProfilePage = () => {
       <Navbar />
       <BackButton clickHandler={handleBack} />
 
-      <Box sx={{ px: 4, maxWidth: "7xl", mx: "auto", mt: 2 }}>
+      <Box sx={{ px: 4, maxWidth: "7xl", mx: "auto" }}>
         <Typography variant="h4" align="center" gutterBottom>
           Profil użytkownika ID #{user.id}
         </Typography>
 
-        <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Grid container spacing={2} alignItems="center" sx={{ mt: 2 }}>
           <Grid
             item
             xs={12}
@@ -100,9 +103,11 @@ const UserProfilePage = () => {
                   {user.username}
                 </Typography>
               </CardContent>
+              <Box mt={-2} mb={1} display="flex" justifyContent="center">
+                <Logout />
+              </Box>
             </Card>
           </Grid>
-
           <Grid item xs={12} sm={8} md={7}>
             <Card>
               <CardContent>

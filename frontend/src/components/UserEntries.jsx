@@ -82,7 +82,7 @@ export default function UserEntries() {
             variant="h4"
             component="h1"
           >
-            Twoje zgłoszenia
+            Moje zgłoszenia
           </Typography>
         </Box>
         {entries.map((entry) => {
