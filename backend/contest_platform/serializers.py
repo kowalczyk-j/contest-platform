@@ -164,6 +164,3 @@ class SchoolSerializer(serializers.ModelSerializer):
         "audience_status",
         "institution_specifics",
         "director_name")
-        
-    def __str__(self):
-        return self.name
