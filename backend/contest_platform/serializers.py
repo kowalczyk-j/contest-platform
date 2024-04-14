@@ -9,6 +9,7 @@ from .models import (
 )
 from .models import User
 from rest_framework import serializers
+from django.db import transaction
 
 
 # REQ_06C
@@ -32,13 +33,15 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 # REQ_06C_END
 
+    @transaction.atomic
     def create(self, validated_data):
         user = User(
             username=validated_data["username"], email=validated_data["email"],
             is_coordinating_unit=validated_data["is_coordinating_unit"]
         )
         user.set_password(validated_data["password"])
-        user.save()
+        with transaction.atomic():
+            user.save()
         return user
 
 
@@ -80,38 +83,40 @@ class PersonSerializer(serializers.ModelSerializer):
 class EntrySerializer(serializers.ModelSerializer):
     contestants = PersonSerializer(many=True, read_only=False)
 
+    @transaction.atomic
     def create(self, validated_data):
         # Create the entry instance
         # Before adding contestants, validity check of entry data is performed
-        contestants = validated_data.pop("contestants")
-        entry = Entry(**validated_data)
+        with transaction.atomic():
+            contestants = validated_data.pop("contestants")
+            entry = Entry(**validated_data)
 
-        user = validated_data["user"]
-        contest = validated_data["contest"]
-        existing_entry = Entry.objects.filter(
-            user=user, contest=contest
-        ).exists()
+            user = validated_data["user"]
+            contest = validated_data["contest"]
+            existing_entry = Entry.objects.filter(
+                user=user, contest=contest
+            ).exists()
 
-        # REQ_23
-        if existing_entry and not (user.is_staff or user.is_coordinating_unit):
-            raise serializers.ValidationError(
-                {"user": "User cannot have more than one entry."}
-            )
-        # REQ_23_END
+            # REQ_23
+            if existing_entry and not (user.is_staff or user.is_coordinating_unit):
+                raise serializers.ValidationError(
+                    {"user": "User cannot have more than one entry."}
+                )
+            # REQ_23_END
 
-        entry.save()
-        person_list = []
-        # Iterate over the contestants data and add them to the entry
-        for contestant_data in contestants:
-            contestant = Person.objects.create(**contestant_data)
-            person_list.append(contestant)
+            entry.save()
+            person_list = []
+            # Iterate over the contestants data and add them to the entry
+            for contestant_data in contestants:
+                contestant = Person.objects.create(**contestant_data)
+                person_list.append(contestant)
 
-        entry.contestants.set(person_list)
+            entry.contestants.set(person_list)
 
-        # Create Grade instances based on GradeCriterions
-        grade_criterions = GradeCriterion.objects.filter(contest=contest)
-        for criterion in grade_criterions:
-            Grade.objects.create(criterion=criterion, entry=entry)
+            # Create Grade instances based on GradeCriterions
+            grade_criterions = GradeCriterion.objects.filter(contest=contest)
+            for criterion in grade_criterions:
+                Grade.objects.create(criterion=criterion, entry=entry)
 
         return entry
 
