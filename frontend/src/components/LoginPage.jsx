@@ -19,7 +19,7 @@ import "reactjs-popup/dist/index.css";
 import ConfirmationWindow from "./ConfirmationWindow";
 import axios from "axios";
 import Header from "./Header";
-import BackButton from "./BackButton";
+import BackButton from "./buttons/BackButton";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");

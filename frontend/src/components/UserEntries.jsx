@@ -4,8 +4,6 @@ import { Card, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
-import Navbar from "./Navbar";
-import BackButton from "./BackButton";
 import EntryInfo from "./EntryInfo";
 
 export default function UserEntries() {
@@ -24,7 +22,8 @@ export default function UserEntries() {
       .then((response) => {
         axios
           .get(
-            `${import.meta.env.VITE_API_URL}api/entries/?user=${response.data.id
+            `${import.meta.env.VITE_API_URL}api/entries/?user=${
+              response.data.id
             }`,
             {
               headers: {
@@ -37,7 +36,8 @@ export default function UserEntries() {
             const entriesWithContest = response.data.map((entry) => {
               return axios
                 .get(
-                  `${import.meta.env.VITE_API_URL}api/contests/${entry.contest
+                  `${import.meta.env.VITE_API_URL}api/contests/${
+                    entry.contest
                   }/`,
                   {
                     headers: {
@@ -62,17 +62,12 @@ export default function UserEntries() {
       .catch((error) => console.error("Error:", error));
   }, []);
 
-  const handleBackClick = () => {
-    navigate("/");
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
     <ThemeProvider theme={montserrat}>
-      <Navbar />
       <Box
         sx={{
           px: 4,
@@ -87,10 +82,9 @@ export default function UserEntries() {
             variant="h4"
             component="h1"
           >
-            Twoje zgłoszenia
+            Moje zgłoszenia
           </Typography>
         </Box>
-        <BackButton clickHandler={handleBackClick} />
         {entries.map((entry) => {
           return (
             <Card

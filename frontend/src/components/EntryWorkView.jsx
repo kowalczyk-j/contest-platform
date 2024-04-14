@@ -8,9 +8,9 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import FileDownloadButton from "./FileDownloadButton";
+import FileDownloadButton from "./buttons/FileDownloadButton";
 import Navbar from "./Navbar";
-import BackButton from "./BackButton";
+import BackButton from "./buttons/BackButton";
 
 export default function EntryWorkView() {
   const { entryId } = useParams();

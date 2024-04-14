@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import BackButton from "./BackButton";
+import BackButton from "./buttons/BackButton";
 import Navbar from "./Navbar";
 import EntryForm from "./EntryForm";
 

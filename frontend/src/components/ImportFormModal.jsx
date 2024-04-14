@@ -1,7 +1,7 @@
 import { Dialog } from "@mui/material";
 import FileUploadButton from "./FileUploadButton";
 import { Typography, Card } from "@mui/material";
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "./buttons/SubmitButton";
 import { useState } from "react";
 import ConfirmationWindow from "./ConfirmationWindow";
 import axios from "axios";

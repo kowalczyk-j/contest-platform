@@ -150,4 +150,17 @@ class GradeSerializer(serializers.ModelSerializer):
 class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
-        fields = "__all__"
+        fields = ("id",
+        "name",
+        "street",
+        "building_number",
+        "apartment_number",
+        "postal_code",
+        "city",
+        "phone",
+        "fax",
+        "email",
+        "website",
+        "audience_status",
+        "institution_specifics",
+        "director_name")

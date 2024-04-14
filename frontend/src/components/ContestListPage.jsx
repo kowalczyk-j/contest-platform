@@ -15,7 +15,7 @@ import {
 import { styled } from "@mui/material/styles";
 import axios from "axios";
 import Navbar from "./Navbar.jsx";
-import TextButton from "./TextButton";
+import TextButton from "./buttons/TextButton";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 

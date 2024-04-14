@@ -1,7 +1,7 @@
 import * as React from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
-import ColorButton from './ColorButton';
+import ColorButton from './buttons/ColorButton';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
