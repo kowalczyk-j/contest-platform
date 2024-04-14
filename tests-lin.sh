@@ -1,10 +1,16 @@
 #!/bin/bash
 
+sudo apt-get update
+sudo apt-get -y install chromium-chromedriver
+
 sudo service postgresql start
 cd backend
-pipenv run python3 manage.py makemigrations
-pipenv run python3 manage.py migrate
-pipenv run python3 manage.py runserver &
+poetry install
+poetry shell
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver &
 PID_DJANGO=$!
 
 cd ../frontend
@@ -13,10 +19,10 @@ npm run dev &
 PID_REACT=$!
 
 cd ../backend
-pipenv run python3 manage.py test
+python manage.py test
 
 cd ..
-pipenv run pytest integration/
+pytest integration/
 
 cleanup() {
   sudo service postgresql stop
