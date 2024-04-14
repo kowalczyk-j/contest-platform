@@ -11,13 +11,13 @@ import {
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
-import SubmitButton from "./SubmitButton";
-import GenerateTextButton from "./GenerateTextButton";
+import SubmitButton from "./buttons/SubmitButton";
+import GenerateTextButton from "./buttons/GenerateTextButton";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import axios from "axios";
 import ConfirmationWindow from "./ConfirmationWindow";
-import BackButton from "./BackButton";
+import BackButton from "./buttons/BackButton";
 
 export default function EmailForm() {
   const { contestId } = useParams();

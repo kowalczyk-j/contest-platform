@@ -11,8 +11,8 @@ import {
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline";
 import FileUploadButton from "./FileUploadButton";
-import SubmitButton from "./SubmitButton";
-import TextButton from "./TextButton";
+import SubmitButton from "./buttons/SubmitButton";
+import TextButton from "./buttons/TextButton";
 import CreatePerson from "./CreatePerson";
 import ConfirmationWindow from "./ConfirmationWindow";
 import { uploadFile } from "./uploadFile";

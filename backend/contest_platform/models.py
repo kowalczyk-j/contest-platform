@@ -105,4 +105,4 @@ class School(models.Model):
         )
 
     def __str__(self):
-        return f"{self.lp}. {self.name}"
+        return f"{self.name}"

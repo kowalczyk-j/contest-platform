@@ -16,7 +16,7 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import axios from "axios";
 import Navbar from "./Navbar";
-import BackButton from "./BackButton";
+import BackButton from "./buttons/BackButton";
 import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
 import Header from "./Header";

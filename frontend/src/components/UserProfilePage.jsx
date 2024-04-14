@@ -18,7 +18,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import montserrat from "../static/theme";
 import Navbar from "./Navbar";
-import BackButton from "./BackButton";
+import BackButton from "./buttons/BackButton";
 
 const GreenButton = styled(Button)({
   backgroundColor: "#95C21E",

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "reactjs-popup/dist/index.css";
 import Header from "./Header";
-import BackButton from "./BackButton";
+import BackButton from "./buttons/BackButton";
 import ContestForm from "./ContestForm";
 import Navbar from "./Navbar";
 
