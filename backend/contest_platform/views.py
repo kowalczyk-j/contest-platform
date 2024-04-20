@@ -30,6 +30,7 @@ from .permissions import (
     GradeCriterionPermissions,
     GradePermissions,
 )
+from .tasks import send_email_task
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -79,12 +80,10 @@ class ContestViewSet(ModelViewSet):
             receiver["email"] for receiver in request.data.get("receivers")
         ]  # Selected mailing list passed in form
 
-        send_mail(
+        send_email_task(
             subject,
             message,
-            "konkursy.bowarto@gmail.com",  # E-mail address of the sender
             receivers,
-            fail_silently=False,
         )
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
@@ -190,7 +189,7 @@ class UserViewSet(ModelViewSet):
         """
         emails = User.objects.values("email")[:500]
         return Response(emails)
-    
+
     @action(detail=False, methods=["get"])
     def jury_users(self, request):
         jury_users = self.queryset.filter(is_jury=True)

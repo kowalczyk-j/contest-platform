@@ -21,6 +21,9 @@ drf-spectacular-sidecar = "*"
 selenium = "*"
 pytest = "*"
 sentry-sdk = "*"
+django-dramatiq = "^0.11.6"
+requests = "^2.31.0"
+dramatiq = {extras = ["rabbitmq", "watch"], version = "^1.16.0"}
 
 
 [tool.poetry.group.dev.dependencies]
