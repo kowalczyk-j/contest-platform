@@ -69,7 +69,7 @@ chmod +x scripts/install_rabbitmq.sh
 scripts/install_rabbitmq.sh focal
 ```
 
-Jeśli skrypt nie zadziała, sugeruję po kolei wykonać wszystkie komendy, według [oficjalnej instrukcji](https://www.rabbitmq.com/docs/install-debian). Jeśli korzystacie z innej dystrybucji Linuxa, odsyłam do [dokumentacji](https://www.rabbitmq.com/docs/platforms).
+Jeśli skrypt nie zadziała, sugeruję po kolei wykonać wszystkie komendy, według [oficjalnej instrukcji](https://www.rabbitmq.com/docs/install-debian). Jeśli korzystasz z innej dystrybucji Linuxa, odsyłam do [dokumentacji](https://www.rabbitmq.com/docs/platforms).
 
 
 
