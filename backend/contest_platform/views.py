@@ -66,9 +66,9 @@ class ContestViewSet(ModelViewSet):
         related to the contest.
         """
         contest = self.get_object()
-        total_max_rating = GradeCriterion.objects.filter(
-            contest=contest
-        ).aggregate(Sum("max_rating"))["max_rating__sum"]
+        total_max_rating = GradeCriterion.objects.filter(contest=contest).aggregate(
+            Sum("max_rating")
+        )["max_rating__sum"]
         return Response({"total_max_rating": total_max_rating or 0})
 
     # REQ_17
@@ -87,6 +87,7 @@ class ContestViewSet(ModelViewSet):
         )
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
+
     # REQ_17_END
 
     @action(detail=False, methods=["get"])
@@ -95,8 +96,9 @@ class ContestViewSet(ModelViewSet):
         Returns only contests that are after their start date but before end
         date.
         """
-        queryset = Contest.objects.filter(date_start__lte=date.today()
-                                          ).filter(date_end__gte=date.today())
+        queryset = Contest.objects.filter(date_start__lte=date.today()).filter(
+            date_end__gte=date.today()
+        )
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -195,6 +197,8 @@ class UserViewSet(ModelViewSet):
         jury_users = self.queryset.filter(is_jury=True)
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
+
+
 # REQ_06B_END
 
 
@@ -216,10 +220,8 @@ def import_schools(request):
             {"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
         )
 
+
 class SentryError(ViewSet):
     def list(self, request):
         undefined_variable = 1 / 0
         return Response("To nigdy się nie wykona!", status=status.HTTP_200_OK)
-
-
-

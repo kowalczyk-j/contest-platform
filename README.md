@@ -56,7 +56,7 @@ W projekcie korzystamy z Poetry, opartego o pyproject.toml, który jest narzędz
 
 6. **Instalacja RabbitMQ**: Do wysyłania maili potrzebny jest message broker RabbitMQ. Aby go zainstalowac, należy wywołać skrypt `install_rabbitmq.sh` znajdujący się w folderze `scripts`. Skrypt wymaga podania nazwy wersji Ubuntu.
 
-Przykładowe wersji Ubuntu:
+Przykładowe nazwy wersji Ubuntu:
 * jammy - Ubuntu 23.04
 * jammy - Ubuntu 22.04
 * focal - Ubuntu 20.04
