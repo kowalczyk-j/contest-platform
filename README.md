@@ -54,6 +54,25 @@ W projekcie korzystamy z Poetry, opartego o pyproject.toml, który jest narzędz
    ```
    Pamiętaj, że plik `Poetry.lock` automatycznie zapisuje dokładne wersje zainstalowanych pakietów, aby zapewnić spójność środowiska na różnych maszynach. Przy kolejnych uruchomieniach projektu, zaleca się używanie poleceń `poetry install` w celu zainstalowania zależności zdefiniowanych w pliku `pyproject.toml`.
 
+6. **Instalacja RabbitMQ**: Do wysyłania maili potrzebny jest message broker RabbitMQ. Aby go zainstalowac, należy wywołać skrypt `install_rabbitmq.sh` znajdujący się w folderze `scripts`. Skrypt wymaga podania nazwy wersji Ubuntu.
+
+Przykładowe nazwy wersji Ubuntu:
+* jammy - Ubuntu 23.04
+* jammy - Ubuntu 22.04
+* focal - Ubuntu 20.04
+* bionic - Ubuntu 18.04
+* buster - Debian Buster, Bullseye, and Sid
+
+Przykładowe wywołanie dla Ubuntu 20.04:
+```shell
+chmod +x scripts/install_rabbitmq.sh
+scripts/install_rabbitmq.sh focal
+```
+
+Jeśli skrypt nie zadziała, sugeruję po kolei wykonać wszystkie komendy, według [oficjalnej instrukcji](https://www.rabbitmq.com/docs/install-debian). Jeśli korzystasz z innej dystrybucji Linuxa, odsyłam do [dokumentacji](https://www.rabbitmq.com/docs/platforms).
+
+
+
 ## Baza danych
 
 Projekt skonfigurowany jest do pracy z bazą PostgreSQL. Aby aplikacja instancja `django` działała poprawnie, powinieneś na swojej maszynie skonfigurować serwer `postgres`, i uruchomić go na porcie `5432`.
@@ -94,7 +113,7 @@ Projekt skonfigurowany jest do pracy z bazą PostgreSQL. Aby aplikacja instancja
          }
       }
       ```
-      W pliku powinny znajdować się już domyślne dane konfiguracyjne. 
+      W pliku powinny znajdować się już domyślne dane konfiguracyjne.
 
    2. Stwórz bazę o zadanych bądź wybranych atrybutach. Aby to zrobić, po wejściu do klienta `psql` wykonaj:
       ```sql
@@ -106,7 +125,7 @@ Projekt skonfigurowany jest do pracy z bazą PostgreSQL. Aby aplikacja instancja
       CREATE ROLE admin WITH SUPERUSER LOGIN ENCRYPTED PASSWORD 'admin';
       ```
       Po poprawnym wykonaniu powyższych instrukcji, django serwerdjango powinien być w stanie połączyć się z bazą danych.
-      
+
       UWAGA! Do poprawnego zalogowania się na konto administratora Django, wymagane jest utworzenie superużytkownika za pomocą komendy
       ```python
       python manage.py createsuperuser
@@ -149,12 +168,12 @@ W projekcie frontend piszemy w React. Aby uruchomić serwer React, wykonaj nast�
    ```bash
    npm install
    ```
-   
+
    Następnie uruchamiamy serwer react:
    ```bash
    npm run dev
    ```
-   
+
    Serwer powinien być uruchomiony i dostępny na porcie: localhost:5173
 
 ## Konteneryzacja

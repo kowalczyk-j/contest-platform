@@ -15,6 +15,10 @@ python manage.py migrate
 python manage.py runserver &
 PID_DJANGO=$!
 
+# Uruchomienie RabbitMQ i dramatiq
+sudo service rabbitmq-server start
+python manage.py rundramatiq &
+
 # Uruchomienie serwera frontendowego React
 cd ../frontend
 npm install

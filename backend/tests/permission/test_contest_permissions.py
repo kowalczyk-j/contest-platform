@@ -41,9 +41,7 @@ class ContestPermissionTest(TestCase):
         self.assertTrue(permission.has_permission(request, view))
 
     def test_has_permission_create_action_authenticated_staff(self):
-        request = self.factory.post(
-            "/api/contests/", {"title": "New Contest"}
-        )
+        request = self.factory.post("/api/contests/", {"title": "New Contest"})
         request.user = self.user
         request.user.is_staff = True
         view = ContestViewSet()
@@ -54,9 +52,7 @@ class ContestPermissionTest(TestCase):
         self.assertTrue(permission.has_permission(request, view))
 
     def test_has_permission_create_action_authenticated_user(self):
-        request = self.factory.post(
-            "/api/contests/", {"title": "New Contest"}
-        )
+        request = self.factory.post("/api/contests/", {"title": "New Contest"})
         request.user = self.user
         request.user.is_staff = False
         view = ContestViewSet()
@@ -69,43 +65,29 @@ class ContestPermissionTest(TestCase):
     def test_has_object_permission_retrieve_action_authenticated_user(
         self,
     ):
-        request = self.factory.get(
-            f"/api/contests/{self.contest.id}/"
-        )
+        request = self.factory.get(f"/api/contests/{self.contest.id}/")
         request.user = self.user
         view = ContestViewSet()
         view.action = "retrieve"
         permission = ContestPermission()
 
         # Authenticated user should have permission to retrieve contest details
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.contest
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.contest))
 
     def test_has_object_permission_retrieve_action_unauthenticated(
         self,
     ):
-        request = self.factory.get(
-            f"/api/contests/{self.contest.id}/"
-        )
+        request = self.factory.get(f"/api/contests/{self.contest.id}/")
         request.user = AnonymousUser
         view = ContestViewSet()
         view.action = "retrieve"
         permission = ContestPermission()
 
         # Unauthenticated user should have permission to retrieve contest details
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.contest
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.contest))
 
     def test_has_object_permission_retrieve_action_staff_user(self):
-        request = self.factory.get(
-            f"/api/contests/{self.contest.id}/"
-        )
+        request = self.factory.get(f"/api/contests/{self.contest.id}/")
         request.user = self.user
         request.user.is_staff = True
         view = ContestViewSet()
@@ -113,18 +95,12 @@ class ContestPermissionTest(TestCase):
         permission = ContestPermission()
 
         # Staff user should have permission to retrieve contest details
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.contest
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.contest))
 
     def test_has_object_permission_retrieve_action_non_staff_user(
         self,
     ):
-        request = self.factory.get(
-            f"/api/contests/{self.contest.id}/"
-        )
+        request = self.factory.get(f"/api/contests/{self.contest.id}/")
         request.user = self.user
         request.user.is_staff = False
         view = ContestViewSet()
@@ -132,11 +108,7 @@ class ContestPermissionTest(TestCase):
         permission = ContestPermission()
 
         # Non-staff user should have permission to retrieve contest details
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.contest
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.contest))
 
     def test_has_object_permission_send_email_action_staff_user(self):
         request = self.factory.post(
@@ -154,11 +126,7 @@ class ContestPermissionTest(TestCase):
         permission = ContestPermission()
 
         # Staff user should have permission to send emails for contests
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.contest
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.contest))
 
     def test_has_object_permission_send_email_action_non_staff_user(
         self,
