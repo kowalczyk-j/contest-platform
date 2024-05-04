@@ -8,7 +8,6 @@ from .views import (
     EntryViewSet,
     PersonViewSet,
     GradeViewSet,
-    SentryError,
 )
 
 
@@ -21,4 +20,3 @@ router.register(r"grades", GradeViewSet)
 router.register(r"users", UserViewSet)
 router.register(r"person", PersonViewSet)
 router.register(r"schools", SchoolViewSet)
-router.register(r'sentry', SentryError, basename='sentry')

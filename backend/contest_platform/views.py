@@ -220,8 +220,3 @@ def import_schools(request):
             {"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
         )
 
-
-class SentryError(ViewSet):
-    def list(self, request):
-        undefined_variable = 1 / 0
-        return Response("To nigdy się nie wykona!", status=status.HTTP_200_OK)
