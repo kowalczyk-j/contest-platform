@@ -14,12 +14,20 @@ def wait_for_elem(chrome_driver, by: By, text: str):
     )
 
 
-def assert_present(chrome_driver: Chrome, by: By, text: str) -> bool:
+def element_present(chrome_driver: Chrome, by: By, text: str):
     try:
-        chrome_driver.find_element(by, text)
-        return True
+        elem = chrome_driver.find_element(by, text)
+        return elem
     except Exception:
-        return False
+        return None
+
+
+def elements_present(chrome_driver: Chrome, by: By, text: str):
+    try:
+        elems = chrome_driver.find_elements(by, text)
+        return elems
+    except Exception:
+        return None
 
 
 def login_decorator(login, passw):
@@ -50,8 +58,6 @@ def navigate_contest_form(chrome_driver: Chrome):
         ".MuiButton-containedSuccess"
     )
     ok_button.click()
-    print("fdfd")
     add_contest = wait_for_elem(chrome_driver, By.LINK_TEXT, "Dodaj konkurs")
     add_contest.click()
-    print("fdfd")
     return chrome_driver
