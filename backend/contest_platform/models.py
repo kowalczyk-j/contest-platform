@@ -61,7 +61,7 @@ class Entry(models.Model):
 
 # REQ_09B
 class GradeCriterion(models.Model):
-    contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
+    contest = models.ForeignKey(Contest, on_delete=models.PROTECT)
     description = models.CharField(max_length=500)
     max_rating = models.IntegerField()
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -69,8 +69,8 @@ class GradeCriterion(models.Model):
 
 
 class Grade(models.Model):
-    criterion = models.ForeignKey(GradeCriterion, on_delete=models.CASCADE)
-    entry = models.ForeignKey(Entry, on_delete=models.CASCADE)
+    criterion = models.ForeignKey(GradeCriterion, on_delete=models.PROTECT)
+    entry = models.ForeignKey(Entry, on_delete=models.PROTECT)
     value = models.IntegerField(null=True)
     description = models.CharField(max_length=255, null=True)
 
