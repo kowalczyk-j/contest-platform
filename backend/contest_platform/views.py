@@ -35,7 +35,7 @@ from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
-from django.core.mail import send_mail
+from django.conf import settings
 from .utils.import_schools_csv import upload_schools_data
 
 from rest_framework.decorators import api_view
@@ -76,15 +76,12 @@ class ContestViewSet(ModelViewSet):
     def send_email(self, request, pk=None):
         subject = request.data.get("subject")
         message = request.data.get("message")
-        receivers = [
-            receiver["email"] for receiver in request.data.get("receivers")
-        ]  # Selected mailing list passed in form
+        host_email = settings.EMAIL_HOST_USER
 
-        send_email_task(
-            subject,
-            message,
-            receivers,
-        )
+        # Create message list for send_mass_mail as specified in the documentation for send_mass_mail
+        messages = [(subject, message, host_email, [receiver["email"]]) for receiver in request.data.get("receivers")]
+
+        send_email_task(messages)
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
 
