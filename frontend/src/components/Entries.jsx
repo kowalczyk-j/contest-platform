@@ -168,6 +168,8 @@ export default function Entries() {
                 userView={false}
                 entry_file={entry.entry_file}
                 onDeleteClick={handleDeleteClick}
+                favourite={entry.favourite}
+                canceled={entry.canceled}
               />
               {/* REQ_35 */}
               <EntryScore

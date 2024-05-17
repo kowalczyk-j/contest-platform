@@ -56,6 +56,8 @@ class Entry(models.Model):
     email = models.EmailField(null=True)
     entry_title = models.CharField(max_length=100)
     entry_file = models.URLField(max_length=300, null=True)
+    favourite = models.BooleanField(default=False)
+    canceled = models.BooleanField(default=False)
 # REQ_24_END
 
 

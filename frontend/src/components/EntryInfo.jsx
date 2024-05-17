@@ -2,6 +2,10 @@ import { Box, Typography, Button, Modal, IconButton } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmationWindow from "./ConfirmationWindow";
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 export default function EntryInfo({
   id,
@@ -13,9 +17,13 @@ export default function EntryInfo({
   contestTitle,
   userView,
   onDeleteClick,
+  favourite: initialFavourite,
+  canceled: initialCanceled
 }) {
   const navigate = useNavigate();
   const [openPopUp, setOpenPopUp] = useState(false);
+  const [isFavourite, setStarred] = useState(initialFavourite);
+  const [isCanceled, setCanceled] = useState(initialCanceled);
 
   const handleDeleteClick = () => {
     onDeleteClick(id);
@@ -27,6 +35,14 @@ export default function EntryInfo({
 
   const handleViewWorkClick = () => {
     navigate(`/view-work/${id}`);
+  };
+
+  const toggleStarred = () => {
+    setStarred(!isFavourite);
+  };
+
+  const toggleCanceled = () => {
+    setCanceled(!isCanceled);
   };
 
   return (
@@ -65,6 +81,12 @@ export default function EntryInfo({
             <Button color="error" onClick={() => setOpenPopUp(true)}>
               Usuń
             </Button>
+            <IconButton onClick={toggleStarred}>
+              {isFavourite ? <StarIcon sx={{ color: 'orange' }} /> : <StarBorderIcon sx={{ color: 'orange' }} />}
+            </IconButton>
+            <IconButton onClick={toggleCanceled}>
+              {isCanceled ? <CancelIcon sx={{ color: 'red' }} /> : <CancelOutlinedIcon sx={{ color: 'red' }} />}
+            </IconButton>
           </>
         )}
 

@@ -126,6 +126,8 @@ class EntrySerializer(serializers.ModelSerializer):
             "email",
             "entry_title",
             "entry_file",
+            "favourite",
+            "canceled"
         )
 
 
