@@ -66,6 +66,7 @@ class ContestSerializer(serializers.ModelSerializer):
             "date_end",
             "individual",
             "type",
+            "status",
             "rules_pdf",
             "poster_img",
         )

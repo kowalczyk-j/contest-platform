@@ -3,6 +3,9 @@
 # Odświeżanie ważności uprawnień sudo
 sudo -v
 
+# Instalowanie wymaganych pakietów
+poetry install
+
 # Uruchomienie PostgreSQL
 sudo service postgresql start &
 PID_POSTGRES=$!

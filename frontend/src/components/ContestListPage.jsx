@@ -27,6 +27,26 @@ const GreenButton = styled(Button)({
   },
 });
 
+const statusColors = {
+  not_started: "#ff9800", // pomarańczowy
+  ongoing: "#4caf50", // zielony
+  judging: "#2196f3", // niebieski
+  finished: "#f44336", // czerwony
+};
+
+const statusLabels = {
+  not_started: "Nierozpoczęty",
+  ongoing: "W trakcie trwania",
+  judging: "W trakcie oceny",
+  finished: "Zakończony",
+};
+
+const getContestStatus = (contest) => {
+  const status = statusLabels[contest.status];
+  const color = statusColors[contest.status];
+  return <span style={{ color: "white", fontWeight: "bold" }}>{status}</span>;
+};
+
 const ContestIndexPage = () => {
   const [contests, setContests] = useState([]);
   const [selectedContest, setSelectedContest] = useState(null);
@@ -35,11 +55,13 @@ const ContestIndexPage = () => {
   const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
-    let contestsLink = `${import.meta.env.VITE_API_URL
-      }api/contests/current_contests`;
+    let contestsLink = `${
+      import.meta.env.VITE_API_URL
+    }api/contests/current_contests`;
     const headers = { headers: { "Content-Type": "application/json" } };
-    const currentUserLink = `${import.meta.env.VITE_API_URL
-      }api/users/current_user/`;
+    const currentUserLink = `${
+      import.meta.env.VITE_API_URL
+    }api/users/current_user/`;
     const headersCurrentUser = {
       headers: {
         "Content-Type": "application/json",
@@ -172,6 +194,20 @@ const ContestIndexPage = () => {
                   Zobacz więcej
                 </TextButton>
               </div>{" "}
+              <div
+                style={{
+                  flex: 0.1,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "#777",
+                  fontSize: "0.8rem",
+                  backgroundColor: statusColors[contest.status], // Ustawienie koloru tła
+                  borderRadius: "5px",
+                }}
+              >
+                {getContestStatus(contest)}
+              </div>
             </Card>
           </Grid>
         ))}
