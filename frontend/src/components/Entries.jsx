@@ -114,6 +114,25 @@ export default function Entries() {
     setOpenPopUp(true);
   };
   // REQ_04_END
+
+  const handleFavouriteChange = (isFavourite, isCanceled, id) => {
+    axios
+      .patch(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
+        favourite: isFavourite,
+        canceled: isCanceled
+      },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+        }
+      ).catch((error) => {
+        console.log(error);
+        }
+      );
+      
+};
   return (
     <ThemeProvider theme={montserrat}>
       <Navbar />
@@ -170,6 +189,7 @@ export default function Entries() {
                 onDeleteClick={handleDeleteClick}
                 favourite={entry.favourite}
                 canceled={entry.canceled}
+                handleFavouriteChange={handleFavouriteChange}
               />
               {/* REQ_35 */}
               <EntryScore

@@ -18,7 +18,8 @@ export default function EntryInfo({
   userView,
   onDeleteClick,
   favourite: initialFavourite,
-  canceled: initialCanceled
+  canceled: initialCanceled,
+  handleFavouriteChange
 }) {
   const navigate = useNavigate();
   const [openPopUp, setOpenPopUp] = useState(false);
@@ -37,12 +38,26 @@ export default function EntryInfo({
     navigate(`/view-work/${id}`);
   };
 
-  const toggleStarred = () => {
+  const toggleStarred = (entryId) => {
+    if (isCanceled) {
+      handleFavouriteChange(true, false, entryId);
+      setCanceled(false);
+    }
+    else {
+      handleFavouriteChange(!isFavourite, false, entryId)
+    }   
     setStarred(!isFavourite);
   };
-
-  const toggleCanceled = () => {
-    setCanceled(!isCanceled);
+  // using handleFavouriteChange(!isFavourite, !isCanceled) doesnt work properly
+  const toggleCanceled = (entryId) => {
+    if (isFavourite) {
+      handleFavouriteChange(false, true, entryId);
+      setStarred(false);
+    }
+    else {
+      handleFavouriteChange(false, !isCanceled, entryId)
+    }
+    setCanceled(!isCanceled)
   };
 
   return (
@@ -81,10 +96,10 @@ export default function EntryInfo({
             <Button color="error" onClick={() => setOpenPopUp(true)}>
               Usuń
             </Button>
-            <IconButton onClick={toggleStarred}>
+            <IconButton onClick={() => toggleStarred(id)}>
               {isFavourite ? <StarIcon sx={{ color: 'orange' }} /> : <StarBorderIcon sx={{ color: 'orange' }} />}
             </IconButton>
-            <IconButton onClick={toggleCanceled}>
+            <IconButton onClick={() => toggleCanceled(id)}>
               {isCanceled ? <CancelIcon sx={{ color: 'red' }} /> : <CancelOutlinedIcon sx={{ color: 'red' }} />}
             </IconButton>
           </>
