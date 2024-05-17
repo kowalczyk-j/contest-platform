@@ -74,7 +74,7 @@ class Grade(models.Model):
     criterion = models.ForeignKey(GradeCriterion, on_delete=models.PROTECT)
     entry = models.ForeignKey(Entry, on_delete=models.PROTECT)
     value = models.IntegerField(null=True)
-    description = models.CharField(max_length=255, null=True)
+    description = models.CharField(max_length=255, default="")
 
     def clean(self):
         if self.value > self.criterion.max_rating:
