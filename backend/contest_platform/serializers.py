@@ -30,12 +30,14 @@ class UserSerializer(serializers.ModelSerializer):
             "date_joined",
         ]
         extra_kwargs = {"password": {"write_only": True}}
-# REQ_06C_END
+
+    # REQ_06C_END
 
     def create(self, validated_data):
         user = User(
-            username=validated_data["username"], email=validated_data["email"],
-            is_coordinating_unit=validated_data["is_coordinating_unit"]
+            username=validated_data["username"],
+            email=validated_data["email"],
+            is_coordinating_unit=validated_data["is_coordinating_unit"],
         )
         user.set_password(validated_data["password"])
         user.save()
@@ -54,6 +56,7 @@ class ContestSerializer(serializers.ModelSerializer):
                     {"date_start": "Date start must be before date end."}
                 )
         return data
+
     # REQ_10_END
 
     class Meta:
@@ -88,9 +91,7 @@ class EntrySerializer(serializers.ModelSerializer):
 
         user = validated_data["user"]
         contest = validated_data["contest"]
-        existing_entry = Entry.objects.filter(
-            user=user, contest=contest
-        ).exists()
+        existing_entry = Entry.objects.filter(user=user, contest=contest).exists()
 
         # REQ_23
         if existing_entry and not (user.is_staff or user.is_coordinating_unit):
@@ -150,17 +151,19 @@ class GradeSerializer(serializers.ModelSerializer):
 class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
-        fields = ("id",
-        "name",
-        "street",
-        "building_number",
-        "apartment_number",
-        "postal_code",
-        "city",
-        "phone",
-        "fax",
-        "email",
-        "website",
-        "audience_status",
-        "institution_specifics",
-        "director_name")
+        fields = (
+            "id",
+            "name",
+            "street",
+            "building_number",
+            "apartment_number",
+            "postal_code",
+            "city",
+            "phone",
+            "fax",
+            "email",
+            "website",
+            "audience_status",
+            "institution_specifics",
+            "director_name",
+        )

@@ -34,7 +34,8 @@ from .tasks import send_email_task
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Sum
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncDate
 from django.conf import settings
 from .utils.import_schools_csv import upload_schools_data
 
@@ -79,7 +80,10 @@ class ContestViewSet(ModelViewSet):
         host_email = settings.EMAIL_HOST_USER
 
         # Create message list for send_mass_mail as specified in the documentation for send_mass_mail
-        messages = [(subject, message, host_email, [receiver["email"]]) for receiver in request.data.get("receivers")]
+        messages = [
+            (subject, message, host_email, [receiver["email"]])
+            for receiver in request.data.get("receivers")
+        ]
 
         send_email_task(messages)
 
@@ -99,6 +103,77 @@ class ContestViewSet(ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=["get"])
+    def get_contestants_amount(self, request, pk=None):
+        """
+        Returns all contestants for the current contest.
+        """
+        contest = self.get_object()
+        entries = Entry.objects.filter(contest=contest)
+        total_contestants = sum(entry.contestants.all().count() for entry in entries)
+        return Response(
+            {"contestant_amount": total_contestants}, status=status.HTTP_200_OK
+        )
+
+    @action(detail=True, methods=["get"])
+    def group_individual_comp_chart(self, request, pk=None):
+        """
+        Returns plot data to compare the amount of group and individual submissions
+        """
+        contest = self.get_object()
+        entries = Entry.objects.filter(contest=contest).annotate(
+            num_contestants=Count("contestants")
+        )
+        group_entries = entries.filter(num_contestants__gt=1).count()
+        solo_entries = entries.count() - group_entries
+
+        response = Response(
+            {
+                "title": "Individual vs group submissions",
+                "data": {
+                    "labels": ["Individual", "Group"],
+                    "backgroundColor": [
+                        "#34aeeb",
+                        "#eba134",
+                    ],  # colors hardcoded for now but probably to change to only return relevant data(entry amount) because picking colors on the backend is wack
+                    "borderColor": ["#34aeeb", "#eba134"],
+                    "data": [
+                        solo_entries,
+                        group_entries,
+                    ],
+                },
+            },
+            status=status.HTTP_200_OK,
+        )
+        return response
+
+    @action(detail=True, methods=["get"])
+    def get_submissions_by_day(self, request, pk=None):
+        """
+        Returns data for the amount of submissions on each day of contest
+        """
+        contest = self.get_object()
+
+        daily_entries = (
+            Entry.objects.filter(
+                contest=contest,
+                date_submitted__gte=contest.date_start,
+                date_submitted__lte=contest.date_end,
+            )
+            .values("date_submitted")
+            .annotate(entry_count=Count("id"))
+            .order_by("date_submitted")
+        )
+
+        return Response({"daily_entries": daily_entries}, status=status.HTTP_200_OK)
+
+    # Endpoints:
+    # total submissions - exists already probably
+    # total participants - endpoint done
+    # comparison between group and individual submissions - endpoint done
+    # total submissions per day
+    # get schools(? no school data)
 
 
 class PersonViewSet(ModelViewSet):
@@ -216,4 +291,3 @@ def import_schools(request):
         return Response(
             {"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
         )
-

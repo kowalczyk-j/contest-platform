@@ -30,9 +30,7 @@ class AddressModelTest(TestCase):
             city="@#$%^&*",
         )
         expected_str = "Kwiatowa 456, !@#$% @#$%^&*"
-        self.assertEqual(
-            str(address_with_special_chars), expected_str
-        )
+        self.assertEqual(str(address_with_special_chars), expected_str)
 
     def test_address_max_length(self):
         max_length = {
@@ -55,6 +53,4 @@ class AddressModelTest(TestCase):
                 city=self.address.city,
             )
         except ExceptionType:
-            self.fail(
-                "duplicate_address() raised ExceptionType unexpectedly!"
-            )
+            self.fail("duplicate_address() raised ExceptionType unexpectedly!")

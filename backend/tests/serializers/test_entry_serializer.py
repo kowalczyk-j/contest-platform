@@ -54,9 +54,7 @@ class EntrySerializerTestCoordinatingUnit(TestCase):
         # Then
         self.assertEqual(entry.contest, self.contest)
         self.assertEqual(entry.user, self.user)
-        self.assertEqual(
-            entry.date_submitted, datetime.date(2024, 1, 15)
-        )
+        self.assertEqual(entry.date_submitted, datetime.date(2024, 1, 15))
         self.assertEqual(entry.email, "john@example.com")
         self.assertEqual(entry.entry_title, "Python Project")
         self.assertEqual(
@@ -66,9 +64,7 @@ class EntrySerializerTestCoordinatingUnit(TestCase):
         self.assertEqual(entry.contestants.count(), 2)
 
         # Check if Grade instances are created for each GradeCriterion
-        grade_criterions = GradeCriterion.objects.filter(
-            contest=self.contest
-        )
+        grade_criterions = GradeCriterion.objects.filter(contest=self.contest)
         self.assertEqual(
             Grade.objects.filter(entry=entry).count(),
             grade_criterions.count(),
@@ -103,9 +99,7 @@ class EntrySerializerTestCoordinatingUnit(TestCase):
         # Then
         self.assertTrue(serializer.is_valid())
         self.assertNotIn("user", serializer.errors)
-        entries_before = Entry.objects.filter(
-            contest=self.contest
-        ).count()
+        entries_before = Entry.objects.filter(contest=self.contest).count()
         serializer.save()
         self.assertEqual(
             Entry.objects.filter(contest=self.contest).count(),
@@ -154,9 +148,7 @@ class EntrySerializerTestNotCoordinatingUnit(TestCase):
 
         # Then
         self.assertTrue(serializer.is_valid())
-        with self.assertRaises(
-            serializers.ValidationError
-        ) as context:
+        with self.assertRaises(serializers.ValidationError) as context:
             serializer.save()
         self.assertIn(
             "User cannot have more than one entry.",
@@ -180,9 +172,7 @@ class EntrySerializerTestNotCoordinatingUnit(TestCase):
         # Then
         self.assertFalse(serializer.is_valid())
         self.assertIn("contest", serializer.errors)
-        self.assertEqual(
-            serializer.errors["contest"][0], "This field is required."
-        )
+        self.assertEqual(serializer.errors["contest"][0], "This field is required.")
 
     def test_entry_serializer_missing_contestants(self):
         # Given

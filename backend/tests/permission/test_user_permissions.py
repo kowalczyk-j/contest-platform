@@ -18,9 +18,7 @@ class UserPermissionTest(TestCase):
         )
 
     def test_has_permission_create_action(self):
-        request = self.factory.post(
-            "/api/users/", {"username": "newuser"}
-        )
+        request = self.factory.post("/api/users/", {"username": "newuser"})
         view = UserViewSet()
         view.action = "create"
         permission = UserPermission()
@@ -57,16 +55,10 @@ class UserPermissionTest(TestCase):
         permission = UserPermission()
 
         # Existing user (self.user) should not have permission to retrieve other_user's info
-        self.assertFalse(
-            permission.has_object_permission(
-                request, view, other_user
-            )
-        )
+        self.assertFalse(permission.has_object_permission(request, view, other_user))
 
     def test_has_object_permission_retrieve_action_staff_user(self):
-        user = User.objects.create_user(
-            username="otheruser", password="testpassword"
-        )
+        user = User.objects.create_user(username="otheruser", password="testpassword")
         request = self.factory.get("/api/users/1/")
         request.user = self.user
         request.user.is_staff = True
@@ -75,16 +67,12 @@ class UserPermissionTest(TestCase):
         permission = UserPermission()
 
         # Staff user (self.user) should have permission to retrieve user's info
-        self.assertTrue(
-            permission.has_object_permission(request, view, user)
-        )
+        self.assertTrue(permission.has_object_permission(request, view, user))
 
     def test_has_object_permission_retrieve_action_unauthenticated(
         self,
     ):
-        user = User.objects.create_user(
-            username="otheruser", password="testpassword"
-        )
+        user = User.objects.create_user(username="otheruser", password="testpassword")
         request = self.factory.get("/api/users/1/")
         request.user = AnonymousUser()
         view = UserViewSet()
@@ -92,9 +80,7 @@ class UserPermissionTest(TestCase):
         permission = UserPermission()
 
         # Unauthenticated user should not have permission to retrieve user's info
-        self.assertFalse(
-            permission.has_object_permission(request, view, user)
-        )
+        self.assertFalse(permission.has_object_permission(request, view, user))
 
     def test_has_object_permission_retrieve_action_same_user(self):
         request = self.factory.get(f"/api/users/{self.user.id}/")
@@ -104,9 +90,7 @@ class UserPermissionTest(TestCase):
         permission = UserPermission()
 
         # User should have permission to retrieve their own info
-        self.assertTrue(
-            permission.has_object_permission(request, view, self.user)
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.user))
 
     def test_has_permission_update_action_authenticated_user(self):
         request = self.factory.put(
