@@ -242,6 +242,20 @@ const ContestIndexPage = () => {
                 </TextButton>
               </Link>
             ) : null}
+
+            {userData.is_staff ? (
+              <Link
+                to={`/contest/${selectedContest?.id}/stats `}
+                style={{ textDecoration: "none" }}
+              >
+                <TextButton
+                  style={{ fontSize: "1rem", color: "#95C21E" }}
+                  endIcon={<ArrowForwardIcon />}
+                >
+                  Statystyki konkursu
+                </TextButton>
+              </Link>
+            ) : null}
           </div>
 
           {/* Add other details as needed */}
