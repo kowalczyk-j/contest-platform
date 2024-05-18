@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certyfikat</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans|Pinyon+Script|Rochester');
+
+        .cursive {
+            font-family: 'Pinyon Script', cursive;
+        }
+
+        .sans {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .underline {
+            border-bottom: 1px solid #777;
+            padding: 5px;
+            margin-bottom: 15px;
+        }
+
+        .margin-0 {
+            margin: 0;
+        }
+
+        .padding-0 {
+            padding: 0;
+        }
+
+        .pm-empty-space {
+            height: 40px;
+            width: 100%;
+        }
+
+        body {
+            padding: 20px 0;
+            background: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .pm-certificate-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            background-color: #618597;
+            padding: 30px;
+            color: #333;
+            font-family: 'Open Sans', sans-serif;
+            box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+        }
+
+        .outer-border {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            border: 2px solid #fff;
+            box-sizing: border-box;
+        }
+
+        .inner-border {
+            width: calc(100% - 64px);
+            height: calc(100% - 64px);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #fff;
+            box-sizing: border-box;
+        }
+
+        .pm-certificate-border {
+            position: relative;
+            width: 720px;
+            height: 520px;
+            padding: 0;
+            border: 1px solid #E1E5F0;
+            background-color: rgba(255, 255, 255, 1);
+            background-image: none;
+            margin: 0 auto;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .pm-certificate-block {
+            width: 650px;
+            height: 200px;
+            margin: 70px auto 0 auto;
+            text-align: center;
+        }
+
+        .pm-certificate-header {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .pm-certificate-title {
+            position: relative;
+            top: 40px;
+        }
+
+        .pm-certificate-title h2 {
+            font-size: 34px !important;
+        }
+
+        .pm-certificate-body {
+            padding: 20px;
+        }
+
+        .pm-name-text {
+            font-size: 20px;
+        }
+
+        .pm-earned {
+            margin: 15px 0 20px;
+        }
+
+        .pm-earned-text {
+            font-size: 20px;
+        }
+
+        .pm-credits-text {
+            font-size: 15px;
+        }
+
+        .pm-course-title .pm-earned-text {
+            font-size: 20px;
+        }
+
+        .pm-course-title .pm-credits-text {
+            font-size: 15px;
+        }
+
+        .pm-certified {
+            font-size: 12px;
+        }
+
+        .pm-certified .underline {
+            margin-bottom: 5px;
+        }
+
+        .pm-certificate-footer {
+            width: 650px;
+            height: 100px;
+            margin: 0 auto;
+            text-align: center;
+            position: absolute;
+            top: 450px;
+            left: 50%;
+            
+            transform: translateX(-50%);
+        }
+
+        .pm-certified {
+            display: inline-block;
+            width: 45%;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+    <div class="container pm-certificate-container">
+        <div class="outer-border"></div>
+        <div class="inner-border"></div>
+        
+        <div class="pm-certificate-border">
+            <div class="pm-certificate-header">
+                <div class="pm-certificate-title cursive text-center">
+                    <h2>Dyplom uznania</h2>
+                </div>
+            </div>
+
+            <div class="pm-certificate-body">
+                <div class="pm-certificate-block">
+                    <div class="row">
+                        <div class="col-xs-2"><!-- LEAVE EMPTY --></div>
+                        <div class="pm-earned col-xs-8 text-center">
+                            <span class="pm-earned-text padding-0 block cursive">otrzymuje</span>
+                        </div>
+                        <div class="col-xs-2"><!-- LEAVE EMPTY --></div>
+                        <div class="col-xs-12"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-2"><!-- LEAVE EMPTY --></div>
+                        <div class="pm-certificate-name underline margin-0 col-xs-8 text-center">
+                            <span class="pm-name-text bold">contestant</span>
+                        </div>
+                        <div class="col-xs-2"><!-- LEAVE EMPTY --></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-2"><!-- LEAVE EMPTY --></div>
+                        <div class="pm-earned col-xs-8 text-center">
+                            <span class="pm-earned-text padding-0 block cursive">od fundacji Bo Warto</span>
+                        </div>
+                        <div class="col-xs-2"><!-- LEAVE EMPTY --></div>
+                        <div class="col-xs-12"></div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-xs-2"><!-- LEAVE EMPTY --></div>
+                        <div class="pm-course-title col-xs-8 text-center">
+                            <span class="pm-earned-text block cursive">achievement</span>
+                        </div>
+                        <div class="col-xs-2"><!-- LEAVE EMPTY --></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-2"><!-- LEAVE EMPTY --></div>
+                        <div class="pm-course-title underline col-xs-8 text-center">
+                            <span class="pm-credits-text block bold sans">contest-name</span>
+                        </div>
+                        <div class="col-xs-2"><!-- LEAVE EMPTY --></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="pm-certificate-footer">
+                <div class="pm-certified text-center">
+                </div>
+                <div class="pm-certified text-center">
+                    <span class="bold block">signatory</span>
+                    <span class="bold block">Prezes Zarządu Fundacji</span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
