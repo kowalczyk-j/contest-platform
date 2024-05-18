@@ -34,13 +34,12 @@ from .tasks import send_email_task
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Sum, Count
-from django.db.models.functions import TruncDate
+from django.db.models import Sum, Count, Case, When
 from django.conf import settings
 from .utils.import_schools_csv import upload_schools_data
 
 from rest_framework.decorators import api_view
-from datetime import date
+from datetime import date, timedelta
 
 
 class Logout(GenericAPIView):
@@ -155,6 +154,15 @@ class ContestViewSet(ModelViewSet):
         """
         contest = self.get_object()
 
+        def generate_date_range(start_date, end_date): # possibly move to separate utilities
+            current_date = start_date
+            while current_date <= end_date:
+                yield current_date
+                current_date += timedelta(days=1)
+
+        start_date = contest.date_start
+        end_date = contest.date_end
+
         daily_entries = (
             Entry.objects.filter(
                 contest=contest,
@@ -163,10 +171,14 @@ class ContestViewSet(ModelViewSet):
             )
             .values("date_submitted")
             .annotate(entry_count=Count("id"))
-            .order_by("date_submitted")
         )
+        daily_entries_dict = {entry["date_submitted"]: entry["entry_count"] for entry in daily_entries}
 
-        return Response({"daily_entries": daily_entries}, status=status.HTTP_200_OK)
+        all_daily_entries = []
+        for date in generate_date_range(start_date, end_date):
+            all_daily_entries.append({"date_submitted": date, "entry_count": daily_entries_dict.get(date, 0)})
+
+        return Response({"daily_entries": all_daily_entries}, status=status.HTTP_200_OK)
 
     # Endpoints:
     # total submissions - exists already probably
