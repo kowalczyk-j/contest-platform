@@ -43,7 +43,6 @@ const statusLabels = {
 
 const getContestStatus = (contest) => {
   const status = statusLabels[contest.status];
-  const color = statusColors[contest.status];
   return <span style={{ color: "white", fontWeight: "bold" }}>{status}</span>;
 };
 
@@ -55,9 +54,7 @@ const ContestIndexPage = () => {
   const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
-    let contestsLink = `${
-      import.meta.env.VITE_API_URL
-    }api/contests/current_contests`;
+    let contestsLink = `${import.meta.env.VITE_API_URL}api/contests`;
     const headers = { headers: { "Content-Type": "application/json" } };
     const currentUserLink = `${
       import.meta.env.VITE_API_URL
@@ -115,7 +112,7 @@ const ContestIndexPage = () => {
 
       <Grid container spacing={4} justifyContent="center">
         <Grid item>
-          {userData.is_staff === true ? (
+          {userData.is_staff ? (
             <Card
               style={{
                 width: "300px",
@@ -284,13 +281,25 @@ const ContestIndexPage = () => {
         </DialogContent>
         <DialogActions>
           {/* # REQ_21 */}
-          <Link to={`/create-entry/${selectedContest?.id}`}>
-            <GreenButton>
-              <Typography align="center" style={{ color: "white" }}>
-                Weź udział
-              </Typography>
-            </GreenButton>
-          </Link>
+          {selectedContest?.status === "ongoing" ? (
+            <Link to={`/create-entry/${selectedContest?.id}`}>
+              <GreenButton>
+                <Typography align="center" style={{ color: "white" }}>
+                  Weź udział
+                </Typography>
+              </GreenButton>
+            </Link>
+          ) : (
+            userData.is_staff && (
+              <Link to={`/create-entry/${selectedContest?.id}`}>
+                <GreenButton>
+                  <Typography align="center" style={{ color: "white" }}>
+                    Dodaj zgłoszenie poza terminem
+                  </Typography>
+                </GreenButton>
+              </Link>
+            )
+          )}
           {/* # REQ_21_END */}
           <GreenButton onClick={handleModalClose}>
             <Typography align="center" style={{ color: "white" }}>

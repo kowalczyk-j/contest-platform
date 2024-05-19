@@ -23,7 +23,7 @@ function App() {
         <Route
           path="/create-entry/:contestId"
           element={
-            <PrivateRoute forAuthenticated={true}>
+            <PrivateRoute forAuthenticated={true} checkContestStatus={true}>
               <CreateEntryPage />
             </PrivateRoute>
           }
