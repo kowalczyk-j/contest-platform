@@ -116,7 +116,7 @@ class ContestViewSet(ModelViewSet):
         )
 
     @action(detail=True, methods=["get"])
-    def group_individual_comp_chart(self, request, pk=None):
+    def group_individual_comp(self, request, pk=None):
         """
         Returns plot data to compare the amount of group and individual submissions
         """
@@ -127,25 +127,7 @@ class ContestViewSet(ModelViewSet):
         group_entries = entries.filter(num_contestants__gt=1).count()
         solo_entries = entries.count() - group_entries
 
-        response = Response(
-            {
-                "title": "Individual vs group submissions",
-                "data": {
-                    "labels": ["Individual", "Group"],
-                    "backgroundColor": [
-                        "#34aeeb",
-                        "#eba134",
-                    ],  # colors hardcoded for now but probably to change to only return relevant data(entry amount) because picking colors on the backend is wack
-                    "borderColor": ["#34aeeb", "#eba134"],
-                    "data": [
-                        solo_entries,
-                        group_entries,
-                    ],
-                },
-            },
-            status=status.HTTP_200_OK,
-        )
-        return response
+        return Response({"solo_entries": solo_entries, "group_entries": group_entries}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["get"])
     def get_submissions_by_day(self, request, pk=None):
@@ -183,7 +165,7 @@ class ContestViewSet(ModelViewSet):
     # Endpoints:
     # total submissions - exists already probably
     # total participants - endpoint done
-    # comparison between group and individual submissions - endpoint done
+    # comparison between group and individual submissions - endpoint done, chart done
     # total submissions per day
     # get schools(? no school data)
 

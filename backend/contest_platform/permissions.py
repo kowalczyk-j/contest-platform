@@ -62,7 +62,7 @@ class ContestPermission(permissions.BasePermission):
             "send_email",
             "current_contests",
             "get_contestants_amount",
-            "group_individual_comp_chart",
+            "group_individual_comp",
             "get_submissions_by_day",
         ]:
             return True
@@ -87,7 +87,7 @@ class ContestPermission(permissions.BasePermission):
             "destroy",
             "max_rating_sum",
             "get_contestants_amount",
-            "group_individual_comp_chart",
+            "group_individual_comp",
             "get_submissions_by_day",
         ]:
             return request.user.is_authenticated and (
