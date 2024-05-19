@@ -18,6 +18,7 @@ const ContestStats = () => {
     const [submissionTypeCount, setSubmissionTypeCount] = useState({});
     const [contestantCount, setContestantCount] = useState({});
     const [dailySubmissions, setDailySubmissions] = useState({ daily_entries: [] });
+    const [entryAmount, setEntryAmount] = useState({});
     const navigate = useNavigate();
 
     defaults.plugins.title.display = true;
@@ -71,6 +72,18 @@ const ContestStats = () => {
                 setDailySubmissions(response.data);
             })
             .catch((error) => console.error("Error fetching daily submissions: ", error));
+
+        axios
+            .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/get_entry_amount/`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Token " + sessionStorage.getItem("accessToken"),
+                },
+            })
+            .then((response) => {
+                setEntryAmount(response.data);
+            })
+            .catch((error) => console.error("Error fetching entry amount: ", error));
     }, [contestId]);
 
     const handleBackClick = () => {
@@ -110,8 +123,9 @@ const ContestStats = () => {
                         >
                             Statystki konkursu {contest.title}
                         </Typography>
-                        <Typography variant="subtitle1" sx={{ mt: 1, mx: 5, alignItems: "left" }}>
-                            Ilość uczestników: {contestantCount.contestant_amount}
+                        <Typography variant="subtitle1" sx={{ mt: 1, mx: 5, alignItems: "center", }} style={{ wordWrap: "break-word" }}>
+                            Liczba uczestników: {contestantCount.contestant_amount} <br />
+                            Liczba nadesłanych prac: {entryAmount.entry_amount}
                         </Typography>
                         <Box
                             sx={{

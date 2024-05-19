@@ -116,6 +116,12 @@ class ContestViewSet(ModelViewSet):
         )
 
     @action(detail=True, methods=["get"])
+    def get_entry_amount(self, request, pk=None):
+        contest = self.get_object()
+        entry_amount = Entry.objects.filter(contest=contest).count()
+        return Response({"entry_amount": entry_amount})
+
+    @action(detail=True, methods=["get"])
     def group_individual_comp(self, request, pk=None):
         """
         Returns plot data to compare the amount of group and individual submissions
@@ -164,10 +170,6 @@ class ContestViewSet(ModelViewSet):
 
     # Endpoints:
     # total submissions - exists already probably
-    # total participants - endpoint done
-    # comparison between group and individual submissions - endpoint done, chart done
-    # total submissions per day
-    # get schools(? no school data)
 
 
 class PersonViewSet(ModelViewSet):
