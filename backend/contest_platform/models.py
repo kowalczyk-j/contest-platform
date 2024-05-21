@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from datetime import date
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
@@ -6,6 +7,13 @@ from django.core.exceptions import ValidationError
 
 # REQ_09A
 class Contest(models.Model):
+    STATUS_CHOICES = [
+        ('not_started', 'Nierozpoczęty'),
+        ('ongoing', 'W trakcie trwania'),
+        ('judging', 'W trakcie oceny'),
+        ('finished', 'Zakończony'),
+    ]
+
     title = models.CharField(max_length=200, default="")
     description = models.CharField(max_length=1800, default="")
     date_start = models.DateField(default=date.today)
@@ -13,11 +21,25 @@ class Contest(models.Model):
     # 1 - konkurs indywidualny; 0 - konkurs grupowy
     individual = models.BooleanField(default=True)
     type = models.CharField(max_length=50, default="")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_started')
     rules_pdf = models.URLField(max_length=300, null=True)
     poster_img = models.URLField(max_length=300, null=True)
 
     def __str__(self):
         return f"{self.title, self.description}"
+    
+    def save(self, *args, **kwargs):
+        today = timezone.now().date()
+        new_status = self.status
+        if self.date_start <= today < self.date_end and self.status != 'ongoing':
+            new_status = 'ongoing'
+        elif today >= self.date_end and self.status != 'judging':
+            new_status = 'judging'
+        
+        if new_status != self.status:
+            self.status = new_status
+            super().save(*args, **kwargs)
+
 # REQ_09A_END
 
 

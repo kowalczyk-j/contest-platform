@@ -36,7 +36,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from django.core.mail import send_mail
-from .utils.import_schools_csv import upload_schools_data
+from .csv_import.import_schools_csv import upload_schools_data
 
 from rest_framework.decorators import api_view
 from datetime import date
