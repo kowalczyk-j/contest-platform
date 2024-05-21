@@ -33,6 +33,7 @@ function ContestForm({ onSubmit }) {
   const [individual, setIndividual] = useState("");
   const [type, setType] = useState("");
   const [otherType, setOtherType] = useState("");
+  const [status, setStatus] = useState("not_started");
   // contest grade criteria
   const [criteria, setCriteria] = useState([
     { contest: "", description: "", maxRating: "", user: "" },
@@ -84,7 +85,7 @@ function ContestForm({ onSubmit }) {
               handleClickRemoveCriterion(i);
             }}
             key={i}
-          />,
+          />
         );
       }
       return newComponents;
@@ -141,6 +142,9 @@ function ContestForm({ onSubmit }) {
     if (type === "inne") {
       finalType = otherType;
     }
+    const today = dayjs().format("YYYY-MM-DD");
+    const contestStatus = dateStart === today ? "ongoing" : "not_started";
+
     try {
       const { contestResponse, criterionResponse } = await onSubmit({
         title,
@@ -150,6 +154,7 @@ function ContestForm({ onSubmit }) {
         individual,
         type: finalType,
         criterion: criteria,
+        status: contestStatus,
       });
       if (
         contestResponse.status === 201 &&
@@ -165,19 +170,22 @@ function ContestForm({ onSubmit }) {
         if (rulesFile) {
           rulesPath = await uploadFile("rules", rulesFile);
         }
-        await axios.patch(
-          `${import.meta.env.VITE_API_URL}api/contests/${contestResponse.data.id}/`,
-          {
-            poster_img: posterPath,
-            rules_pdf: rulesPath,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        await axios
+          .patch(
+            `${import.meta.env.VITE_API_URL}api/contests/${
+              contestResponse.data.id
+            }/`,
+            {
+              poster_img: posterPath,
+              rules_pdf: rulesPath,
             },
-          },
-        )
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Token " + sessionStorage.getItem("accessToken"),
+              },
+            }
+          )
           .catch((error) => {
             setErrorMessage(JSON.stringify(error.response.data, null, 2));
             setOpen(true);
@@ -258,11 +266,7 @@ function ContestForm({ onSubmit }) {
               control={<Radio />}
               label="indywidualny"
             />
-            <FormControlLabel 
-              value="0"
-              control={<Radio />}
-              label="grupowy" 
-            />
+            <FormControlLabel value="0" control={<Radio />} label="grupowy" />
             {/* # REQ_12_END */}
           </RadioGroup>
         </FormControl>
@@ -346,7 +350,7 @@ function ContestForm({ onSubmit }) {
       </div>
 
       <div className="submit">
-        <SubmitButton text="Utwórz konkurs" onClick={() => { }} />
+        <SubmitButton text="Utwórz konkurs" onClick={() => {}} />
         <ConfirmationWindow
           open={open}
           setOpen={setOpen}
