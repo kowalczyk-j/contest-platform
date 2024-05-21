@@ -226,3 +226,42 @@ class GradePermissions(permissions.BasePermission):
             return request.user.is_staff
         else:
             return False
+
+class SchoolPermission(permissions.BasePermission):
+    def has_permission(
+        self, request: Request, view: GenericAPIView
+    ) -> bool:
+        if view.action == "list":
+            return request.user.is_staff
+        if view.action == "create":
+            return request.user.is_staff
+        elif view.action in [
+            "retrieve",
+            "update",
+            "partial_update",
+            "destroy",
+            "emails",
+        ]:
+            return True
+        else:
+            return False
+
+    def has_object_permission(
+        self,
+        request: Request,
+        view: GenericAPIView,
+        obj: models.Model,
+    ) -> bool:
+        if not request.user.is_authenticated:
+            return False
+
+        if view.action in [
+            "retrieve",
+            "update",
+            "partial_update",
+        ]:
+            return request.user.is_staff
+        elif view.action in ["destroy", "emails"]:
+            return request.user.is_staff
+        else:
+            return False

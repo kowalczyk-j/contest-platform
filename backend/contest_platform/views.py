@@ -29,6 +29,7 @@ from .permissions import (
     EntryPermission,
     GradeCriterionPermissions,
     GradePermissions,
+    SchoolPermission
 )
 from .tasks import send_email_task
 from rest_framework.decorators import action
@@ -205,6 +206,17 @@ class UserViewSet(ModelViewSet):
 class SchoolViewSet(ModelViewSet):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [SchoolPermission]
+
+    @action(detail=False, methods=["get"])
+    def emails(self, request):
+        """
+        Returns a list of first 500 emails in the database.
+        500 is max SMTP gmail daily limit.
+        """
+        emails = School.objects.values("email")[:500]
+        return Response(emails)
 
 
 @api_view(["POST"])
