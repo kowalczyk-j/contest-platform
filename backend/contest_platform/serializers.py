@@ -127,6 +127,8 @@ class EntrySerializer(serializers.ModelSerializer):
             "email",
             "entry_title",
             "entry_file",
+            "favourite",
+            "canceled"
         )
 
 
@@ -145,7 +147,7 @@ class GradeCriterionSerializer(serializers.ModelSerializer):
 class GradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grade
-        fields = ("id", "criterion", "entry", "value")
+        fields = ("id", "criterion", "entry", "value", "description")
 
 
 class SchoolSerializer(serializers.ModelSerializer):

@@ -158,8 +158,16 @@ class GradeViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def to_evaluate(self, request):
         user = request.user
-        queryset_criterion = GradeCriterion.objects.all().filter(user=user)
-        qs = [grade for grade in self.queryset if grade.criterion in queryset_criterion]
+        contest_id = request.query_params.get('contestId', None)
+        if contest_id is None:
+            return Response({'error': 'contestId parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            contest_id = int(contest_id)
+        except ValueError:
+            return Response({'error': 'contestId must be an integer.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        queryset_criterion = GradeCriterion.objects.filter(user=user, contest=contest_id)
+        qs = self.get_queryset().filter(criterion__in=queryset_criterion)
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
 

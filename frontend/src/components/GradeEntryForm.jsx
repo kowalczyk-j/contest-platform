@@ -28,6 +28,12 @@ function GradeEntryForm({
     setUpdatedGradesAndCriterions(newArray);
   };
 
+  const handleCommentChange = (index, text) => {
+    const newArray = [...updatedGradesAndCriterions];
+    newArray[index].grade.description = text;
+    setUpdatedGradesAndCriterions(newArray);
+  };
+
   const handleGradeUploadClick = () => {
     handleGradeUpload(updatedGradesAndCriterions);
   };
@@ -79,6 +85,7 @@ function GradeEntryForm({
             gradeCriterion={pair.criterion}
             setUpdatedGradesAndCriterions
             onGradeChange={(value) => handleGradeChange(index, value)}
+            onCommentChange={(text) => handleCommentChange(index, text)}
           />
         ))}
 
