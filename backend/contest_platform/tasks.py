@@ -1,19 +1,14 @@
 import dramatiq
-import datetime
+from django.core.mail import send_mass_mail
 from django.utils import timezone
+import datetime
 from .models import Contest
-from django.core.mail import send_mail
 
 
 @dramatiq.actor
-def send_email_task(subject, message, receiver_emails):
-    send_mail(
-        subject,
-        message,
-        "konkursy.bowarto@gmail.com",
-        receiver_emails,
-        fail_silently=False,
-    )
+def send_email_task(messages):
+    send_mass_mail(messages, fail_silently=False)
+
 
 @dramatiq.actor
 def update_contest_status():

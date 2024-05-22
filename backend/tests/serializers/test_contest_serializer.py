@@ -7,9 +7,7 @@ import datetime
 from rest_framework import serializers
 
 RULES_PDF = "https://pzsp2bucket.blob.core.windows.net/entries/Regulamin%20Konkursu%20na%20kartk%C4%99%20wielkanocn%C4%85_%202023.pdf"
-POSTER_PDF = (
-    "https://pzsp2bucket.blob.core.windows.net/entries/choinka.jpg"
-)
+POSTER_PDF = "https://pzsp2bucket.blob.core.windows.net/entries/choinka.jpg"
 
 
 class ContestSerializerTest(TestCase):

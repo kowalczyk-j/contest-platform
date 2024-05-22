@@ -27,7 +27,7 @@ class Contest(models.Model):
 
     def __str__(self):
         return f"{self.title, self.description}"
-    
+
     def save(self, *args, **kwargs):
         today = timezone.now().date()
         new_status = self.status
@@ -39,7 +39,6 @@ class Contest(models.Model):
         if new_status != self.status:
             self.status = new_status
             super().save(*args, **kwargs)
-
 # REQ_09A_END
 
 
@@ -57,6 +56,8 @@ class Address(models.Model):
 class Person(models.Model):
     name = models.CharField(max_length=20)
     surname = models.CharField(max_length=50)
+
+
 # REQ_23_END
 
 
@@ -65,6 +66,8 @@ class Person(models.Model):
 class User(AbstractUser):
     is_jury = models.BooleanField(default=False)
     is_coordinating_unit = models.BooleanField(default=False)
+
+
 # REQ_06A_END
 # REQ_23B_END
 
@@ -89,6 +92,8 @@ class GradeCriterion(models.Model):
     description = models.CharField(max_length=500)
     max_rating = models.IntegerField()
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+
 # REQ_09B_END
 
 
