@@ -1,34 +1,63 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "reactjs-popup/dist/index.css";
 import BackButton from "./buttons/BackButton";
 import ContestForm from "./ContestForm";
 import Navbar from "./Navbar";
 
-function CreateContestPage() {
+function EditContestPage() {
+  const { contestId } = useParams(); // Get the contest ID from the URL
   const navigate = useNavigate();
+  const [initialData, setInitialData] = useState(null); // State to hold initial data
+  const [loading, setLoading] = useState(true); // State to manage loading state
+
+  // Function to fetch initial data
+  const fetchInitialData = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}api/contests/${contestId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+        }
+      );
+      setInitialData(response.data); // Set initial data
+      setLoading(false); // Set loading to false after data is fetched
+    } catch (error) {
+      console.error("Error fetching initial data: ", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchInitialData(); // Fetch initial data when component mounts
+  }, [contestId]);
 
   const handleFormSubmit = async (formData) => {
     let criterion = formData.criterion;
-    let contestId;
     let contestResponse, criterionResponse;
 
     // Return the promise chain so that the calling function can await it
     return axios
-      .post(`${import.meta.env.VITE_API_URL}api/contests/`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + sessionStorage.getItem("accessToken"),
-        },
-      })
+      .put(
+        `${import.meta.env.VITE_API_URL}api/contests/${contestId}/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+        }
+      )
       .then((response) => {
-        if (response.status !== 201) {
+        if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
         console.log(JSON.stringify(formData));
         const result = response.data;
-        contestId = result.id;
         console.log(result);
         contestResponse = response;
 
@@ -69,6 +98,10 @@ function CreateContestPage() {
     navigate("/");
   };
 
+  if (loading) {
+    return <div>Loading...</div>; // Show a loading state while data is being fetched
+  }
+
   return (
     <div>
       <Navbar />
@@ -77,11 +110,11 @@ function CreateContestPage() {
           <BackButton clickHandler={handleBack} />
         </div>
         <div className="form">
-          <ContestForm onSubmit={handleFormSubmit} initialData={{}} />
+          <ContestForm onSubmit={handleFormSubmit} initialData={initialData} />
         </div>
       </div>
     </div>
   );
 }
 
-export default CreateContestPage;
+export default EditContestPage;

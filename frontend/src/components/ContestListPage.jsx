@@ -276,8 +276,6 @@ const ContestIndexPage = () => {
               </Link>
             ) : null}
           </div>
-
-          {/* Add other details as needed */}
         </DialogContent>
         <DialogActions>
           {/* # REQ_21 */}
@@ -299,6 +297,15 @@ const ContestIndexPage = () => {
                 </GreenButton>
               </Link>
             )
+          )}
+          {userData.is_staff && (
+            <Link to={`/edit-contest/${selectedContest?.id}`}>
+              <GreenButton>
+                <Typography align="center" style={{ color: "white" }}>
+                  Edytuj
+                </Typography>
+              </GreenButton>
+            </Link>
           )}
           {/* # REQ_21_END */}
           <GreenButton onClick={handleModalClose}>

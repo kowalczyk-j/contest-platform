@@ -12,6 +12,7 @@ import EmailForm from "./EmailForm";
 import UsersListPage from "./UsersListPage";
 import UserEntries from "./UserEntries";
 import EntryWorkView from "./EntryWorkView";
+import EditContestPage from "./EditContestPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ContestListPage />} />
         <Route path="/create-contest" element={<CreateContestPage />} />
+        <Route path="/edit-contest/:contestId" element={<EditContestPage />} />
         <Route path="/grade-entry/:entryId" element={<GradeEntry />} />
         <Route
           path="/create-entry/:contestId"

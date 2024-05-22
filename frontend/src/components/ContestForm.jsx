@@ -22,22 +22,27 @@ import FileUploadButton from "./FileUploadButton";
 import { uploadFile } from "./uploadFile";
 import ConfirmationWindow from "./ConfirmationWindow";
 
-function ContestForm({ onSubmit }) {
+function ContestForm({ initialData = {}, onSubmit }) {
   const navigate = useNavigate();
 
-  // contest data
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [dateStart, setDateStart] = useState(dayjs().format("YYYY-MM-DD"));
-  const [dateEnd, setDateEnd] = useState(dayjs().format("YYYY-MM-DD"));
-  const [individual, setIndividual] = useState("");
-  const [type, setType] = useState("");
-  const [otherType, setOtherType] = useState("");
-  const [status, setStatus] = useState("not_started");
-  // contest grade criteria
-  const [criteria, setCriteria] = useState([
-    { contest: "", description: "", maxRating: "", user: "" },
-  ]);
+  const [title, setTitle] = useState(initialData.title || "");
+  const [description, setDescription] = useState(initialData.description || "");
+  const [dateStart, setDateStart] = useState(
+    initialData.dateStart || dayjs().format("YYYY-MM-DD")
+  );
+  const [dateEnd, setDateEnd] = useState(
+    initialData.dateEnd || dayjs().format("YYYY-MM-DD")
+  );
+  const [individual, setIndividual] = useState(initialData.individual || "");
+  const [type, setType] = useState(initialData.type || "");
+  const [otherType, setOtherType] = useState(initialData.otherType || "");
+  const [status, setStatus] = useState(initialData.status || "not_started");
+
+  const [criteria, setCriteria] = useState(
+    initialData.criteria || [
+      { contest: "", description: "", maxRating: "", user: "" },
+    ]
+  );
 
   // pop up after submiting
   const [open, setOpen] = React.useState(false);
@@ -146,7 +151,7 @@ function ContestForm({ onSubmit }) {
     const contestStatus = dateStart === today ? "ongoing" : "not_started";
 
     try {
-      const { contestResponse, criterionResponse } = await onSubmit({
+      const data = {
         title,
         description,
         date_start: dateStart,
@@ -155,41 +160,63 @@ function ContestForm({ onSubmit }) {
         type: finalType,
         criterion: criteria,
         status: contestStatus,
-      });
-      if (
-        contestResponse.status === 201 &&
-        criterionResponse.every((response) => response.status === 201)
-      ) {
-        setOpen(true);
-        // if contest is added succesfully, selected files are uploaded to cloud storage
-        let posterPath = null;
-        if (poster) {
-          posterPath = await uploadFile("posters", poster);
-        }
-        let rulesPath = null;
-        if (rulesFile) {
-          rulesPath = await uploadFile("rules", rulesFile);
-        }
-        await axios
-          .patch(
-            `${import.meta.env.VITE_API_URL}api/contests/${
-              contestResponse.data.id
-            }/`,
-            {
-              poster_img: posterPath,
-              rules_pdf: rulesPath,
+      };
+
+      if (initialData.id) {
+        // Aktualizacja istniejącego konkursu
+        const contestResponse = await axios.patch(
+          `${import.meta.env.VITE_API_URL}api/contests/${initialData.id}/`,
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Token " + sessionStorage.getItem("accessToken"),
             },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          }
+        );
+
+        if (contestResponse.status === 200) {
+          setOpen(true);
+        }
+      } else {
+        // Tworzenie nowego konkursu
+        const { contestResponse, criterionResponse } = await onSubmit(data);
+
+        if (
+          contestResponse.status === 201 &&
+          criterionResponse.every((response) => response.status === 201)
+        ) {
+          setOpen(true);
+          let posterPath = null;
+          if (poster) {
+            posterPath = await uploadFile("posters", poster);
+          }
+          let rulesPath = null;
+          if (rulesFile) {
+            rulesPath = await uploadFile("rules", rulesFile);
+          }
+          await axios
+            .patch(
+              `${import.meta.env.VITE_API_URL}api/contests/${
+                contestResponse.data.id
+              }/`,
+              {
+                poster_img: posterPath,
+                rules_pdf: rulesPath,
               },
-            }
-          )
-          .catch((error) => {
-            setErrorMessage(JSON.stringify(error.response.data, null, 2));
-            setOpen(true);
-          });
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization:
+                    "Token " + sessionStorage.getItem("accessToken"),
+                },
+              }
+            )
+            .catch((error) => {
+              setErrorMessage(JSON.stringify(error.response.data, null, 2));
+              setOpen(true);
+            });
+        }
       }
     } catch (error) {
       console.error(error);
