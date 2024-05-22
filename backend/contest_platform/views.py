@@ -29,6 +29,7 @@ from .permissions import (
     EntryPermission,
     GradeCriterionPermissions,
     GradePermissions,
+    SchoolPermission
 )
 from .tasks import send_email_task
 from rest_framework.decorators import action
@@ -36,8 +37,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum, Count, Case, When
 from django.conf import settings
-from .utils.import_schools_csv import upload_schools_data
-
+from .csv_import.import_schools_csv import upload_schools_data
 from rest_framework.decorators import api_view
 from datetime import date, timedelta
 
@@ -225,8 +225,16 @@ class GradeViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def to_evaluate(self, request):
         user = request.user
-        queryset_criterion = GradeCriterion.objects.all().filter(user=user)
-        qs = [grade for grade in self.queryset if grade.criterion in queryset_criterion]
+        contest_id = request.query_params.get('contestId', None)
+        if contest_id is None:
+            return Response({'error': 'contestId parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            contest_id = int(contest_id)
+        except ValueError:
+            return Response({'error': 'contestId must be an integer.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        queryset_criterion = GradeCriterion.objects.filter(user=user, contest=contest_id)
+        qs = self.get_queryset().filter(criterion__in=queryset_criterion)
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
 
@@ -273,6 +281,17 @@ class UserViewSet(ModelViewSet):
 class SchoolViewSet(ModelViewSet):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [SchoolPermission]
+
+    @action(detail=False, methods=["get"])
+    def emails(self, request):
+        """
+        Returns a list of first 500 emails in the database.
+        500 is max SMTP gmail daily limit.
+        """
+        emails = School.objects.values("email")[:500]
+        return Response(emails)
 
 
 @api_view(["POST"])

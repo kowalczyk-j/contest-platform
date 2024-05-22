@@ -28,7 +28,8 @@ export default function EmailForm() {
     subject: "",
     message: "",
   });
-  const [emailList, setEmailList] = useState([]);
+  const [usersEmails, setUsersEmails] = useState([]);
+  const [schoolsEmails, setSchoolsEmails] = useState([]);
   const [emailSendingError, setEmailSendingError] = useState("");
   const navigate = useNavigate();
 
@@ -50,9 +51,15 @@ export default function EmailForm() {
           Authorization: "Token " + sessionStorage.getItem("accessToken"),
         },
       })
-      .then((response) => setEmailList(response.data))
+      .then((response) => setUsersEmails(response.data))
       .catch((error) => console.error("Error fetching email list: ", error));
     // REQ_05_END
+    axios
+      .get(`${import.meta.env.VITE_API_URL}api/schools/emails/`)
+      .then((response) => {
+        setSchoolsEmails(response.data);
+      })
+      .catch((error) => console.error("Error fetching schools:", error));
   }, [contestId]);
 
   const handleChange = (event) => {
@@ -159,7 +166,8 @@ Zespół Fundacji "BoWarto"`;
                   label="Receivers"
                   onChange={handleChange}
                 >
-                  <MenuItem value={emailList}>Wszyscy odbiorcy z bazy</MenuItem>
+                  <MenuItem value={usersEmails}>Użytkownicy</MenuItem>
+                  <MenuItem value={schoolsEmails}>Szkoły</MenuItem>
                 </Select>
               </FormControl>
               <TextField
