@@ -68,6 +68,7 @@ class ContestPermission(permissions.BasePermission):
             "entries",
             "send_email",
             "current_contests",
+            "generate_certificate",
         ]:
             return True
         elif view.action == "create":
@@ -96,6 +97,7 @@ class ContestPermission(permissions.BasePermission):
             "partial_update",
             "destroy",
             "max_rating_sum",
+            "generate_certificate",
         ]:
             return request.user.is_authenticated and (
                 request.user.is_staff or request.user.is_jury

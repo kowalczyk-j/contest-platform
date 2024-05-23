@@ -41,6 +41,11 @@ from .utils.import_schools_csv import upload_schools_data
 from rest_framework.decorators import api_view
 from datetime import date
 
+from io import BytesIO
+from django.template.loader import get_template
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+
 
 class Logout(GenericAPIView):
     authentication_classes = [TokenAuthentication]
@@ -58,6 +63,7 @@ class ContestViewSet(ModelViewSet):
     serializer_class = ContestSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [ContestPermission]
+    certificate_template_path = 'certificate.html'
 
     @action(detail=True, methods=["get"])
     def max_rating_sum(self, request, pk=None):
@@ -70,6 +76,38 @@ class ContestViewSet(ModelViewSet):
             Sum("max_rating")
         )["max_rating__sum"]
         return Response({"total_max_rating": total_max_rating or 0})
+
+    def render_to_pdf(self, template_src, context_dict={}):
+        template = get_template(template_src)
+        html = template.render(context_dict)      
+        result = BytesIO()
+        pdf = pisa.pisaDocument(BytesIO(html.encode("utf-8")), result)
+        if not pdf.err:
+            return result.getvalue()
+        else:
+            print("Error rendering PDF:", pdf.err)
+            return None
+
+    @action(detail=False, methods=["get"], url_path='certificate')
+    def generate_certificate(self, request):
+        participant = request.query_params.get("participant", None)
+        achievement = request.query_params.get("achievement", None)
+        signature = request.query_params.get("signature", None)
+        signatory = request.query_params.get("signatory", None)
+
+        if not all([participant,  achievement, signature, signatory]):
+            return Response(
+                {"error": "All parameters (participant, achievement, signature, signatory) are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            "participant": participant,
+            "achievement": achievement,
+            "signature": signature,
+            "signatory": signatory
+        }
+        pdf = self.render_to_pdf(self.certificate_template_path, data)
+        return HttpResponse(pdf, content_type='application/pdf')
 
     # REQ_17
     @action(detail=True, methods=["post"])
@@ -131,6 +169,8 @@ class EntryViewSet(ModelViewSet):
             "value__sum"
         ]
         return Response({"total_value": total_value})
+    
+
 
 
 class AddressViewSet(ModelViewSet):

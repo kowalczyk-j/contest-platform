@@ -52,20 +52,25 @@ export default function CertificateForm() {
         alert('All fields are required.');
         return;
         }
-    axios
-      .get(
-        `${import.meta.env.VITE_API_URL}api/contests/certificate?contest=${contest.title}&participant=${formData.participant}&achievement=${formData.achievement}&signature=${formData.signature}&signatory=${formData.signature}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + sessionStorage.getItem("accessToken"),
-          },
-        }
-      )
-      .then((res) => console.log(res.data))
-      .catch((error) => {
-        console.log(error);
-      });
+      axios
+          .get(
+              `${import.meta.env.VITE_API_URL}api/contests/certificate?contest=${contest.title}&participant=${formData.participant}&achievement=${formData.achievement}&signature=${formData.signature}&signatory=${formData.signatory}`,
+              {
+                  headers: {
+                      "Content-Type": "application/json",
+                      Authorization: "Token " + sessionStorage.getItem("accessToken"),
+                  },
+              }
+          )
+          .then((response) => {
+              const file = new Blob([response.data], { type: 'application/pdf' });
+              const fileURL = URL.createObjectURL(file);
+              window.open(fileURL);
+          })
+          .catch((error) => {
+              console.error('Error generating PDF:', error);
+              alert('Error generating PDF. Please try again later.');
+          })
   };
 
   const handleBackClick = () => {
