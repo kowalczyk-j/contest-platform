@@ -242,6 +242,20 @@ const ContestIndexPage = () => {
                 </TextButton>
               </Link>
             ) : null}
+
+            {userData.is_jury || userData.is_staff ? (
+              <Link
+                to={`/contest/${selectedContest?.id}/certificates`}
+                style={{ textDecoration: "none" }}
+              >
+                <TextButton
+                  style={{ fontSize: "1rem", color: "#95C21E" }}
+                  endIcon={<ArrowForwardIcon />}
+                >
+                  Generowanie dyplomów
+                </TextButton>
+              </Link>
+            ) : null}
           </div>
 
           {/* Add other details as needed */}
