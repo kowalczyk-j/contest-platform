@@ -22,7 +22,7 @@ import FileUploadButton from "./FileUploadButton";
 import { uploadFile } from "./uploadFile";
 import ConfirmationWindow from "./ConfirmationWindow";
 
-function ContestForm({ initialData = {}, onSubmit }) {
+function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
   const navigate = useNavigate();
 
   const [title, setTitle] = useState(initialData.title || "");
@@ -33,16 +33,24 @@ function ContestForm({ initialData = {}, onSubmit }) {
   const [dateEnd, setDateEnd] = useState(
     initialData.dateEnd || dayjs().format("YYYY-MM-DD")
   );
-  const [individual, setIndividual] = useState(initialData.individual || "");
-  const [type, setType] = useState(initialData.type || "");
-  const [otherType, setOtherType] = useState(initialData.otherType || "");
-  const [status, setStatus] = useState(initialData.status || "not_started");
-
-  const [criteria, setCriteria] = useState(
-    initialData.criteria || [
-      { contest: "", description: "", maxRating: "", user: "" },
-    ]
+  const [individual, setIndividual] = useState(
+    initialData.individual ? "1" : "0"
   );
+  const [type, setType] = useState(
+    initialData.type === "plastyczne" || initialData.type === "literackie"
+      ? initialData.type
+      : "inne"
+  );
+
+  const [otherType, setOtherType] = useState(
+    initialData.type !== "plastyczne" && initialData.type !== "literackie"
+      ? initialData.type
+      : ""
+  );
+
+  const [criteria, setCriteria] = useState([
+    { contest: "", description: "", maxRating: "", user: "" },
+  ]);
 
   // pop up after submiting
   const [open, setOpen] = React.useState(false);
@@ -323,28 +331,33 @@ function ContestForm({ initialData = {}, onSubmit }) {
               label="literackie"
             />
             <FormControlLabel value="inne" control={<Radio />} label="inne: " />
-            <TextField
-              id="other"
-              size="small"
-              onChange={(e) => setOtherType(e.target.value)}
-            />
+            {type === "inne" && (
+              <TextField
+                id="other"
+                size="small"
+                value={otherType}
+                onChange={(e) => setOtherType(e.target.value)}
+              />
+            )}
           </RadioGroup>
         </FormControl>
       </div>
 
-      <div className="criteria">
-        <Typography variant="body1" style={{ fontWeight: "lighter" }}>
-          Kryteria oceny:
-        </Typography>
-        {criteriaComponents}
-        <TextButton
-          style={{ fontSize: 16, marginTop: "10px" }}
-          startIcon={<AddCircleOutline style={{ color: "#95C21E" }} />}
-          onClick={handleClickAddCriterion}
-        >
-          Dodaj kryterium
-        </TextButton>
-      </div>
+      {!editingMode && (
+        <div className="criteria">
+          <Typography variant="body1" style={{ fontWeight: "lighter" }}>
+            Kryteria oceny:
+          </Typography>
+          {criteriaComponents}
+          <TextButton
+            style={{ fontSize: 16, marginTop: "10px" }}
+            startIcon={<AddCircleOutline style={{ color: "#95C21E" }} />}
+            onClick={handleClickAddCriterion}
+          >
+            Dodaj kryterium
+          </TextButton>
+        </div>
+      )}
 
       <div className="uploads">
         <div className="rules">

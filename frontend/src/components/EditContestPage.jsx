@@ -12,10 +12,10 @@ function EditContestPage() {
   const [initialData, setInitialData] = useState(null); // State to hold initial data
   const [loading, setLoading] = useState(true); // State to manage loading state
 
-  // Function to fetch initial data
-  const fetchInitialData = async () => {
+  // Function to fetch contest data
+  const fetchContestData = async () => {
     try {
-      const response = await axios.get(
+      const contestResponse = await axios.get(
         `${import.meta.env.VITE_API_URL}api/contests/${contestId}`,
         {
           headers: {
@@ -24,7 +24,8 @@ function EditContestPage() {
           },
         }
       );
-      setInitialData(response.data); // Set initial data
+      const contestData = contestResponse.data;
+      setInitialData(contestData); // Set initial data
       setLoading(false); // Set loading to false after data is fetched
     } catch (error) {
       console.error("Error fetching initial data: ", error);
@@ -33,12 +34,11 @@ function EditContestPage() {
   };
 
   useEffect(() => {
-    fetchInitialData(); // Fetch initial data when component mounts
+    fetchContestData(); // Fetch initial data when component mounts
   }, [contestId]);
 
   const handleFormSubmit = async (formData) => {
-    let criterion = formData.criterion;
-    let contestResponse, criterionResponse;
+    let contestResponse;
 
     // Return the promise chain so that the calling function can await it
     return axios
@@ -60,33 +60,7 @@ function EditContestPage() {
         const result = response.data;
         console.log(result);
         contestResponse = response;
-
-        // Map criterion to promises and use Promise.all to wait for all to complete
-        const criterionPromises = criterion.map((c) => {
-          c.contest = contestId;
-          return axios
-            .post(`${import.meta.env.VITE_API_URL}api/criterions/`, c, {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Token " + sessionStorage.getItem("accessToken"),
-              },
-            })
-            .then((response) => {
-              if (response.status !== 201) {
-                throw new Error("Network response was not ok");
-              }
-              console.log(JSON.stringify(c));
-              const result = response.data;
-              console.log(result);
-              return response; // Return the response for each criterion
-            });
-        });
-
-        // Wait for all criterion promises to resolve
-        return Promise.all(criterionPromises).then((responses) => {
-          criterionResponse = responses; // Store all criterion responses
-          return { contestResponse, criterionResponse }; // Return the final result object
-        });
+        return { contestResponse }; // Return the final result object
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -110,7 +84,11 @@ function EditContestPage() {
           <BackButton clickHandler={handleBack} />
         </div>
         <div className="form">
-          <ContestForm onSubmit={handleFormSubmit} initialData={initialData} />
+          <ContestForm
+            onSubmit={handleFormSubmit}
+            initialData={initialData}
+            editingMode={true}
+          />
         </div>
       </div>
     </div>

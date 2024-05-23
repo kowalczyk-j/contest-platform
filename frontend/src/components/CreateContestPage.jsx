@@ -77,7 +77,7 @@ function CreateContestPage() {
           <BackButton clickHandler={handleBack} />
         </div>
         <div className="form">
-          <ContestForm onSubmit={handleFormSubmit} initialData={{}} />
+          <ContestForm onSubmit={handleFormSubmit} />
         </div>
       </div>
     </div>
