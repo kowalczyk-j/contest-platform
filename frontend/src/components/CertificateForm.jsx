@@ -46,31 +46,40 @@ export default function CertificateForm() {
   }, [contestId]);
 
   const handleSubmit = (event) => {
-      event.preventDefault();
-      const { participant, achievement, signature, signatory } = formData;
-        if (!participant || !achievement || !signature || !signatory) {
-        alert('All fields are required.');
-        return;
+    event.preventDefault();
+    const { participant, achievement, signature, signatory } = formData;
+    if (!participant || !achievement || !signature || !signatory) {
+      alert('All fields are required.');
+      return;
+    }
+
+    axios
+      .get(
+        `${import.meta.env.VITE_API_URL}api/contests/certificate`,
+        {
+          params: {
+            contest: contest.title,
+            participant: formData.participant,
+            achievement: formData.achievement,
+            signature: formData.signature,
+            signatory: formData.signatory,
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+          responseType: 'blob',
         }
-      axios
-          .get(
-              `${import.meta.env.VITE_API_URL}api/contests/certificate?contest=${contest.title}&participant=${formData.participant}&achievement=${formData.achievement}&signature=${formData.signature}&signatory=${formData.signatory}`,
-              {
-                  headers: {
-                      "Content-Type": "application/json",
-                      Authorization: "Token " + sessionStorage.getItem("accessToken"),
-                  },
-              }
-          )
-          .then((response) => {
-              const file = new Blob([response.data], { type: 'application/pdf' });
-              const fileURL = URL.createObjectURL(file);
-              window.open(fileURL);
-          })
-          .catch((error) => {
-              console.error('Error generating PDF:', error);
-              alert('Error generating PDF. Please try again later.');
-          })
+      )
+      .then((response) => {
+        const file = new Blob([response.data], { type: 'application/pdf' });
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL);
+      })
+      .catch((error) => {
+        console.error('Error generating PDF:', error);
+        alert('Error generating PDF. Please try again later.');
+      });
   };
 
   const handleBackClick = () => {
