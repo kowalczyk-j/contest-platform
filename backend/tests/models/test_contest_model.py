@@ -21,22 +21,16 @@ class ContestModelTest(TestCase):
 
     def test_contest_fields(self):
         self.assertEqual(self.contest.title, "Programming Contest")
-        self.assertEqual(
-            self.contest.description, "A coding competition"
-        )
+        self.assertEqual(self.contest.description, "A coding competition")
         self.assertEqual(self.contest.date_start, date.today())
         self.assertEqual(self.contest.date_end, date.today())
         self.assertTrue(self.contest.individual)
         self.assertEqual(self.contest.type, "Programming")
         self.assertEqual(self.contest.rules_pdf, "https://rules.pdf")
-        self.assertEqual(
-            self.contest.poster_img, "https://poster.jpg"
-        )
+        self.assertEqual(self.contest.poster_img, "https://poster.jpg")
 
     def test_contest_str(self):
-        expected_str = str(
-            (self.contest.title, self.contest.description)
-        )
+        expected_str = str((self.contest.title, self.contest.description))
         self.assertEqual(str(self.contest), expected_str)
 
     def test_contest_validity(self):

@@ -21,9 +21,7 @@ class GradePermissionsTest(TestCase):
         )
         self.token = Token.objects.create(user=self.user)
         self.contest = Contest.objects.create(title="Test Contest")
-        self.entry = Entry.objects.create(
-            user=self.user, contest=self.contest
-        )
+        self.entry = Entry.objects.create(user=self.user, contest=self.contest)
         self.grade_criterion = GradeCriterion.objects.create(
             contest=self.contest, max_rating=100
         )
@@ -95,11 +93,7 @@ class GradePermissionsTest(TestCase):
         view.action = "retrieve"
         permission = GradePermissions()
 
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.grade
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.grade))
 
     def test_has_object_permission_retrieve_action_authenticated_jury(
         self,
@@ -113,11 +107,7 @@ class GradePermissionsTest(TestCase):
         view.action = "retrieve"
         permission = GradePermissions()
 
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.grade
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.grade))
 
     def test_has_object_permission_retrieve_action_authenticated_entry_user(
         self,
@@ -128,11 +118,7 @@ class GradePermissionsTest(TestCase):
         view.action = "retrieve"
         permission = GradePermissions()
 
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.grade
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.grade))
 
     def test_has_object_permission_retrieve_action_unauthenticated(
         self,
@@ -148,18 +134,12 @@ class GradePermissionsTest(TestCase):
         view.action = "retrieve"
         permission = GradePermissions()
 
-        self.assertFalse(
-            permission.has_object_permission(
-                request, view, self.grade
-            )
-        )
+        self.assertFalse(permission.has_object_permission(request, view, self.grade))
 
     def test_has_object_permission_update_action_authenticated_staff(
         self,
     ):
-        request = self.factory.patch(
-            f"/api/grades/{self.grade.id}/", {"value": 95}
-        )
+        request = self.factory.patch(f"/api/grades/{self.grade.id}/", {"value": 95})
         request.user = self.user
         user = self.user
         user.is_staff = True
@@ -168,18 +148,12 @@ class GradePermissionsTest(TestCase):
         view.action = "update"
         permission = GradePermissions()
 
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.grade
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.grade))
 
     def test_has_object_permission_update_action_authenticated_jury(
         self,
     ):
-        request = self.factory.patch(
-            f"/api/grades/{self.grade.id}/", {"value": 95}
-        )
+        request = self.factory.patch(f"/api/grades/{self.grade.id}/", {"value": 95})
         request.user = self.user
         user = self.user
         user.is_jury = True
@@ -188,18 +162,12 @@ class GradePermissionsTest(TestCase):
         view.action = "update"
         permission = GradePermissions()
 
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.grade
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.grade))
 
     def test_has_object_permission_update_action_authenticated_entry_user(
         self,
     ):
-        request = self.factory.patch(
-            f"/api/grades/{self.grade.id}/", {"value": 95}
-        )
+        request = self.factory.patch(f"/api/grades/{self.grade.id}/", {"value": 95})
         request.user = self.user
         view = GradeViewSet()
         view.action = "update"

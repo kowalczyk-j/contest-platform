@@ -14,13 +14,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import include, path
 from contest_platform.urls import router
 from contest_platform.views import import_schools
 from rest_framework.authtoken.views import obtain_auth_token
 from contest_platform.views import Logout
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 
 urlpatterns = [
@@ -29,7 +34,11 @@ urlpatterns = [
     path("api/login/", obtain_auth_token),
     path("api/logout/", Logout.as_view()),
     path("api/import/", import_schools),
-    path("api/schema/", SpectacularAPIView.as_view(), name='schema'),
-    path("api/docs", SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'), # Swagger UI
-    path("api/redoc", SpectacularRedocView.as_view(url_name='schema'), name='redoc'), # ReDoc UI
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/docs", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"
+    ),  # Swagger UI
+    path(
+        "api/redoc", SpectacularRedocView.as_view(url_name="schema"), name="redoc"
+    ),  # ReDoc UI
 ]

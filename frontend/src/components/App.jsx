@@ -13,6 +13,7 @@ import UsersListPage from "./UsersListPage";
 import UserEntries from "./UserEntries";
 import EntryWorkView from "./EntryWorkView";
 import CertificateForm from "./CertificateForm";
+import ContestStats from "./ContestStats";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
         <Route
           path="/create-entry/:contestId"
           element={
-            <PrivateRoute forAuthenticated={true}>
+            <PrivateRoute forAuthenticated={true} checkContestStatus={true}>
               <CreateEntryPage />
             </PrivateRoute>
           }
@@ -55,6 +56,14 @@ function App() {
           element={
             <PrivateRoute forStaff={true}>
               <EmailForm />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/contest/:contestId/stats"
+          element={
+            <PrivateRoute forStaff={true}>
+              <ContestStats />
             </PrivateRoute>
           }
         />

@@ -6,5 +6,6 @@ class ContestPlatformConfig(AppConfig):
 
     :meta private:
     """
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'contest_platform'
+
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "contest_platform"

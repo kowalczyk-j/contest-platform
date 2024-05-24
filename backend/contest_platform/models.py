@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from datetime import date
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
@@ -6,6 +7,13 @@ from django.core.exceptions import ValidationError
 
 # REQ_09A
 class Contest(models.Model):
+    STATUS_CHOICES = [
+        ('not_started', 'Nierozpoczęty'),
+        ('ongoing', 'W trakcie trwania'),
+        ('judging', 'W trakcie oceny'),
+        ('finished', 'Zakończony'),
+    ]
+
     title = models.CharField(max_length=200, default="")
     description = models.CharField(max_length=1800, default="")
     date_start = models.DateField(default=date.today)
@@ -13,11 +21,24 @@ class Contest(models.Model):
     # 1 - konkurs indywidualny; 0 - konkurs grupowy
     individual = models.BooleanField(default=True)
     type = models.CharField(max_length=50, default="")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_started')
     rules_pdf = models.URLField(max_length=300, null=True)
     poster_img = models.URLField(max_length=300, null=True)
 
     def __str__(self):
         return f"{self.title, self.description}"
+
+    def save(self, *args, **kwargs):
+        today = timezone.now().date()
+        new_status = self.status
+        if self.date_start <= today < self.date_end and self.status != 'ongoing':
+            new_status = 'ongoing'
+        elif today >= self.date_end and self.status != 'judging':
+            new_status = 'judging'
+        
+        if new_status != self.status:
+            self.status = new_status
+            super().save(*args, **kwargs)
 # REQ_09A_END
 
 
@@ -35,6 +56,8 @@ class Address(models.Model):
 class Person(models.Model):
     name = models.CharField(max_length=20)
     surname = models.CharField(max_length=50)
+
+
 # REQ_23_END
 
 
@@ -43,6 +66,8 @@ class Person(models.Model):
 class User(AbstractUser):
     is_jury = models.BooleanField(default=False)
     is_coordinating_unit = models.BooleanField(default=False)
+
+
 # REQ_06A_END
 # REQ_23B_END
 
@@ -56,6 +81,8 @@ class Entry(models.Model):
     email = models.EmailField(null=True)
     entry_title = models.CharField(max_length=100)
     entry_file = models.URLField(max_length=300, null=True)
+    favourite = models.BooleanField(default=False)
+    canceled = models.BooleanField(default=False)
 # REQ_24_END
 
 
@@ -65,6 +92,8 @@ class GradeCriterion(models.Model):
     description = models.CharField(max_length=500)
     max_rating = models.IntegerField()
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+
 # REQ_09B_END
 
 
@@ -72,7 +101,7 @@ class Grade(models.Model):
     criterion = models.ForeignKey(GradeCriterion, on_delete=models.PROTECT)
     entry = models.ForeignKey(Entry, on_delete=models.PROTECT)
     value = models.IntegerField(null=True)
-    description = models.CharField(max_length=255, null=True)
+    description = models.CharField(max_length=255, default="")
 
     def clean(self):
         if self.value > self.criterion.max_rating:

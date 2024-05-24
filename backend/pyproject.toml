@@ -3,7 +3,7 @@ name = "contest-platform"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
-readme = "README.md"
+readme = "../README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -25,6 +25,8 @@ django-dramatiq = "^0.11.6"
 requests = "^2.31.0"
 dramatiq = {extras = ["rabbitmq", "watch"], version = "^1.16.0"}
 WeasyPrint = "*"
+black = "^24.4.2"
+
 
 [tool.poetry.group.dev.dependencies]
 sphinx = "*"
