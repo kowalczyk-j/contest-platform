@@ -35,7 +35,7 @@ from .tasks import send_email_task
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Sum, Count, Case, When
+from django.db.models import Sum, Count
 from django.conf import settings
 from .csv_import.import_schools_csv import upload_schools_data
 from rest_framework.decorators import api_view
@@ -84,7 +84,7 @@ class ContestViewSet(ModelViewSet):
             for receiver in request.data.get("receivers")
         ]
 
-        send_email_task(messages)
+        send_email_task.send(messages)
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
 

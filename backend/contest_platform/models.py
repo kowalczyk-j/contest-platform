@@ -3,7 +3,10 @@ from django.utils import timezone
 from datetime import date
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
-
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.conf import settings
+from .tasks import send_email_task
 
 # REQ_09A
 class Contest(models.Model):
@@ -35,7 +38,7 @@ class Contest(models.Model):
             new_status = 'ongoing'
         elif today >= self.date_end and self.status != 'judging':
             new_status = 'judging'
-        
+
         if new_status != self.status:
             self.status = new_status
             super().save(*args, **kwargs)
@@ -137,3 +140,26 @@ class School(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+
+@receiver(post_save, sender=Entry)
+def send_confirmation_email(sender, instance, created, **kwargs):
+    if created:
+        contest_title = instance.contest.title
+        receiver_email = instance.email
+        host_email = settings.EMAIL_HOST_USER
+
+        subject = f'Potwierdzenie zgłoszenia pracy do konkursu "{contest_title}"'
+        message = f"""Szanowny Panie/ Szanowna Pani,
+
+            Dziękujemy za wzięcie udziału w konkursie \"{contest_title}\"
+            organizowanym przez Fundację "BoWarto". Praca została przyjęta i oczekuje na ocenę.
+
+            Zachęcamy do wzięcie udziału w następnych konkursach i życzymy powodzenia!
+
+            Z poważaniem,
+            Zespół Fundacji \"BoWarto\" """
+        messages = [
+            (subject, message, host_email, [receiver_email])
+        ]
+        send_email_task.send(messages)

@@ -70,7 +70,7 @@ export default function EmailForm() {
     event.preventDefault();
     axios
       .post(
-        `${import.meta.env.VITE_API_URL}api/contests/1/send_email/`,
+        `${import.meta.env.VITE_API_URL}api/contests/send_email/`,
         emailData,
         {
           headers: {
@@ -94,11 +94,9 @@ export default function EmailForm() {
     const emailSubject = `Zaproszenie do udziału w konkursie "${contest.title}"`;
     const emailMessage = `Szanowni Państwo,
 
-Zapraszamy serdecznie do wzięcia udziału w konkursie "${
-      contest.title
-    }" organizowanym przez Fundację "BoWarto". Konkurs ${
-      contest.individual ? "indywidualny" : "zespołowy"
-    } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
+Zapraszamy serdecznie do wzięcia udziału w konkursie "${contest.title
+      }" organizowanym przez Fundację "BoWarto". Konkurs ${contest.individual ? "indywidualny" : "zespołowy"
+      } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
 
 Opis:
 ${contest.description}
