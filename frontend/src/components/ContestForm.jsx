@@ -47,6 +47,13 @@ function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
       ? initialData.type
       : ""
   );
+  const [status, setStatus] = useState(initialData.status || "not_started");
+  const statusChoices = {
+    not_started: "Nierozpoczęty",
+    ongoing: "W trakcie trwania",
+    judging: "W trakcie oceny",
+    finished: "Zakończony",
+  };
 
   const [criteria, setCriteria] = useState([
     { contest: "", description: "", maxRating: "", user: "" },
@@ -168,6 +175,7 @@ function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
         date_end: dateEnd.format("YYYY-MM-DD"),
         individual,
         type: finalType,
+        status,
         criterion: criteria,
       };
 
@@ -296,7 +304,7 @@ function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
 
       <div className="contest-type">
         <FormControl component="fieldset" className="flex flex-col space-y-2">
-          <Typography variant="body1" style={{ fontWeight: "lighter" }}>
+          <Typography variant="body1" style={{ fontWeight: "bold" }}>
             Typ konkursu:
           </Typography>
           <RadioGroup
@@ -320,7 +328,7 @@ function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
       </div>
       <div className="contest-type">
         <FormControl component="fieldset" className="flex flex-col space-y-2">
-          <Typography variant="body1" style={{ fontWeight: "lighter" }}>
+          <Typography variant="body1" style={{ fontWeight: "bold" }}>
             Typ zgłoszeń:
           </Typography>
           <RadioGroup
@@ -360,7 +368,32 @@ function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
         </FormControl>
       </div>
 
-      {!editingMode && (
+      {editingMode ? (
+        <div className="status" style={{ marginTop: "15px" }}>
+          <FormControl component="fieldset" className="flex flex-col space-y-2">
+            <Typography variant="body1" style={{ fontWeight: "bold" }}>
+              Status konkursu:
+            </Typography>
+            <RadioGroup
+              row
+              aria-label="status"
+              required
+              name="row-radio-buttons-group"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              {Object.entries(statusChoices).map(([key, value]) => (
+                <FormControlLabel
+                  key={key}
+                  value={key}
+                  control={<Radio />}
+                  label={value}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </div>
+      ) : (
         <div className="criteria">
           <Typography variant="body1" style={{ fontWeight: "lighter" }}>
             Kryteria oceny:
