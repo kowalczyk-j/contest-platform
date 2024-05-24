@@ -1,6 +1,5 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
 from .models import (
     Address,
     GradeCriterion,
@@ -35,16 +34,13 @@ from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
-from django.core.mail import send_mail
 from .utils.import_schools_csv import upload_schools_data
 
 from rest_framework.decorators import api_view
 from datetime import date
-
-from io import BytesIO
-from django.template.loader import get_template
 from django.http import HttpResponse
-from xhtml2pdf import pisa
+from weasyprint import HTML
+from django.template.loader import render_to_string
 
 
 class Logout(GenericAPIView):
@@ -72,21 +68,17 @@ class ContestViewSet(ModelViewSet):
         related to the contest.
         """
         contest = self.get_object()
-        total_max_rating = GradeCriterion.objects.filter(contest=contest).aggregate(
+        total_max_rating = GradeCriterion.objects.filter(
+            contest=contest).aggregate(
             Sum("max_rating")
         )["max_rating__sum"]
         return Response({"total_max_rating": total_max_rating or 0})
 
-    def render_to_pdf(self, template_src, context_dict={}):
-        template = get_template(template_src)
-        html = template.render(context_dict)      
-        result = BytesIO()
-        pdf = pisa.pisaDocument(BytesIO(html.encode("utf-8")), result)
-        if not pdf.err:
-            return result.getvalue()
-        else:
-            print("Error rendering PDF:", pdf.err)
-            return None
+    def generate_pdf(self, data):
+        html_string = render_to_string(self.certificate_template_path, data)
+        html = HTML(string=html_string)
+        pdf = html.write_pdf()
+        return pdf
 
     @action(detail=False, methods=["get"], url_path='certificate')
     def generate_certificate(self, request):
@@ -94,19 +86,33 @@ class ContestViewSet(ModelViewSet):
         achievement = request.query_params.get("achievement", None)
         signature = request.query_params.get("signature", None)
         signatory = request.query_params.get("signatory", None)
-
-        if not all([participant,  achievement, signature, signatory]):
+        contest = request.query_params.get("contest", None)
+        if not all([participant,  achievement, signature, signatory, contest]):
+            errormsg = "All parameters (participant, achievement, "
+            errormsg += "signature, signatory) are required."
             return Response(
-                {"error": "All parameters (participant, achievement, signature, signatory) are required."},
+                {"error": errormsg},
                 status=status.HTTP_400_BAD_REQUEST
             )
         data = {
             "participant": participant,
             "achievement": achievement,
             "signature": signature,
-            "signatory": signatory
+            "signatory": signatory,
+            "contest": contest
         }
-        pdf = self.render_to_pdf(self.certificate_template_path, data)
+
+        try:
+            pdf = self.generate_pdf(data)
+        except Exception as e:
+            errormsg = "Exception while rendering"
+            errormsg += " certificate. Conntact administrator: " + e
+            return Response(
+                {"error": errormsg},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="diploma.pdf"'
         return HttpResponse(pdf, content_type='application/pdf')
 
     # REQ_17
@@ -169,8 +175,6 @@ class EntryViewSet(ModelViewSet):
             "value__sum"
         ]
         return Response({"total_value": total_value})
-    
-
 
 
 class AddressViewSet(ModelViewSet):
@@ -198,7 +202,7 @@ class GradeViewSet(ModelViewSet):
     def to_evaluate(self, request):
         user = request.user
         queryset_criterion = GradeCriterion.objects.all().filter(user=user)
-        qs = [grade for grade in self.queryset if grade.criterion in queryset_criterion]
+        qs = [gr for gr in self.queryset if gr.criterion in queryset_criterion]
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
 
@@ -259,4 +263,3 @@ def import_schools(request):
         return Response(
             {"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
         )
-
