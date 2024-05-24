@@ -72,7 +72,7 @@ class ContestViewSet(ModelViewSet):
         return Response({"total_max_rating": total_max_rating or 0})
 
     # REQ_17
-    @action(detail=True, methods=["post"])
+    @action(detail=False, methods=["post"])
     def send_email(self, request, pk=None):
         subject = request.data.get("subject")
         message = request.data.get("message")
@@ -273,7 +273,6 @@ class UserViewSet(ModelViewSet):
         jury_users = self.queryset.filter(is_jury=True)
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
-
 
 # REQ_06B_END
 
