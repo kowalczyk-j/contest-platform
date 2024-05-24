@@ -12,25 +12,50 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import axios from "axios";
 import BackButton from "./buttons/BackButton";
+import ConfirmationWindow from "./ConfirmationWindow";
 
 export default function CertificateForm() {
   const { contestId } = useParams();
   const [contest, setContest] = useState({});
   const navigate = useNavigate();
+  const [openPopUp, setOpenPopUp] = useState(false);
+  const [resultOpened, setResultOpened] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const [formData, setFormData] = useState({
-    participant: '',
-    achievement: '',
-    signature: '',
-    signatory: ''
+  const handleCertificates = () => {
+    setOpenPopUp(true);
+  };
+
+  const handleCancel = () => {
+    setOpenPopUp(false);
+  };
+
+  const [formData1, setFormData1] = useState({
+    participant: "",
+    achievement: "",
+    signature: "",
+    signatory: "",
   });
 
-  const handleChange = (e) => {
+  const [formData2, setFormData2] = useState({
+    signature: "",
+    signatory: "",
+  });
+
+  const handleChange1 = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData1((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleChange2 = (e) => {
+    const { name, value } = e.target;
+    setFormData2((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   useEffect(() => {
@@ -45,11 +70,11 @@ export default function CertificateForm() {
       .catch((error) => console.error("Error fetching data: ", error));
   }, [contestId]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit1 = (event) => {
     event.preventDefault();
-    const { participant, achievement, signature, signatory } = formData;
+    const { participant, achievement, signature, signatory } = formData1;
     if (!participant || !achievement || !signature || !signatory) {
-      alert('All fields are required.');
+      alert("All fields are required.");
       return;
     }
 
@@ -59,26 +84,62 @@ export default function CertificateForm() {
         {
           params: {
             contest: contest.title,
-            participant: formData.participant,
-            achievement: formData.achievement,
-            signature: formData.signature,
-            signatory: formData.signatory,
+            participant: formData1.participant,
+            achievement: formData1.achievement,
+            signature: formData1.signature,
+            signatory: formData1.signatory,
           },
           headers: {
             "Content-Type": "application/json",
             Authorization: "Token " + sessionStorage.getItem("accessToken"),
           },
-          responseType: 'blob',
+          responseType: "blob",
         }
       )
       .then((response) => {
-        const file = new Blob([response.data], { type: 'application/pdf' });
+        const file = new Blob([response.data], { type: "application/pdf" });
         const fileURL = URL.createObjectURL(file);
         window.open(fileURL);
       })
       .catch((error) => {
-        console.error('Error generating PDF:', error);
-        alert('Error generating PDF. Please try again later.');
+        console.error("Error generating PDF:", error);
+        alert("Error generating PDF. Please try again later.");
+      });
+  };
+
+    const handleConfirm = () => {
+    setOpenPopUp(false);
+    const { signature, signatory } = formData2;
+    if (!signature || !signatory) {
+      alert('All fields are required.');
+      return;
+    }
+
+    const headers = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + sessionStorage.getItem("accessToken"),
+      },
+      responseType: 'blob',
+    };
+
+    axios
+      .post(
+        `${import.meta.env.VITE_API_URL}api/contests/${contest.id}/send_certificates/`,
+        {
+          signature: formData2.signature,
+          signatory: formData2.signatory,
+        },
+        headers
+      )
+      .then((response) => {
+        setResultOpened(true);
+        setErrorMessage("");
+      })
+      .catch((error) => {
+        console.error('Error sending certificate:', error);
+        setResultOpened(true);
+        setErrorMessage("Wystąpił błąd przy wysyłaniu certyfikatu.");
       });
   };
 
@@ -86,6 +147,10 @@ export default function CertificateForm() {
     navigate("/");
   };
 
+  const handleCloseResult = () => {
+    setResultOpened(false);
+    setErrorMessage("");
+  };
   return (
     <>
       <Navbar />
@@ -120,61 +185,126 @@ export default function CertificateForm() {
               Wypełnij dane dyplomu {contest.title}
             </Typography>
             {/*REQ_18*/}
-            <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-            <TextField
+            <form onSubmit={handleSubmit1} style={{ width: "100%" }}>
+              <TextField
                 fullWidth
                 margin="normal"
-                id="participant"
+                id="participant1"
                 name="participant"
                 label="Uczestnik"
                 placeholder="Wprowadź imię i nazwisko"
-                value={formData.participant}
-                onChange={handleChange}
-            />
-            <TextField
+                value={formData1.participant}
+                onChange={handleChange1}
+              />
+              <TextField
                 fullWidth
                 margin="normal"
-                id="achievement"
+                id="achievement1"
                 name="achievement"
                 label="Osiągnięcie"
                 placeholder="Wprowadź osiągnięcie"
-                value={formData.achievement}
-                onChange={handleChange}
-            />
-            <TextField
+                value={formData1.achievement}
+                onChange={handleChange1}
+              />
+              <TextField
                 fullWidth
                 margin="normal"
-                id="signature"
+                id="signature1"
                 name="signature"
                 label="Podpis"
                 placeholder="Wprowadź podpis"
-                value={formData.signature}
-                onChange={handleChange}
-            />
-            <TextField
+                value={formData1.signature}
+                onChange={handleChange1}
+              />
+              <TextField
                 fullWidth
                 margin="normal"
-                id="signatory"
+                id="signatory1"
                 name="signatory"
                 label="Podpisujący"
                 placeholder="Wprowadź imię i nazwisko podpisującego"
-                value={formData.signatory}
-                onChange={handleChange}
-            />
+                value={formData1.signatory}
+                onChange={handleChange1}
+              />
               {/*REQ_18_END*/}
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "space-between",
+                  justifyContent: "center",
                   marginTop: "1rem",
                 }}
               >
                 <GenerateTextButton
                   text="Wygeneruj dyplom"
-                  onClick={handleSubmit}
+                  onClick={handleSubmit1}
                 />
               </Box>
             </form>
+
+            {/* Drugi formularz */}
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              sx={{ mx: "auto", alignItems: "center", mt: "2rem" }}
+            >
+              Roześlij certyfikaty dla konkursu {contest.title}
+            </Typography>
+            <form onSubmit={handleCertificates} style={{ width: "100%" }}>
+              <TextField
+                fullWidth
+                margin="normal"
+                id="signature2"
+                name="signature"
+                label="Podpis"
+                placeholder="Wprowadź podpis"
+                value={formData2.signature}
+                onChange={handleChange2}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                id="signatory2"
+                name="signatory"
+                label="Podpisujący"
+                placeholder="Wprowadź imię i nazwisko podpisującego"
+                value={formData2.signatory}
+                onChange={handleChange2}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "1rem",
+                }}
+              >
+                <GenerateTextButton
+                  text="Roześlij dyplomy"
+                  onClick={handleCertificates}
+                />
+              </Box>
+            </form>
+            <ConfirmationWindow
+              open={openPopUp}
+              setOpen={setOpenPopUp}
+              title="Czy na pewno chcesz wysłać certyfikaty uznania?"
+              message="Każdy uczestnik otrzyma certyfikat uznania za udział w konkursie"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+            />
+            <ConfirmationWindow
+              open={resultOpened}
+              setOpen={setResultOpened}
+              title={
+                errorMessage
+                  ? "Wystąpił błąd przy wysyłaniu certufikatu"
+                  : "Wysłano certyfikaty"
+              }
+              message={
+                errorMessage || ""
+              }
+              onConfirm={handleCloseResult}
+              showCancelButton={false}
+            />
           </Card>
         </Box>
       </ThemeProvider>

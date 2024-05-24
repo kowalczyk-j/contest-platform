@@ -69,6 +69,7 @@ class ContestPermission(permissions.BasePermission):
             "send_email",
             "current_contests",
             "generate_certificate",
+            "send_certificates",
         ]:
             return True
         elif view.action == "create":
@@ -98,6 +99,7 @@ class ContestPermission(permissions.BasePermission):
             "destroy",
             "max_rating_sum",
             "generate_certificate",
+            "send_certificates",
         ]:
             return request.user.is_authenticated and (
                 request.user.is_staff or request.user.is_jury

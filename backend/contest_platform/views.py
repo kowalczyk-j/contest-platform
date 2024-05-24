@@ -29,7 +29,7 @@ from .permissions import (
     GradeCriterionPermissions,
     GradePermissions,
 )
-from .tasks import send_email_task
+from .tasks import send_email_task, send_certificate_task
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -41,6 +41,7 @@ from datetime import date
 from django.http import HttpResponse
 from weasyprint import HTML
 from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404
 
 
 class Logout(GenericAPIView):
@@ -60,6 +61,7 @@ class ContestViewSet(ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [ContestPermission]
     certificate_template_path = 'certificate.html'
+    default_achievement = "za udział"
 
     @action(detail=True, methods=["get"])
     def max_rating_sum(self, request, pk=None):
@@ -79,6 +81,48 @@ class ContestViewSet(ModelViewSet):
         html = HTML(string=html_string)
         pdf = html.write_pdf()
         return pdf
+
+    @action(detail=True, methods=['post'], url_path='send_certificates')
+    def send_certificates(self, request, pk=None):
+        if pk is None:
+            return Response(
+                {"error": "No contest id given"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        contest = get_object_or_404(Contest, pk=pk)
+        entries = Entry.objects.filter(contest_id=contest.id)
+        signatory = request.data.get('signatory', '')
+        signature = request.data.get('signature', '')
+        user_details = entries.values_list(
+            'user__first_name',
+            'user__last_name',
+            'user__email'
+        ).distinct()
+
+        for first_name, last_name, email in user_details:
+            pdf = self.generate_pdf(
+                data={
+                    'participant': f"{first_name} {last_name}",
+                    'achievement': self.default_achievement,
+                    'email': email,
+                    'signatory': signatory,
+                    'signature': signature,
+                    'contest': contest.description,
+                }
+            )
+
+            subject = "Twój certyfikat"
+            message = "Dziękujemy za udział!."
+            send_certificate_task(
+                subject,
+                message,
+                first_name,
+                last_name,
+                email,
+                pdf
+            )
+
+        return Response({"status": "certificates sent"})
 
     @action(detail=False, methods=["get"], url_path='certificate')
     def generate_certificate(self, request):
