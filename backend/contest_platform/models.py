@@ -35,7 +35,7 @@ class Contest(models.Model):
             new_status = 'ongoing'
         elif today >= self.date_end and self.status != 'judging':
             new_status = 'judging'
-        
+
         if new_status != self.status:
             self.status = new_status
             super().save(*args, **kwargs)
@@ -66,6 +66,7 @@ class Person(models.Model):
 class User(AbstractUser):
     is_jury = models.BooleanField(default=False)
     is_coordinating_unit = models.BooleanField(default=False)
+    is_newsletter_subscribed = models.BooleanField(default=False)
 
 
 # REQ_06A_END

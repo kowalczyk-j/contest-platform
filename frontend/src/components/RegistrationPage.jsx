@@ -26,6 +26,7 @@ const RegistrationPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isCoordinatingUnit, setCoordinatingUnit] = useState(false);
+  const [isSubscribedToNewsletter, setSubscribedToNewsletter] = useState(false);
   const [registrationError, setRegistrationError] = useState("");
   const [registrationErrorMessage, setRegistrationErrorMessage] = useState("");
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const RegistrationPage = () => {
       email: email,
       password: password,
       is_coordinating_unit: isCoordinatingUnit,
+      is_newsletter_subscribed: isSubscribedToNewsletter,
     };
 
     axios
@@ -128,6 +130,21 @@ const RegistrationPage = () => {
                           style={{ maxWidth: "400px", fontWeight: "lighter" }}
                         >
                           Zarejestruj mnie jako jednostkę koordynującą.
+                        </Typography>
+                      }
+                    />
+                  </div>
+
+                  <div className="checkbox">
+                    <FormControlLabel
+                      control={<Checkbox />}
+                      style={{ margin: "15px" }}
+                      onChange={(e) => setSubscribedToNewsletter(e.target.checked)}
+                      label={
+                        <Typography
+                          style={{ maxWidth: "400px", fontWeight: "lighter" }}
+                        >
+                          Chcę otrzymywać na podany adres e-mail informacje o nadchodzących konkursach.
                         </Typography>
                       }
                     />
