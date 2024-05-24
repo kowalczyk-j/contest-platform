@@ -40,7 +40,6 @@ function EditContestPage() {
   const handleFormSubmit = async (formData) => {
     let contestResponse;
 
-    // Return the promise chain so that the calling function can await it
     return axios
       .put(
         `${import.meta.env.VITE_API_URL}api/contests/${contestId}/`,
