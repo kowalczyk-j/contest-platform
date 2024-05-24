@@ -141,7 +141,7 @@ const LoginPage = () => {
                     open={openPopup}
                     setOpen={setOpenPopup}
                     title={
-                      loginError ? "Logowanie nieudane" : "Pomyślnie zalogwano"
+                      loginError ? "Logowanie nieudane" : "Pomyślnie zalogowano"
                     }
                     message={loginError ? loginErrorMessage : null}
                     onConfirm={() =>
