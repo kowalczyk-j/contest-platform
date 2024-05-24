@@ -45,7 +45,7 @@ export default function EmailForm() {
       .catch((error) => console.error("Error fetching data: ", error));
     // REQ_05
     axios
-      .get(`${import.meta.env.VITE_API_URL}api/users/emails/`, {
+      .get(`${import.meta.env.VITE_API_URL}api/users/emails_subscribed/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Token " + sessionStorage.getItem("accessToken"),
@@ -94,11 +94,9 @@ export default function EmailForm() {
     const emailSubject = `Zaproszenie do udziału w konkursie "${contest.title}"`;
     const emailMessage = `Szanowni Państwo,
 
-Zapraszamy serdecznie do wzięcia udziału w konkursie "${
-      contest.title
-    }" organizowanym przez Fundację "BoWarto". Konkurs ${
-      contest.individual ? "indywidualny" : "zespołowy"
-    } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
+Zapraszamy serdecznie do wzięcia udziału w konkursie "${contest.title
+      }" organizowanym przez Fundację "BoWarto". Konkurs ${contest.individual ? "indywidualny" : "zespołowy"
+      } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
 
 Opis:
 ${contest.description}
