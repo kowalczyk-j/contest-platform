@@ -185,6 +185,13 @@ Aby uruchomić kontener, dostosuj ustawienia bazy danych do hosta, który jest d
          }
       }
    ```
+Dostosuj także ustawienia frontendu, dodając flagę w pliku `contest-platform/frontend/package.json`:
+```json
+"scripts": {
+    "dev": "vite --host 0.0.0.0",
+
+}
+```
 Następnie zbuduj obrazy i uruchom kontenery z katalogu głównego projektu (zaleca się przy włączonym Docker Desktop) za pomocą komendy:
 ```bash
    docker-compose up --build
