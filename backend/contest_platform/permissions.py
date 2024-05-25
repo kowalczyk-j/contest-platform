@@ -67,6 +67,8 @@ class ContestPermission(permissions.BasePermission):
             "group_individual_comp",
             "get_submissions_by_day",
             "get_entry_amount",
+            "generate_certificate",
+            "send_certificates",
         ]:
             return True
         elif view.action == "create":
@@ -96,6 +98,8 @@ class ContestPermission(permissions.BasePermission):
             "group_individual_comp",
             "get_submissions_by_day",
             "get_entry_amount",
+            "generate_certificate",
+            "send_certificates",
         ]:
             return request.user.is_authenticated and (
                 request.user.is_staff or request.user.is_jury

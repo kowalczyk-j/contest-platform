@@ -12,6 +12,7 @@ import EmailForm from "./EmailForm";
 import UsersListPage from "./UsersListPage";
 import UserEntries from "./UserEntries";
 import EntryWorkView from "./EntryWorkView";
+import CertificateForm from "./CertificateForm";
 import EditContestPage from "./EditContestPage";
 import ContestStats from "./ContestStats";
 
@@ -65,6 +66,14 @@ function App() {
           element={
             <PrivateRoute forStaff={true}>
               <ContestStats />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/contest/:contestId/certificates"
+          element={
+            <PrivateRoute forStaff={true}>
+              <CertificateForm />
             </PrivateRoute>
           }
         />

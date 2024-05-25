@@ -1,6 +1,5 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
 from .models import (
     Address,
     GradeCriterion,
@@ -31,7 +30,7 @@ from .permissions import (
     GradePermissions,
     SchoolPermission
 )
-from .tasks import send_email_task
+from .tasks import send_email_task, send_certificate_task
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -40,6 +39,10 @@ from django.conf import settings
 from .csv_import.import_schools_csv import upload_schools_data
 from rest_framework.decorators import api_view
 from datetime import date, timedelta
+from django.http import HttpResponse
+from weasyprint import HTML
+from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404
 
 
 class Logout(GenericAPIView):
@@ -58,6 +61,8 @@ class ContestViewSet(ModelViewSet):
     serializer_class = ContestSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [ContestPermission]
+    certificate_template_path = 'certificate.html'
+    default_achievement = "za udział"
 
     @action(detail=True, methods=["get"])
     def max_rating_sum(self, request, pk=None):
@@ -66,10 +71,94 @@ class ContestViewSet(ModelViewSet):
         related to the contest.
         """
         contest = self.get_object()
-        total_max_rating = GradeCriterion.objects.filter(contest=contest).aggregate(
+        total_max_rating = GradeCriterion.objects.filter(
+            contest=contest).aggregate(
             Sum("max_rating")
         )["max_rating__sum"]
         return Response({"total_max_rating": total_max_rating or 0})
+
+    def generate_pdf(self, data):
+        html_string = render_to_string(self.certificate_template_path, data)
+        html = HTML(string=html_string)
+        pdf = html.write_pdf()
+        return pdf
+
+    @action(detail=True, methods=['post'], url_path='send_certificates')
+    def send_certificates(self, request, pk=None):
+        if pk is None:
+            return Response(
+                {"error": "No contest id given"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        contest = get_object_or_404(Contest, pk=pk)
+        entries = Entry.objects.filter(contest_id=contest.id)
+        signatory = request.data.get('signatory', '')
+        signature = request.data.get('signature', '')
+        user_details = entries.values_list(
+            'user__first_name',
+            'user__last_name',
+            'user__email'
+        ).distinct()
+
+        for first_name, last_name, email in user_details:
+            pdf = self.generate_pdf(
+                data={
+                    'participant': f"{first_name} {last_name}",
+                    'achievement': self.default_achievement,
+                    'email': email,
+                    'signatory': signatory,
+                    'signature': signature,
+                    'contest': contest.description,
+                }
+            )
+
+            subject = "Twój certyfikat"
+            message = "Dziękujemy za udział!."
+            send_certificate_task(
+                subject,
+                message,
+                first_name,
+                last_name,
+                email,
+                pdf
+            )
+
+        return Response({"status": "certificates sent"})
+
+    @action(detail=False, methods=["get"], url_path='certificate')
+    def generate_certificate(self, request):
+        participant = request.query_params.get("participant", None)
+        achievement = request.query_params.get("achievement", None)
+        signature = request.query_params.get("signature", None)
+        signatory = request.query_params.get("signatory", None)
+        contest = request.query_params.get("contest", None)
+        if not all([participant,  achievement, signature, signatory, contest]):
+            errormsg = "All parameters (participant, achievement, "
+            errormsg += "signature, signatory) are required."
+            return Response(
+                {"error": errormsg},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            "participant": participant,
+            "achievement": achievement,
+            "signature": signature,
+            "signatory": signatory,
+            "contest": contest
+        }
+
+        try:
+            pdf = self.generate_pdf(data)
+        except Exception as e:
+            errormsg = "Exception while rendering"
+            errormsg += " certificate. Conntact administrator: " + e
+            return Response(
+                {"error": errormsg},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="diploma.pdf"'
+        return HttpResponse(pdf, content_type='application/pdf')
 
     # REQ_17
     @action(detail=False, methods=["post"])
