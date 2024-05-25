@@ -13,6 +13,7 @@ import UsersListPage from "./UsersListPage";
 import UserEntries from "./UserEntries";
 import EntryWorkView from "./EntryWorkView";
 import EditContestPage from "./EditContestPage";
+import ContestStats from "./ContestStats";
 
 function App() {
   return (
@@ -56,6 +57,14 @@ function App() {
           element={
             <PrivateRoute forStaff={true}>
               <EmailForm />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/contest/:contestId/stats"
+          element={
+            <PrivateRoute forStaff={true}>
+              <ContestStats />
             </PrivateRoute>
           }
         />

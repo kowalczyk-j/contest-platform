@@ -21,9 +21,7 @@ class EntryPermissionTest(TestCase):
         )
         self.token = Token.objects.create(user=self.user)
         self.contest = Contest.objects.create(title="Test Contest")
-        self.entry = Entry.objects.create(
-            user=self.user, contest=self.contest
-        )
+        self.entry = Entry.objects.create(user=self.user, contest=self.contest)
         self.grade_criterion = GradeCriterion.objects.create(
             contest=self.contest, max_rating=100
         )
@@ -50,9 +48,7 @@ class EntryPermissionTest(TestCase):
         self.assertFalse(permission.has_permission(request, view))
 
     def test_has_permission_create_action_authenticated_user(self):
-        request = self.factory.post(
-            "/api/entries/", {"user": self.user.id}
-        )
+        request = self.factory.post("/api/entries/", {"user": self.user.id})
         request.user = self.user
         force_authenticate(request, user=self.user)
         view = EntryViewSet()
@@ -71,11 +67,7 @@ class EntryPermissionTest(TestCase):
         view.action = "retrieve"
         permission = EntryPermission()
 
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.entry
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.entry))
 
     def test_has_object_permission_retrieve_action_unauthorized(self):
         request = self.factory.get(f"/api/entries/{self.entry.id}/")
@@ -89,11 +81,7 @@ class EntryPermissionTest(TestCase):
         view.action = "retrieve"
         permission = EntryPermission()
 
-        self.assertFalse(
-            permission.has_object_permission(
-                request, view, self.entry
-            )
-        )
+        self.assertFalse(permission.has_object_permission(request, view, self.entry))
 
     def test_has_object_permission_retrieve_action_authorised(self):
         request = self.factory.get(f"/api/entries/{self.entry.id}/")
@@ -107,8 +95,4 @@ class EntryPermissionTest(TestCase):
         view.action = "retrieve"
         permission = EntryPermission()
 
-        self.assertTrue(
-            permission.has_object_permission(
-                request, view, self.entry
-            )
-        )
+        self.assertTrue(permission.has_object_permission(request, view, self.entry))

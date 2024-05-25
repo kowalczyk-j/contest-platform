@@ -35,12 +35,11 @@ from .tasks import send_email_task
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Sum
-from django.core.mail import send_mail
+from django.db.models import Sum, Count, Case, When
+from django.conf import settings
 from .csv_import.import_schools_csv import upload_schools_data
-
 from rest_framework.decorators import api_view
-from datetime import date
+from datetime import date, timedelta
 
 
 class Logout(GenericAPIView):
@@ -77,15 +76,15 @@ class ContestViewSet(ModelViewSet):
     def send_email(self, request, pk=None):
         subject = request.data.get("subject")
         message = request.data.get("message")
-        receivers = [
-            receiver["email"] for receiver in request.data.get("receivers")
-        ]  # Selected mailing list passed in form
+        host_email = settings.EMAIL_HOST_USER
 
-        send_email_task(
-            subject,
-            message,
-            receivers,
-        )
+        # Create message list for send_mass_mail as specified in the documentation for send_mass_mail
+        messages = [
+            (subject, message, host_email, [receiver["email"]])
+            for receiver in request.data.get("receivers")
+        ]
+
+        send_email_task(messages)
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
 
@@ -115,6 +114,74 @@ class ContestViewSet(ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Contest.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=["get"])
+    def get_contestants_amount(self, request, pk=None):
+        """
+        Returns all contestants for the current contest.
+        """
+        contest = self.get_object()
+        entries = Entry.objects.filter(contest=contest)
+        total_contestants = sum(entry.contestants.all().count() for entry in entries)
+        return Response(
+            {"contestant_amount": total_contestants}, status=status.HTTP_200_OK
+        )
+
+    @action(detail=True, methods=["get"])
+    def get_entry_amount(self, request, pk=None):
+        contest = self.get_object()
+        entry_amount = Entry.objects.filter(contest=contest).count()
+        return Response({"entry_amount": entry_amount})
+
+    @action(detail=True, methods=["get"])
+    def group_individual_comp(self, request, pk=None):
+        """
+        Returns plot data to compare the amount of group and individual submissions
+        """
+        contest = self.get_object()
+        entries = Entry.objects.filter(contest=contest).annotate(
+            num_contestants=Count("contestants")
+        )
+        group_entries = entries.filter(num_contestants__gt=1).count()
+        solo_entries = entries.count() - group_entries
+
+        return Response({"solo_entries": solo_entries, "group_entries": group_entries}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["get"])
+    def get_submissions_by_day(self, request, pk=None):
+        """
+        Returns data for the amount of submissions on each day of contest
+        """
+        contest = self.get_object()
+
+        def generate_date_range(start_date, end_date): # possibly move to separate utilities
+            current_date = start_date
+            while current_date <= end_date:
+                yield current_date
+                current_date += timedelta(days=1)
+
+        start_date = contest.date_start
+        end_date = contest.date_end
+
+        daily_entries = (
+            Entry.objects.filter(
+                contest=contest,
+                date_submitted__gte=contest.date_start,
+                date_submitted__lte=contest.date_end,
+            )
+            .values("date_submitted")
+            .annotate(entry_count=Count("id"))
+        )
+        daily_entries_dict = {entry["date_submitted"]: entry["entry_count"] for entry in daily_entries}
+
+        all_daily_entries = []
+        for date in generate_date_range(start_date, end_date):
+            all_daily_entries.append({"date_submitted": date, "entry_count": daily_entries_dict.get(date, 0)})
+
+        return Response({"daily_entries": all_daily_entries}, status=status.HTTP_200_OK)
+
+    # Endpoints:
+    # total submissions - exists already probably
 
 
 class PersonViewSet(ModelViewSet):
@@ -170,8 +237,16 @@ class GradeViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def to_evaluate(self, request):
         user = request.user
-        queryset_criterion = GradeCriterion.objects.all().filter(user=user)
-        qs = [grade for grade in self.queryset if grade.criterion in queryset_criterion]
+        contest_id = request.query_params.get('contestId', None)
+        if contest_id is None:
+            return Response({'error': 'contestId parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            contest_id = int(contest_id)
+        except ValueError:
+            return Response({'error': 'contestId must be an integer.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        queryset_criterion = GradeCriterion.objects.filter(user=user, contest=contest_id)
+        qs = self.get_queryset().filter(criterion__in=queryset_criterion)
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
 
@@ -243,4 +318,3 @@ def import_schools(request):
         return Response(
             {"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
         )
-

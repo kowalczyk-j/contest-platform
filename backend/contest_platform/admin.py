@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import (Contest, User, GradeCriterion, Address, Entry, Person,
-                     Grade, School)
+from .models import Contest, User, GradeCriterion, Address, Entry, Person, Grade, School
 
 # Register your models here.
 

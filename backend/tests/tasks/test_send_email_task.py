@@ -51,7 +51,7 @@ class SendEmailTest(DramatiqTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            len(mail.outbox[0].recipients()),
+            len(mail.outbox),
             len(self.request_params["data"]["receivers"]),
         )
         self.assertEqual(mail.outbox[0].subject, "Test")

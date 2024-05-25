@@ -7,16 +7,11 @@ from django.db import models
 
 
 class UserPermission(permissions.BasePermission):
-    def has_permission(
-        self, request: Request, view: GenericAPIView
-    ) -> bool:
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
         if view.action == "create":
             return True
         if view.action == "list":
-            return (
-                request.user.is_authenticated
-                and request.user.is_staff
-            )
+            return request.user.is_authenticated and request.user.is_staff
         elif view.action in [
             "retrieve",
             "update",
@@ -44,7 +39,7 @@ class UserPermission(permissions.BasePermission):
             "update",
             "partial_update",
             "current_user",
-            "jury_users"
+            "jury_users",
         ]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
@@ -55,9 +50,7 @@ class UserPermission(permissions.BasePermission):
 
 
 class ContestPermission(permissions.BasePermission):
-    def has_permission(
-        self, request: Request, view: GenericAPIView
-    ) -> bool:
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
         if view.action in [
             "list",
             "max_rating_sum",
@@ -69,13 +62,14 @@ class ContestPermission(permissions.BasePermission):
             "send_email",
             "current_contests",
             "delete_with_related"
+            "get_contestants_amount",
+            "group_individual_comp",
+            "get_submissions_by_day",
+            "get_entry_amount",
         ]:
             return True
         elif view.action == "create":
-            return (
-                request.user.is_authenticated
-                and request.user.is_staff
-            )
+            return request.user.is_authenticated and request.user.is_staff
         else:
             return False
 
@@ -97,6 +91,10 @@ class ContestPermission(permissions.BasePermission):
             "partial_update",
             "destroy",
             "max_rating_sum",
+            "get_contestants_amount",
+            "group_individual_comp",
+            "get_submissions_by_day",
+            "get_entry_amount",
         ]:
             return request.user.is_authenticated and (
                 request.user.is_staff or request.user.is_jury
@@ -106,9 +104,7 @@ class ContestPermission(permissions.BasePermission):
 
 
 class EntryPermission(permissions.BasePermission):
-    def has_permission(
-        self, request: Request, view: GenericAPIView
-    ) -> bool:
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
         if view.action == "list":
             # VUNERABILITY HERE, TODO FIX, DONT ALLOW USERS TO LIST ALL ENTRIES
             # JUST THEIR OWN ENTRIES, but this requires to rebuild the frontend
@@ -144,18 +140,13 @@ class EntryPermission(permissions.BasePermission):
                 or request.user.is_jury
             )
         if view.action in ["destroy"]:
-            return (
-                request.user.is_authenticated
-                and request.user.is_staff
-            )
+            return request.user.is_authenticated and request.user.is_staff
         else:
             return False
 
 
 class GradeCriterionPermissions(permissions.BasePermission):
-    def has_permission(
-        self, request: Request, view: GenericAPIView
-    ) -> bool:
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
         if view.action in [
             "retrieve",
             "update",
@@ -164,10 +155,7 @@ class GradeCriterionPermissions(permissions.BasePermission):
         ]:
             return request.user.is_authenticated
         elif view.action in ["list", "create"]:
-            return (
-                request.user.is_authenticated
-                and request.user.is_staff
-            )
+            return request.user.is_authenticated and request.user.is_staff
         else:
             return False
 
@@ -186,15 +174,13 @@ class GradeCriterionPermissions(permissions.BasePermission):
 
 
 class GradePermissions(permissions.BasePermission):
-    def has_permission(
-        self, request: Request, view: GenericAPIView
-    ) -> bool:
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
         if view.action in [
             "retrieve",
             "update",
             "partial_update",
             "destroy",
-            "to_evaluate"
+            "to_evaluate",
         ]:
             return request.user.is_authenticated
         elif view.action == "list":
@@ -202,10 +188,7 @@ class GradePermissions(permissions.BasePermission):
                 request.user.is_staff or request.user.is_jury
             )
         elif view.action == "create":
-            return (
-                request.user.is_authenticated
-                and request.user.is_staff
-            )
+            return request.user.is_authenticated and request.user.is_staff
         else:
             return False
 

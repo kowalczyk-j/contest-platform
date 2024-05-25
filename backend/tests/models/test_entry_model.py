@@ -21,9 +21,7 @@ class EntryModelTest(TestCase):
             rules_pdf="https://rules.pdf",
             poster_img="https://poster.jpg",
         )
-        self.person = Person.objects.create(
-            name="John", surname="Doe"
-        )
+        self.person = Person.objects.create(name="John", surname="Doe")
         self.entry_data = {
             "contest": self.contest,
             "user": self.user,
@@ -49,15 +47,11 @@ class EntryModelTest(TestCase):
         self.assertEqual(entry.date_submitted, date.today())
         self.assertEqual(entry.entry_title, "Test Entry")
         self.assertEqual(entry.email, "test@example.com")
-        self.assertEqual(
-            entry.entry_file, "https://example.com/test-entry-file"
-        )
+        self.assertEqual(entry.entry_file, "https://example.com/test-entry-file")
         self.assertEqual(list(entry.contestants.all()), [self.person])
 
     def test_entry_file_field_null(self):
-        entry = Entry.objects.create(
-            **self.entry_data_no_file, entry_file=None
-        )
+        entry = Entry.objects.create(**self.entry_data_no_file, entry_file=None)
         self.assertIsNone(entry.entry_file)
 
     def test_entry_contestants_field(self):
