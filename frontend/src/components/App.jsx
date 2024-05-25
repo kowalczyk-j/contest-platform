@@ -15,6 +15,7 @@ import EntryWorkView from "./EntryWorkView";
 import CertificateForm from "./CertificateForm";
 import EditContestPage from "./EditContestPage";
 import ContestStats from "./ContestStats";
+import GradeEntryView from "./GradeEntryView";
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
         <Route path="/" element={<ContestListPage />} />
         <Route path="/create-contest" element={<CreateContestPage />} />
         <Route path="/edit-contest/:contestId" element={<EditContestPage />} />
-        <Route path="/grade-entry/:entryId" element={<GradeEntry />} />
+        <Route path="/grade-entry-rate/:entryId" element={<GradeEntry />} />
+        <Route path="/grade-entry-view/:entryId" element={<GradeEntryView />} />
         <Route
           path="/create-entry/:contestId"
           element={

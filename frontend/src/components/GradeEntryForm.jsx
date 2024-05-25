@@ -18,6 +18,7 @@ function GradeEntryForm({
   entryFile,
   gradesAndCriterions,
   handleGradeUpload,
+  viewConfirmation
 }) {
   const [updatedGradesAndCriterions, setUpdatedGradesAndCriterions] =
     useState(gradesAndCriterions);
@@ -86,14 +87,17 @@ function GradeEntryForm({
             setUpdatedGradesAndCriterions
             onGradeChange={(value) => handleGradeChange(index, value)}
             onCommentChange={(text) => handleCommentChange(index, text)}
+            viewConfirmation={viewConfirmation}
           />
         ))}
 
-        <SubmitButton
-          className="grade-entry-card-commit-button"
-          text="Zatwierdź ocenę"
-          onClick={handleGradeUploadClick}
-        />
+        {viewConfirmation && (
+          <SubmitButton
+            className="grade-entry-card-commit-button"
+            text="Zatwierdź ocenę"
+            onClick={handleGradeUploadClick}
+          />
+        )}
       </div>
     </>
   );
