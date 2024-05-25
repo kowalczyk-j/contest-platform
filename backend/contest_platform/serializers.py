@@ -26,6 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_jury",
             "is_coordinating_unit",
             "is_superuser",
+            "is_newsletter_subscribed",
             "is_active",
             "date_joined",
         ]
@@ -38,6 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
             username=validated_data["username"],
             email=validated_data["email"],
             is_coordinating_unit=validated_data["is_coordinating_unit"],
+            is_newsletter_subscribed=validated_data["is_newsletter_subscribed"],
         )
         user.set_password(validated_data["password"])
         user.save()

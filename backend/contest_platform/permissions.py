@@ -19,6 +19,7 @@ class UserPermission(permissions.BasePermission):
             "destroy",
             "current_user",
             "emails",
+            "emails_subscribed",
             "jury_users",
         ]:
             return True
@@ -43,7 +44,7 @@ class UserPermission(permissions.BasePermission):
         ]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
-        elif view.action in ["destroy", "emails"]:
+        elif view.action in ["destroy", "emails", "emails_subscribed",]:
             return request.user.is_staff
         else:
             return False
@@ -61,6 +62,7 @@ class ContestPermission(permissions.BasePermission):
             "entries",
             "send_email",
             "current_contests",
+            "delete_with_related"
             "get_contestants_amount",
             "group_individual_comp",
             "get_submissions_by_day",
@@ -82,8 +84,11 @@ class ContestPermission(permissions.BasePermission):
     ) -> bool:
         if view.action == "retrieve":
             return True
-        elif view.action == "send_email":
-            return request.user.is_authenticated and request.user.is_staff
+        elif view.action in ["send_email", "delete_with_related"]:
+            return (
+                request.user.is_authenticated
+                and request.user.is_staff
+            )
         elif view.action in [
             "update",
             "partial_update",
@@ -225,6 +230,7 @@ class SchoolPermission(permissions.BasePermission):
             "partial_update",
             "destroy",
             "emails",
+            "emails_subscribed",
         ]:
             return True
         else:
@@ -245,7 +251,7 @@ class SchoolPermission(permissions.BasePermission):
             "partial_update",
         ]:
             return request.user.is_staff
-        elif view.action in ["destroy", "emails"]:
+        elif view.action in ["destroy", "emails", "emails_subscribed"]:
             return request.user.is_staff
         else:
             return False

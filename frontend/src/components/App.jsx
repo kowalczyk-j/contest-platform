@@ -13,6 +13,7 @@ import UsersListPage from "./UsersListPage";
 import UserEntries from "./UserEntries";
 import EntryWorkView from "./EntryWorkView";
 import CertificateForm from "./CertificateForm";
+import EditContestPage from "./EditContestPage";
 import ContestStats from "./ContestStats";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ContestListPage />} />
         <Route path="/create-contest" element={<CreateContestPage />} />
+        <Route path="/edit-contest/:contestId" element={<EditContestPage />} />
         <Route path="/grade-entry/:entryId" element={<GradeEntry />} />
         <Route
           path="/create-entry/:contestId"
