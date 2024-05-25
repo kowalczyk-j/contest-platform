@@ -35,7 +35,7 @@ from .tasks import send_email_task
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Sum, Count, Case, When
+from django.db.models import Sum, Count
 from django.conf import settings
 from .csv_import.import_schools_csv import upload_schools_data
 from rest_framework.decorators import api_view
@@ -72,7 +72,7 @@ class ContestViewSet(ModelViewSet):
         return Response({"total_max_rating": total_max_rating or 0})
 
     # REQ_17
-    @action(detail=True, methods=["post"])
+    @action(detail=False, methods=["post"])
     def send_email(self, request, pk=None):
         subject = request.data.get("subject")
         message = request.data.get("message")
@@ -84,7 +84,7 @@ class ContestViewSet(ModelViewSet):
             for receiver in request.data.get("receivers")
         ]
 
-        send_email_task(messages)
+        send_email_task.send(messages)
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
 
@@ -102,6 +102,18 @@ class ContestViewSet(ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    @action(detail=True, methods=['delete'], url_path='delete_with_related')
+    def delete_with_related(self, request, pk=None):
+        try:
+            contest = self.get_object()
+            Grade.objects.filter(entry__contest=contest).delete()
+            Entry.objects.filter(contest=contest).delete()
+            GradeCriterion.objects.filter(contest=contest).delete()
+            contest.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Contest.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=True, methods=["get"])
     def get_contestants_amount(self, request, pk=None):
@@ -282,7 +294,6 @@ class UserViewSet(ModelViewSet):
         jury_users = self.queryset.filter(is_jury=True)
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
-
 
 # REQ_06B_END
 

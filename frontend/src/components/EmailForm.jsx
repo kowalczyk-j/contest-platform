@@ -70,7 +70,7 @@ export default function EmailForm() {
     event.preventDefault();
     axios
       .post(
-        `${import.meta.env.VITE_API_URL}api/contests/1/send_email/`,
+        `${import.meta.env.VITE_API_URL}api/contests/send_email/`,
         emailData,
         {
           headers: {
