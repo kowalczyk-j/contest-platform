@@ -16,6 +16,7 @@ import { styled } from "@mui/material/styles";
 import axios from "axios";
 import Navbar from "./Navbar.jsx";
 import TextButton from "./buttons/TextButton";
+import ConfirmationWindow from "./ConfirmationWindow";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
@@ -51,6 +52,10 @@ const ContestIndexPage = () => {
   const [selectedContest, setSelectedContest] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [userData, setUserData] = useState({});
+  const [openPopUpBeforeDelete, setOpenPopUpBeforeDelete] = useState(false);
+  const [contestToDelete, setContestToDelete] = useState(null);
+  const [openPopUpAfterDelete, setOpenPopUpAfterDelete] = useState(false);
+  const [reviewDeleteErrorMessage, setReviewDeleteErrorMessage] = useState("");
   const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -95,6 +100,48 @@ const ContestIndexPage = () => {
 
   const handleModalClose = () => {
     setModalOpen(false);
+  };
+
+  const openConfirmationDialog = (contest) => {
+    setContestToDelete(contest);
+    setOpenPopUpBeforeDelete(true);
+  };
+
+  const handleClosePopUpAfterDelete = () => {
+    setOpenPopUpAfterDelete(false);
+    if (reviewDeleteErrorMessage === "") {
+      setModalOpen(false);
+    } else {
+      setReviewDeleteErrorMessage("");
+    }
+  };
+
+  const handleDeleteContest = async () => {
+    if (!contestToDelete) return;
+
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}api/contests/${
+          contestToDelete.id
+        }/delete_with_related/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + accessToken,
+          },
+        }
+      );
+
+      setContests(
+        contests.filter((contest) => contest.id !== contestToDelete.id)
+      );
+      setOpenPopUpBeforeDelete(false);
+      setOpenPopUpAfterDelete(true);
+    } catch (error) {
+      console.error(error);
+      setReviewDeleteErrorMessage(JSON.stringify(error.response.data, null, 2));
+      setOpenPopUpAfterDelete(true);
+    }
   };
 
   return (
@@ -307,12 +354,43 @@ const ContestIndexPage = () => {
               </GreenButton>
             </Link>
           )}
+          {userData.is_staff && (
+            <GreenButton
+              onClick={() => openConfirmationDialog(selectedContest)}
+            >
+              <Typography align="center" style={{ color: "white" }}>
+                Usuń
+              </Typography>
+            </GreenButton>
+          )}
           {/* # REQ_21_END */}
           <GreenButton onClick={handleModalClose}>
             <Typography align="center" style={{ color: "white" }}>
               Zamknij
             </Typography>
           </GreenButton>
+          <ConfirmationWindow
+            open={openPopUpBeforeDelete}
+            setOpen={setOpenPopUpBeforeDelete}
+            title="Czy na pewno chcesz usunąć ten konkurs?"
+            message="Spowoduje to usunięcie wszystkich powiązanych zgłoszeń i ich ocen wraz z kryteriami. Ta akcja jest nieodwracalna."
+            onConfirm={handleDeleteContest}
+          />
+          <ConfirmationWindow
+            open={openPopUpAfterDelete}
+            setOpen={setOpenPopUpAfterDelete}
+            title={
+              reviewDeleteErrorMessage
+                ? "Wystąpił błąd przy usuwaniu konkursu"
+                : "Pomyślnie usunięto konkurs"
+            }
+            message={
+              reviewDeleteErrorMessage ||
+              "Zostaniesz przekierowany do strony głównej"
+            }
+            onConfirm={handleClosePopUpAfterDelete}
+            showCancelButton={false}
+          />
         </DialogActions>
       </Dialog>
     </div>

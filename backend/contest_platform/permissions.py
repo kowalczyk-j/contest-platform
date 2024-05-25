@@ -24,7 +24,7 @@ class UserPermission(permissions.BasePermission):
             "destroy",
             "current_user",
             "emails",
-            "jury_users"
+            "jury_users",
         ]:
             return True
         else:
@@ -68,6 +68,7 @@ class ContestPermission(permissions.BasePermission):
             "entries",
             "send_email",
             "current_contests",
+            "delete_with_related"
         ]:
             return True
         elif view.action == "create":
@@ -86,7 +87,7 @@ class ContestPermission(permissions.BasePermission):
     ) -> bool:
         if view.action == "retrieve":
             return True
-        elif view.action == "send_email":
+        elif view.action in ["send_email", "delete_with_related"]:
             return (
                 request.user.is_authenticated
                 and request.user.is_staff
