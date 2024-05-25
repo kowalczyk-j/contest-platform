@@ -62,16 +62,16 @@ class ContestPermission(permissions.BasePermission):
             "entries",
             "send_email",
             "current_contests",
-            "delete_with_related"
             "get_contestants_amount",
             "group_individual_comp",
             "get_submissions_by_day",
             "get_entry_amount",
             "generate_certificate",
             "send_certificates",
+            "delete_with_related",
         ]:
             return True
-        elif view.action == "create":
+        if view.action == "create":
             return request.user.is_authenticated and request.user.is_staff
         else:
             return False

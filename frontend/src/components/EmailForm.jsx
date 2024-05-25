@@ -94,9 +94,11 @@ export default function EmailForm() {
     const emailSubject = `Zaproszenie do udziału w konkursie "${contest.title}"`;
     const emailMessage = `Szanowni Państwo,
 
-Zapraszamy serdecznie do wzięcia udziału w konkursie "${contest.title
-      }" organizowanym przez Fundację "BoWarto". Konkurs ${contest.individual ? "indywidualny" : "zespołowy"
-      } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
+Zapraszamy serdecznie do wzięcia udziału w konkursie "${
+      contest.title
+    }" organizowanym przez Fundację "BoWarto". Konkurs ${
+      contest.individual ? "indywidualny" : "zespołowy"
+    } rozpoczyna się ${contest.date_start} i potrwa do ${contest.date_end}.
 
 Opis:
 ${contest.description}
@@ -164,8 +166,15 @@ Zespół Fundacji "BoWarto"`;
                   label="Receivers"
                   onChange={handleChange}
                 >
-                  <MenuItem value={usersEmails}>Użytkownicy</MenuItem>
-                  <MenuItem value={schoolsEmails}>Szkoły</MenuItem>
+                  {usersEmails.length > 0 && (
+                    <MenuItem value={usersEmails}>Użytkownicy</MenuItem>
+                  )}
+                  {schoolsEmails.length > 0 && (
+                    <MenuItem value={schoolsEmails}>Szkoły</MenuItem>
+                  )}
+                  {usersEmails.length === 0 && schoolsEmails.length === 0 && (
+                    <MenuItem disabled>Brak dostępnych list odbiorców</MenuItem>
+                  )}
                 </Select>
               </FormControl>
               <TextField

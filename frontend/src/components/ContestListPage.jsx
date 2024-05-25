@@ -67,7 +67,7 @@ const ContestIndexPage = () => {
     const headersCurrentUser = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Token " + accessToken,
+        Authorization: "Token " + sessionStorage.getItem("accessToken"),
       },
     };
     axios

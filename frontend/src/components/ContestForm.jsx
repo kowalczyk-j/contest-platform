@@ -179,12 +179,10 @@ function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
         criterion: criteria,
       };
 
-      // Jeśli jesteśmy w trybie edycji, pobieramy identyfikator konkursu
       const contestId = editingMode ? initialData.id : null;
 
-      // Aktualizujemy plakat i regulamin, jeśli są nowe pliki
-      let posterPath = null;
-      let rulesPath = null;
+      let posterPath = initialData.poster_img;
+      let rulesPath = initialData.rules_pdf;
       if (poster instanceof File) {
         posterPath = await uploadFile("posters", poster);
       }
@@ -192,9 +190,8 @@ function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
         rulesPath = await uploadFile("rules", rulesFile);
       }
 
-      // Jeśli jesteśmy w trybie edycji, aktualizujemy dane konkursu
       if (editingMode) {
-        // Aktualizacja istniejącego konkursu
+        // update of existing contest
         const contestResponse = await axios.patch(
           `${import.meta.env.VITE_API_URL}api/contests/${contestId}/`,
           {
@@ -214,7 +211,7 @@ function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
           setOpen(true);
         }
       } else {
-        // Tworzenie nowego konkursu
+        // creating new contest
         const { contestResponse, criterionResponse } = await onSubmit(data);
 
         if (
@@ -395,7 +392,7 @@ function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
         </div>
       ) : (
         <div className="criteria">
-          <Typography variant="body1" style={{ fontWeight: "lighter" }}>
+          <Typography variant="body1" style={{ fontWeight: "bold" }}>
             Kryteria oceny:
           </Typography>
           {criteriaComponents}
