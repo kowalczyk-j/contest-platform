@@ -22,19 +22,39 @@ import FileUploadButton from "./FileUploadButton";
 import { uploadFile } from "./uploadFile";
 import ConfirmationWindow from "./ConfirmationWindow";
 
-function ContestForm({ onSubmit }) {
+function ContestForm({ initialData = {}, editingMode = false, onSubmit }) {
   const navigate = useNavigate();
 
-  // contest data
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [dateStart, setDateStart] = useState(dayjs().format("YYYY-MM-DD"));
-  const [dateEnd, setDateEnd] = useState(dayjs().format("YYYY-MM-DD"));
-  const [individual, setIndividual] = useState("");
-  const [type, setType] = useState("");
-  const [otherType, setOtherType] = useState("");
-  const [status, setStatus] = useState("not_started");
-  // contest grade criteria
+  const [title, setTitle] = useState(initialData.title || "");
+  const [description, setDescription] = useState(initialData.description || "");
+  const [dateStart, setDateStart] = useState(
+    dayjs(initialData.date_start) || dayjs().format("YYYY-MM-DD")
+  );
+  const [dateEnd, setDateEnd] = useState(
+    dayjs(initialData.date_end) || dayjs().format("YYYY-MM-DD")
+  );
+  const [individual, setIndividual] = useState(
+    initialData.individual ? "1" : "0"
+  );
+  const [type, setType] = useState(
+    initialData.type === "plastyczne" || initialData.type === "literackie"
+      ? initialData.type
+      : "inne"
+  );
+
+  const [otherType, setOtherType] = useState(
+    initialData.type !== "plastyczne" && initialData.type !== "literackie"
+      ? initialData.type
+      : ""
+  );
+  const [status, setStatus] = useState(initialData.status || "not_started");
+  const statusChoices = {
+    not_started: "Nierozpoczęty",
+    ongoing: "W trakcie trwania",
+    judging: "W trakcie oceny",
+    finished: "Zakończony",
+  };
+
   const [criteria, setCriteria] = useState([
     { contest: "", description: "", maxRating: "", user: "" },
   ]);
@@ -114,8 +134,10 @@ function ContestForm({ onSubmit }) {
   };
 
   // file uploads
-  const [poster, setPoster] = React.useState(null);
-  const [posterText, setPosterText] = React.useState("Nie załączono plakatu");
+  const [poster, setPoster] = React.useState(initialData.poster_img);
+  const [posterText, setPosterText] = React.useState(
+    initialData.poster_img ? "Załączono plakat" : "Nie załączono plakatu"
+  );
   const handlePosterChange = (event) => {
     const file = event.target.files[0];
     setPoster(file);
@@ -125,8 +147,10 @@ function ContestForm({ onSubmit }) {
   };
 
   // # REQ_11
-  const [rulesFile, setRulesFile] = React.useState(null);
-  const [rulesText, setRulesText] = React.useState("Nie załączono regulaminu");
+  const [rulesFile, setRulesFile] = React.useState(initialData.rules_pdf);
+  const [rulesText, setRulesText] = React.useState(
+    initialData.rules_pdf ? "Załączono regulamin" : "Nie załączono regulaminu"
+  );
   const handleRulesFileChange = (event) => {
     const file = event.target.files[0];
     setRulesFile(file);
@@ -142,54 +166,85 @@ function ContestForm({ onSubmit }) {
     if (type === "inne") {
       finalType = otherType;
     }
-    const today = dayjs().format("YYYY-MM-DD");
-    const contestStatus = dateStart === today ? "ongoing" : "not_started";
 
     try {
-      const { contestResponse, criterionResponse } = await onSubmit({
+      const data = {
         title,
         description,
-        date_start: dateStart,
-        date_end: dateEnd,
+        date_start: dateStart.format("YYYY-MM-DD"),
+        date_end: dateEnd.format("YYYY-MM-DD"),
         individual,
         type: finalType,
+        status,
         criterion: criteria,
-        status: contestStatus,
-      });
-      if (
-        contestResponse.status === 201 &&
-        criterionResponse.every((response) => response.status === 201)
-      ) {
-        setOpen(true);
-        // if contest is added succesfully, selected files are uploaded to cloud storage
-        let posterPath = null;
-        if (poster) {
-          posterPath = await uploadFile("posters", poster);
-        }
-        let rulesPath = null;
-        if (rulesFile) {
-          rulesPath = await uploadFile("rules", rulesFile);
-        }
-        await axios
-          .patch(
-            `${import.meta.env.VITE_API_URL}api/contests/${
-              contestResponse.data.id
-            }/`,
-            {
-              poster_img: posterPath,
-              rules_pdf: rulesPath,
+      };
+
+      // Jeśli jesteśmy w trybie edycji, pobieramy identyfikator konkursu
+      const contestId = editingMode ? initialData.id : null;
+
+      // Aktualizujemy plakat i regulamin, jeśli są nowe pliki
+      let posterPath = null;
+      let rulesPath = null;
+      if (poster instanceof File) {
+        posterPath = await uploadFile("posters", poster);
+      }
+      if (rulesFile instanceof File) {
+        rulesPath = await uploadFile("rules", rulesFile);
+      }
+
+      // Jeśli jesteśmy w trybie edycji, aktualizujemy dane konkursu
+      if (editingMode) {
+        // Aktualizacja istniejącego konkursu
+        const contestResponse = await axios.patch(
+          `${import.meta.env.VITE_API_URL}api/contests/${contestId}/`,
+          {
+            ...data,
+            poster_img: posterPath,
+            rules_pdf: rulesPath,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Token " + sessionStorage.getItem("accessToken"),
             },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          }
+        );
+
+        if (contestResponse.status === 200) {
+          setOpen(true);
+        }
+      } else {
+        // Tworzenie nowego konkursu
+        const { contestResponse, criterionResponse } = await onSubmit(data);
+
+        if (
+          contestResponse.status === 201 &&
+          criterionResponse.every((response) => response.status === 201)
+        ) {
+          setOpen(true);
+
+          await axios
+            .patch(
+              `${import.meta.env.VITE_API_URL}api/contests/${
+                contestResponse.data.id
+              }/`,
+              {
+                poster_img: posterPath,
+                rules_pdf: rulesPath,
               },
-            }
-          )
-          .catch((error) => {
-            setErrorMessage(JSON.stringify(error.response.data, null, 2));
-            setOpen(true);
-          });
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization:
+                    "Token " + sessionStorage.getItem("accessToken"),
+                },
+              }
+            )
+            .catch((error) => {
+              setErrorMessage(JSON.stringify(error.response.data, null, 2));
+              setOpen(true);
+            });
+        }
       }
     } catch (error) {
       console.error(error);
@@ -232,24 +287,24 @@ function ContestForm({ onSubmit }) {
             className="date"
             required
             label="Data rozpoczęcia"
-            defaultValue={dayjs()}
+            defaultValue={dateStart}
             format="DD-MM-YYYY"
-            onChange={(date) => setDateStart(date.format("YYYY-MM-DD"))}
+            onChange={(date) => setDateStart(date)}
           />
           <DatePicker
             className="date"
             required
             label="Data zakończenia"
-            defaultValue={dayjs()}
+            defaultValue={dateEnd}
             format="DD-MM-YYYY"
-            onChange={(date) => setDateEnd(date.format("YYYY-MM-DD"))}
+            onChange={(date) => setDateEnd(date)}
           />
         </LocalizationProvider>
       </div>
 
       <div className="contest-type">
         <FormControl component="fieldset" className="flex flex-col space-y-2">
-          <Typography variant="body1" style={{ fontWeight: "lighter" }}>
+          <Typography variant="body1" style={{ fontWeight: "bold" }}>
             Typ konkursu:
           </Typography>
           <RadioGroup
@@ -271,10 +326,9 @@ function ContestForm({ onSubmit }) {
           </RadioGroup>
         </FormControl>
       </div>
-
       <div className="contest-type">
         <FormControl component="fieldset" className="flex flex-col space-y-2">
-          <Typography variant="body1" style={{ fontWeight: "lighter" }}>
+          <Typography variant="body1" style={{ fontWeight: "bold" }}>
             Typ zgłoszeń:
           </Typography>
           <RadioGroup
@@ -284,40 +338,76 @@ function ContestForm({ onSubmit }) {
             name="row-radio-buttons-group"
             value={type}
             onChange={(e) => setType(e.target.value)}
+            className="flex flex-wrap"
           >
             <FormControlLabel
               value="plastyczne"
               control={<Radio />}
-              label="plastyczne"
+              label="plastyczne / fotograficze"
             />
             <FormControlLabel
               value="literackie"
               control={<Radio />}
               label="literackie"
             />
-            <FormControlLabel value="inne" control={<Radio />} label="inne: " />
-            <TextField
-              id="other"
-              size="small"
-              onChange={(e) => setOtherType(e.target.value)}
-            />
+            <div className="flex items-center">
+              <FormControlLabel
+                value="inne"
+                control={<Radio />}
+                label="inne:"
+              />
+              <TextField
+                id="other"
+                size="small"
+                value={otherType}
+                onChange={(e) => setOtherType(e.target.value)}
+                style={{ marginLeft: 8 }}
+              />
+            </div>
           </RadioGroup>
         </FormControl>
       </div>
 
-      <div className="criteria">
-        <Typography variant="body1" style={{ fontWeight: "lighter" }}>
-          Kryteria oceny:
-        </Typography>
-        {criteriaComponents}
-        <TextButton
-          style={{ fontSize: 16, marginTop: "10px" }}
-          startIcon={<AddCircleOutline style={{ color: "#95C21E" }} />}
-          onClick={handleClickAddCriterion}
-        >
-          Dodaj kryterium
-        </TextButton>
-      </div>
+      {editingMode ? (
+        <div className="status" style={{ marginTop: "15px" }}>
+          <FormControl component="fieldset" className="flex flex-col space-y-2">
+            <Typography variant="body1" style={{ fontWeight: "bold" }}>
+              Status konkursu:
+            </Typography>
+            <RadioGroup
+              row
+              aria-label="status"
+              required
+              name="row-radio-buttons-group"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              {Object.entries(statusChoices).map(([key, value]) => (
+                <FormControlLabel
+                  key={key}
+                  value={key}
+                  control={<Radio />}
+                  label={value}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </div>
+      ) : (
+        <div className="criteria">
+          <Typography variant="body1" style={{ fontWeight: "lighter" }}>
+            Kryteria oceny:
+          </Typography>
+          {criteriaComponents}
+          <TextButton
+            style={{ fontSize: 16, marginTop: "10px" }}
+            startIcon={<AddCircleOutline style={{ color: "#95C21E" }} />}
+            onClick={handleClickAddCriterion}
+          >
+            Dodaj kryterium
+          </TextButton>
+        </div>
+      )}
 
       <div className="uploads">
         <div className="rules">
@@ -350,14 +440,17 @@ function ContestForm({ onSubmit }) {
       </div>
 
       <div className="submit">
-        <SubmitButton text="Utwórz konkurs" onClick={() => {}} />
+        <SubmitButton
+          text={editingMode ? "Edytuj konkurs" : "Utwórz konkurs"}
+          onClick={() => {}}
+        />
         <ConfirmationWindow
           open={open}
           setOpen={setOpen}
           title={
             errorMessage
-              ? "Wystąpił błąd przy dodawaniu konkursu"
-              : "Dodano nowy konkurs"
+              ? "Wystąpił błąd przy uzupełnianiu formularza"
+              : "Pomyślnie dodano konkurs"
           }
           message={errorMessage || "Zostaniesz przekierowany do strony głównej"}
           onConfirm={handleClose}

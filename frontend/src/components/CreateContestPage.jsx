@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "reactjs-popup/dist/index.css";
-import Header from "./Header";
 import BackButton from "./buttons/BackButton";
 import ContestForm from "./ContestForm";
 import Navbar from "./Navbar";
@@ -62,7 +61,7 @@ function CreateContestPage() {
       })
       .catch((error) => {
         console.error("Error:", error);
-        throw error; 
+        throw error;
       });
   };
 

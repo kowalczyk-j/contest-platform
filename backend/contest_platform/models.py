@@ -33,15 +33,12 @@ class Contest(models.Model):
 
     def save(self, *args, **kwargs):
         today = timezone.now().date()
-        new_status = self.status
-        if self.date_start <= today < self.date_end and self.status != 'ongoing':
-            new_status = 'ongoing'
-        elif today >= self.date_end and self.status != 'judging':
-            new_status = 'judging'
-
-        if new_status != self.status:
-            self.status = new_status
-            super().save(*args, **kwargs)
+        if self.status != 'finished':
+            if self.date_start <= today < self.date_end and self.status != 'ongoing':
+                self.status = 'ongoing'
+            elif today >= self.date_end and self.status != 'judging':
+                self.status = 'judging'
+        super().save(*args, **kwargs)
 # REQ_09A_END
 
 

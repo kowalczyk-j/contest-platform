@@ -102,6 +102,18 @@ class ContestViewSet(ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    @action(detail=True, methods=['delete'], url_path='delete_with_related')
+    def delete_with_related(self, request, pk=None):
+        try:
+            contest = self.get_object()
+            Grade.objects.filter(entry__contest=contest).delete()
+            Entry.objects.filter(contest=contest).delete()
+            GradeCriterion.objects.filter(contest=contest).delete()
+            contest.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Contest.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=True, methods=["get"])
     def get_contestants_amount(self, request, pk=None):
