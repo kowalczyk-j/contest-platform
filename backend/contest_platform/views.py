@@ -274,10 +274,19 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def emails(self, request):
         """
-        Returns a list of first 500 emails in the database.
+        Returns a list of first 500 emails in the databaser.
         500 is max SMTP gmail daily limit.
         """
         emails = User.objects.values("email")[:500]
+        return Response(emails)
+
+    @action(detail=False, methods=["get"])
+    def emails_subscribed(self, request):
+        """
+        Returns a list of first 500 emails in the database - subscribed to the newsletter.
+        500 is max SMTP gmail daily limit.
+        """
+        emails = User.objects.filter(is_newsletter_subscribed=True).values("email")[:500]
         return Response(emails)
 
     @action(detail=False, methods=["get"])

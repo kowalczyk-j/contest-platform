@@ -66,6 +66,7 @@ class Person(models.Model):
 class User(AbstractUser):
     is_jury = models.BooleanField(default=False)
     is_coordinating_unit = models.BooleanField(default=False)
+    is_newsletter_subscribed = models.BooleanField(default=False)
 
 
 # REQ_06A_END

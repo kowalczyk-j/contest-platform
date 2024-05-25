@@ -45,7 +45,7 @@ export default function EmailForm() {
       .catch((error) => console.error("Error fetching data: ", error));
     // REQ_05
     axios
-      .get(`${import.meta.env.VITE_API_URL}api/users/emails/`, {
+      .get(`${import.meta.env.VITE_API_URL}api/users/emails_subscribed/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Token " + sessionStorage.getItem("accessToken"),

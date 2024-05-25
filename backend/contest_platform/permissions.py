@@ -19,6 +19,7 @@ class UserPermission(permissions.BasePermission):
             "destroy",
             "current_user",
             "emails",
+            "emails_subscribed",
             "jury_users",
         ]:
             return True
@@ -43,7 +44,7 @@ class UserPermission(permissions.BasePermission):
         ]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
-        elif view.action in ["destroy", "emails"]:
+        elif view.action in ["destroy", "emails", "emails_subscribed",]:
             return request.user.is_staff
         else:
             return False
@@ -225,6 +226,7 @@ class SchoolPermission(permissions.BasePermission):
             "partial_update",
             "destroy",
             "emails",
+            "emails_subscribed",
         ]:
             return True
         else:
@@ -245,7 +247,7 @@ class SchoolPermission(permissions.BasePermission):
             "partial_update",
         ]:
             return request.user.is_staff
-        elif view.action in ["destroy", "emails"]:
+        elif view.action in ["destroy", "emails", "emails_subscribed"]:
             return request.user.is_staff
         else:
             return False
