@@ -6,21 +6,26 @@ function GradeCriterionCard({
   grade,
   gradeCriterion,
   onGradeChange,
-  onCommentChange
+  onCommentChange,
+  viewConfirmation
   }) {
   const [selectedValue, setSelectedValue] = useState(grade.value);
   const [textValue, setTextValue] = useState(grade.description);
 
   const handleChange = (event) => {
-    const value = event.target.value;
-    setSelectedValue(value);
-    onGradeChange(value); // Notify the parent component about the grade change
+    if (viewConfirmation) {
+      const value = event.target.value;
+      setSelectedValue(value);
+      onGradeChange(value); // Notify the parent component about the grade change
+    }
   };
 
   const handleTextChange = (event) => {
-    const text = event.target.value;
-    setTextValue(text);
-    onCommentChange(text);
+    if (viewConfirmation) {
+      const text = event.target.value;
+      setTextValue(text);
+      onCommentChange(text);
+    }
   };
 
   return (

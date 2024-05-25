@@ -33,7 +33,7 @@ const GreenButton = styled(Button)({
   },
 });
 
-const GradeEntry = () => {
+const GradeEntryView = () => {
   const [gradesAndCriterions, setGradesAndCriterions] = useState([]);
   const [entry, setEntry] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
@@ -64,7 +64,7 @@ const GradeEntry = () => {
       setEntry(entry);
 
       const gradeResponse = await axios.get(
-        `${import.meta.env.VITE_API_URL}api/grades/to_evaluate/?contestId=${entry.contest}`,
+        `${import.meta.env.VITE_API_URL}api/grades?entry=${entryId}`,
         headers,
       );
       const grades = gradeResponse.data;
@@ -146,34 +146,14 @@ const GradeEntry = () => {
               applicant={entry.user}
               entryFile={entry.entry_file}
               gradesAndCriterions={gradesAndCriterions}
-              handleGradeUpload={handleGradeUpload}
-              viewConfirmation={true}
+              handleGradeUpload={() => { }}
+              viewConfirmation={false}
             />
           )}
         </Grid>
-        <ConfirmationWindow
-          open={openPopup}
-          setOpen={setOpenPopup}
-          title={
-            fetchError
-              ? "Nie udało się pobrać zgłoszenia"
-              : uploadError
-                ? "Nie udało się zapisać ocen"
-                : "Pomyślnie zapisano oceny"
-          }
-          message={
-            fetchError
-              ? fetchErrorMessage
-              : uploadError
-                ? uploadErrorMessage
-                : null
-          }
-          onConfirm={() => setOpenPopup(false)}
-          showCancelButton={false}
-        />
       </div>
     </ThemeProvider>
   );
 };
 
-export default GradeEntry;
+export default GradeEntryView;

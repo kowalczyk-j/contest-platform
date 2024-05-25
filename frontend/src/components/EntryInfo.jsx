@@ -31,9 +31,13 @@ export default function EntryInfo({
   };
 
   const handleRateClick = (entryId) => {
-    navigate(`/grade-entry/${entryId}`);
+    navigate(`/grade-entry-rate/${entryId}`);
   };
 
+  const handleRateViewClick = (entryId) => {
+    navigate(`/grade-entry-view/${entryId}`);
+  };
+  
   const handleViewWorkClick = () => {
     navigate(`/view-work/${id}`);
   };
@@ -91,7 +95,10 @@ export default function EntryInfo({
         {userView ? null : (
           <>
             <Button color="success" onClick={() => handleRateClick(id)}>
-              Panel oceny
+              Oceń
+            </Button>
+            <Button color="secondary" onClick={() => handleRateViewClick(id)}>
+              Zobacz oceny
             </Button>
             <Button color="error" onClick={() => setOpenPopUp(true)}>
               Usuń
