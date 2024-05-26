@@ -352,7 +352,7 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     authentication_classes = [TokenAuthentication]
-    permission_classes = [UserPermission]
+    #permission_classes = [UserPermission]
 
     @action(detail=False, methods=["get"])
     def current_user(self, request):
@@ -383,6 +383,26 @@ class UserViewSet(ModelViewSet):
         jury_users = self.queryset.filter(is_jury=True)
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=["put"], url_path='update-profile')
+    def update_profile(self, request):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=["post"], url_path='change_password')
+    def change_password(self, request):
+        user = request.user
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        if not user.check_password(old_password):
+            return Response({'detail': 'Podano nieprawidłowe hasło'}, status=status.HTTP_400_BAD_REQUEST)
+        user.set_password(new_password)
+        user.save()
+        return Response({'detail': 'Password successfully changed'}, status=status.HTTP_200_OK)
 
 # REQ_06B_END
 
