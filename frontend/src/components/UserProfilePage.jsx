@@ -23,6 +23,7 @@ import Navbar from "./Navbar";
 import BackButton from "./buttons/BackButton";
 import ColorButton from "./buttons/ColorButton";
 import Logout from "./Logout";
+import ConfirmationWindow from "./ConfirmationWindow";
 
 const UserProfilePage = () => {
   const [user, setUser] = useState({});
@@ -30,6 +31,9 @@ const UserProfilePage = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openChangePasswordDialog, setOpenChangePasswordDialog] =
     useState(false);
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [confirmationTitle, setConfirmationTitle] = useState("");
+  const [confirmationMessage, setConfirmationMessage] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -86,9 +90,24 @@ const UserProfilePage = () => {
         }
       );
       setUser(response.data);
+      setConfirmationTitle("Sukces");
+      setConfirmationMessage("Dane użytkownika zostały zaktualizowane.");
       setOpenEditDialog(false);
     } catch (error) {
       console.error("Error updating user data:", error);
+      setConfirmationTitle("Wystąpił błąd");
+      if (error.response && error.response.data) {
+        const errorMessage = Object.values(error.response.data)
+          .flat()
+          .join(" ");
+        setConfirmationMessage(errorMessage);
+      } else {
+        setConfirmationMessage(
+          "Nie udało się zaktualizować danych użytkownika."
+        );
+      }
+    } finally {
+      setConfirmationOpen(true);
     }
   };
 
@@ -111,10 +130,25 @@ const UserProfilePage = () => {
           },
         }
       );
+      setConfirmationTitle("Sukces");
+      setConfirmationMessage(
+        "Pomyślnie usunięto konto. Zostaniesz wylogowany."
+      );
       sessionStorage.removeItem("accessToken");
-      navigate("/");
     } catch (error) {
       console.error("Error deleting account:", error);
+      setConfirmationTitle("Błąd");
+      if (error.response && error.response.data) {
+        const errorMessage = Object.values(error.response.data)
+          .flat()
+          .join(" ");
+        setConfirmationMessage(errorMessage);
+      } else {
+        setConfirmationMessage("Wystąpił błąd podczas usuwania konta.");
+      }
+    } finally {
+      // navigate("/");
+      setConfirmationOpen(true);
     }
   };
 
@@ -142,8 +176,22 @@ const UserProfilePage = () => {
         }
       );
       setOpenChangePasswordDialog(false);
+      setConfirmationTitle("Sukces");
+      setConfirmationMessage("Hasło zostało zmienione.");
     } catch (error) {
       console.error("Error changing password:", error);
+      setConfirmationTitle("Błąd");
+      if (error.response && error.response.data) {
+        const errorMessage = Object.values(error.response.data)
+          .flat()
+          .join(" ");
+        setConfirmationMessage(errorMessage);
+      } else {
+        setConfirmationMessage("Wystąpił błąd podczas zmiany hasła.");
+      }
+    } finally {
+      navigate("/");
+      setConfirmationOpen(true);
     }
   };
 
@@ -374,6 +422,14 @@ const UserProfilePage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <ConfirmationWindow
+        open={confirmationOpen}
+        setOpen={setConfirmationOpen}
+        title={confirmationTitle}
+        message={confirmationMessage}
+        showCancelButton={false}
+        onConfirm={() => setConfirmationOpen(false)}
+      />
     </ThemeProvider>
   );
 };

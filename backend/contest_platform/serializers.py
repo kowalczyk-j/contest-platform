@@ -9,7 +9,8 @@ from .models import (
 )
 from .models import User
 from rest_framework import serializers
-
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 # REQ_06C
 class UserSerializer(serializers.ModelSerializer):
@@ -48,6 +49,19 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
+
+    def validate(self, data):
+        for field_name in ['first_name', 'last_name', 'email']:
+            if not data.get(field_name):
+                raise serializers.ValidationError("Uzupełnij poprawnie wszystkie pola.")
+            
+        email = data.get('email')
+        try:
+            validate_email(email)
+        except ValidationError:
+            raise serializers.ValidationError("Niepoprawny adres e-mail.")
+        
+        return data
 
 
 class ContestSerializer(serializers.ModelSerializer):

@@ -399,10 +399,12 @@ class UserViewSet(ModelViewSet):
         old_password = request.data.get('old_password')
         new_password = request.data.get('new_password')
         if not user.check_password(old_password):
-            return Response({'detail': 'Podano nieprawidłowe hasło'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'Obecne hasło jest nieprawidłowe'}, status=status.HTTP_400_BAD_REQUEST)
+        if len(new_password) < 5:
+            return Response({'detail': 'Nowe hasło musi mieć co najmniej 5 znaków'}, status=status.HTTP_400_BAD_REQUEST)
         user.set_password(new_password)
         user.save()
-        return Response({'detail': 'Password successfully changed'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Pomyślnie zmieniono hasło'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["delete"], url_path='delete_account')
     def delete_account(self, request, pk=None):
