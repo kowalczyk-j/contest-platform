@@ -352,7 +352,7 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     authentication_classes = [TokenAuthentication]
-    #permission_classes = [UserPermission]
+    permission_classes = [UserPermission]
 
     @action(detail=False, methods=["get"])
     def current_user(self, request):
@@ -404,6 +404,26 @@ class UserViewSet(ModelViewSet):
         user.save()
         return Response({'detail': 'Password successfully changed'}, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=["delete"], url_path='delete_account')
+    def delete_account(self, request, pk=None):
+        user = self.get_object()
+        if user.is_superuser:
+            return Response({'detail': 'Nie można usunąć konta administratora.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        # Delete grades to user entries
+        user_entries = Entry.objects.filter(user=user)
+        Grade.objects.filter(entry__in=user_entries).delete()
+        
+        # Delete entries
+        user_entries.delete()
+
+        # If it was a jury then assign its ratings to the main administrator
+        default_user = User.objects.get(pk=1)
+        GradeCriterion.objects.filter(user=user).update(user=default_user)
+        
+        user.delete()
+
+        return Response({'detail': 'Konto zostało pomyślnie usunięte.'}, status=status.HTTP_204_NO_CONTENT)
 # REQ_06B_END
 
 

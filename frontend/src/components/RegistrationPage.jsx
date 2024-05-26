@@ -75,8 +75,11 @@ const RegistrationPage = () => {
           },
         }
       );
+      console.log(postData);
       setRegistrationError(false);
-      setConfirmationMessage("Pomyślnie zarejestrowano!");
+      setConfirmationMessage(
+        "Możesz teraz zalogować się podanym loginem i hasłem."
+      );
     } catch (error) {
       setRegistrationError(true);
       if (error.response && error.response.data) {

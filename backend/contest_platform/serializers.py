@@ -30,13 +30,17 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
             "date_joined",
         ]
-        extra_kwargs = {"password": {"write_only": True}}
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
 
     # REQ_06C_END
 
     def create(self, validated_data):
         user = User(
             username=validated_data["username"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
             email=validated_data["email"],
             is_coordinating_unit=validated_data["is_coordinating_unit"],
             is_newsletter_subscribed=validated_data["is_newsletter_subscribed"],
