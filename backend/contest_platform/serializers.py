@@ -63,6 +63,20 @@ class UserSerializer(serializers.ModelSerializer):
         
         return data
 
+    def validate_email(self, value):
+        if self.instance is not None:  # check while updating data
+            if User.objects.filter(email__iexact=value).exclude(pk=self.instance.pk).exists():
+                raise serializers.ValidationError("Ten adres e-mail jest już zajęty.")
+        else:  # check while creating new user
+            if User.objects.filter(email__iexact=value).exists():
+                raise serializers.ValidationError("Ten adres e-mail jest już zajęty.")
+
+        try:
+            validate_email(value)
+        except ValidationError:
+            raise serializers.ValidationError("Niepoprawny adres e-mail.")
+
+        return value
 
 class ContestSerializer(serializers.ModelSerializer):
     date_start = serializers.DateField(input_formats=["%Y-%m-%d"])

@@ -87,7 +87,10 @@ const RegistrationPage = () => {
         if (errorData.username) {
           setConfirmationMessage(`Taki użytkownik już istnieje!`);
         } else if (errorData.email) {
-          setConfirmationMessage(`Wprowadź poprawny adres e-mail!`);
+          const errorMessage = Object.values(error.response.data)
+            .flat()
+            .join(" ");
+          setConfirmationMessage(errorMessage);
         } else {
           setConfirmationMessage("Rejestracja nieudana, spróbuj ponownie.");
         }
