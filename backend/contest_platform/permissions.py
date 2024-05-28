@@ -24,6 +24,7 @@ class UserPermission(permissions.BasePermission):
             "update_profile",
             "change_password",
             "delete_account",
+            "update_status",
         ]:
             return True
         else:
@@ -51,7 +52,7 @@ class UserPermission(permissions.BasePermission):
         ]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
-        elif view.action in ["emails", "emails_subscribed",]:
+        elif view.action in ["emails", "emails_subscribed", "update_status",]:
             return request.user.is_staff
         else:
             return False
