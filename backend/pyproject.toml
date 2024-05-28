@@ -26,6 +26,7 @@ requests = "^2.31.0"
 dramatiq = {extras = ["rabbitmq", "watch"], version = "^1.16.0"}
 WeasyPrint = "*"
 black = "^24.4.2"
+yacron = "^0.19.0"
 
 
 [tool.poetry.group.dev.dependencies]

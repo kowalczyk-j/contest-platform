@@ -1,0 +1,6 @@
+jobs:
+  - name: "Update contest statuses"
+    schedule: "1 0 * * *"
+    command: "python update_statuses.py"
+    captureStderr: true
+    captureStdout: true

@@ -22,6 +22,10 @@ PID_DJANGO=$!
 sudo service rabbitmq-server start
 python manage.py rundramatiq &
 
+# Uruchomienie yacrona
+yacron -c yacron_jobs.yml &
+PID_YACRON=$!
+
 # Uruchomienie serwera frontendowego React
 cd ../frontend
 npm install
@@ -32,7 +36,7 @@ PID_REACT=$!
 cd ..
 
 # Zakończenie wszystkich procesów po zakończeniu pracy
-trap "kill $PID_POSTGRES $PID_DJANGO $PID_REACT" EXIT
+trap "kill $PID_POSTGRES $PID_DJANGO $PID_REACT $PID_YACRON" EXIT
 
 # Oczekiwanie na zakończenie skryptu
 wait
