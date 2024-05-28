@@ -21,6 +21,10 @@ class UserPermission(permissions.BasePermission):
             "emails",
             "emails_subscribed",
             "jury_users",
+            "update_profile",
+            "change_password",
+            "delete_account",
+            "update_status",
         ]:
             return True
         else:
@@ -41,10 +45,14 @@ class UserPermission(permissions.BasePermission):
             "partial_update",
             "current_user",
             "jury_users",
+            "update_profile",
+            "change_password",
+            "destroy",
+            "delete_account",
         ]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
-        elif view.action in ["destroy", "emails", "emails_subscribed",]:
+        elif view.action in ["emails", "emails_subscribed", "update_status",]:
             return request.user.is_staff
         else:
             return False
@@ -170,9 +178,9 @@ class GradeCriterionPermissions(permissions.BasePermission):
         view: GenericAPIView,
         obj: models.Model,
     ) -> bool:
-        if view.action == "retrieve":
+        if view.action in ["update", "partial_update", "retrieve"]:
             return request.user.is_staff or request.user.is_jury
-        elif view.action in ["update", "partial_update", "destroy"]:
+        elif view.action == "destroy":
             return request.user.is_staff
         else:
             return False

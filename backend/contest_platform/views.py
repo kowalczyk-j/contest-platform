@@ -384,6 +384,79 @@ class UserViewSet(ModelViewSet):
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=["put"], url_path='update-profile')
+    def update_profile(self, request):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=["post"], url_path='change_password')
+    def change_password(self, request):
+        user = request.user
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        if not user.check_password(old_password):
+            return Response({'detail': 'Obecne hasło jest nieprawidłowe'}, status=status.HTTP_400_BAD_REQUEST)
+        if len(new_password) < 5:
+            return Response({'detail': 'Nowe hasło musi mieć co najmniej 5 znaków'}, status=status.HTTP_400_BAD_REQUEST)
+        user.set_password(new_password)
+        user.save()
+        return Response({'detail': 'Pomyślnie zmieniono hasło'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["delete"], url_path='delete_account')
+    def delete_account(self, request, pk=None):
+        if pk:
+            if not request.user.is_staff:
+                return Response({'detail': 'Nie masz uprawnień do usuwania innych użytkowników.'}, status=status.HTTP_403_FORBIDDEN)
+            user = User.objects.get(pk=pk)
+        else:
+            user = request.user
+
+        if user.is_staff:
+            return Response({'detail': 'Nie można usunąć konta administratora.'}, status=status.HTTP_403_FORBIDDEN)
+
+        # Delete grades to user entries
+        user_entries = Entry.objects.filter(user=user)
+        Grade.objects.filter(entry__in=user_entries).delete()
+
+        # Delete entries
+        user_entries.delete()
+
+        # If it was a jury then assign its ratings to the main administrator
+        default_user = User.objects.get(pk=1)
+        GradeCriterion.objects.filter(user=user).update(user=default_user)
+
+        user.delete()
+
+        return Response({'detail': 'Konto zostało pomyślnie usunięte.'}, status=status.HTTP_204_NO_CONTENT)
+    
+    @action(detail=True, methods=["patch"], url_path='update_status')
+    def update_status(self, request, pk=None):
+        user = self.get_object()
+        status_type = request.data.get('statusType')
+
+        if user.is_superuser:
+            return Response({'detail': 'Nie można zmienić statusu administratora'}, status=status.HTTP_403_FORBIDDEN)
+
+        status_mapping = {
+            'admin': {'is_staff': True, 'is_jury': False, 'is_coordinating_unit': False},
+            'jury': {'is_staff': False, 'is_jury': True, 'is_coordinating_unit': False},
+            'coordinating_unit': {'is_staff': False, 'is_jury': False, 'is_coordinating_unit': True},
+            'user': {'is_staff': False, 'is_jury': False, 'is_coordinating_unit': False},
+        }
+
+        if status_type not in status_mapping:
+            return Response({"detail": "Wystąpił błąd podczas nadawania uprawnień"}, status=status.HTTP_400_BAD_REQUEST)
+
+        attributes_to_update = status_mapping[status_type]
+        for attribute, value in attributes_to_update.items():
+            setattr(user, attribute, value)
+
+        user.save()
+        return Response({"detail": f"Pomyślnie zmieniono rodzaj konta na {status_type}"}, status=status.HTTP_200_OK)
 # REQ_06B_END
 
 

@@ -9,7 +9,8 @@ from .models import (
 )
 from .models import User
 from rest_framework import serializers
-
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 # REQ_06C
 class UserSerializer(serializers.ModelSerializer):
@@ -30,13 +31,17 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
             "date_joined",
         ]
-        extra_kwargs = {"password": {"write_only": True}}
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
 
     # REQ_06C_END
 
     def create(self, validated_data):
         user = User(
             username=validated_data["username"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
             email=validated_data["email"],
             is_coordinating_unit=validated_data["is_coordinating_unit"],
             is_newsletter_subscribed=validated_data["is_newsletter_subscribed"],
@@ -45,6 +50,33 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+    def validate(self, data):
+        for field_name in ['first_name', 'last_name', 'email']:
+            if not data.get(field_name):
+                raise serializers.ValidationError("Uzupełnij poprawnie wszystkie pola.")
+            
+        email = data.get('email')
+        try:
+            validate_email(email)
+        except ValidationError:
+            raise serializers.ValidationError("Niepoprawny adres e-mail.")
+        
+        return data
+
+    def validate_email(self, value):
+        if self.instance is not None:  # check while updating data
+            if User.objects.filter(email__iexact=value).exclude(pk=self.instance.pk).exists():
+                raise serializers.ValidationError("Ten adres e-mail jest już zajęty.")
+        else:  # check while creating new user
+            if User.objects.filter(email__iexact=value).exists():
+                raise serializers.ValidationError("Ten adres e-mail jest już zajęty.")
+
+        try:
+            validate_email(value)
+        except ValidationError:
+            raise serializers.ValidationError("Niepoprawny adres e-mail.")
+
+        return value
 
 class ContestSerializer(serializers.ModelSerializer):
     date_start = serializers.DateField(input_formats=["%Y-%m-%d"])

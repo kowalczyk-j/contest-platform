@@ -64,6 +64,7 @@ class Person(models.Model):
 # REQ_06A
 # REQ_23B
 class User(AbstractUser):
+    email = models.EmailField(unique=True)
     is_jury = models.BooleanField(default=False)
     is_coordinating_unit = models.BooleanField(default=False)
     is_newsletter_subscribed = models.BooleanField(default=False)

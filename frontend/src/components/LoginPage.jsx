@@ -6,20 +6,14 @@ import {
   CardContent,
   Typography,
   TextField,
-  Button,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
   Grid,
+  Link,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import Popup from "reactjs-popup";
-import "reactjs-popup/dist/index.css";
-import ConfirmationWindow from "./ConfirmationWindow";
 import axios from "axios";
+import ConfirmationWindow from "./ConfirmationWindow";
 import Header from "./Header";
 import BackButton from "./buttons/BackButton";
+import ColorButton from "./buttons/ColorButton";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -30,7 +24,6 @@ const LoginPage = () => {
   const [isStaff, setIsStaff] = useState(false);
   const navigate = useNavigate();
 
-  // REQ_06D
   const handleLogin = async (event) => {
     event.preventDefault();
     setLoginError(false);
@@ -42,42 +35,39 @@ const LoginPage = () => {
     const loginLink = `${import.meta.env.VITE_API_URL}api/login/`;
     const headersLogin = { headers: { "Content-Type": "application/json" } };
 
-    axios
-      .post(loginLink, postData, headersLogin)
-      .then((response) => {
-        const responseData = response.data;
-        const token = responseData.token;
-        sessionStorage.setItem("accessToken", token);
+    try {
+      const response = await axios.post(loginLink, postData, headersLogin);
+      const responseData = response.data;
+      const token = responseData.token;
+      sessionStorage.setItem("accessToken", token);
 
-        const currentUserLink = `${import.meta.env.VITE_API_URL
-          }api/users/current_user/`;
+      const currentUserLink = `${
+        import.meta.env.VITE_API_URL
+      }api/users/current_user/`;
 
-        const headersCurrentUser = {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + token,
-          },
-        };
-        axios
-          .get(currentUserLink, headersCurrentUser)
-          .then((res) => {
-            console.log(res.data);
-            setIsStaff(res.data.is_staff);
-            sessionStorage.setItem("isStaff", isStaff);
-          })
-          .catch((error) => {
-            console.log("Error:", error);
-          });
-        setOpenPopup(true);
-      })
-      .catch((error) => {
-        console.log("Login failed:", error.message);
-        setLoginError(true);
-        setLoginErrorMessage(JSON.stringify(error.response.data, null, 2));
-        setOpenPopup(true);
-      });
+      const headersCurrentUser = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + token,
+        },
+      };
+
+      const userResponse = await axios.get(currentUserLink, headersCurrentUser);
+      setIsStaff(userResponse.data.is_staff);
+      sessionStorage.setItem("isStaff", userResponse.data.is_staff);
+
+      setOpenPopup(true);
+    } catch (error) {
+      console.log("Login failed:", error.message);
+      setLoginError(true);
+      if (error.response.data.non_field_errors) {
+        setLoginErrorMessage(`Podane dane są nieprawidłowe!`);
+      } else {
+        setLoginErrorMessage(`Błąd logowania: ${error.message}`);
+      }
+      setOpenPopup(true);
+    }
   };
-  // REQ_06D_END
 
   const handleBack = () => {
     setLoginError(false);
@@ -93,63 +83,63 @@ const LoginPage = () => {
       <Grid container justifyContent="center" alignItems="center">
         <Grid item>
           <Card>
-            <CardHeader title="Logowanie" />
+            <CardHeader
+              title="Logowanie"
+              titleTypographyProps={{ align: "center" }}
+            />
             <CardContent>
               <form onSubmit={handleLogin}>
                 <div>
-                  <FormControl
-                    style={{ display: "flex", margin: "2%" }}
-                    className="flex flex-col space-y-4"
-                  >
-                    <TextField
-                      id="username"
-                      label="Nazwa użytkownika"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                    />
-                  </FormControl>
-                </div>
-                <div>
-                  <FormControl
-                    style={{ display: "flex", margin: "2%" }}
-                    className="flex flex-col space-y-4"
-                  >
-                    <TextField
-                      id="password"
-                      label="Hasło"
-                      value={password}
-                      type="password"
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </FormControl>
-                </div>
-                <div
-                  style={{ display: "flex", justifyContent: "space-evenly" }}
-                >
-                  <Button
-                    variant="contained"
-                    style={{
-                      backgroundColor: "#95C21E",
-                      color: "white",
-                      width: "225px",
-                    }}
-                    type="submit"
-                  >
-                    Zaloguj się
-                  </Button>
-                  <ConfirmationWindow
-                    open={openPopup}
-                    setOpen={setOpenPopup}
-                    title={
-                      loginError ? "Logowanie nieudane" : "Pomyślnie zalogowano"
-                    }
-                    message={loginError ? loginErrorMessage : null}
-                    onConfirm={() =>
-                      loginError ? setOpenPopup(false) : handleBack()
-                    }
-                    showCancelButton={false}
+                  <TextField
+                    id="username"
+                    label="Nazwa użytkownika"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    InputLabelProps={{ shrink: true }}
                   />
                 </div>
+                <div>
+                  <TextField
+                    id="password"
+                    label="Hasło"
+                    value={password}
+                    type="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </div>
+                <Typography
+                  style={{
+                    marginTop: "10px",
+                    marginBottom: "15px",
+                    textAlign: "center",
+                  }}
+                >
+                  Nie masz konta? <Link href="/register">Zarejestruj się</Link>
+                </Typography>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <ColorButton variant="contained" type="submit">
+                    Zaloguj się
+                  </ColorButton>
+                </div>
+                <ConfirmationWindow
+                  open={openPopup}
+                  setOpen={setOpenPopup}
+                  title={
+                    loginError ? "Logowanie nieudane" : "Pomyślnie zalogowano"
+                  }
+                  message={loginError ? loginErrorMessage : null}
+                  onConfirm={() =>
+                    loginError ? setOpenPopup(false) : handleBack()
+                  }
+                  showCancelButton={false}
+                />
               </form>
             </CardContent>
           </Card>
