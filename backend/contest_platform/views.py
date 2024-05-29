@@ -30,7 +30,7 @@ from .permissions import (
     GradePermissions,
     SchoolPermission
 )
-from .tasks import send_email_task, send_certificate_task
+from .tasks import send_email_task, send_certificates_task
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -114,29 +114,14 @@ class ContestViewSet(ModelViewSet):
             'user__last_name',
             'user__email'
         ).distinct()
-
-        for first_name, last_name, email in user_details:
-            pdf = self.generate_pdf(
-                data={
-                    'participant': f"{first_name} {last_name}",
-                    'achievement': self.default_achievement,
-                    'email': email,
-                    'signatory': signatory,
-                    'signature': signature,
-                    'contest': contest.description,
-                }
-            )
-
-            subject = "Twój certyfikat"
-            message = "Dziękujemy za udział!."
-            send_certificate_task(
-                subject,
-                message,
-                first_name,
-                last_name,
-                email,
-                pdf
-            )
+        send_certificates_task(
+            user_details,
+            signatory,
+            signature,
+            contest.description,
+            self.default_achievement,
+            self.certificate_template_path
+        )
 
         return Response({"status": "certificates sent"})
 
