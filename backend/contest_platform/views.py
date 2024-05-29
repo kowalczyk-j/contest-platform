@@ -287,7 +287,8 @@ class ContestViewSet(ModelViewSet):
         """
         contest = self.get_object()
 
-        def generate_date_range(start_date, end_date): # possibly move to separate utilities
+        # possibly move to separate utilities
+        def generate_date_range(start_date, end_date):
             current_date = start_date
             while current_date <= end_date:
                 yield current_date
@@ -305,13 +306,24 @@ class ContestViewSet(ModelViewSet):
             .values("date_submitted")
             .annotate(entry_count=Count("id"))
         )
-        daily_entries_dict = {entry["date_submitted"]: entry["entry_count"] for entry in daily_entries}
+        daily_entries_dict = {
+            entry["date_submitted"]: entry["entry_count"]
+            for entry in daily_entries
+            }
 
         all_daily_entries = []
-        for date in generate_date_range(start_date, end_date):
-            all_daily_entries.append({"date_submitted": date, "entry_count": daily_entries_dict.get(date, 0)})
+        for day in generate_date_range(start_date, end_date):
+            all_daily_entries.append(
+                {
+                    "date_submitted": day,
+                    "entry_count": daily_entries_dict.get(day, 0)
+                    }
+                )
 
-        return Response({"daily_entries": all_daily_entries}, status=status.HTTP_200_OK)
+        return Response(
+            {"daily_entries": all_daily_entries},
+            status=status.HTTP_200_OK
+            )
 
     # Endpoints:
     # total submissions - exists already probably
@@ -372,13 +384,22 @@ class GradeViewSet(ModelViewSet):
         user = request.user
         contest_id = request.query_params.get('contestId', None)
         if contest_id is None:
-            return Response({'error': 'contestId parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': 'contestId parameter is required.'},
+                status=status.HTTP_400_BAD_REQUEST
+                )
         try:
             contest_id = int(contest_id)
         except ValueError:
-            return Response({'error': 'contestId must be an integer.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': 'contestId must be an integer.'},
+                status=status.HTTP_400_BAD_REQUEST
+                )
 
-        queryset_criterion = GradeCriterion.objects.filter(user=user, contest=contest_id)
+        queryset_criterion = GradeCriterion.objects.filter(
+            user=user,
+            contest=contest_id
+            )
         qs = self.get_queryset().filter(criterion__in=queryset_criterion)
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
@@ -450,24 +471,40 @@ class UserViewSet(ModelViewSet):
         old_password = request.data.get('old_password')
         new_password = request.data.get('new_password')
         if not user.check_password(old_password):
-            return Response({'detail': 'Obecne hasło jest nieprawidłowe'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'detail': 'Obecne hasło jest nieprawidłowe'},
+                status=status.HTTP_400_BAD_REQUEST
+                )
         if len(new_password) < 5:
-            return Response({'detail': 'Nowe hasło musi mieć co najmniej 5 znaków'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'detail': 'Nowe hasło musi mieć co najmniej 5 znaków'},
+                status=status.HTTP_400_BAD_REQUEST
+                )
         user.set_password(new_password)
         user.save()
-        return Response({'detail': 'Pomyślnie zmieniono hasło'}, status=status.HTTP_200_OK)
+        return Response(
+            {'detail': 'Pomyślnie zmieniono hasło'},
+            status=status.HTTP_200_OK
+            )
 
     @action(detail=True, methods=["delete"], url_path='delete_account')
     def delete_account(self, request, pk=None):
         if pk:
             if not request.user.is_staff:
-                return Response({'detail': 'Nie masz uprawnień do usuwania innych użytkowników.'}, status=status.HTTP_403_FORBIDDEN)
+                resp = 'Nie masz uprawnień do usuwania innych użytkowników.'
+                return Response(
+                    {'detail': resp},
+                    status=status.HTTP_403_FORBIDDEN
+                    )
             user = User.objects.get(pk=pk)
         else:
             user = request.user
 
         if user.is_staff:
-            return Response({'detail': 'Nie można usunąć konta administratora.'}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {'detail': 'Nie można usunąć konta administratora.'},
+                status=status.HTTP_403_FORBIDDEN
+                )
 
         # Delete grades to user entries
         user_entries = Entry.objects.filter(user=user)
@@ -482,7 +519,10 @@ class UserViewSet(ModelViewSet):
 
         user.delete()
 
-        return Response({'detail': 'Konto zostało pomyślnie usunięte.'}, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {'detail': 'Konto zostało pomyślnie usunięte.'},
+            status=status.HTTP_204_NO_CONTENT
+            )
 
     @action(detail=True, methods=["patch"], url_path='update_status')
     def update_status(self, request, pk=None):
@@ -490,24 +530,48 @@ class UserViewSet(ModelViewSet):
         status_type = request.data.get('statusType')
 
         if user.is_superuser:
-            return Response({'detail': 'Nie można zmienić statusu administratora'}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {'detail': 'Nie można zmienić statusu administratora'},
+                status=status.HTTP_403_FORBIDDEN
+                )
 
         status_mapping = {
-            'admin': {'is_staff': True, 'is_jury': False, 'is_coordinating_unit': False},
-            'jury': {'is_staff': False, 'is_jury': True, 'is_coordinating_unit': False},
-            'coordinating_unit': {'is_staff': False, 'is_jury': False, 'is_coordinating_unit': True},
-            'user': {'is_staff': False, 'is_jury': False, 'is_coordinating_unit': False},
+            'admin': {
+                'is_staff': True,
+                'is_jury': False,
+                'is_coordinating_unit': False
+                },
+            'jury': {
+                'is_staff': False,
+                'is_jury': True,
+                'is_coordinating_unit': False
+                },
+            'coordinating_unit': {
+                'is_staff': False,
+                'is_jury': False,
+                'is_coordinating_unit': True
+                },
+            'user': {
+                'is_staff': False,
+                'is_jury': False,
+                'is_coordinating_unit': False
+                },
         }
 
         if status_type not in status_mapping:
-            return Response({"detail": "Wystąpił błąd podczas nadawania uprawnień"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Wystąpił błąd podczas nadawania uprawnień"},
+                status=status.HTTP_400_BAD_REQUEST
+                )
 
         attributes_to_update = status_mapping[status_type]
         for attribute, value in attributes_to_update.items():
             setattr(user, attribute, value)
 
         user.save()
-        return Response({"detail": f"Pomyślnie zmieniono rodzaj konta na {status_type}"}, status=status.HTTP_200_OK)
+        return Response(
+            {"detail": f"Pomyślnie zmieniono rodzaj konta na {status_type}"},
+            status=status.HTTP_200_OK)
 # REQ_06B_END
 
 
