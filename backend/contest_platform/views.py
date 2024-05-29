@@ -46,12 +46,13 @@ from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 
 
+# low values set for testing
 def cache_short_lived(key, value):
-    cache.set(key, value, timeout=600)
+    cache.set(key, value, timeout=30)
 
 
 def cache_long_lived(key, value):
-    cache.set(key, value, timeout=1800)
+    cache.set(key, value, timeout=90)
 
 
 class Logout(GenericAPIView):
@@ -254,18 +255,30 @@ class ContestViewSet(ModelViewSet):
         return Response({"entry_amount": entry_amount})
 
     @action(detail=True, methods=["get"])
-    def group_individual_comp(self, request, pk=None):
+    def group_individual_comp(self, request, pk):
         """
-        Returns plot data to compare the amount of group and individual submissions
+        Returns plot data to compare the
+        amount of group and individual submissions
         """
+        key = f"group_individual_comp_{pk}"
+        stored = cache.get(key)
+        if stored:
+            solo_entries, group_entries = stored
+            return Response(
+                {"solo_entries": solo_entries, "group_entries": group_entries},
+                status=status.HTTP_200_OK
+                )
         contest = self.get_object()
         entries = Entry.objects.filter(contest=contest).annotate(
             num_contestants=Count("contestants")
         )
         group_entries = entries.filter(num_contestants__gt=1).count()
         solo_entries = entries.count() - group_entries
-
-        return Response({"solo_entries": solo_entries, "group_entries": group_entries}, status=status.HTTP_200_OK)
+        cache_long_lived(key, (solo_entries, group_entries))
+        return Response(
+            {"solo_entries": solo_entries, "group_entries": group_entries},
+            status=status.HTTP_200_OK
+            )
 
     @action(detail=True, methods=["get"])
     def get_submissions_by_day(self, request, pk=None):
@@ -403,15 +416,22 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def emails_subscribed(self, request):
         """
-        Returns a list of first 500 emails in the database - subscribed to the newsletter.
+        Returns a list of first 500 emails in the
+        database - subscribed to the newsletter.
         500 is max SMTP gmail daily limit.
         """
-        emails = User.objects.filter(is_newsletter_subscribed=True).values("email")[:500]
+        emails = User.objects.filter(
+            is_newsletter_subscribed=True
+            ).values("email")[:500]
         return Response(emails)
 
     @action(detail=False, methods=["get"])
     def jury_users(self, request):
-        jury_users = self.queryset.filter(is_jury=True)
+        key = 'jury_users'
+        jury_users = cache.get(key)
+        if not jury_users:
+            jury_users = list(User.objects.filter(is_jury=True))
+            cache_long_lived(key, jury_users)
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
 
