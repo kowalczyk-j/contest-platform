@@ -129,7 +129,7 @@ DATABASES = {
         "NAME": "contest_platform_database",
         "USER": "admin",
         "PASSWORD": "admin",
-        "HOST": "localhost",
+        "HOST": "db",
         "PORT": "5432",
     }
 }
@@ -200,10 +200,12 @@ SPECTACULAR_SETTINGS = {
     "REDOC_DIST": "SIDECAR",
 }
 
+RABBITMQ_URL = os.environ.get('RABBITMQ_URL', "amqp://user:password@rabbitmq:5672/")
+
 DRAMATIQ_BROKER = {
     "BROKER": "dramatiq.brokers.rabbitmq.RabbitmqBroker",
     "OPTIONS": {
-        "url": "amqp://localhost:5672",
+        "url": RABBITMQ_URL,
     },
     "MIDDLEWARE": [
         "dramatiq.middleware.Prometheus",

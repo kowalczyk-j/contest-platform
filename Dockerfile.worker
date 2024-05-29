@@ -4,10 +4,7 @@ WORKDIR /backend
 
 COPY ./backend .
 COPY ./backend/entrypoint.sh /backend
-
 RUN chmod +x /backend/entrypoint.sh
-
-RUN apt-get update && apt-get install -y postgresql-client
 
 RUN pip install pipx && \
     pipx install poetry && \
@@ -16,8 +13,6 @@ RUN pip install pipx && \
 
 ENV PATH=/root/.local/bin:$PATH
 
+COPY ./backend .
 
-EXPOSE 8000
-
-ENTRYPOINT ["./entrypoint.sh"] 
-
+CMD ["poetry", "run", "python", "manage.py", "rundramatiq"]
