@@ -147,7 +147,7 @@ const UserProfilePage = () => {
         setConfirmationMessage("Wystąpił błąd podczas usuwania konta.");
       }
     } finally {
-      // navigate("/");
+      navigate("/");
       setConfirmationOpen(true);
     }
   };
@@ -324,8 +324,6 @@ const UserProfilePage = () => {
         </Grid>
         <UserEntries />
       </Box>
-
-      {/* Dialog do edycji danych */}
       <Dialog open={openEditDialog} onClose={handleEditClose}>
         <DialogTitle>Edytuj dane</DialogTitle>
         <DialogContent>
