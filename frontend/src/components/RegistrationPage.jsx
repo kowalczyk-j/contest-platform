@@ -11,61 +11,109 @@ import {
   FormControlLabel,
   Checkbox,
   Grid,
+  Link,
 } from "@mui/material";
-import Popup from "reactjs-popup";
-import "reactjs-popup/dist/index.css";
 import axios from "axios";
-import Navbar from "./Navbar";
 import BackButton from "./buttons/BackButton";
 import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
 import Header from "./Header";
+import ConfirmationWindow from "./ConfirmationWindow";
 
 const RegistrationPage = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isCoordinatingUnit, setCoordinatingUnit] = useState(false);
-  const [isSubscribedToNewsletter, setSubscribedToNewsletter] = useState(false);
-  const [registrationError, setRegistrationError] = useState("");
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+    firstName: "",
+    lastName: "",
+    isCoordinatingUnit: false,
+    isSubscribedToNewsletter: false,
+  });
+  const [registrationError, setRegistrationError] = useState(false);
   const [registrationErrorMessage, setRegistrationErrorMessage] = useState("");
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState("");
   const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
 
   const handleRegistration = async (event) => {
     event.preventDefault();
 
+    if (formData.password !== formData.passwordConfirmation) {
+      setRegistrationError(true);
+      setConfirmationMessage("Hasła nie są takie same.");
+      setConfirmationOpen(true);
+      return;
+    }
+
     const postData = {
-      username: username,
-      email: email,
-      password: password,
-      is_coordinating_unit: isCoordinatingUnit,
-      is_newsletter_subscribed: isSubscribedToNewsletter,
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      is_coordinating_unit: formData.isCoordinatingUnit,
+      is_newsletter_subscribed: formData.isSubscribedToNewsletter,
     };
 
-    axios
-      .post(`${import.meta.env.VITE_API_URL}api/users/`, postData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        setRegistrationError(false);
-        console.log(postData);
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-        setRegistrationError(true);
-        setRegistrationErrorMessage(
-          JSON.stringify(error.response.data, null, 2)
-        );
-      });
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}api/users/`,
+        postData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(postData);
+      setRegistrationError(false);
+      setConfirmationMessage(
+        "Możesz teraz zalogować się podanym loginem i hasłem."
+      );
+    } catch (error) {
+      setRegistrationError(true);
+      if (error.response && error.response.data) {
+        const errorData = error.response.data;
+        if (errorData.username) {
+          setConfirmationMessage(`Taki użytkownik już istnieje!`);
+        } else if (errorData.email) {
+          const errorMessage = Object.values(error.response.data)
+            .flat()
+            .join(" ");
+          setConfirmationMessage(errorMessage);
+        } else {
+          setConfirmationMessage("Rejestracja nieudana, spróbuj ponownie.");
+        }
+        setRegistrationErrorMessage(JSON.stringify(errorData, null, 2));
+      } else {
+        setConfirmationMessage("Wystąpił nieznany błąd, spróbuj ponownie.");
+        setRegistrationErrorMessage(error.message);
+      }
+    }
+    setConfirmationOpen(true);
   };
 
   const handleBack = () => {
     setRegistrationError(false);
     setRegistrationErrorMessage("");
     navigate("/");
+  };
+
+  const handleConfirmationClose = () => {
+    setConfirmationOpen(false);
+    if (!registrationError) {
+      navigate("/");
+    }
   };
 
   return (
@@ -76,126 +124,102 @@ const RegistrationPage = () => {
         <Grid container justifyContent="center" alignItems="center">
           <Grid item>
             <Card>
-              <CardHeader title="Rejestracja" />
+              <CardHeader title="Witaj, wypełnij formularz i zarejestruj się!" />
               <CardContent>
                 <form onSubmit={handleRegistration}>
-                  <div>
+                  {[
+                    "username",
+                    "email",
+                    "password",
+                    "passwordConfirmation",
+                    "firstName",
+                    "lastName",
+                  ].map((field) => (
                     <FormControl
+                      key={field}
                       style={{ display: "flex", margin: "2%" }}
-                      className="flex flex-col space-y-4"
                     >
                       <TextField
-                        id="username"
-                        label="Nazwa użytkownika"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        id={field}
+                        label={
+                          field === "username"
+                            ? "Nazwa użytkownika"
+                            : field === "password"
+                              ? "Hasło"
+                              : field === "passwordConfirmation"
+                                ? "Potwierdź hasło"
+                                : field === "firstName"
+                                  ? "Imię"
+                                  : field === "lastName"
+                                    ? "Nazwisko"
+                                    : field.charAt(0).toUpperCase() +
+                                      field.slice(1)
+                        }
+                        name={field}
+                        value={formData[field]}
+                        onChange={handleInputChange}
+                        type={field.includes("password") ? "password" : "text"}
                       />
                     </FormControl>
-                  </div>
-                  <div>
-                    <FormControl
-                      style={{ display: "flex", margin: "2%" }}
-                      className="flex flex-col space-y-4"
-                    >
-                      <TextField
-                        id="email"
-                        label="Adres email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                  ))}
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={formData.isCoordinatingUnit}
+                        onChange={handleInputChange}
+                        name="isCoordinatingUnit"
                       />
-                    </FormControl>
-                  </div>
-                  <div>
-                    <FormControl
-                      style={{ display: "flex", margin: "2%" }}
-                      className="flex flex-col space-y-4"
-                    >
-                      <TextField
-                        id="password"
-                        label="Hasło"
-                        value={password}
-                        type="password"
-                        onChange={(e) => setPassword(e.target.value)}
+                    }
+                    style={{ margin: "15px" }}
+                    label={
+                      <Typography
+                        style={{ maxWidth: "300px", fontWeight: "lighter" }}
+                      >
+                        Zarejestruj mnie jako jednostkę koordynującą
+                        (przedstawiciel szkoły).
+                      </Typography>
+                    }
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={formData.isSubscribedToNewsletter}
+                        onChange={handleInputChange}
+                        name="isSubscribedToNewsletter"
                       />
-                    </FormControl>
-                  </div>
-
-                  <div className="checkbox">
-                    <FormControlLabel
-                      control={<Checkbox />}
-                      style={{ margin: "15px" }}
-                      onChange={(e) => setCoordinatingUnit(e.target.checked)}
-                      label={
-                        <Typography
-                          style={{ maxWidth: "400px", fontWeight: "lighter" }}
-                        >
-                          Zarejestruj mnie jako jednostkę koordynującą.
-                        </Typography>
-                      }
-                    />
-                  </div>
-
-                  <div className="checkbox">
-                    <FormControlLabel
-                      control={<Checkbox />}
-                      style={{ margin: "15px" }}
-                      onChange={(e) => setSubscribedToNewsletter(e.target.checked)}
-                      label={
-                        <Typography
-                          style={{ maxWidth: "400px", fontWeight: "lighter" }}
-                        >
-                          Chcę otrzymywać na podany adres e-mail informacje o nadchodzących konkursach.
-                        </Typography>
-                      }
-                    />
-                  </div>
-
+                    }
+                    style={{ margin: "15px" }}
+                    label={
+                      <Typography
+                        style={{ maxWidth: "300px", fontWeight: "lighter" }}
+                      >
+                        Chcę otrzymywać e-maile z informacjami o nadchodzących
+                        konkursach.
+                      </Typography>
+                    }
+                  />
+                  <Typography
+                    style={{
+                      marginBottom: "10px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Posiadasz już konto? <Link href="/login">Zaloguj się</Link>
+                  </Typography>
                   <div
                     style={{ display: "flex", justifyContent: "space-evenly" }}
                   >
-                    <Popup
-                      trigger={
-                        <Button
-                          variant="contained"
-                          style={{
-                            backgroundColor: "#95C21E",
-                            color: "white",
-                            width: "225px",
-                          }}
-                          type="submit"
-                          onClick={
-                            registrationError ? close : () => handleBack()
-                          }
-                        >
-                          Zarejestruj się
-                        </Button>
-                      }
-                      modal
-                      contentStyle={{
-                        maxWidth: "300px",
-                        borderRadius: "10px",
-                        padding: "20px",
-                        textAlign: "center",
-                        fontFamily: "Arial",
+                    <Button
+                      variant="contained"
+                      style={{
+                        backgroundColor: "#95C21E",
+                        color: "white",
+                        width: "225px",
                       }}
+                      type="submit"
                     >
-                      {(close) => (
-                        <div className="modal">
-                          <div className="content">
-                            {registrationError ? (
-                              <React.Fragment>
-                                Rejestracja nieudana, spróbuj ponownie.
-                                <br />
-                                <br />
-                                {registrationErrorMessage}
-                              </React.Fragment>
-                            ) : (
-                              "Pomyślnie zarejestrowano!"
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </Popup>
+                      Zarejestruj się
+                    </Button>
                   </div>
                 </form>
               </CardContent>
@@ -203,6 +227,14 @@ const RegistrationPage = () => {
           </Grid>
         </Grid>
       </div>
+      <ConfirmationWindow
+        open={confirmationOpen}
+        setOpen={setConfirmationOpen}
+        title={registrationError ? "Wystąpił błąd" : "Pomyślnie zarejestrowano"}
+        message={confirmationMessage}
+        onConfirm={handleConfirmationClose}
+        showCancelButton={false}
+      />
     </ThemeProvider>
   );
 };

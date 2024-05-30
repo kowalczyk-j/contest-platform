@@ -71,7 +71,28 @@ scripts/install_rabbitmq.sh focal
 
 Jeśli skrypt nie zadziała, sugeruję po kolei wykonać wszystkie komendy, według [oficjalnej instrukcji](https://www.rabbitmq.com/docs/install-debian). Jeśli korzystasz z innej dystrybucji Linuxa, odsyłam do [dokumentacji](https://www.rabbitmq.com/docs/platforms).
 
+7. **Instalacja Redis**: Używany w cachowaniu zapytań do bazy danych. Instalacja i sprawdzenie działania przez następujące komendy:
+```shell
+sudo apt update
+sudo apt install redis
+sudo systemctl status redis
+```
+Uruchomienie w przypadku statusu `disabled` `stopped`
+```shell
 
+sudo systemctl start redis
+sudo systemctl enable redis
+```
+
+8. **Testy wydajnościowe locust**
+Uruchomienie serwera testowego:
+```shell
+backend/locust-performance$ locust -f locust-tasks.py
+```
+Uruchomienie testów i wgląd w raport przez [localhost:8089](http://localhost:8089).
+
+
+Należy wybrać ilość użytkowników wysyłających zapytania oraz wpisać hosta jako adres backendu: `http://localhost:8000`.
 
 ## Baza danych
 

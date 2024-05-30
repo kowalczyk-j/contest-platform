@@ -5,19 +5,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Wymagania projektu &#8212; Platforma Konkursowa  - dokumentacja</title>
+    <title>Wymagania projektu &#8212; Rozbudowa platformy konkursowej dla fundacji Bo Warto  - dokumentacja</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
     <link rel="stylesheet" type="text/css" href="_static/assets/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common.css?v=bd9ab754" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/styles.css?v=6c8eb985" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/layouts.css?v=448c382f" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=ffa536d2" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/styles.css?v=6c8eb985" />
     <script src="_static/jquery.js?v=5d32c60e"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
     <script src="_static/documentation_options.js?v=9893e7ba"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/translations.js?v=a186e9ce"></script>
     <script src="_static/assets/jsonview.bundle.js?v=18cd53c5"></script>
@@ -27,7 +27,8 @@
     <script src="_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=f783d6a5"></script>
     <link rel="index" title="Indeks" href="genindex.html" />
     <link rel="search" title="Szukaj" href="search.html" />
-    <link rel="prev" title="Dokumentacja kodu Platformy Konkursowej dla fundacji BoWarto." href="index.html" />
+    <link rel="next" title="Architektura" href="architecture.html" />
+    <link rel="prev" title="User stories" href="user_stories.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -49,7 +50,7 @@
 <h1>Wymagania projektu<a class="headerlink" href="#wymagania-projektu" title="Link to this heading">¶</a></h1>
 <section id="integracja-ze-strona-internetowa">
 <h2>1. Integracja ze stroną internetową:<a class="headerlink" href="#integracja-ze-strona-internetowa" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-9613a656">
+<div class="need_container docutils container" id="SNCB-d7449cdf">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_01">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -58,14 +59,26 @@
 </td>
 </tr>
 <tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
-<div class="line"><span><span><div class="line"><span class="needs_osoba"><span class="needs_label">osoba: </span><span class="needs_data">Jakub Kowalczyk</span></span></div>
-<div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
 </span></span></div>
 <div class="line"><span></span></div>
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"><p>Na stronie internetowej powinna znajdować się zakładka “Konkursy”; po jej kliknięciu użytkownik ma zostać przekierowany na specjalnie przygotowaną platformę konkursową.</p></td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>Na stronie internetowej powinna znajdować się zakładka “Konkursy”; po jej kliknięciu użytkownik ma zostać przekierowany na specjalnie przygotowaną platformę konkursową.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">pages</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Konkursy&quot;</span><span class="p">,</span> <span class="s2">&quot;Strona Główna&quot;</span><span class="p">,</span> <span class="s2">&quot;Użytkownicy&quot;</span><span class="p">];</span>
+<span class="n">const</span> <span class="n">settings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Profil&quot;</span><span class="p">,</span> <span class="s2">&quot;Importuj dane&quot;</span><span class="p">];</span>
+<span class="n">const</span> <span class="n">settingsLinks</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">Profil</span><span class="p">:</span> <span class="s2">&quot;/profile&quot;</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="n">const</span> <span class="n">pagesLinks</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">Konkursy</span><span class="p">:</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;Strona Główna&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.fundacjabowarto.pl/&quot;</span><span class="p">,</span>
+  <span class="n">Użytkownicy</span><span class="p">:</span> <span class="s2">&quot;/users&quot;</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -73,7 +86,7 @@
 </section>
 <section id="integracja-z-baza-adresowa">
 <h2>2. Integracja z bazą adresową:<a class="headerlink" href="#integracja-z-baza-adresowa" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-1350c182">
+<div class="need_container docutils container" id="SNCB-2eb5c2f0">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_02">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -93,7 +106,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-f9e66be2">
+<div class="need_container docutils container" id="SNCB-177b79a4">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_03">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -113,7 +126,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-b5f61385">
+<div class="need_container docutils container" id="SNCB-d8b1c516">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_04">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -128,12 +141,33 @@
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  const handleDeleteClick = (id) =&gt; {
+    axios
+      .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
+        headers: {
+          &quot;Content-Type&quot;: &quot;application/json&quot;,
+          Authorization: &quot;Token &quot; + sessionStorage.getItem(&quot;accessToken&quot;),
+        },
+      })
+      .then(() =&gt; {
+        setEntries(entries.filter((entry) =&gt; entry.id !== id));
+      })
+      .catch((error) =&gt; {
+        console.log(error);
+        setReviewDeleteErrorMessage(
+          JSON.stringify(error.response.data, null, 2)
+        );
+      });
+    setOpenPopUp(true);
+  };
+</pre></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-0bfd80c2">
+<div class="need_container docutils container" id="SNCB-e506ff43">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_05">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -148,7 +182,18 @@
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"><p>Zgoda na zapisanie do bazy adresowej realizowana jest poprzez zaznaczenie checkboxa.</p></td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    axios
+      .get(`${import.meta.env.VITE_API_URL}api/users/emails_subscribed/`, {
+        headers: {
+          &quot;Content-Type&quot;: &quot;application/json&quot;,
+          Authorization: &quot;Token &quot; + sessionStorage.getItem(&quot;accessToken&quot;),
+        },
+      })
+      .then((response) =&gt; setUsersEmails(response.data))
+      .catch((error) =&gt; console.error(&quot;Error fetching email list: &quot;, error));
+</pre></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -156,7 +201,7 @@
 </section>
 <section id="rejestracja-administratorow-i-uzytkownikow">
 <h2>3. Rejestracja administratorów i użytkowników:<a class="headerlink" href="#rejestracja-administratorow-i-uzytkownikow" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-4076e047">
+<div class="need_container docutils container" id="SNCB-e2193496">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_06">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -172,64 +217,15 @@
 </td>
 </tr>
 <tr class="need content row-odd"><td class="need content" colspan="1"><p>Członkowie jury, uczestnicy indywidualni, liderzy zespołów, koordynatorzy szkół logują się do systemu za pomocą e-maila i hasła.</p>
-<section id="kod-frontendu-realizujacy-wymaganie">
-<h3>Kod frontendu realizujący wymaganie:<a class="headerlink" href="#kod-frontendu-realizujacy-wymaganie" title="Link to this heading">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  const handleLogin = async (event) =&gt; {
-    event.preventDefault();
-    setLoginError(false);
-    const postData = {
-      username: username,
-      password: password,
-    };
-
-    const loginLink = `${import.meta.env.VITE_API_URL}api/login/`;
-    const headersLogin = { headers: { &quot;Content-Type&quot;: &quot;application/json&quot; } };
-
-    axios
-      .post(loginLink, postData, headersLogin)
-      .then((response) =&gt; {
-        const responseData = response.data;
-        const token = responseData.token;
-        sessionStorage.setItem(&quot;accessToken&quot;, token);
-
-        const currentUserLink = `${import.meta.env.VITE_API_URL
-          }api/users/current_user/`;
-
-        const headersCurrentUser = {
-          headers: {
-            &quot;Content-Type&quot;: &quot;application/json&quot;,
-            Authorization: &quot;Token &quot; + token,
-          },
-        };
-        axios
-          .get(currentUserLink, headersCurrentUser)
-          .then((res) =&gt; {
-            console.log(res.data);
-            setIsStaff(res.data.is_staff);
-            sessionStorage.setItem(&quot;isStaff&quot;, isStaff);
-          })
-          .catch((error) =&gt; {
-            console.log(&quot;Error:&quot;, error);
-          });
-        setOpenPopup(true);
-      })
-      .catch((error) =&gt; {
-        console.log(&quot;Login failed:&quot;, error.message);
-        setLoginError(true);
-        setLoginErrorMessage(JSON.stringify(error.response.data, null, 2));
-        setOpenPopup(true);
-      });
-  };
-</pre></div>
-</div>
-</section>
-<section id="kod-backendu-realizujacy-wymaganie">
-<h3>Kod backendu realizujący wymaganie:<a class="headerlink" href="#kod-backendu-realizujacy-wymaganie" title="Link to this heading">¶</a></h3>
 <p>Modele</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># REQ_23B</span>
 <span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">AbstractUser</span><span class="p">):</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">is_jury</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">is_coordinating_unit</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">is_newsletter_subscribed</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
 </pre></div>
 </div>
 <p>Widoki</p>
@@ -247,8 +243,151 @@
 
     <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">emails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of first 500 emails in the databaser.</span>
+<span class="sd">        500 is max SMTP gmail daily limit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">emails</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)[:</span><span class="mi">500</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">emails</span><span class="p">)</span>
+
+    <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">emails_subscribed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of first 500 emails in the</span>
+<span class="sd">        database - subscribed to the newsletter.</span>
+<span class="sd">        500 is max SMTP gmail daily limit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">emails</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">is_newsletter_subscribed</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)[:</span><span class="mi">500</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">emails</span><span class="p">)</span>
+
+    <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">jury_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;jury_users&#39;</span>
+        <span class="n">jury_users</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">jury_users</span><span class="p">:</span>
+            <span class="n">jury_users</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_jury</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="n">cache_long_lived</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">jury_users</span><span class="p">)</span>
+        <span class="n">serializer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_serializer</span><span class="p">(</span><span class="n">jury_users</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;put&quot;</span><span class="p">],</span> <span class="n">url_path</span><span class="o">=</span><span class="s1">&#39;update-profile&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">update_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">serializer</span> <span class="o">=</span> <span class="n">UserSerializer</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">partial</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">serializer</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">serializer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+    <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">],</span> <span class="n">url_path</span><span class="o">=</span><span class="s1">&#39;change_password&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">change_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">old_password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;old_password&#39;</span><span class="p">)</span>
+        <span class="n">new_password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;new_password&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">check_password</span><span class="p">(</span><span class="n">old_password</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Obecne hasło jest nieprawidłowe&#39;</span><span class="p">},</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span>
+                <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_password</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Nowe hasło musi mieć co najmniej 5 znaków&#39;</span><span class="p">},</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span>
+                <span class="p">)</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="n">new_password</span><span class="p">)</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+            <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Pomyślnie zmieniono hasło&#39;</span><span class="p">},</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span>
+            <span class="p">)</span>
+
+    <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">],</span> <span class="n">url_path</span><span class="o">=</span><span class="s1">&#39;delete_account&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">delete_account</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pk</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">:</span>
+                <span class="n">resp</span> <span class="o">=</span> <span class="s1">&#39;Nie masz uprawnień do usuwania innych użytkowników.&#39;</span>
+                <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="n">resp</span><span class="p">},</span>
+                    <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span>
+                    <span class="p">)</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+
+        <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Nie można usunąć konta administratora.&#39;</span><span class="p">},</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Delete grades to user entries</span>
+        <span class="n">user_entries</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">Grade</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">entry__in</span><span class="o">=</span><span class="n">user_entries</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+        <span class="c1"># Delete entries</span>
+        <span class="n">user_entries</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+        <span class="c1"># If it was a jury then assign its ratings to the main administrator</span>
+        <span class="n">default_user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">GradeCriterion</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">default_user</span><span class="p">)</span>
+
+        <span class="n">user</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+            <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Konto zostało pomyślnie usunięte.&#39;</span><span class="p">},</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_204_NO_CONTENT</span>
+            <span class="p">)</span>
+
+    <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;patch&quot;</span><span class="p">],</span> <span class="n">url_path</span><span class="o">=</span><span class="s1">&#39;update_status&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">update_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span>
+        <span class="n">status_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;statusType&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Nie można zmienić statusu administratora&#39;</span><span class="p">},</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span>
+                <span class="p">)</span>
+
+        <span class="n">status_mapping</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;admin&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">False</span>
+                <span class="p">},</span>
+            <span class="s1">&#39;jury&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">False</span>
+                <span class="p">},</span>
+            <span class="s1">&#39;coordinating_unit&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">True</span>
+                <span class="p">},</span>
+            <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">False</span>
+                <span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">status_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_mapping</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;Wystąpił błąd podczas nadawania uprawnień&quot;</span><span class="p">},</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span>
+                <span class="p">)</span>
+
+        <span class="n">attributes_to_update</span> <span class="o">=</span> <span class="n">status_mapping</span><span class="p">[</span><span class="n">status_type</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attributes_to_update</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Pomyślnie zmieniono rodzaj konta na </span><span class="si">{</span><span class="n">status_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Serializery</p>
@@ -266,19 +405,22 @@
             <span class="s2">&quot;is_jury&quot;</span><span class="p">,</span>
             <span class="s2">&quot;is_coordinating_unit&quot;</span><span class="p">,</span>
             <span class="s2">&quot;is_superuser&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;is_newsletter_subscribed&quot;</span><span class="p">,</span>
             <span class="s2">&quot;is_active&quot;</span><span class="p">,</span>
             <span class="s2">&quot;date_joined&quot;</span><span class="p">,</span>
         <span class="p">]</span>
-        <span class="n">extra_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;write_only&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}}</span>
+        <span class="n">extra_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;write_only&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+        <span class="p">}</span>
+
 </pre></div>
 </div>
-</section>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-5a3b4d38">
+<div class="need_container docutils container" id="SNCB-06c3e225">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_07">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -298,7 +440,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-76801b1e">
+<div class="need_container docutils container" id="SNCB-0e7577e4">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_08">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -326,7 +468,7 @@
 </section>
 <section id="zarzadzanie-konkursami">
 <h2>4. Zarządzanie konkursami:<a class="headerlink" href="#zarzadzanie-konkursami" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-3aeb6cee">
+<div class="need_container docutils container" id="SNCB-8491734e">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_09">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -342,9 +484,14 @@
 </td>
 </tr>
 <tr class="need content row-odd"><td class="need content" colspan="1"><p>Parametry to nazwa, opis konkursu, harmonogram, regulamin, wyraźnie zaznaczona grupa docelowa, maksymalna liczba prac na uczestnika, dodatkowe dane wymagane w formularzu zgłoszeniowym, wyszczególniona informacja o konieczności wysyłki fizycznej pracy, nieobowiązkowe - nagrody, kategorie oceny dla jury i skład zespołów jury.</p>
-<section id="parametry-konkursu">
-<h3>Parametry konkursu:<a class="headerlink" href="#parametry-konkursu" title="Link to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Contest</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">STATUS_CHOICES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;not_started&#39;</span><span class="p">,</span> <span class="s1">&#39;Nierozpoczęty&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ongoing&#39;</span><span class="p">,</span> <span class="s1">&#39;W trakcie trwania&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;judging&#39;</span><span class="p">,</span> <span class="s1">&#39;W trakcie oceny&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;finished&#39;</span><span class="p">,</span> <span class="s1">&#39;Zakończony&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+
     <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1800</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="n">date_start</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">)</span>
@@ -352,29 +499,38 @@
     <span class="c1"># 1 - konkurs indywidualny; 0 - konkurs grupowy</span>
     <span class="n">individual</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">STATUS_CHOICES</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;not_started&#39;</span><span class="p">)</span>
     <span class="n">rules_pdf</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">poster_img</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">today</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">localtime</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s1">&#39;finished&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_start</span> <span class="o">&lt;=</span> <span class="n">today</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_end</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s1">&#39;ongoing&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;ongoing&#39;</span>
+            <span class="k">elif</span> <span class="n">today</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_end</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s1">&#39;judging&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;judging&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="parametry-oceny-przez-jury">
-<h3>Parametry oceny przez jury:<a class="headerlink" href="#parametry-oceny-przez-jury" title="Link to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">GradeCriterion</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">contest</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Contest</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">contest</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Contest</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">)</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
     <span class="n">max_rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">SET_NULL</span><span class="p">)</span>
+
+
 </pre></div>
 </div>
-</section>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-3a0cfdb1">
+<div class="need_container docutils container" id="SNCB-f6d2d16b">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_10">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -390,8 +546,6 @@
 </td>
 </tr>
 <tr class="need content row-odd"><td class="need content" colspan="1"><p>Harmonogram konkursu jest zdefiniowany przez datę rozpoczęcia i zakończenia. Pilnowane jest, aby daty były poprawne - data zakończenia nie może być przed datą rozpoczęcia.</p>
-<section id="kod-realizujacy-wymaganie">
-<h3>Kod realizujący wymaganie:<a class="headerlink" href="#kod-realizujacy-wymaganie" title="Link to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;date_start&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;date_end&quot;</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;date_start&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;date_end&quot;</span><span class="p">]:</span>
@@ -399,15 +553,15 @@
                     <span class="p">{</span><span class="s2">&quot;date_start&quot;</span><span class="p">:</span> <span class="s2">&quot;Date start must be before date end.&quot;</span><span class="p">}</span>
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">data</span>
+
 </pre></div>
 </div>
-</section>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-897540b3">
+<div class="need_container docutils container" id="SNCB-643220d0">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_11">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -423,10 +577,10 @@
 </td>
 </tr>
 <tr class="need content row-odd"><td class="need content" colspan="1"><p>Pliki są przechowywane w Azure.</p>
-<section id="wgrywanie-pliku-z-regulaminem">
-<h3>Wgrywanie pliku z regulaminem:<a class="headerlink" href="#wgrywanie-pliku-z-regulaminem" title="Link to this heading">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  const [rulesFile, setRulesFile] = React.useState(null);
-  const [rulesText, setRulesText] = React.useState(&quot;Nie załączono regulaminu&quot;);
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  const [rulesFile, setRulesFile] = React.useState(initialData.rules_pdf);
+  const [rulesText, setRulesText] = React.useState(
+    initialData.rules_pdf ? &quot;Załączono regulamin&quot; : &quot;Nie załączono regulaminu&quot;
+  );
   const handleRulesFileChange = (event) =&gt; {
     const file = event.target.files[0];
     setRulesFile(file);
@@ -436,13 +590,12 @@
   };
 </pre></div>
 </div>
-</section>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-55414e9f">
+<div class="need_container docutils container" id="SNCB-bb46152a">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_12">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -458,27 +611,20 @@
 </td>
 </tr>
 <tr class="need content row-odd"><td class="need content" colspan="1"><p>W zależności od oznaczenia, formularz zgłoszeniowy będzie wyglądał inaczej.</p>
-<section id="id1">
-<h3>Kod realizujący wymaganie:<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>            <span class="o">&lt;</span><span class="n">FormControlLabel</span>
               <span class="n">value</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
               <span class="n">control</span><span class="o">=</span><span class="p">{</span><span class="o">&lt;</span><span class="n">Radio</span> <span class="o">/&gt;</span><span class="p">}</span>
               <span class="n">label</span><span class="o">=</span><span class="s2">&quot;indywidualny&quot;</span>
             <span class="o">/&gt;</span>
-            <span class="o">&lt;</span><span class="n">FormControlLabel</span> 
-              <span class="n">value</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
-              <span class="n">control</span><span class="o">=</span><span class="p">{</span><span class="o">&lt;</span><span class="n">Radio</span> <span class="o">/&gt;</span><span class="p">}</span>
-              <span class="n">label</span><span class="o">=</span><span class="s2">&quot;grupowy&quot;</span> 
-            <span class="o">/&gt;</span>
+            <span class="o">&lt;</span><span class="n">FormControlLabel</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;0&quot;</span> <span class="n">control</span><span class="o">=</span><span class="p">{</span><span class="o">&lt;</span><span class="n">Radio</span> <span class="o">/&gt;</span><span class="p">}</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;grupowy&quot;</span> <span class="o">/&gt;</span>
 </pre></div>
 </div>
-</section>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-3db7e6c5">
+<div class="need_container docutils container" id="SNCB-8080d92b">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_13">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -498,7 +644,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-92f6bc6f">
+<div class="need_container docutils container" id="SNCB-e20fd6e2">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_14">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -513,21 +659,21 @@
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"><section id="id2">
-<h3>Kod realizujący wymaganie:<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">GradeCriterion</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">contest</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Contest</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+<tr class="need content row-odd"><td class="need content" colspan="1"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">GradeCriterion</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">contest</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Contest</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">)</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
     <span class="n">max_rating</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">SET_NULL</span><span class="p">)</span>
+
+
 </pre></div>
 </div>
-</section>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-701ab27f">
+<div class="need_container docutils container" id="SNCB-c074677d">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_15">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -547,7 +693,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-645cf711">
+<div class="need_container docutils container" id="SNCB-4e8080bd">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_16">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -570,7 +716,7 @@
 </section>
 <section id="powiadomienia-mailingowe">
 <h2>5. Powiadomienia mailingowe:<a class="headerlink" href="#powiadomienia-mailingowe" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-24a90f57">
+<div class="need_container docutils container" id="SNCB-6f9e7aab">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_17">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -585,12 +731,31 @@
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">send_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject&quot;</span><span class="p">)</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
+        <span class="n">host_email</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">EMAIL_HOST_USER</span>
+
+        <span class="c1"># Create message list for send_mass_mail</span>
+        <span class="c1"># as specified in the documentation for send_mass_mail</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">host_email</span><span class="p">,</span> <span class="p">[</span><span class="n">receiver</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">]])</span>
+            <span class="k">for</span> <span class="n">receiver</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;receivers&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">send_email_task</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Response</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-fd41fe3b">
+<div class="need_container docutils container" id="SNCB-f5db672a">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_18">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -605,12 +770,58 @@
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>            <span class="o">&lt;</span><span class="n">form</span> <span class="n">onSubmit</span><span class="o">=</span><span class="p">{</span><span class="n">handleSubmit</span><span class="p">}</span> <span class="n">style</span><span class="o">=</span><span class="p">{{</span> <span class="n">width</span><span class="p">:</span> <span class="s2">&quot;100%&quot;</span> <span class="p">}}</span><span class="o">&gt;</span>
+              <span class="o">&lt;</span><span class="n">FormControl</span> <span class="n">fullWidth</span> <span class="n">margin</span><span class="o">=</span><span class="s2">&quot;normal&quot;</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="n">InputLabel</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;receivers-label&quot;</span><span class="o">&gt;</span><span class="n">Odbiorcy</span><span class="o">&lt;/</span><span class="n">InputLabel</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="n">Select</span>
+                  <span class="n">labelId</span><span class="o">=</span><span class="s2">&quot;receivers-label&quot;</span>
+                  <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;receivers&quot;</span>
+                  <span class="n">name</span><span class="o">=</span><span class="s2">&quot;receivers&quot;</span>
+                  <span class="n">value</span><span class="o">=</span><span class="p">{</span><span class="n">emailData</span><span class="o">.</span><span class="n">receivers</span><span class="p">}</span>
+                  <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Receivers&quot;</span>
+                  <span class="n">onChange</span><span class="o">=</span><span class="p">{</span><span class="n">handleChange</span><span class="p">}</span>
+                <span class="o">&gt;</span>
+                  <span class="p">{</span><span class="n">usersEmails</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="n">MenuItem</span> <span class="n">value</span><span class="o">=</span><span class="p">{</span><span class="n">usersEmails</span><span class="p">}</span><span class="o">&gt;</span><span class="n">Użytkownicy</span><span class="o">&lt;/</span><span class="n">MenuItem</span><span class="o">&gt;</span>
+                  <span class="p">)}</span>
+                  <span class="p">{</span><span class="n">schoolsEmails</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="n">MenuItem</span> <span class="n">value</span><span class="o">=</span><span class="p">{</span><span class="n">schoolsEmails</span><span class="p">}</span><span class="o">&gt;</span><span class="n">Szkoły</span><span class="o">&lt;/</span><span class="n">MenuItem</span><span class="o">&gt;</span>
+                  <span class="p">)}</span>
+                  <span class="p">{</span><span class="n">usersEmails</span><span class="o">.</span><span class="n">length</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">schoolsEmails</span><span class="o">.</span><span class="n">length</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="n">MenuItem</span> <span class="n">disabled</span><span class="o">&gt;</span><span class="n">Brak</span> <span class="n">dostępnych</span> <span class="nb">list</span> <span class="n">odbiorców</span><span class="o">&lt;/</span><span class="n">MenuItem</span><span class="o">&gt;</span>
+                  <span class="p">)}</span>
+                <span class="o">&lt;/</span><span class="n">Select</span><span class="o">&gt;</span>
+              <span class="o">&lt;/</span><span class="n">FormControl</span><span class="o">&gt;</span>
+              <span class="o">&lt;</span><span class="n">TextField</span>
+                <span class="n">fullWidth</span>
+                <span class="n">margin</span><span class="o">=</span><span class="s2">&quot;normal&quot;</span>
+                <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;subject&quot;</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;subject&quot;</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Tytuł&quot;</span>
+                <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Wprowadź tytuł newslettera&quot;</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">{</span><span class="n">emailData</span><span class="o">.</span><span class="n">subject</span><span class="p">}</span>
+                <span class="n">onChange</span><span class="o">=</span><span class="p">{</span><span class="n">handleChange</span><span class="p">}</span>
+              <span class="o">/&gt;</span>
+              <span class="o">&lt;</span><span class="n">TextField</span>
+                <span class="n">fullWidth</span>
+                <span class="n">margin</span><span class="o">=</span><span class="s2">&quot;normal&quot;</span>
+                <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;message&quot;</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;message&quot;</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Treść e-mail&quot;</span>
+                <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Wpisz treść wiadomości&quot;</span>
+                <span class="n">multiline</span>
+                <span class="n">rows</span><span class="o">=</span><span class="p">{</span><span class="mi">15</span><span class="p">}</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">{</span><span class="n">emailData</span><span class="o">.</span><span class="n">message</span><span class="p">}</span>
+                <span class="n">onChange</span><span class="o">=</span><span class="p">{</span><span class="n">handleChange</span><span class="p">}</span>
+              <span class="o">/&gt;</span>
+</pre></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-3e6dae26">
+<div class="need_container docutils container" id="SNCB-2d046708">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_19">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -630,7 +841,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-88d1584c">
+<div class="need_container docutils container" id="SNCB-a75c4b33">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_20">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -639,7 +850,7 @@
 </td>
 </tr>
 <tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
-<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">wysoki</span></span></div>
+<div class="line"><span><span><div class="line"><span class="needs_priorytet"><span class="needs_label">priorytet: </span><span class="needs_data">niski</span></span></div>
 </span></span></div>
 <div class="line"><span></span></div>
 </div>
@@ -653,7 +864,7 @@
 </section>
 <section id="zbieranie-i-obsluga-zgloszen">
 <h2>6. Zbieranie i obsługa zgłoszeń:<a class="headerlink" href="#zbieranie-i-obsluga-zgloszen" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-c88e5edc">
+<div class="need_container docutils container" id="SNCB-b1a3ed4f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_21">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -672,24 +883,51 @@
 <li><p>Każdy kafelek posiada widoczny przycisk z napisem “Szczegóły i zgłoszenia”</p></li>
 <li><p>Po kliknięciu przycisku użytkownik zostaje przeniesiony na stronę poświęconą danemu konkursowi</p></li>
 </ul>
-<section id="id3">
-<h3>Kod realizujący wymaganie:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          &lt;Link to={`/create-entry/${selectedContest?.id}`}&gt;
-            &lt;GreenButton&gt;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          {selectedContest?.status === &quot;ongoing&quot; ? (
+            &lt;Link to={`/create-entry/${selectedContest?.id}`}&gt;
+              &lt;GreenButton&gt;
+                &lt;Typography align=&quot;center&quot; style={{ color: &quot;white&quot; }}&gt;
+                  Weź udział
+                &lt;/Typography&gt;
+              &lt;/GreenButton&gt;
+            &lt;/Link&gt;
+          ) : (
+            userData.is_staff &amp;&amp; (
+              &lt;Link to={`/create-entry/${selectedContest?.id}`}&gt;
+                &lt;GreenButton&gt;
+                  &lt;Typography align=&quot;center&quot; style={{ color: &quot;white&quot; }}&gt;
+                    Dodaj zgłoszenie poza terminem
+                  &lt;/Typography&gt;
+                &lt;/GreenButton&gt;
+              &lt;/Link&gt;
+            )
+          )}
+          {userData.is_staff &amp;&amp; (
+            &lt;Link to={`/edit-contest/${selectedContest?.id}`}&gt;
+              &lt;GreenButton&gt;
+                &lt;Typography align=&quot;center&quot; style={{ color: &quot;white&quot; }}&gt;
+                  Edytuj
+                &lt;/Typography&gt;
+              &lt;/GreenButton&gt;
+            &lt;/Link&gt;
+          )}
+          {userData.is_staff &amp;&amp; (
+            &lt;GreenButton
+              onClick={() =&gt; openConfirmationDialog(selectedContest)}
+            &gt;
               &lt;Typography align=&quot;center&quot; style={{ color: &quot;white&quot; }}&gt;
-                Weź udział
+                Usuń
               &lt;/Typography&gt;
             &lt;/GreenButton&gt;
-          &lt;/Link&gt;
+          )}
 </pre></div>
 </div>
-</section>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-d2e8beb2">
+<div class="need_container docutils container" id="SNCB-4c29f233">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_22">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -708,20 +946,17 @@
 <li><p>Informacje o konkursie: nazwa, opis konkursu, harmonogram wraz z terminami nadsyłania prac i ogłoszenia wyników, regulamin widoczny po rozwinięciu, wyraźnie zaznaczona grupa docelowa.</p></li>
 <li><p>Formularz zgłoszeniowy z polami do wypełnienia.</p></li>
 </ul>
-<section id="id4">
-<h3>Kod realizujący wymaganie:<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>        <span class="o">&lt;</span><span class="n">div</span> <span class="n">className</span><span class="o">=</span><span class="s2">&quot;form&quot;</span><span class="o">&gt;</span>
           <span class="o">&lt;</span><span class="n">EntryForm</span> <span class="n">contestId</span><span class="o">=</span><span class="p">{</span><span class="n">contestId</span><span class="p">}</span> <span class="n">onSubmit</span><span class="o">=</span><span class="p">{</span><span class="n">handleFormSubmit</span><span class="p">}</span> <span class="o">/&gt;</span>
         <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-</section>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-55cd8ec9">
+<div class="need_container docutils container" id="SNCB-733acd35">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_23">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -742,8 +977,6 @@
 <li><p>Uczestnik indywidualny widzi formularz standardowy opisany poniżej.</p></li>
 <li><p>Dowódca zespołu posiada dodatkowo możliwość podania danych osobowych pozostałych członków zespołu.</p></li>
 </ul>
-<section id="id5">
-<h3>Kod realizujący wymaganie:<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>        {personComponents}
         {!contest.individual &amp;&amp; (
           &lt;TextButton
@@ -760,14 +993,20 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
     <span class="n">surname</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+
 </pre></div>
 </div>
 <ul class="simple">
 <li><p>Koordynator szkoły posiada możliwość zamieszczenia większej liczby prac wraz z danymi uczniów/zespołów, którzy je wykonali. Status koordynatora nadawany jest zarejestrowanym użytkownikom przez administratora systemu.</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">AbstractUser</span><span class="p">):</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">is_jury</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">is_coordinating_unit</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">is_newsletter_subscribed</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
 <span class="c1"># REQ_06A_END</span>
 </pre></div>
 </div>
@@ -780,13 +1019,12 @@
             <span class="p">)</span>
 </pre></div>
 </div>
-</section>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-16192d76">
+<div class="need_container docutils container" id="SNCB-5e874514">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_24">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -803,13 +1041,15 @@
 </tr>
 <tr class="need content row-odd"><td class="need content" colspan="1"><p>Zbierane informacje odnośnie zgłoszenia:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Entry</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">contest</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Contest</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">contest</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Contest</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">SET_NULL</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">contestants</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Person</span><span class="p">)</span>
     <span class="n">date_submitted</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">)</span>
     <span class="n">email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">entry_title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
     <span class="n">entry_file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">favourite</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">canceled</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </td>
@@ -817,7 +1057,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-60d30a67">
+<div class="need_container docutils container" id="SNCB-3c61d2b8">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_25">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -851,7 +1091,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-69e2b37c">
+<div class="need_container docutils container" id="SNCB-15ca2864">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_26">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -871,7 +1111,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-b68ebeac">
+<div class="need_container docutils container" id="SNCB-fbe75eaa">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_27">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -915,7 +1155,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-d9c61f75">
+<div class="need_container docutils container" id="SNCB-3352590f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_28">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -946,7 +1186,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-e45cdfa6">
+<div class="need_container docutils container" id="SNCB-4fcbc283">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_29">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -961,12 +1201,12 @@
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>Wymaganie zrealizowane poprzez wewnętrzne mechanizmy form HTML5.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-90ad084b">
+<div class="need_container docutils container" id="SNCB-97d654ae">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_30">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -986,12 +1226,28 @@
 <li><p>Może wypełniać i zmieniać zawartość pól w bazie danych</p></li>
 <li><p>Administrator może dodać zgłoszenie ręcznie na przykład za indywidualną prośbą uczestnika</p></li>
 </ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          <span class="o">&lt;</span><span class="n">Typography</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{{</span> <span class="n">fontWeight</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">marginTop</span><span class="p">:</span> <span class="s2">&quot;20px&quot;</span> <span class="p">}}</span>
+            <span class="n">variant</span><span class="o">=</span><span class="s2">&quot;h4&quot;</span>
+            <span class="n">component</span><span class="o">=</span><span class="s2">&quot;h1&quot;</span>
+          <span class="o">&gt;</span>
+            <span class="n">Prace</span> <span class="n">konkursowe</span><span class="p">:</span> <span class="p">{</span><span class="n">contest</span><span class="o">.</span><span class="n">title</span><span class="p">}</span>
+          <span class="o">&lt;/</span><span class="n">Typography</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="n">Select</span> <span class="n">value</span><span class="o">=</span><span class="p">{</span><span class="n">sortOrder</span><span class="p">}</span> <span class="n">onChange</span><span class="o">=</span><span class="p">{</span><span class="n">handleSortChange</span><span class="p">}</span> <span class="n">sx</span><span class="o">=</span><span class="p">{{</span> <span class="n">mt</span><span class="p">:</span> <span class="mi">2</span> <span class="p">}}</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">MenuItem</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;asc&quot;</span><span class="o">&gt;</span><span class="n">Od</span> <span class="n">nieocenionych</span><span class="o">/</span><span class="n">najniżej</span> <span class="n">ocenionych</span><span class="o">&lt;/</span><span class="n">MenuItem</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">MenuItem</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;desc&quot;</span><span class="o">&gt;</span><span class="n">Od</span> <span class="n">najwyżej</span> <span class="n">ocenionych</span><span class="o">&lt;/</span><span class="n">MenuItem</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">MenuItem</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;favourite&quot;</span><span class="o">&gt;</span><span class="n">Od</span> <span class="n">ulubionych</span><span class="o">&lt;/</span><span class="n">MenuItem</span><span class="o">&gt;</span>
+          <span class="o">&lt;/</span><span class="n">Select</span><span class="o">&gt;</span>
+        <span class="o">&lt;/</span><span class="n">Box</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">BackButton</span> <span class="n">clickHandler</span><span class="o">=</span><span class="p">{</span><span class="n">handleBackClick</span><span class="p">}</span> <span class="o">/&gt;</span>
+</pre></div>
+</div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-a4e3bc22">
+<div class="need_container docutils container" id="SNCB-bcfbc078">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_31">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1006,7 +1262,35 @@
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          &lt;CardContent sx={{ width: &quot;100%&quot; }}&gt;
+            &lt;Box
+              sx={{
+                display: &quot;flex&quot;,
+                justifyContent: &quot;center&quot;,
+                overflow: &quot;hidden&quot;,
+              }}
+            &gt;
+              {entryData.entry_file ? (
+                &lt;img
+                  src={entryData.entry_file}
+                  alt=&quot;Nie można wyświetlić tej pracy. Pobierz plik.&quot;
+                  style={{ maxWidth: &quot;600px&quot;, width: &quot;100%&quot;, height: &quot;auto&quot; }}
+                /&gt;
+              ) : (
+                &lt;Typography variant=&quot;body1&quot; component=&quot;div&quot;&gt;
+                  Zgłoszenie nie zawiera żadnego dołączonego pliku. Praca mogła
+                  zostać dostarczona jedynie w formie fizycznej.
+                &lt;/Typography&gt;
+              )}
+            &lt;/Box&gt;
+          &lt;/CardContent&gt;
+          &lt;FileDownloadButton
+            text=&quot;Pobierz pracę&quot;
+            link={entryData.entry_file}
+          /&gt;
+</pre></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1014,7 +1298,7 @@
 </section>
 <section id="ocenianie-i-jury">
 <h2>7. Ocenianie i jury<a class="headerlink" href="#ocenianie-i-jury" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-730924a1">
+<div class="need_container docutils container" id="SNCB-03636c45">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_32">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1034,7 +1318,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-ece849a9">
+<div class="need_container docutils container" id="SNCB-1bdc366f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_33">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1051,14 +1335,30 @@
 </tr>
 <tr class="need content row-odd"><td class="need content" colspan="1"><ul class="simple">
 <li><p>Praca konkursowa opatrzona jest danymi autora, które są widoczne dopiero po kliknięciu przycisku, aby nie sugerować się nimi przy ocenie.</p></li>
-<li><p>Istnieje możliwość filtrowania prac oznaczonych gwiazdką (faworyci), krzyżykiem (odrzuceni) oraz prac jeszcze nieocenionych przez danego jurora.</p></li>
+<li><p>Istnieje możliwość filtrowania prac faworytów oraz prac jeszcze nieocenionych przez danego jurora.</p></li>
 </ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          <span class="o">&lt;</span><span class="n">Typography</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{{</span> <span class="n">fontWeight</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">marginTop</span><span class="p">:</span> <span class="s2">&quot;20px&quot;</span> <span class="p">}}</span>
+            <span class="n">variant</span><span class="o">=</span><span class="s2">&quot;h4&quot;</span>
+            <span class="n">component</span><span class="o">=</span><span class="s2">&quot;h1&quot;</span>
+          <span class="o">&gt;</span>
+            <span class="n">Prace</span> <span class="n">konkursowe</span><span class="p">:</span> <span class="p">{</span><span class="n">contest</span><span class="o">.</span><span class="n">title</span><span class="p">}</span>
+          <span class="o">&lt;/</span><span class="n">Typography</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="n">Select</span> <span class="n">value</span><span class="o">=</span><span class="p">{</span><span class="n">sortOrder</span><span class="p">}</span> <span class="n">onChange</span><span class="o">=</span><span class="p">{</span><span class="n">handleSortChange</span><span class="p">}</span> <span class="n">sx</span><span class="o">=</span><span class="p">{{</span> <span class="n">mt</span><span class="p">:</span> <span class="mi">2</span> <span class="p">}}</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">MenuItem</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;asc&quot;</span><span class="o">&gt;</span><span class="n">Od</span> <span class="n">nieocenionych</span><span class="o">/</span><span class="n">najniżej</span> <span class="n">ocenionych</span><span class="o">&lt;/</span><span class="n">MenuItem</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">MenuItem</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;desc&quot;</span><span class="o">&gt;</span><span class="n">Od</span> <span class="n">najwyżej</span> <span class="n">ocenionych</span><span class="o">&lt;/</span><span class="n">MenuItem</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">MenuItem</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;favourite&quot;</span><span class="o">&gt;</span><span class="n">Od</span> <span class="n">ulubionych</span><span class="o">&lt;/</span><span class="n">MenuItem</span><span class="o">&gt;</span>
+          <span class="o">&lt;/</span><span class="n">Select</span><span class="o">&gt;</span>
+        <span class="o">&lt;/</span><span class="n">Box</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">BackButton</span> <span class="n">clickHandler</span><span class="o">=</span><span class="p">{</span><span class="n">handleBackClick</span><span class="p">}</span> <span class="o">/&gt;</span>
+</pre></div>
+</div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-f8c3abf8">
+<div class="need_container docutils container" id="SNCB-7ea03a41">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_34">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1074,20 +1374,38 @@
 </tr>
 <tr class="need content row-odd"><td class="need content" colspan="1"><ul class="simple">
 <li><p>Juror wpisuje wartość zgodnie z ustaloną skalą dla każdego kryterium.</p></li>
-<li><p>Zawsze dostępne jest pole “Uwagi” na komentarz tekstowy.</p></li>
-<li><p>Jurorzy mają możliwość segregowania prac poprzez oznaczenie je gwiazdką (takie, które przejdą do finału) oraz czerwonym krzyżykiem (wstępnie odrzucone).</p></li>
-<li><p>Oznaczenie pracy krzyżykiem lub gwiazdką można zmieniać w dowolnym momencie.</p></li>
+<li><p>Opcjonalnie dostępne jest pole “Uwagi” na komentarz tekstowy.</p></li>
 </ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  const handleGradeUpload = async (updatedGradesAndCriterions) =&gt; {
+    setUploadError(false);
+    try {
+      const headers = {
+        headers: {
+          &quot;Content-Type&quot;: &quot;application/json&quot;,
+          Authorization: &quot;Token &quot; + sessionStorage.getItem(&quot;accessToken&quot;),
+        },
+      };
+      for (const pair of updatedGradesAndCriterions) {
+        await axios.patch(
+          `${import.meta.env.VITE_API_URL}api/grades/${pair.grade.id}/`,
+          pair.grade,
+          headers,
+        );
+      }
+      console.log(&quot;Grades updated successfully&quot;);
+      setOpenPopup(true);
+</pre></div>
+</div>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-8f201e27">
+<div class="need_container docutils container" id="SNCB-7f081d0f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_35">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Po ocenie pracy przez każdego jurora system oblicza i wyświetla przy niej średnią i medianę ocen dla każdej kategorii oraz łącznie.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_35" title="REQ_35">REQ_35</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Wymaganie</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">Po ocenie pracy przez każdego jurora system oblicza i wyświetla przy niej średnią ocen.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#REQ_35" title="REQ_35">REQ_35</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -1098,15 +1416,22 @@
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="o">&lt;</span><span class="n">EntryScore</span>
+                <span class="n">badgeColor</span><span class="o">=</span><span class="p">{</span><span class="n">badgeColor</span><span class="p">}</span>
+                <span class="n">score</span><span class="o">=</span><span class="p">{</span><span class="n">entry</span><span class="o">.</span><span class="n">score</span><span class="p">}</span>
+                <span class="n">maxScore</span><span class="o">=</span><span class="p">{</span><span class="n">maxScore</span><span class="p">}</span>
+              <span class="o">/&gt;</span>
+</pre></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
 <section id="raportowanie">
-<h2>8. Raportowanie<a class="headerlink" href="#raportowanie" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-33b57c5b">
+<h2>8. Raportowanie*<a class="headerlink" href="#raportowanie" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-697cd56c">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_36">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1126,7 +1451,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-56a4a814">
+<div class="need_container docutils container" id="SNCB-9676a9c2">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_37">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1146,7 +1471,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-33fecaf0">
+<div class="need_container docutils container" id="SNCB-cc2d0386">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_38">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1176,7 +1501,7 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Platforma Konkursowa</a></h1>
+<h1 class="logo"><a href="index.html">Rozbudowa platformy konkursowej dla fundacji Bo Warto</a></h1>
 
 
 
@@ -1187,6 +1512,8 @@
 
 <h3>Nawigacja</h3>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Cel projektu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_stories.html">User stories</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Wymagania projektu</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#integracja-ze-strona-internetowa">1. Integracja ze stroną internetową:</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#integracja-z-baza-adresowa">2. Integracja z bazą adresową:</a></li>
@@ -1195,20 +1522,25 @@
 <li class="toctree-l2"><a class="reference internal" href="#powiadomienia-mailingowe">5. Powiadomienia mailingowe:</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#zbieranie-i-obsluga-zgloszen">6. Zbieranie i obsługa zgłoszeń:</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ocenianie-i-jury">7. Ocenianie i jury</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#raportowanie">8. Raportowanie</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raportowanie">8. Raportowanie*</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architektura</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_instruction.html">Podręcznik użytkownika</a></li>
+<li class="toctree-l1"><a class="reference internal" href="technological_stack.html">Stack technologiczny</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliografia</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="poprzedni rozdział">Dokumentacja kodu Platformy Konkursowej dla fundacji BoWarto.</a></li>
+      <li>Previous: <a href="user_stories.html" title="poprzedni rozdział">User stories</a></li>
+      <li>Next: <a href="architecture.html" title="następny rozdział">Architektura</a></li>
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Szybkie wyszukiwanie</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -1216,7 +1548,7 @@
       <input type="submit" value="Szukaj" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
 
 
@@ -1231,10 +1563,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &#169;2023, Kinga Świderek, Filip Budzyński, Jan Filipecki, Jakub Kowalczyk, Jakub Podrażka.
+      &#169;2024, Jakub Kowalczyk, Piotr Kowalski, Paweł Dombrzalski.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |

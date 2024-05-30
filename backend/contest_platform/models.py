@@ -35,12 +35,12 @@ class Contest(models.Model):
         return f"{self.title, self.description}"
 
     def save(self, *args, **kwargs):
-        today = timezone.now().date()
-        if self.status != "finished":
-            if self.date_start <= today < self.date_end and self.status != "ongoing":
-                self.status = "ongoing"
-            elif today >= self.date_end and self.status != "judging":
-                self.status = "judging"
+        today = timezone.localtime(timezone.now()).date()
+        if self.status != 'finished':
+            if self.date_start <= today <= self.date_end and self.status != 'ongoing':
+                self.status = 'ongoing'
+            elif today > self.date_end and self.status != 'judging':
+                self.status = 'judging'
         super().save(*args, **kwargs)
 
 
@@ -69,6 +69,7 @@ class Person(models.Model):
 # REQ_06A
 # REQ_23B
 class User(AbstractUser):
+    email = models.EmailField(unique=True)
     is_jury = models.BooleanField(default=False)
     is_coordinating_unit = models.BooleanField(default=False)
     is_newsletter_subscribed = models.BooleanField(default=False)

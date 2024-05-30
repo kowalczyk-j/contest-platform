@@ -30,7 +30,7 @@ from .permissions import (
     GradePermissions,
     SchoolPermission,
 )
-from .tasks import send_email_task, send_certificate_task
+from .tasks import send_email_task, send_certificates_task
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -43,6 +43,16 @@ from django.http import HttpResponse
 from weasyprint import HTML
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
+from django.core.cache import cache
+
+
+# low values set for testing
+def cache_short_lived(key, value):
+    cache.set(key, value, timeout=30)
+
+
+def cache_long_lived(key, value):
+    cache.set(key, value, timeout=90)
 
 
 class Logout(GenericAPIView):
@@ -65,15 +75,20 @@ class ContestViewSet(ModelViewSet):
     default_achievement = "za udział"
 
     @action(detail=True, methods=["get"])
-    def max_rating_sum(self, request, pk=None):
+    def max_rating_sum(self, request, pk):
         """
         Returns the sum of max_rating for all GradeCriteria
         related to the contest.
         """
+        key = f"max_rating_sum_{pk}"
+        stored_sum = cache.get(key)
+        if stored_sum:
+            return Response({"total_max_rating": stored_sum or 0})
         contest = self.get_object()
         total_max_rating = GradeCriterion.objects.filter(contest=contest).aggregate(
             Sum("max_rating")
         )["max_rating__sum"]
+        cache_long_lived(key, total_max_rating)
         return Response({"total_max_rating": total_max_rating or 0})
 
     def generate_pdf(self, data):
@@ -95,22 +110,14 @@ class ContestViewSet(ModelViewSet):
         user_details = entries.values_list(
             "user__first_name", "user__last_name", "user__email"
         ).distinct()
-
-        for first_name, last_name, email in user_details:
-            pdf = self.generate_pdf(
-                data={
-                    "participant": f"{first_name} {last_name}",
-                    "achievement": self.default_achievement,
-                    "email": email,
-                    "signatory": signatory,
-                    "signature": signature,
-                    "contest": contest.description,
-                }
-            )
-
-            subject = "Twój certyfikat"
-            message = "Dziękujemy za udział!."
-            send_certificate_task(subject, message, first_name, last_name, email, pdf)
+        send_certificates_task(
+            user_details,
+            signatory,
+            signature,
+            contest.description,
+            self.default_achievement,
+            self.certificate_template_path
+        )
 
         return Response({"status": "certificates sent"})
 
@@ -152,7 +159,8 @@ class ContestViewSet(ModelViewSet):
         message = request.data.get("message")
         host_email = settings.EMAIL_HOST_USER
 
-        # Create message list for send_mass_mail as specified in the documentation for send_mass_mail
+        # Create message list for send_mass_mail
+        # as specified in the documentation for send_mass_mail
         messages = [
             (subject, message, host_email, [receiver["email"]])
             for receiver in request.data.get("receivers")
@@ -177,7 +185,7 @@ class ContestViewSet(ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=["delete"], url_path="delete_with_related")
+    @action(detail=True, methods=['delete'], url_path='delete_with_related')
     def delete_with_related(self, request, pk=None):
         try:
             contest = self.get_object()
@@ -190,39 +198,64 @@ class ContestViewSet(ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=True, methods=["get"])
-    def get_contestants_amount(self, request, pk=None):
+    def get_contestants_amount(self, request, pk):
         """
         Returns all contestants for the current contest.
         """
+        key = f"contestants_amount_{pk}"
+        stored = cache.get(key)
+        if stored:
+            return Response(
+                {"contestant_amount": stored}, status=status.HTTP_200_OK
+            )
         contest = self.get_object()
         entries = Entry.objects.filter(contest=contest)
-        total_contestants = sum(entry.contestants.all().count() for entry in entries)
+        total_contestants = sum(
+            entry.contestants.all().count() for entry in entries
+            )
+        cache_short_lived(key, total_contestants)
         return Response(
             {"contestant_amount": total_contestants}, status=status.HTTP_200_OK
         )
 
     @action(detail=True, methods=["get"])
-    def get_entry_amount(self, request, pk=None):
+    def get_entry_amount(self, request, pk):
+        key = f"entry_amount_{pk}"
+        stored = cache.get(key)
+        if stored:
+            return Response(
+                {"entry_amount": stored}, status=status.HTTP_200_OK
+            )
         contest = self.get_object()
         entry_amount = Entry.objects.filter(contest=contest).count()
+        cache_short_lived(key, entry_amount)
         return Response({"entry_amount": entry_amount})
 
     @action(detail=True, methods=["get"])
-    def group_individual_comp(self, request, pk=None):
+    def group_individual_comp(self, request, pk):
         """
-        Returns plot data to compare the amount of group and individual submissions
+        Returns plot data to compare the
+        amount of group and individual submissions
         """
+        key = f"group_individual_comp_{pk}"
+        stored = cache.get(key)
+        if stored:
+            solo_entries, group_entries = stored
+            return Response(
+                {"solo_entries": solo_entries, "group_entries": group_entries},
+                status=status.HTTP_200_OK
+                )
         contest = self.get_object()
         entries = Entry.objects.filter(contest=contest).annotate(
             num_contestants=Count("contestants")
         )
         group_entries = entries.filter(num_contestants__gt=1).count()
         solo_entries = entries.count() - group_entries
-
+        cache_long_lived(key, (solo_entries, group_entries))
         return Response(
             {"solo_entries": solo_entries, "group_entries": group_entries},
-            status=status.HTTP_200_OK,
-        )
+            status=status.HTTP_200_OK
+            )
 
     @action(detail=True, methods=["get"])
     def get_submissions_by_day(self, request, pk=None):
@@ -231,9 +264,8 @@ class ContestViewSet(ModelViewSet):
         """
         contest = self.get_object()
 
-        def generate_date_range(
-            start_date, end_date
-        ):  # possibly move to separate utilities
+        # possibly move to separate utilities
+        def generate_date_range(start_date, end_date):
             current_date = start_date
             while current_date <= end_date:
                 yield current_date
@@ -252,16 +284,23 @@ class ContestViewSet(ModelViewSet):
             .annotate(entry_count=Count("id"))
         )
         daily_entries_dict = {
-            entry["date_submitted"]: entry["entry_count"] for entry in daily_entries
-        }
+            entry["date_submitted"]: entry["entry_count"]
+            for entry in daily_entries
+            }
 
         all_daily_entries = []
-        for date in generate_date_range(start_date, end_date):
+        for day in generate_date_range(start_date, end_date):
             all_daily_entries.append(
-                {"date_submitted": date, "entry_count": daily_entries_dict.get(date, 0)}
-            )
+                {
+                    "date_submitted": day,
+                    "entry_count": daily_entries_dict.get(day, 0)
+                    }
+                )
 
-        return Response({"daily_entries": all_daily_entries}, status=status.HTTP_200_OK)
+        return Response(
+            {"daily_entries": all_daily_entries},
+            status=status.HTTP_200_OK
+            )
 
     # Endpoints:
     # total submissions - exists already probably
@@ -323,20 +362,21 @@ class GradeViewSet(ModelViewSet):
         contest_id = request.query_params.get("contestId", None)
         if contest_id is None:
             return Response(
-                {"error": "contestId parameter is required."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+                {'error': 'contestId parameter is required.'},
+                status=status.HTTP_400_BAD_REQUEST
+                )
         try:
             contest_id = int(contest_id)
         except ValueError:
             return Response(
-                {"error": "contestId must be an integer."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+                {'error': 'contestId must be an integer.'},
+                status=status.HTTP_400_BAD_REQUEST
+                )
 
         queryset_criterion = GradeCriterion.objects.filter(
-            user=user, contest=contest_id
-        )
+            user=user,
+            contest=contest_id
+            )
         qs = self.get_queryset().filter(criterion__in=queryset_criterion)
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
@@ -374,21 +414,141 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def emails_subscribed(self, request):
         """
-        Returns a list of first 500 emails in the database - subscribed to the newsletter.
+        Returns a list of first 500 emails in the
+        database - subscribed to the newsletter.
         500 is max SMTP gmail daily limit.
         """
-        emails = User.objects.filter(is_newsletter_subscribed=True).values("email")[
-            :500
-        ]
+        emails = User.objects.filter(
+            is_newsletter_subscribed=True
+            ).values("email")[:500]
         return Response(emails)
 
     @action(detail=False, methods=["get"])
     def jury_users(self, request):
-        jury_users = self.queryset.filter(is_jury=True)
+        key = 'jury_users'
+        jury_users = cache.get(key)
+        if not jury_users:
+            jury_users = list(User.objects.filter(is_jury=True))
+            cache_long_lived(key, jury_users)
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=["put"], url_path='update_profile')
+    def update_profile(self, request):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=["post"], url_path='change_password')
+    def change_password(self, request):
+        user = request.user
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        if not user.check_password(old_password):
+            return Response(
+                {'detail': 'Obecne hasło jest nieprawidłowe'},
+                status=status.HTTP_400_BAD_REQUEST
+                )
+        if len(new_password) < 5:
+            return Response(
+                {'detail': 'Nowe hasło musi mieć co najmniej 5 znaków'},
+                status=status.HTTP_400_BAD_REQUEST
+                )
+        user.set_password(new_password)
+        user.save()
+        return Response(
+            {'detail': 'Pomyślnie zmieniono hasło'},
+            status=status.HTTP_200_OK
+            )
+
+    @action(detail=True, methods=["delete"], url_path='delete_account')
+    def delete_account(self, request, pk=None):
+        if pk:
+            if not request.user.is_staff:
+                resp = 'Nie masz uprawnień do usuwania innych użytkowników.'
+                return Response(
+                    {'detail': resp},
+                    status=status.HTTP_403_FORBIDDEN
+                    )
+            user = User.objects.get(pk=pk)
+        else:
+            user = request.user
+
+        if user.is_staff:
+            return Response(
+                {'detail': 'Nie można usunąć konta administratora.'},
+                status=status.HTTP_403_FORBIDDEN
+                )
+
+        # Delete grades to user entries
+        user_entries = Entry.objects.filter(user=user)
+        Grade.objects.filter(entry__in=user_entries).delete()
+
+        # Delete entries
+        user_entries.delete()
+
+        # If it was a jury then assign his ratings to the main administrator
+        default_user = User.objects.get(pk=1)
+        GradeCriterion.objects.filter(user=user).update(user=default_user)
+
+        user.delete()
+
+        return Response(
+            {'detail': 'Konto zostało pomyślnie usunięte.'},
+            status=status.HTTP_204_NO_CONTENT
+            )
+
+    @action(detail=True, methods=["patch"], url_path='update_status')
+    def update_status(self, request, pk=None):
+        user = self.get_object()
+        status_type = request.data.get('statusType')
+
+        if user.is_superuser:
+            return Response(
+                {'detail': 'Nie można zmienić statusu administratora'},
+                status=status.HTTP_403_FORBIDDEN
+                )
+
+        status_mapping = {
+            'admin': {
+                'is_staff': True,
+                'is_jury': False,
+                'is_coordinating_unit': False
+                },
+            'jury': {
+                'is_staff': False,
+                'is_jury': True,
+                'is_coordinating_unit': False
+                },
+            'coordinating_unit': {
+                'is_staff': False,
+                'is_jury': False,
+                'is_coordinating_unit': True
+                },
+            'user': {
+                'is_staff': False,
+                'is_jury': False,
+                'is_coordinating_unit': False
+                },
+        }
+
+        if status_type not in status_mapping:
+            return Response(
+                {"detail": "Wystąpił błąd podczas nadawania uprawnień"},
+                status=status.HTTP_400_BAD_REQUEST
+                )
+
+        attributes_to_update = status_mapping[status_type]
+        for attribute, value in attributes_to_update.items():
+            setattr(user, attribute, value)
+
+        user.save()
+        return Response(
+            {"detail": f"Pomyślnie zmieniono rodzaj konta na {status_type}"},
+            status=status.HTTP_200_OK)
 # REQ_06B_END
 
 
@@ -406,6 +566,12 @@ class SchoolViewSet(ModelViewSet):
         """
         emails = School.objects.values("email")[:500]
         return Response(emails)
+
+    @action(detail=True, methods=['delete'], url_path='delete_school')
+    def delete_school(self, request, pk=None):
+        school = self.get_object()
+        school.delete()
+        return Response({'detail': 'School deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(["POST"])

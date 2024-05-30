@@ -1,4 +1,4 @@
-Dokumentacja kodu Platformy Konkursowej dla fundacji BoWarto.
+Dokumentacja Platformy Konkursowej dla fundacji "Bo Warto".
 =================================================================
 .. Tutaj dodajemy elementy do dokumentowania
 .. .. automodule:: backend.manage
@@ -23,7 +23,19 @@ Podstrony
 .. toctree::
    :maxdepth: 2
 
+   introduction
+
+   user_stories
+
    requirements
+
+   architecture
+
+   user_instruction
+
+   technological_stack
+
+   bibliography
 
 * :ref:`genindex`
 * :ref:`modindex`
