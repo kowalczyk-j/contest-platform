@@ -28,6 +28,7 @@ WeasyPrint = "*"
 black = "^24.4.2"
 yacron = "^0.19.0"
 django-redis = "*"
+locust = "*"
 
 [tool.poetry.group.dev.dependencies]
 sphinx = "*"

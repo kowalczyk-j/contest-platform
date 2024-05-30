@@ -84,6 +84,16 @@ sudo systemctl start redis
 sudo systemctl enable redis
 ```
 
+8. **Testy wydajnościowe locust**
+Uruchomienie serwera testowego:
+```shell
+backend/locust-performance$ locust -f locust-tasks.py
+```
+Uruchomienie testów i wgląd w raport przez [localhost:8089](http://localhost:8089).
+
+
+Należy wybrać ilość użytkowników wysyłających zapytania oraz wpisać hosta jako adres backendu: `http://localhost:8000`.
+
 ## Baza danych
 
 Projekt skonfigurowany jest do pracy z bazą PostgreSQL. Aby aplikacja instancja `django` działała poprawnie, powinieneś na swojej maszynie skonfigurować serwer `postgres`, i uruchomić go na porcie `5432`.
