@@ -31,6 +31,8 @@ Podstrony
 
    architecture
 
+   user_instruction
+
    technological_stack
 
    bibliography

@@ -50,7 +50,7 @@
 <h1>Wymagania projektu<a class="headerlink" href="#wymagania-projektu" title="Link to this heading">¶</a></h1>
 <section id="integracja-ze-strona-internetowa">
 <h2>1. Integracja ze stroną internetową:<a class="headerlink" href="#integracja-ze-strona-internetowa" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-e4a2263e">
+<div class="need_container docutils container" id="SNCB-d7449cdf">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_01">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -86,7 +86,7 @@
 </section>
 <section id="integracja-z-baza-adresowa">
 <h2>2. Integracja z bazą adresową:<a class="headerlink" href="#integracja-z-baza-adresowa" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-428ba930">
+<div class="need_container docutils container" id="SNCB-2eb5c2f0">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_02">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -106,7 +106,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-a09ef43d">
+<div class="need_container docutils container" id="SNCB-177b79a4">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_03">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -126,7 +126,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-9d119aa7">
+<div class="need_container docutils container" id="SNCB-d8b1c516">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_04">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -167,7 +167,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-7bbad52f">
+<div class="need_container docutils container" id="SNCB-e506ff43">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_05">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -201,7 +201,7 @@
 </section>
 <section id="rejestracja-administratorow-i-uzytkownikow">
 <h2>3. Rejestracja administratorów i użytkowników:<a class="headerlink" href="#rejestracja-administratorow-i-uzytkownikow" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-1d4b134d">
+<div class="need_container docutils container" id="SNCB-e2193496">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_06">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -253,15 +253,22 @@
     <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">emails_subscribed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a list of first 500 emails in the database - subscribed to the newsletter.</span>
+<span class="sd">        Returns a list of first 500 emails in the</span>
+<span class="sd">        database - subscribed to the newsletter.</span>
 <span class="sd">        500 is max SMTP gmail daily limit.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">emails</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_newsletter_subscribed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)[:</span><span class="mi">500</span><span class="p">]</span>
+        <span class="n">emails</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">is_newsletter_subscribed</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)[:</span><span class="mi">500</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">emails</span><span class="p">)</span>
 
     <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">jury_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
-        <span class="n">jury_users</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_jury</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;jury_users&#39;</span>
+        <span class="n">jury_users</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">jury_users</span><span class="p">:</span>
+            <span class="n">jury_users</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_jury</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="n">cache_long_lived</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">jury_users</span><span class="p">)</span>
         <span class="n">serializer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_serializer</span><span class="p">(</span><span class="n">jury_users</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
@@ -273,31 +280,47 @@
             <span class="n">serializer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
-    
+
     <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">],</span> <span class="n">url_path</span><span class="o">=</span><span class="s1">&#39;change_password&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">change_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
         <span class="n">old_password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;old_password&#39;</span><span class="p">)</span>
         <span class="n">new_password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;new_password&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">check_password</span><span class="p">(</span><span class="n">old_password</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">Response</span><span class="p">({</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Obecne hasło jest nieprawidłowe&#39;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Obecne hasło jest nieprawidłowe&#39;</span><span class="p">},</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span>
+                <span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_password</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">Response</span><span class="p">({</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Nowe hasło musi mieć co najmniej 5 znaków&#39;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Nowe hasło musi mieć co najmniej 5 znaków&#39;</span><span class="p">},</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span>
+                <span class="p">)</span>
         <span class="n">user</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="n">new_password</span><span class="p">)</span>
         <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">Response</span><span class="p">({</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Pomyślnie zmieniono hasło&#39;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+            <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Pomyślnie zmieniono hasło&#39;</span><span class="p">},</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span>
+            <span class="p">)</span>
 
     <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">],</span> <span class="n">url_path</span><span class="o">=</span><span class="s1">&#39;delete_account&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">delete_account</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">pk</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">Response</span><span class="p">({</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Nie masz uprawnień do usuwania innych użytkowników.&#39;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span><span class="p">)</span>
+                <span class="n">resp</span> <span class="o">=</span> <span class="s1">&#39;Nie masz uprawnień do usuwania innych użytkowników.&#39;</span>
+                <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="n">resp</span><span class="p">},</span>
+                    <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span>
+                    <span class="p">)</span>
             <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
 
         <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">Response</span><span class="p">({</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Nie można usunąć konta administratora.&#39;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Nie można usunąć konta administratora.&#39;</span><span class="p">},</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span>
+                <span class="p">)</span>
 
         <span class="c1"># Delete grades to user entries</span>
         <span class="n">user_entries</span> <span class="o">=</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
@@ -312,32 +335,59 @@
 
         <span class="n">user</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">Response</span><span class="p">({</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Konto zostało pomyślnie usunięte.&#39;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_204_NO_CONTENT</span><span class="p">)</span>
-    
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+            <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Konto zostało pomyślnie usunięte.&#39;</span><span class="p">},</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_204_NO_CONTENT</span>
+            <span class="p">)</span>
+
     <span class="nd">@action</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;patch&quot;</span><span class="p">],</span> <span class="n">url_path</span><span class="o">=</span><span class="s1">&#39;update_status&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">update_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span>
         <span class="n">status_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;statusType&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">Response</span><span class="p">({</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Nie można zmienić statusu administratora&#39;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="s1">&#39;Nie można zmienić statusu administratora&#39;</span><span class="p">},</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span>
+                <span class="p">)</span>
 
         <span class="n">status_mapping</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;admin&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
-            <span class="s1">&#39;jury&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
-            <span class="s1">&#39;coordinating_unit&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-            <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+            <span class="s1">&#39;admin&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">False</span>
+                <span class="p">},</span>
+            <span class="s1">&#39;jury&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">False</span>
+                <span class="p">},</span>
+            <span class="s1">&#39;coordinating_unit&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">True</span>
+                <span class="p">},</span>
+            <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;is_staff&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_jury&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;is_coordinating_unit&#39;</span><span class="p">:</span> <span class="kc">False</span>
+                <span class="p">},</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="n">status_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_mapping</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">Response</span><span class="p">({</span><span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;Wystąpił błąd podczas nadawania uprawnień&quot;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;Wystąpił błąd podczas nadawania uprawnień&quot;</span><span class="p">},</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span>
+                <span class="p">)</span>
 
         <span class="n">attributes_to_update</span> <span class="o">=</span> <span class="n">status_mapping</span><span class="p">[</span><span class="n">status_type</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attributes_to_update</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
         <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">Response</span><span class="p">({</span><span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Pomyślnie zmieniono rodzaj konta na </span><span class="si">{</span><span class="n">status_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Pomyślnie zmieniono rodzaj konta na </span><span class="si">{</span><span class="n">status_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Serializery</p>
@@ -370,7 +420,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-07753c16">
+<div class="need_container docutils container" id="SNCB-06c3e225">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_07">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -390,7 +440,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-82a2187f">
+<div class="need_container docutils container" id="SNCB-0e7577e4">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_08">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -418,7 +468,7 @@
 </section>
 <section id="zarzadzanie-konkursami">
 <h2>4. Zarządzanie konkursami:<a class="headerlink" href="#zarzadzanie-konkursami" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-a6267721">
+<div class="need_container docutils container" id="SNCB-8491734e">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_09">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -480,7 +530,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-67f57ca6">
+<div class="need_container docutils container" id="SNCB-f6d2d16b">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_10">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -511,7 +561,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-24b11f9b">
+<div class="need_container docutils container" id="SNCB-643220d0">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_11">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -545,7 +595,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-3036f182">
+<div class="need_container docutils container" id="SNCB-bb46152a">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_12">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -574,7 +624,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-c8c1d4be">
+<div class="need_container docutils container" id="SNCB-8080d92b">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_13">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -594,7 +644,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-a26da29f">
+<div class="need_container docutils container" id="SNCB-e20fd6e2">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_14">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -623,7 +673,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-c45da12e">
+<div class="need_container docutils container" id="SNCB-c074677d">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_15">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -643,7 +693,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-1f74815d">
+<div class="need_container docutils container" id="SNCB-4e8080bd">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_16">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -666,7 +716,7 @@
 </section>
 <section id="powiadomienia-mailingowe">
 <h2>5. Powiadomienia mailingowe:<a class="headerlink" href="#powiadomienia-mailingowe" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-9581ceba">
+<div class="need_container docutils container" id="SNCB-6f9e7aab">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_17">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -687,7 +737,8 @@
         <span class="n">message</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
         <span class="n">host_email</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">EMAIL_HOST_USER</span>
 
-        <span class="c1"># Create message list for send_mass_mail as specified in the documentation for send_mass_mail</span>
+        <span class="c1"># Create message list for send_mass_mail</span>
+        <span class="c1"># as specified in the documentation for send_mass_mail</span>
         <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">host_email</span><span class="p">,</span> <span class="p">[</span><span class="n">receiver</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">]])</span>
             <span class="k">for</span> <span class="n">receiver</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;receivers&quot;</span><span class="p">)</span>
@@ -704,7 +755,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-36fd913a">
+<div class="need_container docutils container" id="SNCB-f5db672a">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_18">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -770,7 +821,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-41550099">
+<div class="need_container docutils container" id="SNCB-2d046708">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_19">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -790,7 +841,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-a6593f68">
+<div class="need_container docutils container" id="SNCB-a75c4b33">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_20">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -813,7 +864,7 @@
 </section>
 <section id="zbieranie-i-obsluga-zgloszen">
 <h2>6. Zbieranie i obsługa zgłoszeń:<a class="headerlink" href="#zbieranie-i-obsluga-zgloszen" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-d83704b5">
+<div class="need_container docutils container" id="SNCB-b1a3ed4f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_21">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -876,7 +927,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-2c036021">
+<div class="need_container docutils container" id="SNCB-4c29f233">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_22">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -905,7 +956,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-df336bfc">
+<div class="need_container docutils container" id="SNCB-733acd35">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_23">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -973,7 +1024,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-9403e453">
+<div class="need_container docutils container" id="SNCB-5e874514">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_24">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1006,7 +1057,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-39c95780">
+<div class="need_container docutils container" id="SNCB-3c61d2b8">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_25">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1040,7 +1091,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-40e5411d">
+<div class="need_container docutils container" id="SNCB-15ca2864">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_26">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1060,7 +1111,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-a25b683a">
+<div class="need_container docutils container" id="SNCB-fbe75eaa">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_27">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1104,7 +1155,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-1464c701">
+<div class="need_container docutils container" id="SNCB-3352590f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_28">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1135,7 +1186,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-83c0cbb5">
+<div class="need_container docutils container" id="SNCB-4fcbc283">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_29">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1155,7 +1206,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-8897a084">
+<div class="need_container docutils container" id="SNCB-97d654ae">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_30">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1196,7 +1247,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-6c1a4131">
+<div class="need_container docutils container" id="SNCB-bcfbc078">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_31">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1247,7 +1298,7 @@
 </section>
 <section id="ocenianie-i-jury">
 <h2>7. Ocenianie i jury<a class="headerlink" href="#ocenianie-i-jury" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-48074f61">
+<div class="need_container docutils container" id="SNCB-03636c45">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_32">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1267,7 +1318,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-3264d3b8">
+<div class="need_container docutils container" id="SNCB-1bdc366f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_33">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1307,7 +1358,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-a4e31972">
+<div class="need_container docutils container" id="SNCB-7ea03a41">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_34">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1350,7 +1401,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-3a8332e5">
+<div class="need_container docutils container" id="SNCB-7f081d0f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_35">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1380,7 +1431,7 @@
 </section>
 <section id="raportowanie">
 <h2>8. Raportowanie*<a class="headerlink" href="#raportowanie" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-0f48b2c7">
+<div class="need_container docutils container" id="SNCB-697cd56c">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_36">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1400,7 +1451,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-24f46d01">
+<div class="need_container docutils container" id="SNCB-9676a9c2">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_37">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1420,7 +1471,7 @@
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-12506b05">
+<div class="need_container docutils container" id="SNCB-cc2d0386">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_req docutils align-default" id="REQ_38">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -1475,6 +1526,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architektura</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_instruction.html">Podręcznik użytkownika</a></li>
+<li class="toctree-l1"><a class="reference internal" href="technological_stack.html">Stack technologiczny</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliografia</a></li>
 </ul>
 
 <div class="relations">

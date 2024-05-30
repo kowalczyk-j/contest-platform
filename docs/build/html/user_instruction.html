@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Stack technologiczny &#8212; Rozbudowa platformy konkursowej dla fundacji Bo Warto  - dokumentacja</title>
+    <title>Podręcznik użytkownika &#8212; Rozbudowa platformy konkursowej dla fundacji Bo Warto  - dokumentacja</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
     <link rel="stylesheet" type="text/css" href="_static/assets/jsonview.bundle.css?v=f6ef2277" />
@@ -27,8 +27,8 @@
     <script src="_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=f783d6a5"></script>
     <link rel="index" title="Indeks" href="genindex.html" />
     <link rel="search" title="Szukaj" href="search.html" />
-    <link rel="next" title="Bibliografia" href="bibliography.html" />
-    <link rel="prev" title="Podręcznik użytkownika" href="user_instruction.html" />
+    <link rel="next" title="Stack technologiczny" href="technological_stack.html" />
+    <link rel="prev" title="Architektura" href="architecture.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -46,26 +46,15 @@
 
           <div class="body" role="main">
             
-  <section id="stack-technologiczny">
-<h1>Stack technologiczny<a class="headerlink" href="#stack-technologiczny" title="Link to this heading">¶</a></h1>
-<ul class="simple">
-<li><dl class="simple">
-<dt><strong>Backend:</strong> Python Django</dt><dd><ul>
-<li><p>Cache: Redis</p></li>
-<li><p>Kolejki: Dramatiq</p></li>
-<li><p>Harmonogramowanie: yacron</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p><strong>Frontend:</strong> React + Vite</p></li>
-<li><p><strong>Baza danych:</strong> PostgreSQL</p></li>
-<li><p><strong>Testy automatyczne:</strong> Selenium</p></li>
-<li><p><strong>Testy jednostkowe:</strong> Unittest</p></li>
-<li><p><strong>Konteneryzacja:</strong> Docker</p></li>
-<li><p><strong>Skrypty:</strong> Shell</p></li>
-<li><p><strong>Dokumentacja:</strong> Sphinx</p></li>
-</ul>
+  <section id="podrecznik-uzytkownika">
+<h1>Podręcznik użytkownika<a class="headerlink" href="#podrecznik-uzytkownika" title="Link to this heading">¶</a></h1>
+<p>Szczegółowa instrukcja pierwszego uruchomienia projektu została opisana w README.md. Później, aby uruchomić projekt wystarczy wywołać polecenie «poetry run ./run.sh» w katalogu «backend» projektu.</p>
+<p><strong>Ekran główny</strong>
+Przechodząc na stronę internetową platformy konkursowej, oczom użytkownika ukażą się wszystkie konkursy wraz z ich obecnym stanem (nierozpoczęty, w trakcie trwania/oceny, zakończony). Po kliknięciu pod plakatem wybranego konkursu przycisku “Więcej informacji”, użytkownik będzie mógł poznać dokładną nazwę i opis konkursu, pobrać regulamin konkursu, a także wziąć w nim udział. Jeśli użytkownik nie jest jeszcze zalogowany, przed wypełnieniem formularza zostanie przeniesiony do formularza logowania. Otrzymanie takiego formularza możliwe jest również po kliknięciu przycisku “Zaloguj się”, w górnym pasku nawigacyjnym strony. Rejestracja konta możliwa jest natomiast poprzez kliknięcie przycisku “Zarejestruj się”, znajdującego się w prawym górnym rogu ekranu. Pasek nawigacyjny strony pozwala oprócz tego na powrót do widoku wszystkich aktywnych konkursów (jest to opisywany właśnie ekran główny naszej platformy) oraz do strony głównej fundacji.</p>
+<p><strong>Formularz dodawania zgłoszeń konkursowych</strong>
+Po zalogowaniu się, użytkownik może wziąć udział w konkursie, wypełniając prosty formularz zgłoszeniowy. W przypadku konkursów grupowych, możliwe jest wpisanie wielu uczestników konkursu. Aby zgłoszenie zostało przyjęte przez system, użytkownik zgłaszający musi wyrazić zgodę na przetwarzanie danych osobowych (tzw. RODO). Oprócz tego, użytkownik ma opcję dołączenia do zgłoszenia pliku w formacie cyfrowym (w zależności od rodzaju konkursu - przykładowo, konkurs typu “plastyczny” pozwoli na dołączenie pracy w znanych formatach graficznych, m.in. .jpeg, .webp, .bmp, .gif, itp.). Po kliknięciu w przycisk “Zgłoś swoją pracę”, użytkownikowi pokaże się informacja o dodaniu nowego zgłoszenia lub pojawieniu się błędu wraz z jego opisem. Następnie użytkownik zostanie przeniesiony z powrotem do ekranu głównego.</p>
+<p><strong>Profil użytkownika</strong>
+Gdy użytkownik jest już zalogowany na stronie platformy, w prawym górnym rogu ekranu pojawi się symbol awatara. Po kliknięciu w symbol, jedną z opcji do wybrania jest “Profil”. Znajdują się tam najważniejsze dane o użytkowniku, czyli nazwa użytkownika i e-mail przypisane do konta. Istnieje opcja edycji tych danych oraz zmiany hasła. Użytkownik może także usunąć swoje konto a wraz z nim wszystkie powiązane zgłoszenia. Same zgłoszenia również są widoczne w sekcji “Moje zgłoszenia” profilu użytkownika. Otrzyma on tam dostęp do takich informacji jak: nazwa konkursu, tytuł pracy oraz daty jej zgłoszenia. Ponadto, odnośnik “Zobacz pracę” pozwala na podgląd dodanego w formularzu zgłoszeniowym pliku (jeżeli konkurs był konkursem plastycznym i typ dołączonego pliku umożliwia podgląd pracy).</p>
 </section>
 
 
@@ -90,8 +79,8 @@
 <li class="toctree-l1"><a class="reference internal" href="user_stories.html">User stories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="requirements.html">Wymagania projektu</a></li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architektura</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_instruction.html">Podręcznik użytkownika</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Stack technologiczny</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Podręcznik użytkownika</a></li>
+<li class="toctree-l1"><a class="reference internal" href="technological_stack.html">Stack technologiczny</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliografia</a></li>
 </ul>
 
@@ -99,8 +88,8 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="user_instruction.html" title="poprzedni rozdział">Podręcznik użytkownika</a></li>
-      <li>Next: <a href="bibliography.html" title="następny rozdział">Bibliografia</a></li>
+      <li>Previous: <a href="architecture.html" title="poprzedni rozdział">Architektura</a></li>
+      <li>Next: <a href="technological_stack.html" title="następny rozdział">Stack technologiczny</a></li>
   </ul></li>
 </ul>
 </div>
@@ -134,7 +123,7 @@
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
-      <a href="_sources/technological_stack.rst.txt"
+      <a href="_sources/user_instruction.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
