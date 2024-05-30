@@ -6,10 +6,17 @@ Wymagania projektu
 
 .. req:: System ma umożliwiać prostą integrację z aktualną stroną internetową Fundacji. (https://www.fundacjabowarto.pl/) 
     :id: REQ_01
-    :osoba: Jakub Kowalczyk
+    :osoba:
     :priorytet: wysoki
 
     Na stronie internetowej powinna znajdować się zakładka “Konkursy”; po jej kliknięciu użytkownik ma zostać przekierowany na specjalnie przygotowaną platformę konkursową.
+
+    Kod realizujący wymaganie:
+    --------------------------
+
+    .. literalinclude:: ../../frontend/src/components/Navbar.jsx
+        :start-after: REQ_01
+        :end-before: REQ_01_END
 
 2. Integracja z bazą adresową:
 ------------------------------
@@ -29,12 +36,24 @@ Wymagania projektu
     :osoba:
     :priorytet: wysoki
 
+    Kod realizujący wymaganie:
+    --------------------------
+
+    .. literalinclude:: ../../frontend/src/components/Entries.jsx
+        :start-after: REQ_04
+        :end-before: REQ_04_END
+
 .. req:: System powinien umożliwić automatyczne dodawanie uczestnika konkursu do bazy adresowej, jeśli wyrazi on taką zgodę przy rejestracji zgłoszenia.
     :id: REQ_05
     :osoba:
     :priorytet: średni
 
-    Zgoda na zapisanie do bazy adresowej realizowana jest poprzez zaznaczenie checkboxa.
+    Kod realizujący wymaganie:
+    --------------------------
+
+    .. literalinclude:: ../../frontend/src/components/EmailForm.jsx
+        :start-after: REQ_05
+        :end-before: REQ_05_END
 
 3. Rejestracja administratorów i użytkowników:
 -----------------------------------------------
@@ -193,10 +212,24 @@ Wymagania projektu
     :osoba:
     :priorytet: wysoki
 
+    Kod realizujący wymaganie:
+    ---------------------------
+
+    .. literalinclude:: ../../backend/contest_platform/views.py
+        :start-after: REQ_17
+        :end-before: REQ_17_END
+
 .. req:: Administrator wysyłający maile powinien móc wybrać grupę odbiorców oraz wpisać temat maila i treść z informacją o konkursie i linkiem do platformy konkursowej.
     :id: REQ_18
     :osoba:
     :priorytet: średni
+
+    Kod realizujący wymaganie:
+    --------------------------
+    
+    .. literalinclude:: ../../frontend/src/components/EmailForm.jsx
+        :start-after: REQ_18
+        :end-before: REQ_18_END
 
 .. req:: *Grupa odbiorców może być posortowana w zależności od obszaru zamieszkania; wówczas system umożliwiałby wysłanie maila do wszystkich odbiorców z danego obszaru (np. zaznaczonego na mapie).
     :id: REQ_19
@@ -206,7 +239,7 @@ Wymagania projektu
 .. req:: System powinien wysyłać mailowe potwierdzenie poprawnego zarejestrowania zgłoszenia po każdym wypełnieniu formularza przez uczestnika.
     :id: REQ_20
     :osoba:
-    :priorytet: wysoki
+    :priorytet: niski
 
 6. Zbieranie i obsługa zgłoszeń:
 ---------------------------------
@@ -333,6 +366,8 @@ Wymagania projektu
     :osoba:
     :priorytet: średni
 
+    Wymaganie zrealizowane poprzez wewnętrzne mechanizmy form HTML5.
+
 .. req:: System powinien umożliwić administratorom dowolne edytowanie i zarządzanie zgłoszeniami
     :id: REQ_30
     :osoba:
@@ -342,10 +377,24 @@ Wymagania projektu
     - Może wypełniać i zmieniać zawartość pól w bazie danych
     - Administrator może dodać zgłoszenie ręcznie na przykład za indywidualną prośbą uczestnika
 
+    Kod realizujący wymaganie:
+    ---------------------------
+
+    .. literalinclude:: ../../frontend/src/components/Entries.jsx
+        :start-after: REQ_33
+        :end-before: REQ_33_END
+
 .. req:: System pozwala na pobieranie (ewentualnie wyświetlanie podglądu) plików nadesłanych przez uczestników
     :id: REQ_31
     :osoba:
     :priorytet: wysoki
+
+    Kod realizujący wymaganie:
+    ---------------------------
+
+    .. literalinclude:: ../../frontend/src/components/EntryWorkView.jsx
+        :start-after: REQ_31
+        :end-before: REQ_31_END
 
 7. Ocenianie i jury
 --------------------
@@ -363,7 +412,14 @@ Wymagania projektu
     :priorytet: średni
 
     - Praca konkursowa opatrzona jest danymi autora, które są widoczne dopiero po kliknięciu przycisku, aby nie sugerować się nimi przy ocenie.
-    - Istnieje możliwość filtrowania prac oznaczonych gwiazdką (faworyci), krzyżykiem (odrzuceni) oraz prac jeszcze nieocenionych przez danego jurora.
+    - Istnieje możliwość filtrowania prac faworytów oraz prac jeszcze nieocenionych przez danego jurora.
+
+    Kod realizujący wymaganie:
+    ---------------------------
+
+    .. literalinclude:: ../../frontend/src/components/Entries.jsx
+        :start-after: REQ_33
+        :end-before: REQ_33_END
 
 .. req:: System ma umożliwiać ocenę pracy zgodnie z przyjętymi kryteriami.
     :id: REQ_34
@@ -371,16 +427,22 @@ Wymagania projektu
     :priorytet:
 
     - Juror wpisuje wartość zgodnie z ustaloną skalą dla każdego kryterium.
-    - Zawsze dostępne jest pole “Uwagi” na komentarz tekstowy.
-    - Jurorzy mają możliwość segregowania prac poprzez oznaczenie je gwiazdką (takie, które przejdą do finału) oraz czerwonym krzyżykiem (wstępnie odrzucone).
-    - Oznaczenie pracy krzyżykiem lub gwiazdką można zmieniać w dowolnym momencie.
+    - Opcjonalnie dostępne jest pole “Uwagi” na komentarz tekstowy.
 
-.. req:: Po ocenie pracy przez każdego jurora system oblicza i wyświetla przy niej średnią i medianę ocen dla każdej kategorii oraz łącznie.
+    .. literalinclude:: ../../frontend/src/components/GradeEntry.jsx
+        :start-after: REQ_34
+        :end-before: REQ_34_END
+
+.. req:: Po ocenie pracy przez każdego jurora system oblicza i wyświetla przy niej średnią ocen.
     :id: REQ_35
     :osoba:
     :priorytet: średni
 
-8. Raportowanie
+    .. literalinclude:: ../../frontend/src/components/Entries.jsx
+        :start-after: REQ_35
+        :end-before: REQ_35_END
+
+8. Raportowanie*
 --------------------
 
 .. req:: System ma umożliwiać generowanie statystyk na temat uczestnictwa w konkursie zawierające: liczbę uczestników konkursu, liczbę zgłoszeń prac konkursowych, *liczbę szkół biorących udział, *regiony pochodzenia uczestników, *dane statystyczne na temat wieku uczestników.

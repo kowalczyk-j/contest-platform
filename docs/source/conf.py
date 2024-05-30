@@ -8,9 +8,9 @@
 
 import sys
 import os
-project = 'Platforma Konkursowa'
-copyright = '2023, Kinga Świderek, Filip Budzyński, Jan Filipecki, Jakub Kowalczyk, Jakub Podrażka'
-author = 'Kinga Świderek, Filip Budzyński, Jan Filipecki, Jakub Kowalczyk, Jakub Podrażka'
+project = 'Rozbudowa platformy konkursowej dla fundacji Bo Warto'
+copyright = '2024, Jakub Kowalczyk, Piotr Kowalski, Paweł Dombrzalski'
+author = 'Jakub Kowalczyk, Piotr Kowalski, Paweł Dombrzalski'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
