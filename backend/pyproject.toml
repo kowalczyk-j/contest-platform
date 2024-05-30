@@ -27,7 +27,7 @@ dramatiq = {extras = ["rabbitmq", "watch"], version = "^1.16.0"}
 WeasyPrint = "*"
 black = "^24.4.2"
 yacron = "^0.19.0"
-
+django-redis = "*"
 
 [tool.poetry.group.dev.dependencies]
 sphinx = "*"

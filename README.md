@@ -71,7 +71,18 @@ scripts/install_rabbitmq.sh focal
 
 Jeśli skrypt nie zadziała, sugeruję po kolei wykonać wszystkie komendy, według [oficjalnej instrukcji](https://www.rabbitmq.com/docs/install-debian). Jeśli korzystasz z innej dystrybucji Linuxa, odsyłam do [dokumentacji](https://www.rabbitmq.com/docs/platforms).
 
+7. **Instalacja Redis**: Używany w cachowaniu zapytań do bazy danych. Instalacja i sprawdzenie działania przez następujące komendy:
+```shell
+sudo apt update
+sudo apt install redis
+sudo systemctl status redis
+```
+Uruchomienie w przypadku statusu `disabled` `stopped`
+```shell
 
+sudo systemctl start redis
+sudo systemctl enable redis
+```
 
 ## Baza danych
 
