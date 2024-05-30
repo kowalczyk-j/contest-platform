@@ -2,17 +2,19 @@ FROM python:3.12
 
 WORKDIR /backend
 
-COPY ./backend .
-COPY ./backend/entrypoint.sh /backend
-RUN chmod +x /backend/entrypoint.sh
+COPY ./backend/pyproject.toml ./backend/poetry.lock* ./
 
 RUN pip install pipx && \
+    pipx ensurepath && \
     pipx install poetry && \
-    export PATH=$PATH:/root/.local/bin && \
-    poetry install
+    export PATH=$PATH:/root/.local/bin
 
 ENV PATH=/root/.local/bin:$PATH
 
 COPY ./backend .
 
-CMD ["poetry", "run", "python", "manage.py", "rundramatiq"]
+COPY ./backend/entrypoint_worker.sh /backend
+RUN chmod +x /backend/entrypoint_worker.sh
+
+
+ENTRYPOINT ["/backend/entrypoint_worker.sh"]

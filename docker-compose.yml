@@ -8,17 +8,17 @@ services:
       - "5672:5672"
       - "15672:15672"
     volumes:
-        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-        - ./backend:/backend
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      - ./backend:/backend
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
-      RABBITMQ_HEARTBEAT: 120
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      test: rabbitmq-diagnostics -q ping
       interval: 30s
-      timeout: 10s
+      timeout: 30s
       retries: 3
 
   dramatiq_worker:
@@ -32,8 +32,12 @@ services:
       dramatiq_prom_host: dramatiq_worker
       dramatiq_prom_port: 9191
     depends_on:
-      - rabbitmq
-      - db
+      rabbitmq:
+        condition: service_healthy
+      backend:
+        condition: service_started
+      db:
+        condition: service_healthy
     volumes:
       - ./backend:/backend
 
@@ -73,4 +77,9 @@ services:
       POSTGRES_DB: contest_platform_database
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d contest_platform_database"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
