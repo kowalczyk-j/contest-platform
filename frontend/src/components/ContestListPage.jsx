@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   Card,
-  CardHeader,
+  Box,
   CardContent,
   Typography,
   Grid,
@@ -30,6 +30,18 @@ const GreenButton = styled(Button)({
   },
 });
 
+const CustomFacebookShareButton = styled(FacebookShareButton)({
+  "&:hover": {
+    opacity: 0.7,
+  },
+});
+
+const CustomTwitterShareButton = styled(TwitterShareButton)({
+  "&:hover": {
+    opacity: 0.7,
+  },
+});
+
 const statusColors = {
   not_started: "#ff9800", // pomarańczowy
   ongoing: "#4caf50", // zielony
@@ -49,18 +61,6 @@ const getContestStatus = (contest) => {
   return <span style={{ color: "white", fontWeight: "bold" }}>{status}</span>;
 };
 
-const CustomFacebookShareButton = styled(FacebookShareButton)({
-  "&:hover": {
-    opacity: 0.7,
-  },
-});
-
-const CustomTwitterShareButton = styled(TwitterShareButton)({
-  "&:hover": {
-    opacity: 0.7,
-  },
-});
-
 const ContestIndexPage = () => {
   const [contests, setContests] = useState([]);
   const [selectedContest, setSelectedContest] = useState(null);
@@ -75,8 +75,9 @@ const ContestIndexPage = () => {
   useEffect(() => {
     let contestsLink = `${import.meta.env.VITE_API_URL}api/contests`;
     const headers = { headers: { "Content-Type": "application/json" } };
-    const currentUserLink = `${import.meta.env.VITE_API_URL
-      }api/users/current_user/`;
+    const currentUserLink = `${
+      import.meta.env.VITE_API_URL
+    }api/users/current_user/`;
     const headersCurrentUser = {
       headers: {
         "Content-Type": "application/json",
@@ -134,7 +135,8 @@ const ContestIndexPage = () => {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}api/contests/${contestToDelete.id
+        `${import.meta.env.VITE_API_URL}api/contests/${
+          contestToDelete.id
         }/delete_with_related/`,
         {
           headers: {
@@ -273,7 +275,7 @@ const ContestIndexPage = () => {
         open={isModalOpen}
         onClose={handleModalClose}
         fullWidth
-        maxWidth="md"
+        maxWidth="sm"
       >
         <DialogTitle style={{ fontSize: "1.8rem" }}>
           {selectedContest?.title}
@@ -362,25 +364,32 @@ const ContestIndexPage = () => {
                 </TextButton>
               </Link>
             ) : null}
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              marginTop={1}
+              marginLeft={2}
+              gap={2}
+            >
+              <CustomFacebookShareButton
+                url={"www.fundacjabowarto.pl"}
+                quote={`Fundacja \"Bo Warto\" zaprasza na konkurs: ${selectedContest?.title}.`}
+                description={`${selectedContest?.description}`}
+              >
+                <FacebookIcon round size={42} />
+              </CustomFacebookShareButton>
+              <CustomTwitterShareButton
+                url={"www.fundacjabowarto.pl"}
+                title={`Fundacja \"Bo Warto\" zaprasza na konkurs: ${selectedContest?.title}.`}
+              >
+                <XIcon round size={42} />
+              </CustomTwitterShareButton>
+            </Box>
           </div>
         </DialogContent>
         <DialogActions>
           {/* # REQ_21 */}
-          <CustomFacebookShareButton
-            align="center"
-            url={"www.fundacjabowarto.pl"}
-            quote={`Fundacja \"Bo Warto\" zaprasza na konkurs: ${selectedContest?.title}.`}
-            description={`${selectedContest?.description}`}
-          >
-            <FacebookIcon round size={42} />
-          </CustomFacebookShareButton>
-          <CustomTwitterShareButton
-            align="center"
-            url={"www.fundacjabowarto.pl"}
-            title={`Fundacja \"Bo Warto\" zaprasza na konkurs: ${selectedContest?.title}.`}
-          >
-            <XIcon round size={42} />
-          </CustomTwitterShareButton>
           {selectedContest?.status === "ongoing" ? (
             <Link to={`/create-entry/${selectedContest?.id}`}>
               <GreenButton>
