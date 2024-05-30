@@ -19,6 +19,8 @@ import TextButton from "./buttons/TextButton";
 import ConfirmationWindow from "./ConfirmationWindow";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { FacebookShareButton, TwitterShareButton } from "react-share";
+import { FacebookIcon, XIcon } from "react-share";
 
 const GreenButton = styled(Button)({
   backgroundColor: "#95C21E",
@@ -47,6 +49,18 @@ const getContestStatus = (contest) => {
   return <span style={{ color: "white", fontWeight: "bold" }}>{status}</span>;
 };
 
+const CustomFacebookShareButton = styled(FacebookShareButton)({
+  "&:hover": {
+    opacity: 0.7,
+  },
+});
+
+const CustomTwitterShareButton = styled(TwitterShareButton)({
+  "&:hover": {
+    opacity: 0.7,
+  },
+});
+
 const ContestIndexPage = () => {
   const [contests, setContests] = useState([]);
   const [selectedContest, setSelectedContest] = useState(null);
@@ -61,9 +75,8 @@ const ContestIndexPage = () => {
   useEffect(() => {
     let contestsLink = `${import.meta.env.VITE_API_URL}api/contests`;
     const headers = { headers: { "Content-Type": "application/json" } };
-    const currentUserLink = `${
-      import.meta.env.VITE_API_URL
-    }api/users/current_user/`;
+    const currentUserLink = `${import.meta.env.VITE_API_URL
+      }api/users/current_user/`;
     const headersCurrentUser = {
       headers: {
         "Content-Type": "application/json",
@@ -121,8 +134,7 @@ const ContestIndexPage = () => {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}api/contests/${
-          contestToDelete.id
+        `${import.meta.env.VITE_API_URL}api/contests/${contestToDelete.id
         }/delete_with_related/`,
         {
           headers: {
@@ -261,7 +273,7 @@ const ContestIndexPage = () => {
         open={isModalOpen}
         onClose={handleModalClose}
         fullWidth
-        maxWidth="sm"
+        maxWidth="md"
       >
         <DialogTitle style={{ fontSize: "1.8rem" }}>
           {selectedContest?.title}
@@ -354,6 +366,21 @@ const ContestIndexPage = () => {
         </DialogContent>
         <DialogActions>
           {/* # REQ_21 */}
+          <CustomFacebookShareButton
+            align="center"
+            url={"www.fundacjabowarto.pl"}
+            quote={`Fundacja \"Bo Warto\" zaprasza na konkurs: ${selectedContest?.title}.`}
+            description={`${selectedContest?.description}`}
+          >
+            <FacebookIcon round size={42} />
+          </CustomFacebookShareButton>
+          <CustomTwitterShareButton
+            align="center"
+            url={"www.fundacjabowarto.pl"}
+            title={`Fundacja \"Bo Warto\" zaprasza na konkurs: ${selectedContest?.title}.`}
+          >
+            <XIcon round size={42} />
+          </CustomTwitterShareButton>
           {selectedContest?.status === "ongoing" ? (
             <Link to={`/create-entry/${selectedContest?.id}`}>
               <GreenButton>
