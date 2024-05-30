@@ -239,6 +239,7 @@ class SchoolPermission(permissions.BasePermission):
             "destroy",
             "emails",
             "emails_subscribed",
+            "delete_school",
         ]:
             return True
         else:
@@ -259,7 +260,7 @@ class SchoolPermission(permissions.BasePermission):
             "partial_update",
         ]:
             return request.user.is_staff
-        elif view.action in ["destroy", "emails", "emails_subscribed"]:
+        elif view.action in ["destroy", "emails", "emails_subscribed", "delete_school",]:
             return request.user.is_staff
         else:
             return False

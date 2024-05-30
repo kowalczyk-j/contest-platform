@@ -441,7 +441,7 @@ class UserViewSet(ModelViewSet):
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=["put"], url_path='update-profile')
+    @action(detail=False, methods=["put"], url_path='update_profile')
     def update_profile(self, request):
         user = request.user
         serializer = UserSerializer(user, data=request.data, partial=True)
@@ -498,7 +498,7 @@ class UserViewSet(ModelViewSet):
         # Delete entries
         user_entries.delete()
 
-        # If it was a jury then assign its ratings to the main administrator
+        # If it was a jury then assign his ratings to the main administrator
         default_user = User.objects.get(pk=1)
         GradeCriterion.objects.filter(user=user).update(user=default_user)
 
@@ -574,6 +574,12 @@ class SchoolViewSet(ModelViewSet):
         """
         emails = School.objects.values("email")[:500]
         return Response(emails)
+
+    @action(detail=True, methods=['delete'], url_path='delete_school')
+    def delete_school(self, request, pk=None):
+        school = self.get_object()
+        school.delete()
+        return Response({'detail': 'School deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(["POST"])

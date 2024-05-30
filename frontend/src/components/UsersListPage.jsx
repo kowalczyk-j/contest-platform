@@ -328,7 +328,7 @@ export default function UsersListPage() {
           <MenuItem onClick={() => handleMenuItemClick("coordinating_unit")}>
             Jednostka koordynująca
           </MenuItem>
-          <MenuItem onClick={() => handleMenuItemClick("none")}>
+          <MenuItem onClick={() => handleMenuItemClick("user")}>
             Usuń wszystkie uprawnienia
           </MenuItem>
         </Menu>

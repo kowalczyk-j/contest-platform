@@ -190,7 +190,6 @@ const UserProfilePage = () => {
         setConfirmationMessage("Wystąpił błąd podczas zmiany hasła.");
       }
     } finally {
-      navigate("/");
       setConfirmationOpen(true);
     }
   };
@@ -215,7 +214,12 @@ const UserProfilePage = () => {
             xs={12}
             sm={1}
             md={3}
-            sx={{ display: "flex", justifyContent: "center" }}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              minWidth: 150,
+              minHeight: 150,
+            }}
           >
             <Card
               sx={{
