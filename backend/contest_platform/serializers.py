@@ -131,7 +131,7 @@ class EntrySerializer(serializers.ModelSerializer):
             "entry_title",
             "entry_file",
             "favourite",
-            "canceled"
+            "canceled",
         )
 
 

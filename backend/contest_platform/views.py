@@ -28,7 +28,7 @@ from .permissions import (
     EntryPermission,
     GradeCriterionPermissions,
     GradePermissions,
-    SchoolPermission
+    SchoolPermission,
 )
 from .tasks import send_email_task, send_certificate_task
 from rest_framework.decorators import action
@@ -61,7 +61,7 @@ class ContestViewSet(ModelViewSet):
     serializer_class = ContestSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [ContestPermission]
-    certificate_template_path = 'certificate.html'
+    certificate_template_path = "certificate.html"
     default_achievement = "za udział"
 
     @action(detail=True, methods=["get"])
@@ -71,8 +71,7 @@ class ContestViewSet(ModelViewSet):
         related to the contest.
         """
         contest = self.get_object()
-        total_max_rating = GradeCriterion.objects.filter(
-            contest=contest).aggregate(
+        total_max_rating = GradeCriterion.objects.filter(contest=contest).aggregate(
             Sum("max_rating")
         )["max_rating__sum"]
         return Response({"total_max_rating": total_max_rating or 0})
@@ -83,68 +82,55 @@ class ContestViewSet(ModelViewSet):
         pdf = html.write_pdf()
         return pdf
 
-    @action(detail=True, methods=['post'], url_path='send_certificates')
+    @action(detail=True, methods=["post"], url_path="send_certificates")
     def send_certificates(self, request, pk=None):
         if pk is None:
             return Response(
-                {"error": "No contest id given"},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "No contest id given"}, status=status.HTTP_400_BAD_REQUEST
             )
         contest = get_object_or_404(Contest, pk=pk)
         entries = Entry.objects.filter(contest_id=contest.id)
-        signatory = request.data.get('signatory', '')
-        signature = request.data.get('signature', '')
+        signatory = request.data.get("signatory", "")
+        signature = request.data.get("signature", "")
         user_details = entries.values_list(
-            'user__first_name',
-            'user__last_name',
-            'user__email'
+            "user__first_name", "user__last_name", "user__email"
         ).distinct()
 
         for first_name, last_name, email in user_details:
             pdf = self.generate_pdf(
                 data={
-                    'participant': f"{first_name} {last_name}",
-                    'achievement': self.default_achievement,
-                    'email': email,
-                    'signatory': signatory,
-                    'signature': signature,
-                    'contest': contest.description,
+                    "participant": f"{first_name} {last_name}",
+                    "achievement": self.default_achievement,
+                    "email": email,
+                    "signatory": signatory,
+                    "signature": signature,
+                    "contest": contest.description,
                 }
             )
 
             subject = "Twój certyfikat"
             message = "Dziękujemy za udział!."
-            send_certificate_task(
-                subject,
-                message,
-                first_name,
-                last_name,
-                email,
-                pdf
-            )
+            send_certificate_task(subject, message, first_name, last_name, email, pdf)
 
         return Response({"status": "certificates sent"})
 
-    @action(detail=False, methods=["get"], url_path='certificate')
+    @action(detail=False, methods=["get"], url_path="certificate")
     def generate_certificate(self, request):
         participant = request.query_params.get("participant", None)
         achievement = request.query_params.get("achievement", None)
         signature = request.query_params.get("signature", None)
         signatory = request.query_params.get("signatory", None)
         contest = request.query_params.get("contest", None)
-        if not all([participant,  achievement, signature, signatory, contest]):
+        if not all([participant, achievement, signature, signatory, contest]):
             errormsg = "All parameters (participant, achievement, "
             errormsg += "signature, signatory) are required."
-            return Response(
-                {"error": errormsg},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"error": errormsg}, status=status.HTTP_400_BAD_REQUEST)
         data = {
             "participant": participant,
             "achievement": achievement,
             "signature": signature,
             "signatory": signatory,
-            "contest": contest
+            "contest": contest,
         }
 
         try:
@@ -153,12 +139,11 @@ class ContestViewSet(ModelViewSet):
             errormsg = "Exception while rendering"
             errormsg += " certificate. Conntact administrator: " + e
             return Response(
-                {"error": errormsg},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": errormsg}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="diploma.pdf"'
-        return HttpResponse(pdf, content_type='application/pdf')
+        response = HttpResponse(pdf, content_type="application/pdf")
+        response["Content-Disposition"] = 'inline; filename="diploma.pdf"'
+        return HttpResponse(pdf, content_type="application/pdf")
 
     # REQ_17
     @action(detail=False, methods=["post"])
@@ -191,8 +176,8 @@ class ContestViewSet(ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-    
-    @action(detail=True, methods=['delete'], url_path='delete_with_related')
+
+    @action(detail=True, methods=["delete"], url_path="delete_with_related")
     def delete_with_related(self, request, pk=None):
         try:
             contest = self.get_object()
@@ -234,7 +219,10 @@ class ContestViewSet(ModelViewSet):
         group_entries = entries.filter(num_contestants__gt=1).count()
         solo_entries = entries.count() - group_entries
 
-        return Response({"solo_entries": solo_entries, "group_entries": group_entries}, status=status.HTTP_200_OK)
+        return Response(
+            {"solo_entries": solo_entries, "group_entries": group_entries},
+            status=status.HTTP_200_OK,
+        )
 
     @action(detail=True, methods=["get"])
     def get_submissions_by_day(self, request, pk=None):
@@ -243,7 +231,9 @@ class ContestViewSet(ModelViewSet):
         """
         contest = self.get_object()
 
-        def generate_date_range(start_date, end_date): # possibly move to separate utilities
+        def generate_date_range(
+            start_date, end_date
+        ):  # possibly move to separate utilities
             current_date = start_date
             while current_date <= end_date:
                 yield current_date
@@ -261,11 +251,15 @@ class ContestViewSet(ModelViewSet):
             .values("date_submitted")
             .annotate(entry_count=Count("id"))
         )
-        daily_entries_dict = {entry["date_submitted"]: entry["entry_count"] for entry in daily_entries}
+        daily_entries_dict = {
+            entry["date_submitted"]: entry["entry_count"] for entry in daily_entries
+        }
 
         all_daily_entries = []
         for date in generate_date_range(start_date, end_date):
-            all_daily_entries.append({"date_submitted": date, "entry_count": daily_entries_dict.get(date, 0)})
+            all_daily_entries.append(
+                {"date_submitted": date, "entry_count": daily_entries_dict.get(date, 0)}
+            )
 
         return Response({"daily_entries": all_daily_entries}, status=status.HTTP_200_OK)
 
@@ -326,15 +320,23 @@ class GradeViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def to_evaluate(self, request):
         user = request.user
-        contest_id = request.query_params.get('contestId', None)
+        contest_id = request.query_params.get("contestId", None)
         if contest_id is None:
-            return Response({'error': 'contestId parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "contestId parameter is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         try:
             contest_id = int(contest_id)
         except ValueError:
-            return Response({'error': 'contestId must be an integer.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "contestId must be an integer."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-        queryset_criterion = GradeCriterion.objects.filter(user=user, contest=contest_id)
+        queryset_criterion = GradeCriterion.objects.filter(
+            user=user, contest=contest_id
+        )
         qs = self.get_queryset().filter(criterion__in=queryset_criterion)
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
@@ -375,7 +377,9 @@ class UserViewSet(ModelViewSet):
         Returns a list of first 500 emails in the database - subscribed to the newsletter.
         500 is max SMTP gmail daily limit.
         """
-        emails = User.objects.filter(is_newsletter_subscribed=True).values("email")[:500]
+        emails = User.objects.filter(is_newsletter_subscribed=True).values("email")[
+            :500
+        ]
         return Response(emails)
 
     @action(detail=False, methods=["get"])
@@ -383,6 +387,7 @@ class UserViewSet(ModelViewSet):
         jury_users = self.queryset.filter(is_jury=True)
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
+
 
 # REQ_06B_END
 

@@ -44,7 +44,11 @@ class UserPermission(permissions.BasePermission):
         ]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
-        elif view.action in ["destroy", "emails", "emails_subscribed",]:
+        elif view.action in [
+            "destroy",
+            "emails",
+            "emails_subscribed",
+        ]:
             return request.user.is_staff
         else:
             return False
@@ -85,10 +89,7 @@ class ContestPermission(permissions.BasePermission):
         if view.action == "retrieve":
             return True
         elif view.action in ["send_email", "delete_with_related"]:
-            return (
-                request.user.is_authenticated
-                and request.user.is_staff
-            )
+            return request.user.is_authenticated and request.user.is_staff
         elif view.action in [
             "update",
             "partial_update",
@@ -216,10 +217,9 @@ class GradePermissions(permissions.BasePermission):
         else:
             return False
 
+
 class SchoolPermission(permissions.BasePermission):
-    def has_permission(
-        self, request: Request, view: GenericAPIView
-    ) -> bool:
+    def has_permission(self, request: Request, view: GenericAPIView) -> bool:
         if view.action == "list":
             return request.user.is_staff
         if view.action == "create":
