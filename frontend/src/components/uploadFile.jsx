@@ -8,7 +8,7 @@ export async function uploadFile(containerName, file) {
   const blobClient = containerClient.getBlobClient(file.name);
   const blockBlobClient = blobClient.getBlockBlobClient();
   const result = await blockBlobClient.uploadData(file, {
-    onProgress: ev => console.log(ev)
+    onProgress: (ev) => console.log(ev),
   });
   console.log(`Upload of file '${file.name}' completed`);
   return blobClient.url;

@@ -1,49 +1,38 @@
+from datetime import date, timedelta
+from django.conf import settings
+from django.core.cache import cache
+from django.db.models import Count, Sum, Q
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from rest_framework import status
-from rest_framework.response import Response
-from .models import (
-    Address,
-    GradeCriterion,
-    Contest,
-    Entry,
-    User,
-    Person,
-    Grade,
-    School,
-)
-from .serializers import (
-    AddressSerializer,
-    GradeCriterionSerializer,
-    ContestSerializer,
-    EntrySerializer,
-    UserSerializer,
-    PersonSerializer,
-    GradeSerializer,
-    SchoolSerializer,
-)
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import action, api_view
+from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+from weasyprint import HTML
+from .csv_import.import_schools_csv import upload_schools_data
+from .models import Contest, Entry, Grade, GradeCriterion, Person, School, User
 from .permissions import (
-    UserPermission,
     ContestPermission,
     EntryPermission,
     GradeCriterionPermissions,
     GradePermissions,
-    SchoolPermission
+    SchoolPermission,
+    UserPermission,
 )
-from .tasks import send_email_task, send_certificates_task
-from rest_framework.decorators import action
-from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import IsAuthenticated
-from django.db.models import Sum, Count
-from django.conf import settings
-from .csv_import.import_schools_csv import upload_schools_data
-from rest_framework.decorators import api_view
-from datetime import date, timedelta
-from django.http import HttpResponse
-from weasyprint import HTML
-from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404
-from django.core.cache import cache
+from .serializers import (
+    ContestSerializer,
+    EntrySerializer,
+    GradeCriterionSerializer,
+    GradeSerializer,
+    PersonSerializer,
+    SchoolSerializer,
+    UserSerializer,
+)
+from .tasks import send_certificates_task, send_email_task
 
 
 # low values set for testing
@@ -62,7 +51,7 @@ class Logout(GenericAPIView):
     def get(self, request):
         request.user.auth_token.delete()
         return Response(
-            {"message": "user has been logged out"}, status=status.HTTP_200_OK
+            {"message": "Wylogowano użytkownika."}, status=status.HTTP_200_OK
         )
 
 
@@ -71,7 +60,7 @@ class ContestViewSet(ModelViewSet):
     serializer_class = ContestSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [ContestPermission]
-    certificate_template_path = 'certificate.html'
+    certificate_template_path = "certificate.html"
     default_achievement = "za udział"
 
     @action(detail=True, methods=["get"])
@@ -85,8 +74,7 @@ class ContestViewSet(ModelViewSet):
         if stored_sum:
             return Response({"total_max_rating": stored_sum or 0})
         contest = self.get_object()
-        total_max_rating = GradeCriterion.objects.filter(
-            contest=contest).aggregate(
+        total_max_rating = GradeCriterion.objects.filter(contest=contest).aggregate(
             Sum("max_rating")
         )["max_rating__sum"]
         cache_long_lived(key, total_max_rating)
@@ -98,21 +86,18 @@ class ContestViewSet(ModelViewSet):
         pdf = html.write_pdf()
         return pdf
 
-    @action(detail=True, methods=['post'], url_path='send_certificates')
+    @action(detail=True, methods=["post"])
     def send_certificates(self, request, pk=None):
         if pk is None:
             return Response(
-                {"error": "No contest id given"},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "Nie podano id konkursu."}, status=status.HTTP_400_BAD_REQUEST
             )
         contest = get_object_or_404(Contest, pk=pk)
         entries = Entry.objects.filter(contest_id=contest.id)
-        signatory = request.data.get('signatory', '')
-        signature = request.data.get('signature', '')
+        signatory = request.data.get("signatory", "")
+        signature = request.data.get("signature", "")
         user_details = entries.values_list(
-            'user__first_name',
-            'user__last_name',
-            'user__email'
+            "user__first_name", "user__last_name", "user__email"
         ).distinct()
         send_certificates_task(
             user_details,
@@ -120,45 +105,47 @@ class ContestViewSet(ModelViewSet):
             signature,
             contest.description,
             self.default_achievement,
-            self.certificate_template_path
+            self.certificate_template_path,
         )
 
         return Response({"status": "certificates sent"})
 
-    @action(detail=False, methods=["get"], url_path='certificate')
+    @action(detail=False, methods=["get"], url_path="certificate")
     def generate_certificate(self, request):
         participant = request.query_params.get("participant", None)
         achievement = request.query_params.get("achievement", None)
         signature = request.query_params.get("signature", None)
         signatory = request.query_params.get("signatory", None)
         contest = request.query_params.get("contest", None)
-        if not all([participant,  achievement, signature, signatory, contest]):
-            errormsg = "All parameters (participant, achievement, "
-            errormsg += "signature, signatory) are required."
+        if not all([participant, achievement, signature, signatory, contest]):
             return Response(
-                {"error": errormsg},
-                status=status.HTTP_400_BAD_REQUEST
+                {
+                    "error": "Wszystkie parametry (uczestnik, osiągnięcie, \
+                          podpis, podpisujący) są wymagane."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
             )
         data = {
             "participant": participant,
             "achievement": achievement,
             "signature": signature,
             "signatory": signatory,
-            "contest": contest
+            "contest": contest,
         }
 
         try:
             pdf = self.generate_pdf(data)
         except Exception as e:
-            errormsg = "Exception while rendering"
-            errormsg += " certificate. Conntact administrator: " + e
             return Response(
-                {"error": errormsg},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {
+                    "error": f"Wystąpił błąd podczas renderowania certyfikatu. \
+                          Skontaktuj się z administratorem. {e}"
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="diploma.pdf"'
-        return HttpResponse(pdf, content_type='application/pdf')
+        response = HttpResponse(pdf, content_type="application/pdf")
+        response["Content-Disposition"] = 'inline; filename="diploma.pdf"'
+        return HttpResponse(pdf, content_type="application/pdf")
 
     # REQ_17
     @action(detail=False, methods=["post"])
@@ -180,21 +167,11 @@ class ContestViewSet(ModelViewSet):
 
     # REQ_17_END
 
-    @action(detail=False, methods=["get"])
-    def current_contests(self, request):
-        """
-        Returns only contests that are after their start date but before end
-        date.
-        """
-        queryset = Contest.objects.filter(date_start__lte=date.today()).filter(
-            date_end__gte=date.today()
-        )
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    @action(detail=True, methods=['delete'], url_path='delete_with_related')
+    @action(detail=True, methods=["delete"])
     def delete_with_related(self, request, pk=None):
+        """
+        Deletes the competition by first deleting the associated elements
+        """
         try:
             contest = self.get_object()
             Grade.objects.filter(entry__contest=contest).delete()
@@ -213,14 +190,10 @@ class ContestViewSet(ModelViewSet):
         key = f"contestants_amount_{pk}"
         stored = cache.get(key)
         if stored:
-            return Response(
-                {"contestant_amount": stored}, status=status.HTTP_200_OK
-            )
+            return Response({"contestant_amount": stored}, status=status.HTTP_200_OK)
         contest = self.get_object()
         entries = Entry.objects.filter(contest=contest)
-        total_contestants = sum(
-            entry.contestants.all().count() for entry in entries
-            )
+        total_contestants = sum(entry.contestants.all().count() for entry in entries)
         cache_short_lived(key, total_contestants)
         return Response(
             {"contestant_amount": total_contestants}, status=status.HTTP_200_OK
@@ -231,9 +204,7 @@ class ContestViewSet(ModelViewSet):
         key = f"entry_amount_{pk}"
         stored = cache.get(key)
         if stored:
-            return Response(
-                {"entry_amount": stored}, status=status.HTTP_200_OK
-            )
+            return Response({"entry_amount": stored}, status=status.HTTP_200_OK)
         contest = self.get_object()
         entry_amount = Entry.objects.filter(contest=contest).count()
         cache_short_lived(key, entry_amount)
@@ -251,8 +222,8 @@ class ContestViewSet(ModelViewSet):
             solo_entries, group_entries = stored
             return Response(
                 {"solo_entries": solo_entries, "group_entries": group_entries},
-                status=status.HTTP_200_OK
-                )
+                status=status.HTTP_200_OK,
+            )
         contest = self.get_object()
         entries = Entry.objects.filter(contest=contest).annotate(
             num_contestants=Count("contestants")
@@ -262,8 +233,8 @@ class ContestViewSet(ModelViewSet):
         cache_long_lived(key, (solo_entries, group_entries))
         return Response(
             {"solo_entries": solo_entries, "group_entries": group_entries},
-            status=status.HTTP_200_OK
-            )
+            status=status.HTTP_200_OK,
+        )
 
     @action(detail=True, methods=["get"])
     def get_submissions_by_day(self, request, pk=None):
@@ -292,26 +263,16 @@ class ContestViewSet(ModelViewSet):
             .annotate(entry_count=Count("id"))
         )
         daily_entries_dict = {
-            entry["date_submitted"]: entry["entry_count"]
-            for entry in daily_entries
-            }
+            entry["date_submitted"]: entry["entry_count"] for entry in daily_entries
+        }
 
         all_daily_entries = []
         for day in generate_date_range(start_date, end_date):
             all_daily_entries.append(
-                {
-                    "date_submitted": day,
-                    "entry_count": daily_entries_dict.get(day, 0)
-                    }
-                )
-
-        return Response(
-            {"daily_entries": all_daily_entries},
-            status=status.HTTP_200_OK
+                {"date_submitted": day, "entry_count": daily_entries_dict.get(day, 0)}
             )
 
-    # Endpoints:
-    # total submissions - exists already probably
+        return Response({"daily_entries": all_daily_entries}, status=status.HTTP_200_OK)
 
 
 class PersonViewSet(ModelViewSet):
@@ -343,14 +304,6 @@ class EntryViewSet(ModelViewSet):
         return Response({"total_value": total_value})
 
 
-class AddressViewSet(ModelViewSet):
-    queryset = Address.objects.all()
-    serializer_class = AddressSerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [AddressPermission]
-    # TODO
-
-
 class GradeCriterionViewSet(ModelViewSet):
     queryset = GradeCriterion.objects.all()
     serializer_class = GradeCriterionSerializer
@@ -367,24 +320,23 @@ class GradeViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def to_evaluate(self, request):
         user = request.user
-        contest_id = request.query_params.get('contestId', None)
+        contest_id = request.query_params.get("contestId", None)
         if contest_id is None:
             return Response(
-                {'error': 'contestId parameter is required.'},
-                status=status.HTTP_400_BAD_REQUEST
-                )
+                {"error": "Parametr contestId jest wymagany."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         try:
             contest_id = int(contest_id)
         except ValueError:
             return Response(
-                {'error': 'contestId must be an integer.'},
-                status=status.HTTP_400_BAD_REQUEST
-                )
+                {"error": "Parametr contestId musi być liczbą."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         queryset_criterion = GradeCriterion.objects.filter(
-            user=user,
-            contest=contest_id
-            )
+            user=user, contest=contest_id
+        )
         qs = self.get_queryset().filter(criterion__in=queryset_criterion)
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
@@ -411,37 +363,28 @@ class UserViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=["get"])
-    def emails(self, request):
-        """
-        Returns a list of first 500 emails in the databaser.
-        500 is max SMTP gmail daily limit.
-        """
-        emails = User.objects.values("email")[:500]
-        return Response(emails)
-
-    @action(detail=False, methods=["get"])
     def emails_subscribed(self, request):
         """
         Returns a list of first 500 emails in the
         database - subscribed to the newsletter.
         500 is max SMTP gmail daily limit.
         """
-        emails = User.objects.filter(
-            is_newsletter_subscribed=True
-            ).values("email")[:500]
+        emails = User.objects.filter(is_newsletter_subscribed=True).values("email")[
+            :500
+        ]
         return Response(emails)
 
     @action(detail=False, methods=["get"])
     def jury_users(self, request):
-        key = 'jury_users'
+        key = "jury_users"
         jury_users = cache.get(key)
         if not jury_users:
-            jury_users = list(User.objects.filter(is_jury=True))
+            jury_users = list(User.objects.filter(Q(is_jury=True) | Q(is_staff=True)))
             cache_long_lived(key, jury_users)
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=["put"], url_path='update_profile')
+    @action(detail=False, methods=["put"])
     def update_profile(self, request):
         user = request.user
         serializer = UserSerializer(user, data=request.data, partial=True)
@@ -450,46 +393,47 @@ class UserViewSet(ModelViewSet):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=["post"], url_path='change_password')
+    @action(detail=False, methods=["post"])
     def change_password(self, request):
         user = request.user
-        old_password = request.data.get('old_password')
-        new_password = request.data.get('new_password')
+        old_password = request.data.get("old_password")
+        new_password = request.data.get("new_password")
         if not user.check_password(old_password):
             return Response(
-                {'detail': 'Obecne hasło jest nieprawidłowe'},
-                status=status.HTTP_400_BAD_REQUEST
-                )
+                {"detail": "Obecne hasło jest nieprawidłowe"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         if len(new_password) < 5:
             return Response(
-                {'detail': 'Nowe hasło musi mieć co najmniej 5 znaków'},
-                status=status.HTTP_400_BAD_REQUEST
-                )
+                {"detail": "Nowe hasło musi mieć co najmniej 5 znaków"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         user.set_password(new_password)
         user.save()
         return Response(
-            {'detail': 'Pomyślnie zmieniono hasło'},
-            status=status.HTTP_200_OK
-            )
+            {"detail": "Pomyślnie zmieniono hasło"}, status=status.HTTP_200_OK
+        )
 
-    @action(detail=True, methods=["delete"], url_path='delete_account')
+    @action(detail=True, methods=["delete"])
     def delete_account(self, request, pk=None):
-        if pk:
-            if not request.user.is_staff:
-                resp = 'Nie masz uprawnień do usuwania innych użytkowników.'
-                return Response(
-                    {'detail': resp},
-                    status=status.HTTP_403_FORBIDDEN
-                    )
-            user = User.objects.get(pk=pk)
-        else:
+        if int(pk) == request.user.id:
             user = request.user
+        else:
+            if not request.user.is_staff:
+                return Response(
+                    {"detail": "Nie masz uprawnień do usuwania innych użytkowników."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            user = User.objects.get(pk=pk)
 
         if user.is_staff:
             return Response(
-                {'detail': 'Nie można usunąć konta administratora.'},
-                status=status.HTTP_403_FORBIDDEN
-                )
+                {
+                    "detail": "Nie można usunąć konta administratora. \
+                          Najpierw odbierz mu uprawnienia."
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         # Delete grades to user entries
         user_entries = Entry.objects.filter(user=user)
@@ -505,49 +449,45 @@ class UserViewSet(ModelViewSet):
         user.delete()
 
         return Response(
-            {'detail': 'Konto zostało pomyślnie usunięte.'},
-            status=status.HTTP_204_NO_CONTENT
-            )
+            {"detail": "Konto zostało pomyślnie usunięte."},
+            status=status.HTTP_204_NO_CONTENT,
+        )
 
-    @action(detail=True, methods=["patch"], url_path='update_status')
+    @action(detail=True, methods=["patch"])
     def update_status(self, request, pk=None):
         user = self.get_object()
-        status_type = request.data.get('statusType')
+        status_type = request.data.get("statusType")
 
         if user.is_superuser:
             return Response(
-                {'detail': 'Nie można zmienić statusu administratora'},
-                status=status.HTTP_403_FORBIDDEN
-                )
+                {"detail": "Nie można zmienić statusu głównego administratora."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         status_mapping = {
-            'admin': {
-                'is_staff': True,
-                'is_jury': False,
-                'is_coordinating_unit': False
-                },
-            'jury': {
-                'is_staff': False,
-                'is_jury': True,
-                'is_coordinating_unit': False
-                },
-            'coordinating_unit': {
-                'is_staff': False,
-                'is_jury': False,
-                'is_coordinating_unit': True
-                },
-            'user': {
-                'is_staff': False,
-                'is_jury': False,
-                'is_coordinating_unit': False
-                },
+            "admin": {
+                "is_staff": True,
+                "is_jury": False,
+                "is_coordinating_unit": False,
+            },
+            "jury": {"is_staff": False, "is_jury": True, "is_coordinating_unit": False},
+            "coordinating_unit": {
+                "is_staff": False,
+                "is_jury": False,
+                "is_coordinating_unit": True,
+            },
+            "user": {
+                "is_staff": False,
+                "is_jury": False,
+                "is_coordinating_unit": False,
+            },
         }
 
         if status_type not in status_mapping:
             return Response(
-                {"detail": "Wystąpił błąd podczas nadawania uprawnień"},
-                status=status.HTTP_400_BAD_REQUEST
-                )
+                {"detail": "Wystąpił błąd podczas nadawania uprawnień."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         attributes_to_update = status_mapping[status_type]
         for attribute, value in attributes_to_update.items():
@@ -555,8 +495,11 @@ class UserViewSet(ModelViewSet):
 
         user.save()
         return Response(
-            {"detail": f"Pomyślnie zmieniono rodzaj konta na {status_type}"},
-            status=status.HTTP_200_OK)
+            {"detail": f"Pomyślnie zmieniono rodzaj konta na {status_type}."},
+            status=status.HTTP_200_OK,
+        )
+
+
 # REQ_06B_END
 
 
@@ -575,12 +518,6 @@ class SchoolViewSet(ModelViewSet):
         emails = School.objects.values("email")[:500]
         return Response(emails)
 
-    @action(detail=True, methods=['delete'], url_path='delete_school')
-    def delete_school(self, request, pk=None):
-        school = self.get_object()
-        school.delete()
-        return Response({'detail': 'School deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
-
 
 @api_view(["POST"])
 def import_schools(request):
@@ -588,9 +525,9 @@ def import_schools(request):
         file = request.FILES["csv_file"]
         upload_schools_data(file)
         return Response(
-            {"message": "Upload successful"}, status=status.HTTP_201_CREATED
+            {"message": "Pomyślnie wczytano."}, status=status.HTTP_201_CREATED
         )
     else:
         return Response(
-            {"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
+            {"error": "Nie podano pliku."}, status=status.HTTP_400_BAD_REQUEST
         )

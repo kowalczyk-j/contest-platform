@@ -22,7 +22,14 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<ContestListPage />} />
-        <Route path="/create-contest" element={<CreateContestPage />} />
+        <Route
+          path="/create-contest"
+          element={
+            <PrivateRoute forStaff={true}>
+              <CreateContestPage />
+            </PrivateRoute>
+          }
+        />
         <Route path="/edit-contest/:contestId" element={<EditContestPage />} />
         <Route path="/grade-entry-rate/:entryId" element={<GradeEntry />} />
         <Route path="/grade-entry-view/:entryId" element={<GradeEntryView />} />
@@ -44,7 +51,14 @@ function App() {
         />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
-        <Route path="/profile" element={<UserProfilePage />} />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute forAuthenticated={true}>
+              <UserProfilePage />
+            </PrivateRoute>
+          }
+        />
         <Route path="/user-entries" element={<UserEntries />} />
         <Route path="/view-work/:entryId" element={<EntryWorkView />} />
         <Route

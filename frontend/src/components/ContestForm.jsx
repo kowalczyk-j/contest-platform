@@ -18,7 +18,7 @@ import AddCircleOutline from "@mui/icons-material/AddCircleOutline";
 import SubmitButton from "./buttons/SubmitButton";
 import CreateCriterion from "./CreateCriterion";
 import TextButton from "./buttons/TextButton";
-import FileUploadButton from "./FileUploadButton";
+import FileUploadButton from "./buttons/FileUploadButton";
 import { uploadFile } from "./uploadFile";
 import ConfirmationWindow from "./ConfirmationWindow";
 

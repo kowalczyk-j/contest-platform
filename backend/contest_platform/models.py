@@ -8,13 +8,14 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from .tasks import send_email_task
 
+
 # REQ_09A
 class Contest(models.Model):
     STATUS_CHOICES = [
-        ('not_started', 'Nierozpoczęty'),
-        ('ongoing', 'W trakcie trwania'),
-        ('judging', 'W trakcie oceny'),
-        ('finished', 'Zakończony'),
+        ("not_started", "Nierozpoczęty"),
+        ("ongoing", "W trakcie trwania"),
+        ("judging", "W trakcie oceny"),
+        ("finished", "Zakończony"),
     ]
 
     title = models.CharField(max_length=200, default="")
@@ -24,7 +25,9 @@ class Contest(models.Model):
     # 1 - konkurs indywidualny; 0 - konkurs grupowy
     individual = models.BooleanField(default=True)
     type = models.CharField(max_length=50, default="")
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_started')
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default="not_started"
+    )
     rules_pdf = models.URLField(max_length=300, null=True)
     poster_img = models.URLField(max_length=300, null=True)
 
@@ -33,23 +36,15 @@ class Contest(models.Model):
 
     def save(self, *args, **kwargs):
         today = timezone.localtime(timezone.now()).date()
-        if self.status != 'finished':
-            if self.date_start <= today <= self.date_end and self.status != 'ongoing':
-                self.status = 'ongoing'
-            elif today > self.date_end and self.status != 'judging':
-                self.status = 'judging'
+        if self.status != "finished":
+            if self.date_start <= today <= self.date_end and self.status != "ongoing":
+                self.status = "ongoing"
+            elif today > self.date_end and self.status != "judging":
+                self.status = "judging"
         super().save(*args, **kwargs)
+
+
 # REQ_09A_END
-
-
-class Address(models.Model):
-    street = models.CharField(max_length=50)
-    number = models.CharField(max_length=10)
-    postal_code = models.CharField(max_length=6)
-    city = models.CharField(max_length=20)
-
-    def __str__(self):
-        return f"{self.street} {self.number}, {self.postal_code} {self.city}"
 
 
 # REQ_23
@@ -85,6 +80,8 @@ class Entry(models.Model):
     entry_file = models.URLField(max_length=300, null=True)
     favourite = models.BooleanField(default=False)
     canceled = models.BooleanField(default=False)
+
+
 # REQ_24_END
 
 
@@ -109,8 +106,8 @@ class Grade(models.Model):
         if self.value > self.criterion.max_rating:
             raise ValidationError(
                 {
-                    "value": "Value must be less than or equal to the max \
-            rating of the criterion."
+                    "value": "Wartość musi być mniejsza lub równa \
+                        maksymalnej ocenie kryterium dla danego kryterium."
                 }
             )
 
@@ -158,7 +155,5 @@ def send_confirmation_email(sender, instance, created, **kwargs):
 
             Z poważaniem,
             Zespół Fundacji \"BoWarto\" """
-        messages = [
-            (subject, message, host_email, [receiver_email])
-        ]
+        messages = [(subject, message, host_email, [receiver_email])]
         send_email_task.send(messages)

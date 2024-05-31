@@ -1,5 +1,5 @@
 import { Dialog } from "@mui/material";
-import FileUploadButton from "./FileUploadButton";
+import FileUploadButton from "./buttons/FileUploadButton";
 import { Typography, Card } from "@mui/material";
 import SubmitButton from "./buttons/SubmitButton";
 import { useState } from "react";

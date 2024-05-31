@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { FormControl, InputLabel, Select, MenuItem, TextField } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+} from "@mui/material";
 
 function GradeCriterionCard({
   positionNumber,
@@ -7,8 +13,8 @@ function GradeCriterionCard({
   gradeCriterion,
   onGradeChange,
   onCommentChange,
-  viewConfirmation
-  }) {
+  viewConfirmation,
+}) {
   const [selectedValue, setSelectedValue] = useState(grade.value);
   const [textValue, setTextValue] = useState(grade.description);
 
@@ -34,7 +40,10 @@ function GradeCriterionCard({
         <div className="circle">
           <span className="circle-number">{positionNumber}</span>
         </div>
-        <p className="lower-grade-entry-card-text" style={{ display: "inline-block", marginLeft: "10px" }}>
+        <p
+          className="lower-grade-entry-card-text"
+          style={{ display: "inline-block", marginLeft: "10px" }}
+        >
           {gradeCriterion.description}
         </p>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -47,11 +56,14 @@ function GradeCriterionCard({
             onChange={handleChange}
           >
             <MenuItem value={null}>-</MenuItem>
-            {Array.from({ length: gradeCriterion.max_rating + 1 }, (_, index) => (
-              <MenuItem key={index} value={index}>
-                {index}
-              </MenuItem>
-            ))}
+            {Array.from(
+              { length: gradeCriterion.max_rating + 1 },
+              (_, index) => (
+                <MenuItem key={index} value={index}>
+                  {index}
+                </MenuItem>
+              )
+            )}
           </Select>
         </FormControl>
       </div>

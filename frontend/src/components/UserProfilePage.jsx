@@ -76,7 +76,7 @@ const UserProfilePage = () => {
   const handleEditSave = async () => {
     try {
       const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}api/users/update-profile/`,
+        `${import.meta.env.VITE_API_URL}api/users/update_profile/`,
         {
           first_name: firstName,
           last_name: lastName,
@@ -147,7 +147,9 @@ const UserProfilePage = () => {
         setConfirmationMessage("Wystąpił błąd podczas usuwania konta.");
       }
     } finally {
-      // navigate("/");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2500);
       setConfirmationOpen(true);
     }
   };
@@ -324,8 +326,6 @@ const UserProfilePage = () => {
         </Grid>
         <UserEntries />
       </Box>
-
-      {/* Dialog do edycji danych */}
       <Dialog open={openEditDialog} onClose={handleEditClose}>
         <DialogTitle>Edytuj dane</DialogTitle>
         <DialogContent>

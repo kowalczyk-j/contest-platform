@@ -11,20 +11,21 @@ function CreateEntryPage() {
   const { contestId } = useParams();
 
   const handleFormSubmit = async (formData) => {
-    return axios.post(`${import.meta.env.VITE_API_URL}api/entries/`, formData, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + sessionStorage.getItem('accessToken')
-      },
-    })
-    .then((response) => {
-      console.log(JSON.stringify(formData));
-      if (response && response.status !== 201) {
-        throw new Error('Network response was not ok');
-      }
-      console.log(response.data);
-      return response;
-    });
+    return axios
+      .post(`${import.meta.env.VITE_API_URL}api/entries/`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        console.log(JSON.stringify(formData));
+        if (response && response.status !== 201) {
+          throw new Error("Network response was not ok");
+        }
+        console.log(response.data);
+        return response;
+      });
   };
 
   const handleBack = () => {

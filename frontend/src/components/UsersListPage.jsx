@@ -119,15 +119,12 @@ export default function UsersListPage() {
 
   const deleteSchool = (schoolId) => {
     axios
-      .delete(
-        `${import.meta.env.VITE_API_URL}api/schools/${schoolId}/delete_school/`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + sessionStorage.getItem("accessToken"),
-          },
-        }
-      )
+      .delete(`${import.meta.env.VITE_API_URL}api/schools/${schoolId}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+      })
       .then((response) => {
         fetchData(); // Refresh data after deletion
       })
@@ -251,7 +248,7 @@ export default function UsersListPage() {
         </Box>
       );
     } else {
-      return null; // Dla przypadków, gdy displayType jest niepoprawny
+      return null;
     }
   };
 
