@@ -112,6 +112,7 @@ class Grade(models.Model):
             )
 
 
+# REQ_03
 class School(models.Model):
     name = models.CharField(max_length=255)
     street = models.CharField(max_length=255)
@@ -136,6 +137,9 @@ class School(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+
+# REQ_03_END
 
 
 @receiver(post_save, sender=Entry)

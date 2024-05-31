@@ -106,12 +106,15 @@ export default function Entries() {
   // REQ_04
   const handleDeleteClick = (id) => {
     axios
-      .delete(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Token " + sessionStorage.getItem("accessToken"),
-        },
-      })
+      .delete(
+        `${import.meta.env.VITE_API_URL}api/entries/${id}/delete_with_related/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+        }
+      )
       .then(() => {
         setEntries(entries.filter((entry) => entry.id !== id));
       })

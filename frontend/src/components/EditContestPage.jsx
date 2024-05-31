@@ -5,7 +5,7 @@ import "reactjs-popup/dist/index.css";
 import BackButton from "./buttons/BackButton";
 import ContestForm from "./ContestForm";
 import Navbar from "./Navbar";
-
+//REQ_16
 function EditContestPage() {
   const { contestId } = useParams(); // Get the contest ID from the URL
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ function EditContestPage() {
         throw error;
       });
   };
-
+  //REQ_16_END
   const handleBack = () => {
     navigate("/");
   };
