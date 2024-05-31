@@ -41,6 +41,18 @@ services:
     volumes:
       - ./backend:/backend
 
+  redis:
+    image: redis:alpine
+    container_name: 'redis'
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   backend:
     build:
       context: .
@@ -50,6 +62,7 @@ services:
     depends_on:
       - db
       - rabbitmq
+      - redis
     volumes:
       - ./backend:/backend
     environment:

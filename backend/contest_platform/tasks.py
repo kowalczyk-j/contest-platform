@@ -76,7 +76,7 @@ def send_certificates_task(
 
         subject = "Twój certyfikat"
         message = "Dziękujemy za udział!."
-        send_certificate_task(
+        send_certificate_task.send(
             subject,
             message,
             first_name,
