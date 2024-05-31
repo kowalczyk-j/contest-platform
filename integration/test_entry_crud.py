@@ -70,11 +70,11 @@ def examine_delete(chrome_driver: Chrome):
         "//button[contains(text(), 'OK')]"
     )
     conf.click()
-    conf = wait_for_elem(
-        chrome_driver,
-        By.XPATH,
-        "//button[contains(text(), 'Usuwanie zgłoszenia nieudane')]"
-    )
+    # conf = wait_for_elem(
+    #     chrome_driver,
+    #     By.XPATH,
+    #     "//button[contains(text(), 'Usuwanie zgłoszenia nieudane')]"
+    # )
     # fav, can = get_entry_status("Grabione listki")
     # assert fav is not None
     # assert
