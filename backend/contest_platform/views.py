@@ -302,6 +302,19 @@ class EntryViewSet(ModelViewSet):
             "value__sum"
         ]
         return Response({"total_value": total_value})
+    
+    @action(detail=True, methods=["delete"])
+    def delete_with_related(self, request, pk=None):
+        """
+        Deletes the entry by first deleting the associated grades
+        """
+        try:
+            entry = self.get_object()
+            Grade.objects.filter(entry=entry).delete()
+            entry.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Entry.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class GradeCriterionViewSet(ModelViewSet):

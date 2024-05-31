@@ -127,6 +127,7 @@ class EntryPermission(permissions.BasePermission):
             "partial_update",
             "destroy",
             "total_grade_value",
+            "delete_with_related",
         ]:
             return True
         else:
@@ -149,7 +150,7 @@ class EntryPermission(permissions.BasePermission):
                 or request.user.is_staff
                 or request.user.is_jury
             )
-        if view.action in ["destroy"]:
+        if view.action in ["destroy", "delete_with_related"]:
             return request.user.is_authenticated and request.user.is_staff
         else:
             return False

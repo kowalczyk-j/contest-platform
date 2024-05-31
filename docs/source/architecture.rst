@@ -38,13 +38,13 @@ Moduł oceny umożliwia Jury przeglądanie i ocenianie zgłoszonych przez Uczest
 .. image:: _static/ER_model.png
    :alt: Model ER
 
-**Model logiczny bazy danych**
+**Diagram ERD**
 
-.. image:: _static/Logical_model.png
-   :alt: Model logiczny
+.. image:: _static/ERD.png
+   :alt: Diagram ERD
 
 * Encja "zgłoszenie konkursowe" jest odpowiednikiem przesłanego formularza przez osobę chętną do wzięcia udziału w konkursie. Zakładamy możliwość organizowania konkursów grupowych (oznaczone w polu "typ zgłoszenia"), zatem jeden konkurs może być powiązany z kilkoma osobami. Dodatkowo, zgłoszenie może być powiązane z pewną jednostką koordynującą (np. szkołą). Opcjonalne jest też pole "Praca konkursowa" - może zostać przesłany plik JPG, PDF, etc., który zawierałby zgłoszoną pracę. Jeśli pole nie zostanie wypełnione, oczekujemy wysyłki pracy pocztą do siedziby fundacji BoWarto.
 * Encja "konkursy" jest użyta do definiowania konkursu. Definiuje nazwę, opis, harmonogram, typ konkursu (np. plastyczny, literacki, filmowy etc.), przyjmowane typy zgłoszeń (grupowe, indywidualne). Zawiera również plik z regulaminem w formacie PDF oraz plakat w formacie PNG. 
 * Do każdego konkursu przypisane są pewne kryteria oceny (encja "kryteria oceny"), które zostaną wykorzystane przez jury w procesie poszukiwania zwycięzcy konkursu. Ocena pojedynczego zgłoszenia składa się z wydania oceny przez jury w każdym kryterium zdefiniowanym dla konkursu. Zakładamy, że są konkursy, w których jury składa się z wielu osób i wówczas każdy juror wystawi swoją ocenę (oceny będą przypisane do jurora przez pole "id wystawiającego jurora"). Te oceny znajdują się w tabeli "ocena pracy". 
-* "Osoba" jest encją zawierającą dane na temat osób interagujących z naszym systemem. Zgodnie z typem użytkownika może to być: organizator konkursu, juror, osoba zgłaszająca prace z ramienia jednostki koordynującej, osoba zgłaszająca prace indywidualnie.
-* "Jednostki koordynujące" są zbiorem placówek (szkoły podstawowe, licea, kuratoria etc.) do których będą wysyłane powiadomienia mailowe w związku z utworzeniem nowego konkursu.
+* "Osoba" jest encją zawierającą dane na temat osób integrujących z naszym systemem. Zgodnie z typem użytkownika może to być: organizator konkursu, juror, osoba zgłaszająca prace z ramienia jednostki koordynującej, osoba zgłaszająca prace indywidualnie.
+* "Szkoły / Jednostki koordynujące" są zbiorem placówek (szkoły podstawowe, licea, kuratoria etc.) do których będą wysyłane powiadomienia mailowe w związku z utworzeniem nowego konkursu. Prace zgłaszane są w imieniu danego przedstawiciela jednostki.
