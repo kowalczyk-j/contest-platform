@@ -47,7 +47,7 @@ def login_decorator(login, passw):
             )
             log_button.click()
             wait_for_elem(chrome_driver, By.ID, "alert-dialog-title")
-            func(chrome_driver, *args, **kwargs)
+            return func(chrome_driver, *args, **kwargs)
         return wrapper
     return decorator
 
@@ -60,4 +60,31 @@ def navigate_contest_form(chrome_driver: Chrome):
     ok_button.click()
     add_contest = wait_for_elem(chrome_driver, By.LINK_TEXT, "Dodaj konkurs")
     add_contest.click()
+    return chrome_driver
+
+
+def navigate_to_entries(chrome_driver: Chrome):
+    ok_button = element_present(
+        chrome_driver,
+        By.CSS_SELECTOR,
+        ".MuiButton-containedSuccess"
+    )
+    assert ok_button
+    ok_button.click()
+    view_button = wait_for_elem(
+        chrome_driver,
+        By.XPATH,
+        "//button[contains(text(), 'Zobacz więcej')]"
+        )
+    assert view_button
+    view_button.click()
+    xpath = "//button[span[contains(@class, 'MuiButton-endIcon')]"
+    xpath += " and contains(text(), 'Nadesłane prace')]"
+    entry_button = wait_for_elem(
+        chrome_driver,
+        By.XPATH,
+        xpath
+        )
+    assert entry_button
+    entry_button.click()
     return chrome_driver

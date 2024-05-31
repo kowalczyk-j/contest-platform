@@ -11,7 +11,7 @@ sudo service postgresql start &
 PID_POSTGRES=$!
 
 # Ekportowanie zmiennej środowiskowej
-export DJANGO_ENV=production
+export DJANGO_ENV=test
 echo "Running on "$DJANGO_ENV" database"
 
 # Migracje bazy danych

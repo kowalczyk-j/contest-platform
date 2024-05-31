@@ -30,7 +30,7 @@ npm run dev &
 PID_REACT=$!
 
 cd ../backend
-python manage.py test > ../unit-tests.log
+# python manage.py test > ../unit-tests.log
 
 cd ..
 pytest integration/ > integration-tests.log

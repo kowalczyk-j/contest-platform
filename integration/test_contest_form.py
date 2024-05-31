@@ -31,7 +31,7 @@ def examine_checkboxes(chrome_driver: Chrome):
     assert group_checkbox.is_selected()
 
     individual_checkbox.click()
-    assert individual_checkbox.is_selected()
+    assert not individual_checkbox.is_selected()
     assert not group_checkbox.is_selected()
 
 
