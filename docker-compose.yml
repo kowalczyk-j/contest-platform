@@ -11,8 +11,6 @@ services:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
       - ./backend:/backend
-    environment:
-      RABBITMQ_HEARTBEAT: 60
     restart: unless-stopped
     healthcheck:
       test: rabbitmq-diagnostics -q ping
@@ -29,6 +27,8 @@ services:
       RABBITMQ_HOST: rabbitmq
       POSTGRESQL_HOST: db
       REDIS_HOST: redis
+      dramatiq_prom_host: dramatiq_worker
+      dramatiq_prom_port: 9191
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -76,10 +76,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-    ports:
-      - "5173:5173"
     environment:
       VITE_HOST: 0.0.0.0
+    ports:
+      - "5173:5173"
     volumes:
       - ./frontend:/frontend
 

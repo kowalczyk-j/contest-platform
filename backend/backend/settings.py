@@ -209,7 +209,7 @@ DRAMATIQ_BROKER = {
     "BROKER": "dramatiq.brokers.rabbitmq.RabbitmqBroker",
     "OPTIONS": {
         "url": f"amqp://{RABBITMQ_HOST}:5672",
-        "heartbeat": 60
+
     },
     "MIDDLEWARE": [
         "dramatiq.middleware.Prometheus",
