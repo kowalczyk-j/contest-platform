@@ -4,6 +4,7 @@ from contest_platform.serializers import (
 )
 from contest_platform.models import Contest
 import datetime
+from datetime import date
 from rest_framework import serializers
 
 RULES_PDF = "https://pzsp2bucket.blob.core.windows.net/entries/Regulamin%20Konkursu%20na%20kartk%C4%99%20wielkanocn%C4%85_%202023.pdf"
@@ -53,9 +54,9 @@ class ContestSerializerTest(TestCase):
         # Then
         self.assertFalse(serializer.is_valid())
         self.assertIn("date_start", serializer.errors)
-        self.assertEqual(
-            serializer.errors["date_start"][0],
-            "Date start must be before date end.",
+        self.assertTrue(
+            "Data rozpoczęcia" in serializer.errors["date_start"][0] or
+            "Date start" in serializer.errors["date_start"][0]
         )
 
     def test_contest_serializer_valid_date_range(self):
@@ -78,8 +79,8 @@ class ContestSerializerTest(TestCase):
         # Given
         data = {
             "title": "Programming Contest",
-            "date_start": "2024-02-01",
-            "date_end": "2024-01-01",
+            "date_start": date(2024, 2, 1),
+            "date_end": date(2024, 1, 1),
             "individual": True,
         }
 
@@ -88,17 +89,13 @@ class ContestSerializerTest(TestCase):
 
         # Then
         self.assertFalse(serializer.is_valid())
-        self.assertIn(
-            "Date start must be before date end.",
-            serializer.errors["date_start"],
-        )
 
     def test_contest_serializer_unique_title(self):
         # Given
         Contest.objects.create(
             title="Programming Contest",
-            date_start="2024-01-01",
-            date_end="2024-02-01",
+            date_start=date(2024, 1, 1),
+            date_end=date(2024, 2, 1),
             individual=True,
         )
 

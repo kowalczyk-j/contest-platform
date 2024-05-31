@@ -11,8 +11,7 @@ Wymagania projektu
 
     Na stronie internetowej powinna znajdować się zakładka “Konkursy”; po jej kliknięciu użytkownik ma zostać przekierowany na specjalnie przygotowaną platformę konkursową.
 
-    Kod realizujący wymaganie:
-    --------------------------
+    **Kod realizujący wymaganie:**
 
     .. literalinclude:: ../../frontend/src/components/Navbar.jsx
         :start-after: REQ_01
@@ -26,18 +25,29 @@ Wymagania projektu
     :osoba:
     :priorytet: wysoki
 
+    **Kod realizujący wymaganie:**
+
+    .. literalinclude:: ../../backend/contest_platform/csv_import/import_schools_csv.py
+        :start-after: REQ_02
+        :end-before: REQ_02_END
+
 .. req:: System ma umożliwiać dodawanie nowych rekordów do bazy danych a w szczególności osób/szkół/organizacji wraz z danymi kontaktowymi.
     :id: REQ_03
     :osoba:
     :priorytet: wysoki
+
+    **Kod realizujący wymaganie:**
+
+    .. literalinclude:: ../../backend/contest_platform/models.py
+        :start-after: REQ_03
+        :end-before: REQ_03_END
 
 .. req:: System musi umożliwiać usuwanie rekordów z bazy.
     :id: REQ_04
     :osoba:
     :priorytet: wysoki
 
-    Kod realizujący wymaganie:
-    --------------------------
+    **Kod realizujący wymaganie:**
 
     .. literalinclude:: ../../frontend/src/components/Entries.jsx
         :start-after: REQ_04
@@ -48,8 +58,7 @@ Wymagania projektu
     :osoba:
     :priorytet: średni
 
-    Kod realizujący wymaganie:
-    --------------------------
+    **Kod realizujący wymaganie:**
 
     .. literalinclude:: ../../frontend/src/components/EmailForm.jsx
         :start-after: REQ_05
@@ -65,16 +74,14 @@ Wymagania projektu
 
     Członkowie jury, uczestnicy indywidualni, liderzy zespołów, koordynatorzy szkół logują się do systemu za pomocą e-maila i hasła.
 
-    Kod frontendu realizujący wymaganie:
-    ------------------------------------
+    **Kod frontendu realizujący wymaganie:**
 
     .. literalinclude:: ../../frontend/src/components/LoginPage.jsx
         :start-after: REQ_06D
         :end-before: REQ_06D_END
 
 
-    Kod backendu realizujący wymaganie:
-    -----------------------------------
+    **Kod backendu realizujący wymaganie:**
 
     Modele
 
@@ -99,6 +106,18 @@ Wymagania projektu
     :osoba:
     :priorytet: średni
 
+    **Kod frontendu realizujący wymaganie:**
+
+    .. literalinclude:: ../../frontend/src/components/UserProfilePage.jsx
+        :start-after: REQ_07A
+        :end-before: REQ_07A_END
+
+    **Kod backendu realizujący wymaganie:**
+
+    .. literalinclude:: ../../backend/contest_platform/views.py
+        :start-after: REQ_07B
+        :end-before: REQ_07B_END
+
 .. req:: Administrator systemu musi mieć możliwość nadawania roli innym użytkownikom (koordynator szkoły, juror, administrator).
     :id: REQ_08
     :osoba:
@@ -107,6 +126,18 @@ Wymagania projektu
     - Koordynator posiada możliwość wprowadzania kilku zgłoszeń jednocześnie w imieniu uczniów.
     - Juror posiada jedynie możliwość oceniania i komentowania prac oraz ma dostęp do statystyk.
     - Administrator posiada dodatkowo możliwość zamieszczania konkursów, wysyłki maili i modyfikowania/usuwania danych.
+
+    **Kod frontendu realizujący wymaganie:**
+
+    .. literalinclude:: ../../frontend/src/components/UsersListPage.jsx
+        :start-after: REQ_08A
+        :end-before: REQ_08A_END
+
+    **Kod backendu realizujący wymaganie:**
+
+    .. literalinclude:: ../../backend/contest_platform/views.py
+        :start-after: REQ_08B
+        :end-before: REQ_08B_END
 
 4. Zarządzanie konkursami:
 --------------------------
@@ -118,15 +149,13 @@ Wymagania projektu
 
     Parametry to nazwa, opis konkursu, harmonogram, regulamin, wyraźnie zaznaczona grupa docelowa, maksymalna liczba prac na uczestnika, dodatkowe dane wymagane w formularzu zgłoszeniowym, wyszczególniona informacja o konieczności wysyłki fizycznej pracy, nieobowiązkowe - nagrody, kategorie oceny dla jury i skład zespołów jury.
 
-    Parametry konkursu:
-    --------------------------
+    **Parametry konkursu:**
 
     .. literalinclude:: ../../backend/contest_platform/models.py
         :start-after: REQ_09A
         :end-before: REQ_09A_END
 
-    Parametry oceny przez jury:
-    ----------------------------
+    **Parametry oceny przez jury:**
 
     .. literalinclude:: ../../backend/contest_platform/models.py
         :start-after: REQ_09B
@@ -141,8 +170,7 @@ Wymagania projektu
 
     Harmonogram konkursu jest zdefiniowany przez datę rozpoczęcia i zakończenia. Pilnowane jest, aby daty były poprawne - data zakończenia nie może być przed datą rozpoczęcia.
 
-    Kod realizujący wymaganie:
-    ---------------------------
+    **Kod realizujący wymaganie:**-
 
     .. literalinclude:: ../../backend/contest_platform/serializers.py
         :start-after: REQ_10
@@ -155,8 +183,7 @@ Wymagania projektu
 
     Pliki są przechowywane w Azure.
 
-    Wgrywanie pliku z regulaminem:
-    -------------------------------
+    **Wgrywanie pliku z regulaminem:**
 
     .. literalinclude:: ../../frontend/src/components/ContestForm.jsx
         :start-after: REQ_11
@@ -169,8 +196,7 @@ Wymagania projektu
 
     W zależności od oznaczenia, formularz zgłoszeniowy będzie wyglądał inaczej.
 
-    Kod realizujący wymaganie:
-    ---------------------------
+    **Kod realizujący wymaganie:**-
 
     .. literalinclude:: ../../frontend/src/components/ContestForm.jsx
         :start-after: REQ_12
@@ -187,8 +213,7 @@ Wymagania projektu
     :osoba:
     :priorytet: średni
 
-    Kod realizujący wymaganie:
-    ---------------------------
+    **Kod realizujący wymaganie:**-
 
     .. literalinclude:: ../../backend/contest_platform/models.py
         :start-after: REQ_09B
@@ -199,10 +224,22 @@ Wymagania projektu
     :osoba:
     :priorytet: niski
 
+    **Kod realizujący wymaganie:**-
+
+    .. literalinclude:: ../../backend/contest_platform/views.py
+        :start-after: REQ_15
+        :end-before: REQ_15_END
+
 .. req:: Platforma ma pozwalać na edytowanie szczegółów związanych z konkursem w dowolnym momencie jego trwania.
     :id: REQ_16
     :osoba:
     :priorytet: niski
+
+    **Kod realizujący wymaganie:**-
+
+    .. literalinclude:: ../../frontend/src/components/EditContestPage.jsx
+        :start-after: REQ_16
+        :end-before: REQ_16_END
 
 5. Powiadomienia mailingowe:
 -----------------------------
@@ -212,8 +249,7 @@ Wymagania projektu
     :osoba:
     :priorytet: wysoki
 
-    Kod realizujący wymaganie:
-    ---------------------------
+    **Kod realizujący wymaganie:**-
 
     .. literalinclude:: ../../backend/contest_platform/views.py
         :start-after: REQ_17
@@ -224,8 +260,7 @@ Wymagania projektu
     :osoba:
     :priorytet: średni
 
-    Kod realizujący wymaganie:
-    --------------------------
+    **Kod realizujący wymaganie:**
     
     .. literalinclude:: ../../frontend/src/components/EmailForm.jsx
         :start-after: REQ_18
@@ -253,8 +288,7 @@ Wymagania projektu
     - Po kliknięciu przycisku użytkownik zostaje przeniesiony na stronę poświęconą danemu konkursowi
 
 
-    Kod realizujący wymaganie:
-    ---------------------------
+    **Kod realizujący wymaganie:**-
 
     .. literalinclude:: ../../frontend/src/components/ContestListPage.jsx
         :start-after: REQ_21
@@ -268,8 +302,7 @@ Wymagania projektu
     - Informacje o konkursie: nazwa, opis konkursu, harmonogram wraz z terminami nadsyłania prac i ogłoszenia wyników, regulamin widoczny po rozwinięciu, wyraźnie zaznaczona grupa docelowa.
     - Formularz zgłoszeniowy z polami do wypełnienia.
 
-    Kod realizujący wymaganie:
-    ---------------------------
+    **Kod realizujący wymaganie:**-
 
     .. literalinclude:: ../../frontend/src/components/CreateEntryPage.jsx
         :start-after: REQ_22
@@ -285,8 +318,7 @@ Wymagania projektu
     - Uczestnik indywidualny widzi formularz standardowy opisany poniżej.
     - Dowódca zespołu posiada dodatkowo możliwość podania danych osobowych pozostałych członków zespołu.
 
-    Kod realizujący wymaganie:
-    ---------------------------
+    **Kod realizujący wymaganie:**-
 
     .. literalinclude:: ../../frontend/src/components/EntryForm.jsx
         :start-after: REQ_23
@@ -377,8 +409,7 @@ Wymagania projektu
     - Może wypełniać i zmieniać zawartość pól w bazie danych
     - Administrator może dodać zgłoszenie ręcznie na przykład za indywidualną prośbą uczestnika
 
-    Kod realizujący wymaganie:
-    ---------------------------
+    **Kod realizujący wymaganie:**-
 
     .. literalinclude:: ../../frontend/src/components/Entries.jsx
         :start-after: REQ_33
@@ -389,8 +420,7 @@ Wymagania projektu
     :osoba:
     :priorytet: wysoki
 
-    Kod realizujący wymaganie:
-    ---------------------------
+    **Kod realizujący wymaganie:**-
 
     .. literalinclude:: ../../frontend/src/components/EntryWorkView.jsx
         :start-after: REQ_31
@@ -414,8 +444,7 @@ Wymagania projektu
     - Praca konkursowa opatrzona jest danymi autora, które są widoczne dopiero po kliknięciu przycisku, aby nie sugerować się nimi przy ocenie.
     - Istnieje możliwość filtrowania prac faworytów oraz prac jeszcze nieocenionych przez danego jurora.
 
-    Kod realizujący wymaganie:
-    ---------------------------
+    **Kod realizujący wymaganie:**-
 
     .. literalinclude:: ../../frontend/src/components/Entries.jsx
         :start-after: REQ_33

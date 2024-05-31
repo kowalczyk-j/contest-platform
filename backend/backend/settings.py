@@ -119,17 +119,29 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 POSTGRESQL_HOST = os.environ.get("POSTGRES_HOST", 'localhost')
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "contest_platform_database",
-        "USER": "admin",
-        "PASSWORD": "admin",
-        "HOST": POSTGRESQL_HOST,
-        "PORT": "5432",
+DJANGO_ENV = os.getenv('DJANGO_ENV', 'production')
+if DJANGO_ENV == 'test':
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "contest_platform_database_test",
+            "USER": "admin",
+            "PASSWORD": "admin",
+            "HOST": POSTGRESQL_HOST,
+            "PORT": "5432",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "contest_platform_database",
+            "USER": "admin",
+            "PASSWORD": "admin",
+            "HOST": POSTGRESQL_HOST,
+            "PORT": "5432",
+        }
+    }
 
 REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 

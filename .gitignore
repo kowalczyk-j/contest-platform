@@ -12,5 +12,10 @@ backend/contest_platform/utils/__pycache__/
 *.env
 .DS_Store
 
+docs/build/
+
 get-pip.py
 migrations
+test_db.log
+unit-tests.log
+integration-tests.log

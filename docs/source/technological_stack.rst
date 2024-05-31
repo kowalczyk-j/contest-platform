@@ -7,8 +7,10 @@ Stack technologiczny
     * Harmonogramowanie: yacron
 * **Frontend:** React + Vite
 * **Baza danych:** PostgreSQL
-* **Testy automatyczne:** Selenium
 * **Testy jednostkowe:** Unittest
+* **Testy automatyczne:** Selenium
+* **Testy wydajnościowe:** Locust
+* **Logowanie:** Sentry
 * **Konteneryzacja:** Docker
-* **Skrypty:** Shell
+* **Skrypty:** shell
 * **Dokumentacja:** Sphinx
