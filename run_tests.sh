@@ -1,12 +1,11 @@
 #!/bin/bash
 
+# run in environment
 sudo apt-get update
 sudo apt-get -y install chromium-chromedriver
 
 sudo service postgresql start &
 cd backend
-poetry install
-poetry shell
 
 sudo ../scripts/test_db_setup.sh
 
@@ -31,10 +30,10 @@ npm run dev &
 PID_REACT=$!
 
 cd ../backend
-python manage.py test
+python manage.py test > ../unit-tests.log
 
 cd ..
-pytest integration/
+pytest integration/ > integration-tests.log
 
 cleanup() {
   sudo service postgresql stop
