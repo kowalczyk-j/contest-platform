@@ -43,7 +43,6 @@ class SendEmailTest(DramatiqTestCase):
     def test_send_email(self):
         self.request_params["data"]["receivers"] = [{"email": "test1@example.com"}]
         response = self.client.post(**self.request_params)
-        print(self.request_params)
 
         self.broker.join(send_email_task.queue_name)
         self.worker.join()
