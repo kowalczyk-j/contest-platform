@@ -22,79 +22,79 @@ export default function Entries() {
   const { contestId } = useParams();
 
   useEffect(() => {
-  axios
-    .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + sessionStorage.getItem("accessToken"),
-      },
-    })
-    .then((response) => {
-      const entriesWithScores = response.data.map((entry) => {
-        return axios
-          .get(
-            `${import.meta.env.VITE_API_URL}api/entries/${
-              entry.id
-            }/total_grade_value/`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization:
-                  "Token " + sessionStorage.getItem("accessToken"),
-              },
-            }
-          )
-          .then((scoreResponse) => {
-            return { ...entry, score: scoreResponse.data.total_value };
-          });
-      });
-
-      Promise.all(entriesWithScores).then((completed) => {
-        let sortedEntries;
-        if (sortOrder === "asc") {
-          sortedEntries = completed.sort((a, b) => a.score - b.score);
-        } else if (sortOrder === "desc") {
-          sortedEntries = completed.sort((a, b) => b.score - a.score);
-        } else if (sortOrder === "favourite") {
-          sortedEntries = completed.sort((a, b) => {
-            if (a.favourite === b.favourite) {
-              return 0;
-            }
-            return a.favourite ? -1 : 1;
-          });
-        }
-        setEntries(sortedEntries);
-      });
-    })
-    .catch((error) => console.error("Error fetching data: ", error));
-
-  axios
-    .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + sessionStorage.getItem("accessToken"),
-      },
-    })
-    .then((response) => setContest(response.data))
-    .catch((error) => console.error("Error fetching data: ", error));
-
-  axios
-    .get(
-      `${
-        import.meta.env.VITE_API_URL
-      }api/contests/${contestId}/max_rating_sum/`,
-      {
+    axios
+      .get(`${import.meta.env.VITE_API_URL}api/entries/?contest=${contestId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Token " + sessionStorage.getItem("accessToken"),
         },
-      }
-    )
-    .then((response) => {
-      setMaxScore(response.data.total_max_rating);
-    })
-    .catch((error) => console.error("Error fetching max score: ", error));
-}, [contestId, sortOrder]);
+      })
+      .then((response) => {
+        const entriesWithScores = response.data.map((entry) => {
+          return axios
+            .get(
+              `${import.meta.env.VITE_API_URL}api/entries/${
+                entry.id
+              }/total_grade_value/`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization:
+                    "Token " + sessionStorage.getItem("accessToken"),
+                },
+              }
+            )
+            .then((scoreResponse) => {
+              return { ...entry, score: scoreResponse.data.total_value };
+            });
+        });
+
+        Promise.all(entriesWithScores).then((completed) => {
+          let sortedEntries;
+          if (sortOrder === "asc") {
+            sortedEntries = completed.sort((a, b) => a.score - b.score);
+          } else if (sortOrder === "desc") {
+            sortedEntries = completed.sort((a, b) => b.score - a.score);
+          } else if (sortOrder === "favourite") {
+            sortedEntries = completed.sort((a, b) => {
+              if (a.favourite === b.favourite) {
+                return 0;
+              }
+              return a.favourite ? -1 : 1;
+            });
+          }
+          setEntries(sortedEntries);
+        });
+      })
+      .catch((error) => console.error("Error fetching data: ", error));
+
+    axios
+      .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => setContest(response.data))
+      .catch((error) => console.error("Error fetching data: ", error));
+
+    axios
+      .get(
+        `${
+          import.meta.env.VITE_API_URL
+        }api/contests/${contestId}/max_rating_sum/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Token " + sessionStorage.getItem("accessToken"),
+          },
+        }
+      )
+      .then((response) => {
+        setMaxScore(response.data.total_max_rating);
+      })
+      .catch((error) => console.error("Error fetching max score: ", error));
+  }, [contestId, sortOrder]);
 
   const handleSortChange = (event) => {
     setSortOrder(event.target.value);
@@ -127,22 +127,23 @@ export default function Entries() {
 
   const handleFavouriteChange = (isFavourite, isCanceled, id) => {
     axios
-      .patch(`${import.meta.env.VITE_API_URL}api/entries/${id}/`, {
-        favourite: isFavourite,
-        canceled: isCanceled
-      },
+      .patch(
+        `${import.meta.env.VITE_API_URL}api/entries/${id}/`,
+        {
+          favourite: isFavourite,
+          canceled: isCanceled,
+        },
         {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Token " + sessionStorage.getItem("accessToken"),
           },
         }
-      ).catch((error) => {
+      )
+      .catch((error) => {
         console.log(error);
-        }
-      );
-      
-};
+      });
+  };
   return (
     <ThemeProvider theme={montserrat}>
       <Navbar />
@@ -164,7 +165,9 @@ export default function Entries() {
             Prace konkursowe: {contest.title}
           </Typography>
           <Select value={sortOrder} onChange={handleSortChange} sx={{ mt: 2 }}>
-            <MenuItem value="asc">Od nieocenionych/najniżej ocenionych</MenuItem>
+            <MenuItem value="asc">
+              Od nieocenionych/najniżej ocenionych
+            </MenuItem>
             <MenuItem value="desc">Od najwyżej ocenionych</MenuItem>
             <MenuItem value="favourite">Od ulubionych</MenuItem>
           </Select>

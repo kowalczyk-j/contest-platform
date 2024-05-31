@@ -14,7 +14,7 @@ const PrivateRoute = ({
   const [loading, setLoading] = useState(true);
   const [contestData, setContestData] = useState(null);
   const location = useLocation();
-  const { contestId } = useParams(); // Pobieranie contestId z URL
+  const { contestId } = useParams();
   const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {

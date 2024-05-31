@@ -1,37 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  Typography,
-  Grid,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Box,
-  FormControl,
-} from "@mui/material";
+import { Grid, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import FileUploadButton from "./FileUploadButton"; /* TODO: stwórz FileDownload zamiast FileUpload */
 import GradeEntryForm from "./GradeEntryForm";
 import BackButton from "./buttons/BackButton";
 import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import ConfirmationWindow from "./ConfirmationWindow";
 import Navbar from "./Navbar";
-
-const GreenButton = styled(Button)({
-  backgroundColor: "#95C21E",
-  color: "white",
-  "&:hover": {
-    backgroundColor: "#82a819",
-  },
-});
 
 const GradeEntryView = () => {
   const [gradesAndCriterions, setGradesAndCriterions] = useState([]);
@@ -57,7 +34,7 @@ const GradeEntryView = () => {
 
       const entryResponse = await axios.get(
         `${import.meta.env.VITE_API_URL}api/entries/${entryId}`,
-        headers,
+        headers
       );
       const entry = entryResponse.data;
       console.log(entry);
@@ -65,14 +42,14 @@ const GradeEntryView = () => {
 
       const gradeResponse = await axios.get(
         `${import.meta.env.VITE_API_URL}api/grades?entry=${entryId}`,
-        headers,
+        headers
       );
       const grades = gradeResponse.data;
 
-      const gradeCriterionsPromises = grades.map(async (grade) => { 
-        const criterionResponse = await axios.get( 
+      const gradeCriterionsPromises = grades.map(async (grade) => {
+        const criterionResponse = await axios.get(
           `${import.meta.env.VITE_API_URL}api/criterions/${grade.criterion}`,
-          headers,
+          headers
         );
         const criterion = criterionResponse.data;
 
@@ -102,7 +79,7 @@ const GradeEntryView = () => {
         await axios.patch(
           `${import.meta.env.VITE_API_URL}api/grades/${pair.grade.id}/`,
           pair.grade,
-          headers,
+          headers
         );
       }
       console.log("Grades updated successfully");
@@ -146,7 +123,7 @@ const GradeEntryView = () => {
               applicant={entry.user}
               entryFile={entry.entry_file}
               gradesAndCriterions={gradesAndCriterions}
-              handleGradeUpload={() => { }}
+              handleGradeUpload={() => {}}
               viewConfirmation={false}
             />
           )}

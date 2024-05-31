@@ -32,7 +32,6 @@ const RegistrationPage = () => {
     isSubscribedToNewsletter: false,
   });
   const [registrationError, setRegistrationError] = useState(false);
-  const [registrationErrorMessage, setRegistrationErrorMessage] = useState("");
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const navigate = useNavigate();
@@ -94,10 +93,8 @@ const RegistrationPage = () => {
         } else {
           setConfirmationMessage("Rejestracja nieudana, spróbuj ponownie.");
         }
-        setRegistrationErrorMessage(JSON.stringify(errorData, null, 2));
       } else {
         setConfirmationMessage("Wystąpił nieznany błąd, spróbuj ponownie.");
-        setRegistrationErrorMessage(error.message);
       }
     }
     setConfirmationOpen(true);
@@ -105,7 +102,6 @@ const RegistrationPage = () => {
 
   const handleBack = () => {
     setRegistrationError(false);
-    setRegistrationErrorMessage("");
     navigate("/");
   };
 

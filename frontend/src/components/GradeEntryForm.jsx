@@ -1,4 +1,3 @@
-import { ThemeProvider } from "@mui/material/styles";
 import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/500.css";
 import { Typography } from "@mui/material";
@@ -6,7 +5,6 @@ import FileDownloadButton from "./buttons/FileDownloadButton";
 import SubmitButton from "./buttons/SubmitButton";
 import GradeUpperCardInfo from "./GradeUpperCardInfo";
 import GradeCriterionCard from "./GradeCriterionCard";
-import montserrat from "../static/theme";
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -18,7 +16,7 @@ function GradeEntryForm({
   entryFile,
   gradesAndCriterions,
   handleGradeUpload,
-  viewConfirmation
+  viewConfirmation,
 }) {
   const [updatedGradesAndCriterions, setUpdatedGradesAndCriterions] =
     useState(gradesAndCriterions);

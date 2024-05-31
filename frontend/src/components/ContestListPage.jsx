@@ -43,10 +43,10 @@ const CustomTwitterShareButton = styled(TwitterShareButton)({
 });
 
 const statusColors = {
-  not_started: "#ff9800", // pomarańczowy
-  ongoing: "#4caf50", // zielony
-  judging: "#2196f3", // niebieski
-  finished: "#f44336", // czerwony
+  not_started: "#ff9800", // orange
+  ongoing: "#4caf50", // green
+  judging: "#2196f3", // blue
+  finished: "#f44336", // red
 };
 
 const statusLabels = {
@@ -260,7 +260,7 @@ const ContestIndexPage = () => {
                   alignItems: "center",
                   color: "#777",
                   fontSize: "0.8rem",
-                  backgroundColor: statusColors[contest.status], // Ustawienie koloru tła
+                  backgroundColor: statusColors[contest.status],
                   borderRadius: "5px",
                 }}
               >

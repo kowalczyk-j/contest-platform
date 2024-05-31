@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from django.conf import settings
 from django.core.cache import cache
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
@@ -379,7 +379,7 @@ class UserViewSet(ModelViewSet):
         key = "jury_users"
         jury_users = cache.get(key)
         if not jury_users:
-            jury_users = list(User.objects.filter(is_jury=True))
+            jury_users = list(User.objects.filter(Q(is_jury=True) | Q(is_staff=True)))
             cache_long_lived(key, jury_users)
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)

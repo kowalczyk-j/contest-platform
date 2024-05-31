@@ -2,10 +2,10 @@ import { Box, Typography, Button, Modal, IconButton } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmationWindow from "./ConfirmationWindow";
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
 export default function EntryInfo({
   id,
@@ -19,7 +19,7 @@ export default function EntryInfo({
   onDeleteClick,
   favourite: initialFavourite,
   canceled: initialCanceled,
-  handleFavouriteChange
+  handleFavouriteChange,
 }) {
   const navigate = useNavigate();
   const [openPopUp, setOpenPopUp] = useState(false);
@@ -37,7 +37,7 @@ export default function EntryInfo({
   const handleRateViewClick = (entryId) => {
     navigate(`/grade-entry-view/${entryId}`);
   };
-  
+
   const handleViewWorkClick = () => {
     navigate(`/view-work/${id}`);
   };
@@ -46,22 +46,19 @@ export default function EntryInfo({
     if (isCanceled) {
       handleFavouriteChange(true, false, entryId);
       setCanceled(false);
+    } else {
+      handleFavouriteChange(!isFavourite, false, entryId);
     }
-    else {
-      handleFavouriteChange(!isFavourite, false, entryId)
-    }   
     setStarred(!isFavourite);
   };
-  // using handleFavouriteChange(!isFavourite, !isCanceled) doesnt work properly
   const toggleCanceled = (entryId) => {
     if (isFavourite) {
       handleFavouriteChange(false, true, entryId);
       setStarred(false);
+    } else {
+      handleFavouriteChange(false, !isCanceled, entryId);
     }
-    else {
-      handleFavouriteChange(false, !isCanceled, entryId)
-    }
-    setCanceled(!isCanceled)
+    setCanceled(!isCanceled);
   };
 
   return (
@@ -104,10 +101,18 @@ export default function EntryInfo({
               Usuń
             </Button>
             <IconButton onClick={() => toggleStarred(id)}>
-              {isFavourite ? <StarIcon sx={{ color: 'orange' }} /> : <StarBorderIcon sx={{ color: 'orange' }} />}
+              {isFavourite ? (
+                <StarIcon sx={{ color: "orange" }} />
+              ) : (
+                <StarBorderIcon sx={{ color: "orange" }} />
+              )}
             </IconButton>
             <IconButton onClick={() => toggleCanceled(id)}>
-              {isCanceled ? <CancelIcon sx={{ color: 'red' }} /> : <CancelOutlinedIcon sx={{ color: 'red' }} />}
+              {isCanceled ? (
+                <CancelIcon sx={{ color: "red" }} />
+              ) : (
+                <CancelOutlinedIcon sx={{ color: "red" }} />
+              )}
             </IconButton>
           </>
         )}

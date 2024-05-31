@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, Typography, Box } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
 import EntryInfo from "./EntryInfo";
 
 export default function UserEntries() {
   const [entries, setEntries] = useState([]);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -248,7 +248,7 @@ export default function UsersListPage() {
         </Box>
       );
     } else {
-      return null; // Dla przypadków, gdy displayType jest niepoprawny
+      return null;
     }
   };
 
