@@ -302,7 +302,7 @@ class EntryViewSet(ModelViewSet):
             "value__sum"
         ]
         return Response({"total_value": total_value})
-    
+
     @action(detail=True, methods=["delete"])
     def delete_with_related(self, request, pk=None):
         """
@@ -369,6 +369,7 @@ class UserViewSet(ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [UserPermission]
 
+    # REQ_06B_END
     @action(detail=False, methods=["get"])
     def current_user(self, request):
         user = request.user
@@ -387,6 +388,7 @@ class UserViewSet(ModelViewSet):
         ]
         return Response(emails)
 
+    # REQ_15
     @action(detail=False, methods=["get"])
     def jury_users(self, request):
         key = "jury_users"
@@ -397,6 +399,9 @@ class UserViewSet(ModelViewSet):
         serializer = self.get_serializer(jury_users, many=True)
         return Response(serializer.data)
 
+    # REQ_15_END
+
+    # REQ_07B
     @action(detail=False, methods=["put"])
     def update_profile(self, request):
         user = request.user
@@ -406,6 +411,7 @@ class UserViewSet(ModelViewSet):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    # REQ_07B_END
     @action(detail=False, methods=["post"])
     def change_password(self, request):
         user = request.user
@@ -466,6 +472,7 @@ class UserViewSet(ModelViewSet):
             status=status.HTTP_204_NO_CONTENT,
         )
 
+    # REQ_08B
     @action(detail=True, methods=["patch"])
     def update_status(self, request, pk=None):
         user = self.get_object()
@@ -513,7 +520,7 @@ class UserViewSet(ModelViewSet):
         )
 
 
-# REQ_06B_END
+# REQ_08B_END
 
 
 class SchoolViewSet(ModelViewSet):

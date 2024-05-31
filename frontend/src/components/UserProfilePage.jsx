@@ -72,7 +72,7 @@ const UserProfilePage = () => {
   const handleEditClose = () => {
     setOpenEditDialog(false);
   };
-
+  //REQ_07A
   const handleEditSave = async () => {
     try {
       const response = await axios.put(
@@ -110,7 +110,7 @@ const UserProfilePage = () => {
       setConfirmationOpen(true);
     }
   };
-
+  //REQ_07A_END
   const handleDeleteOpen = () => {
     setOpenDeleteDialog(true);
   };

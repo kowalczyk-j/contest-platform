@@ -3,6 +3,7 @@ from ..models import School
 from io import TextIOWrapper
 
 
+# REQ_02
 def upload_schools_data(file):
     file_wrapper = TextIOWrapper(file.file, encoding="utf-8")
     with file_wrapper as csvfile:
@@ -29,3 +30,6 @@ def upload_schools_data(file):
                     institution_specifics=row["Specyfika placówki"],
                     director_name=row["Imię i nazwisko dyrektora"],
                 )
+
+
+# REQ_02_END

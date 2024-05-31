@@ -50,7 +50,7 @@ export default function UsersListPage() {
   useEffect(() => {
     fetchData();
   }, [displayType]);
-
+  // REQ_08A
   const updateUserStatus = (userId, statusType) => {
     axios
       .patch(
@@ -68,7 +68,7 @@ export default function UsersListPage() {
       })
       .catch((error) => console.error("Error updating status: ", error));
   };
-
+  // REQ_08A_END
   const handleOpenMenu = (event, userId) => {
     setAnchorEl(event.currentTarget);
     setSelectedUserId(userId);
