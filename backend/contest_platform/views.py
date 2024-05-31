@@ -416,17 +416,22 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=True, methods=["delete"])
     def delete_account(self, request, pk=None):
-        if pk:
-            if not request.user.is_staff:
-                resp = "Nie masz uprawnień do usuwania innych użytkowników."
-                return Response({"detail": resp}, status=status.HTTP_403_FORBIDDEN)
-            user = User.objects.get(pk=pk)
-        else:
+        if int(pk) == request.user.id:
             user = request.user
+        else:
+            if not request.user.is_staff:
+                return Response(
+                    {"detail": "Nie masz uprawnień do usuwania innych użytkowników."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            user = User.objects.get(pk=pk)
 
         if user.is_staff:
             return Response(
-                {"detail": "Nie można usunąć konta administratora."},
+                {
+                    "detail": "Nie można usunąć konta administratora. \
+                          Najpierw odbierz mu uprawnienia."
+                },
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -520,9 +525,9 @@ def import_schools(request):
         file = request.FILES["csv_file"]
         upload_schools_data(file)
         return Response(
-            {"message": "Upload successful"}, status=status.HTTP_201_CREATED
+            {"message": "Pomyślnie wczytano."}, status=status.HTTP_201_CREATED
         )
     else:
         return Response(
-            {"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
+            {"error": "Nie podano pliku."}, status=status.HTTP_400_BAD_REQUEST
         )
