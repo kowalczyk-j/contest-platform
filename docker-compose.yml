@@ -25,6 +25,7 @@ services:
       dockerfile: Dockerfile.worker
     environment:
       RABBITMQ_HOST: rabbitmq
+      RABBITMQ_URL: amqp://rabbitmq:5672/
       POSTGRESQL_HOST: db
       REDIS_HOST: redis
       dramatiq_prom_host: dramatiq_worker
@@ -69,7 +70,7 @@ services:
       - POSTGRES_DB=contest_platform_database
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
-      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_URL=amqp://rabbitmq:5672/
       - REDIS_HOST=redis
 
   frontend:
