@@ -53,3 +53,26 @@ def get_entry_status(entry_title):
 
     except psycopg2.Error as e:
         print(f"Error connecting to PostgreSQL: {e}")
+
+
+def count_users_by_name(first_name, last_name):
+    try:
+        with PostgreSQLConnection(
+            dbname="contest_platform_database_test",
+            user="admin",
+            password="admin",
+            host="127.0.0.1"
+        ) as conn:
+            with conn.cursor() as cursor:
+                sql = """
+                SELECT COUNT(*)
+                FROM public.contest_platform_user
+                WHERE first_name = %s AND last_name = %s
+                """
+                cursor.execute(sql, (first_name, last_name))
+                count = cursor.fetchone()[0]
+                return count
+
+    except psycopg2.Error as e:
+        print(f"Error connecting to PostgreSQL: {e}")
+        return None
