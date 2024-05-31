@@ -14,5 +14,5 @@ def test_login_successful(chrome_driver):
     """requiers superuser with given login data"""
     login_result = wait_for_elem(chrome_driver, By.ID, "alert-dialog-title")
     print(login_result.text)
-    assert login_result.text == "Pomyślnie zalogwano"
+    assert login_result.text == "Pomyślnie zalogowano"
     return

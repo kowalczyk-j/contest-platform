@@ -118,16 +118,29 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "contest_platform_database",
-        "USER": "admin",
-        "PASSWORD": "admin",
-        "HOST": "localhost",
-        "PORT": "5432",
+DJANGO_ENV = os.getenv('DJANGO_ENV', 'production')
+if DJANGO_ENV == 'test':
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "contest_platform_database_test",
+            "USER": "admin",
+            "PASSWORD": "admin",
+            "HOST": "localhost",
+            "PORT": "5432",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "contest_platform_database",
+            "USER": "admin",
+            "PASSWORD": "admin",
+            "HOST": "localhost",
+            "PORT": "5432",
+        }
+    }
 
 CACHES = {
     "default": {
