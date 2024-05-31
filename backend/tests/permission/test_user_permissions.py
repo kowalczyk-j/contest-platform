@@ -46,7 +46,9 @@ class UserPermissionTest(TestCase):
 
     def test_has_object_permission_retrieve_action_own_user(self):
         other_user = User.objects.create_user(
-            username="otheruser", password="testpassword"
+            username="otheruser",
+            password="testpassword",
+            email="sssssssssss@wp.pl"
         )
         request = self.factory.get("/api/users/1/")
         request.user = self.user
@@ -58,7 +60,11 @@ class UserPermissionTest(TestCase):
         self.assertFalse(permission.has_object_permission(request, view, other_user))
 
     def test_has_object_permission_retrieve_action_staff_user(self):
-        user = User.objects.create_user(username="otheruser", password="testpassword")
+        user = User.objects.create_user(
+            username="otheruser",
+            password="testpassword",
+            email="skibidiemail@wp.pl"
+            )
         request = self.factory.get("/api/users/1/")
         request.user = self.user
         request.user.is_staff = True
@@ -72,7 +78,11 @@ class UserPermissionTest(TestCase):
     def test_has_object_permission_retrieve_action_unauthenticated(
         self,
     ):
-        user = User.objects.create_user(username="otheruser", password="testpassword")
+        user = User.objects.create_user(
+            username="otheruser",
+            password="testpassword",
+            email="testemail232Wwp.pl"
+            )
         request = self.factory.get("/api/users/1/")
         request.user = AnonymousUser()
         view = UserViewSet()

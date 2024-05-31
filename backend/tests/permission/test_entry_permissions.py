@@ -11,6 +11,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.test import force_authenticate
 from contest_platform.views import EntryViewSet
 from contest_platform.permissions import EntryPermission
+from rest_framework.request import Request
 
 
 class EntryPermissionTest(TestCase):
@@ -44,6 +45,7 @@ class EntryPermissionTest(TestCase):
         view = EntryViewSet()
         view.action = "list"
         permission = EntryPermission()
+        request = Request(request)
 
         self.assertFalse(permission.has_permission(request, view))
 
@@ -73,6 +75,7 @@ class EntryPermissionTest(TestCase):
         request = self.factory.get(f"/api/entries/{self.entry.id}/")
         jury_user = User.objects.create_user(
             username="testjury",
+            email="testemail8976@wp.pl",
             password="testjurypasswd",
             is_jury=False,
         )
@@ -88,6 +91,7 @@ class EntryPermissionTest(TestCase):
         jury_user = User.objects.create_user(
             username="test_valid_jury",
             password="testjurypasswd",
+            email='testemail43343@wp.pl',
             is_jury=True,
         )
         request.user = jury_user

@@ -125,6 +125,7 @@ class GradePermissionsTest(TestCase):
     ):
         request = self.factory.get(f"/api/grades/{self.grade.id}/")
         jury_user = User.objects.create_user(
+            email="addingemialfix@wp.pl",
             username="testjury",
             password="testjurypasswd",
             is_jury=False,

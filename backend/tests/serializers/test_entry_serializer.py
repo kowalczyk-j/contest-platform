@@ -2,6 +2,7 @@ from django.test import TestCase
 
 # Create your tests here.
 #
+from datetime import date
 import datetime
 from contest_platform.models import User
 from django.test import TestCase
@@ -26,8 +27,8 @@ class EntrySerializerTestCoordinatingUnit(TestCase):
         )
         self.contest = Contest.objects.create(
             title="Programming Contest",
-            date_start="2024-01-01",
-            date_end="2024-02-01",
+            date_start=date(2024, 1, 1),
+            date_end=date(2024, 2, 1),
         )
 
     def test_entry_serializer_create(self):
@@ -116,8 +117,8 @@ class EntrySerializerTestNotCoordinatingUnit(TestCase):
         )
         self.contest = Contest.objects.create(
             title="Programming Contest",
-            date_start="2024-01-01",
-            date_end="2024-02-01",
+            date_start=date(2024, 1, 1),
+            date_end=date(2024, 2, 1),
         )
 
     def test_entry_serializer_create_duplicate_entry_non_coordinating_unit(
@@ -151,7 +152,7 @@ class EntrySerializerTestNotCoordinatingUnit(TestCase):
         with self.assertRaises(serializers.ValidationError) as context:
             serializer.save()
         self.assertIn(
-            "User cannot have more than one entry.",
+            'Użytkownik nie może mieć więcej niż jednego zgłoszenia.',
             str(context.exception),
         )
 

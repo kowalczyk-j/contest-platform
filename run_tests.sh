@@ -6,10 +6,11 @@ sudo apt-get -y install chromium-chromedriver
 
 sudo service postgresql start &
 cd backend
+export DJANGO_ENV=test
+
+python manage.py test
 
 sudo ../scripts/test_db_setup.sh
-
-export DJANGO_ENV=test
 
 python manage.py makemigrations
 python manage.py migrate
@@ -30,7 +31,7 @@ npm run dev &
 PID_REACT=$!
 
 cd ../backend
-# python manage.py test > ../unit-tests.log
+
 
 cd ..
 pytest integration/ > integration-tests.log
