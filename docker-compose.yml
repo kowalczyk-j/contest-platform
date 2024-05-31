@@ -11,9 +11,6 @@ services:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
       - ./backend:/backend
-    environment:
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: password
     restart: unless-stopped
     healthcheck:
       test: rabbitmq-diagnostics -q ping
@@ -27,10 +24,9 @@ services:
       context: .
       dockerfile: Dockerfile.worker
     environment:
-      RABBIT_HOST: rabbitmq
+      RABBITMQ_HOST: rabbitmq
       POSTGRESQL_HOST: db
-      dramatiq_prom_host: dramatiq_worker
-      dramatiq_prom_port: 9191
+      REDIS_HOST: redis
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -71,7 +67,8 @@ services:
       - POSTGRES_DB=contest_platform_database
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
-      - RABBITMQ_URL=amqp://user:password@rabbitmq:5672/
+      - RABBITMQ_HOST=rabbitmq
+      - REDIS_HOST=redis
 
   frontend:
     build:
@@ -79,6 +76,8 @@ services:
       dockerfile: Dockerfile.frontend
     ports:
       - "5173:5173"
+    environment:
+      VITE_HOST: 0.0.0.0
     volumes:
       - ./frontend:/frontend
 

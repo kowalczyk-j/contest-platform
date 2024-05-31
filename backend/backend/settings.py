@@ -118,21 +118,25 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+POSTGRES_HOST = os.environ.get('POSTGRES_HOST', 'localhost')
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "contest_platform_database",
         "USER": "admin",
         "PASSWORD": "admin",
-        "HOST": "db",
+        "HOST": f"{POSTGRES_HOST}",
         "PORT": "5432",
     }
 }
 
+REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis:6379/1",
+        "LOCATION": f"redis://{REDIS_HOST}:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -204,12 +208,13 @@ SPECTACULAR_SETTINGS = {
     "REDOC_DIST": "SIDECAR",
 }
 
-RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "amqp://user:password@rabbitmq:5672/")
+
+RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
 
 DRAMATIQ_BROKER = {
     "BROKER": "dramatiq.brokers.rabbitmq.RabbitmqBroker",
     "OPTIONS": {
-        "url": RABBITMQ_URL,
+        "url": f"amqp://{RABBITMQ_HOST}:5672",
     },
     "MIDDLEWARE": [
         "dramatiq.middleware.Prometheus",
