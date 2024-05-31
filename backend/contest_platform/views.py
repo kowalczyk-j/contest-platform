@@ -99,7 +99,7 @@ class ContestViewSet(ModelViewSet):
         user_details = entries.values_list(
             "user__first_name", "user__last_name", "user__email"
         ).distinct()
-        send_certificates_task(
+        send_certificates_task.send(
             user_details,
             signatory,
             signature,

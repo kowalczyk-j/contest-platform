@@ -28,8 +28,10 @@ WeasyPrint = "*"
 black = "^24.4.2"
 yacron = "^0.19.0"
 django-redis = "*"
+redis = "^5.0.4"
+async-timeout = "^4.0.0"
 locust = "*"
-psycopg2 = "^2.9.9"
+psycopg2-binary = "*"
 
 [tool.poetry.group.dev.dependencies]
 sphinx = "*"

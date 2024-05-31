@@ -1,0 +1,23 @@
+FROM python:3.12
+
+WORKDIR /backend
+
+COPY ./backend/pyproject.toml ./backend/poetry.lock* ./
+
+RUN pip install pipx && \
+    pipx ensurepath && \
+    pipx install poetry && \
+    export PATH=$PATH:/root/.local/bin && \
+    poetry export -f requirements.txt --output requirements.txt --without-hashes && \
+    pip install -r requirements.txt
+
+
+ENV PATH=/root/.local/bin:$PATH
+
+COPY ./backend .
+
+COPY ./backend/entrypoint_worker.sh /backend
+RUN chmod +x /backend/entrypoint_worker.sh
+
+
+ENTRYPOINT ["/backend/entrypoint_worker.sh"]

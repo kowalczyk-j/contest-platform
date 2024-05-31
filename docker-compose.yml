@@ -1,14 +1,67 @@
 version: '3'
 
 services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      - ./backend:/backend
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  dramatiq_worker:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_URL: amqp://rabbitmq:5672/
+      POSTGRESQL_HOST: db
+      REDIS_HOST: redis
+      dramatiq_prom_host: dramatiq_worker
+      dramatiq_prom_port: 9191
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      backend:
+        condition: service_started
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/backend
+
+  redis:
+    image: redis:alpine
+    container_name: 'redis'
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   backend:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.backend
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - rabbitmq
+      - redis
     volumes:
       - ./backend:/backend
     environment:
@@ -17,11 +70,15 @@ services:
       - POSTGRES_DB=contest_platform_database
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
+      - RABBITMQ_URL=amqp://rabbitmq:5672/
+      - REDIS_HOST=redis
 
   frontend:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.frontend
+    environment:
+      VITE_HOST: 0.0.0.0
     ports:
       - "5173:5173"
     volumes:
@@ -35,3 +92,9 @@ services:
       POSTGRES_DB: contest_platform_database
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d contest_platform_database"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+

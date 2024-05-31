@@ -118,42 +118,19 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-POSTGRESQL_HOST = os.environ.get("POSTGRES_HOST", 'localhost')
-DJANGO_ENV = os.getenv('DJANGO_ENV', 'production')
-if DJANGO_ENV == 'test':
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "contest_platform_database_test",
-            "USER": "admin",
-            "PASSWORD": "admin",
-            "HOST": POSTGRESQL_HOST,
-            "PORT": "5432",
-        }
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "contest_platform_database",
-            "USER": "admin",
-            "PASSWORD": "admin",
-            "HOST": POSTGRESQL_HOST,
-            "PORT": "5432",
-        }
-    }
+POSTGRES_HOST = os.environ.get('POSTGRES_HOST', 'localhost')
 
-REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
-
-CACHES = {
+DATABASES = {
     "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{REDIS_HOST}:6379/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "contest_platform_database",
+        "USER": "admin",
+        "PASSWORD": "admin",
+        "HOST": f"{POSTGRES_HOST}",
+        "PORT": "5432",
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -210,32 +187,21 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Contest platform API",
-    "DESCRIPTION": 'API of the contest platform website for the "Bo Warto" foundation',
-    "VERSION": "1.0.0",
-    "SERVE_INCLUDE_SCHEMA": False,
-    "SWAGGER_UI_DIST": "SIDECAR",
-    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
-    "REDOC_DIST": "SIDECAR",
-}
 
-RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "amqp://localhost:5672/")
+RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
 
 DRAMATIQ_BROKER = {
-    "BROKER": "dramatiq.brokers.rabbitmq.RabbitmqBroker",
-    "OPTIONS": {
-        "url": RABBITMQ_URL,
-    },
+    "BROKER": "dramatiq.brokers.stub.StubBroker",
+    "OPTIONS": {},
     "MIDDLEWARE": [
-        "dramatiq.middleware.Prometheus",
         "dramatiq.middleware.AgeLimit",
         "dramatiq.middleware.TimeLimit",
         "dramatiq.middleware.Callbacks",
+        "dramatiq.middleware.Pipelines",
         "dramatiq.middleware.Retries",
         "django_dramatiq.middleware.DbConnectionsMiddleware",
         "django_dramatiq.middleware.AdminMiddleware",
-    ],
+    ]
 }
 
 # Defines which database should be used to persist Task objects when the

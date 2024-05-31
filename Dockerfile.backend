@@ -19,5 +19,4 @@ ENV PATH=/root/.local/bin:$PATH
 
 EXPOSE 8000
 
-ENTRYPOINT ["./entrypoint.sh"] 
-
+ENTRYPOINT ["./entrypoint.sh"]

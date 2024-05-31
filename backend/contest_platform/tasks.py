@@ -48,4 +48,4 @@ def send_certificates_task(
         subject = "Dyplom uznania - fundacja BoWarto"
         message = "Dziękujemy za udział i zachęcamy do zgłaszania prac w przyszłych konkursach! \
               W załaczniku tej wiadomości znajduje się Twój dyplom do pobrania."
-        send_certificate_task(subject, message, first_name, last_name, email, pdf)
+        send_certificate_task.send(subject, message, first_name, last_name, email, pdf)
