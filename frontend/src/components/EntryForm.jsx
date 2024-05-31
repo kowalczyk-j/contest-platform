@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline";
-import FileUploadButton from "./FileUploadButton";
+import FileUploadButton from "./buttons/FileUploadButton";
 import SubmitButton from "./buttons/SubmitButton";
 import TextButton from "./buttons/TextButton";
 import CreatePerson from "./CreatePerson";
@@ -38,19 +38,18 @@ function EntryForm({ contestId, onSubmit }) {
       .get(`${import.meta.env.VITE_API_URL}api/contests/${contestId}/`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Token " + sessionStorage.getItem("accessToken")
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
         },
       })
       .then((response) => {
         console.log(response.data);
         setContest(response.data);
         axios
-          .get(
-            `${import.meta.env.VITE_API_URL}api/users/current_user/`, {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Token " + sessionStorage.getItem("accessToken"),
-              },
+          .get(`${import.meta.env.VITE_API_URL}api/users/current_user/`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Token " + sessionStorage.getItem("accessToken"),
+            },
           })
           .then((response) => {
             setUser(response.data);
@@ -254,13 +253,19 @@ function EntryForm({ contestId, onSubmit }) {
             <FileUploadButton
               name="Załącz pracę"
               onFileChange={handleFileChange}
-              fileType={contest && contest.type === "plastyczne" ? "image/*" : contest && contest.type === "literackie" ? "application/pdf" : ["image/*", "application/pdf"]}
+              fileType={
+                contest && contest.type === "plastyczne"
+                  ? "image/*"
+                  : contest && contest.type === "literackie"
+                    ? "application/pdf"
+                    : ["image/*", "application/pdf"]
+              }
             />
           </div>
 
           <div className="submit">
-            <SubmitButton text="Zgłoś swoją pracę" onClick={() => {}}/>
-            <ConfirmationWindow 
+            <SubmitButton text="Zgłoś swoją pracę" onClick={() => {}} />
+            <ConfirmationWindow
               open={open}
               setOpen={setOpen}
               title={
@@ -268,7 +273,9 @@ function EntryForm({ contestId, onSubmit }) {
                   ? "Wystąpił błąd przy dodawaniu zgłoszenia"
                   : "Dodano nowe zgłoszenie"
               }
-              message={errorMessage || "Zostaniesz przekierowany do strony głównej"}
+              message={
+                errorMessage || "Zostaniesz przekierowany do strony głównej"
+              }
               onConfirm={handleClose}
               showCancelButton={false}
             />

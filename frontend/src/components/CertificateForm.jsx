@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  TextField,
-  Card,
-  Box,
-} from "@mui/material";
+import { Typography, TextField, Card, Box } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import montserrat from "../static/theme";
 import GenerateTextButton from "./buttons/GenerateTextButton";
@@ -79,23 +74,20 @@ export default function CertificateForm() {
     }
 
     axios
-      .get(
-        `${import.meta.env.VITE_API_URL}api/contests/certificate`,
-        {
-          params: {
-            contest: contest.title,
-            participant: formData1.participant,
-            achievement: formData1.achievement,
-            signature: formData1.signature,
-            signatory: formData1.signatory,
-          },
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Token " + sessionStorage.getItem("accessToken"),
-          },
-          responseType: "blob",
-        }
-      )
+      .get(`${import.meta.env.VITE_API_URL}api/contests/certificate`, {
+        params: {
+          contest: contest.title,
+          participant: formData1.participant,
+          achievement: formData1.achievement,
+          signature: formData1.signature,
+          signatory: formData1.signatory,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + sessionStorage.getItem("accessToken"),
+        },
+        responseType: "blob",
+      })
       .then((response) => {
         const file = new Blob([response.data], { type: "application/pdf" });
         const fileURL = URL.createObjectURL(file);
@@ -107,11 +99,11 @@ export default function CertificateForm() {
       });
   };
 
-    const handleConfirm = () => {
+  const handleConfirm = () => {
     setOpenPopUp(false);
     const { signature, signatory } = formData2;
     if (!signature || !signatory) {
-      alert('All fields are required.');
+      alert("All fields are required.");
       return;
     }
 
@@ -120,12 +112,14 @@ export default function CertificateForm() {
         "Content-Type": "application/json",
         Authorization: "Token " + sessionStorage.getItem("accessToken"),
       },
-      responseType: 'blob',
+      responseType: "blob",
     };
 
     axios
       .post(
-        `${import.meta.env.VITE_API_URL}api/contests/${contest.id}/send_certificates/`,
+        `${import.meta.env.VITE_API_URL}api/contests/${
+          contest.id
+        }/send_certificates/`,
         {
           signature: formData2.signature,
           signatory: formData2.signatory,
@@ -137,7 +131,7 @@ export default function CertificateForm() {
         setErrorMessage("");
       })
       .catch((error) => {
-        console.error('Error sending certificate:', error);
+        console.error("Error sending certificate:", error);
         setResultOpened(true);
         setErrorMessage("Wystąpił błąd przy wysyłaniu certyfikatu.");
       });
@@ -299,9 +293,7 @@ export default function CertificateForm() {
                   ? "Wystąpił błąd przy wysyłaniu certufikatu"
                   : "Wysłano certyfikaty"
               }
-              message={
-                errorMessage || ""
-              }
+              message={errorMessage || ""}
               onConfirm={handleCloseResult}
               showCancelButton={false}
             />

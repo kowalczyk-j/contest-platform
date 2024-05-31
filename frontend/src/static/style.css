@@ -165,11 +165,6 @@ body {
     max-width: 900px;
 }
 
-/* .grade-entry-card .grade-entry-cardFont1 {
-font-family: "Montserrat";
-font-weight: 700;
-font-size: 36;
-} */
 
 .grade-entry-card .upper-grade-entry-card {
     display: flex;
@@ -209,4 +204,4 @@ font-size: 36;
     flex: 1;
     padding: 10px;
     justify-content: center;
-} /* nie działa, bo to własny przycisk */
+}

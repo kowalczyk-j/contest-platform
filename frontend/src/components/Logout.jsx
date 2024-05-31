@@ -25,7 +25,7 @@ const Logout = () => {
       setLogoutError(true);
       setLogoutErrorMessage(JSON.stringify(error.response.data, null, 2));
       setOpenPopup(true);
-      // console.error("Logout failed:", error);
+      console.error("Logout failed:", error);
     }
   };
   const updateSession = async () => {

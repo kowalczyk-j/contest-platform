@@ -1,16 +1,16 @@
 from .models import (
-    Address,
     GradeCriterion,
     Contest,
     Entry,
     Person,
     Grade,
     School,
+    User,
 )
-from .models import User
 from rest_framework import serializers
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+
 
 # REQ_06C
 class UserSerializer(serializers.ModelSerializer):
@@ -51,21 +51,25 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def validate(self, data):
-        for field_name in ['first_name', 'last_name', 'email']:
+        for field_name in ["first_name", "last_name", "email"]:
             if not data.get(field_name):
                 raise serializers.ValidationError("Uzupełnij poprawnie wszystkie pola.")
-            
-        email = data.get('email')
+
+        email = data.get("email")
         try:
             validate_email(email)
         except ValidationError:
             raise serializers.ValidationError("Niepoprawny adres e-mail.")
-        
+
         return data
 
     def validate_email(self, value):
         if self.instance is not None:  # check while updating data
-            if User.objects.filter(email__iexact=value).exclude(pk=self.instance.pk).exists():
+            if (
+                User.objects.filter(email__iexact=value)
+                .exclude(pk=self.instance.pk)
+                .exists()
+            ):
                 raise serializers.ValidationError("Ten adres e-mail jest już zajęty.")
         else:  # check while creating new user
             if User.objects.filter(email__iexact=value).exists():
@@ -78,6 +82,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         return value
 
+
 class ContestSerializer(serializers.ModelSerializer):
     date_start = serializers.DateField(input_formats=["%Y-%m-%d"])
     date_end = serializers.DateField(input_formats=["%Y-%m-%d"])
@@ -87,7 +92,7 @@ class ContestSerializer(serializers.ModelSerializer):
         if data.get("date_start") and data.get("date_end"):
             if data["date_start"] > data["date_end"]:
                 raise serializers.ValidationError(
-                    {"date_start": "Date start must be before date end."}
+                    {"date_start": "Data rozpoczęcia musi być przed datą zakończenia."}
                 )
         return data
 
@@ -131,7 +136,7 @@ class EntrySerializer(serializers.ModelSerializer):
         # REQ_23
         if existing_entry and not (user.is_staff or user.is_coordinating_unit):
             raise serializers.ValidationError(
-                {"user": "User cannot have more than one entry."}
+                {"user": "Użytkownik nie może mieć więcej niż jednego zgłoszenia."}
             )
         # REQ_23_END
 
@@ -165,12 +170,6 @@ class EntrySerializer(serializers.ModelSerializer):
             "favourite",
             "canceled",
         )
-
-
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Address
-        fields = ("id", "street", "number", "postal_code", "city")
 
 
 class GradeCriterionSerializer(serializers.ModelSerializer):

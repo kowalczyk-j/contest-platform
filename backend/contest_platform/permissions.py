@@ -1,9 +1,7 @@
+from django.db import models
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.request import Request
-
-
-from django.db import models
 
 
 class UserPermission(permissions.BasePermission):
@@ -18,7 +16,6 @@ class UserPermission(permissions.BasePermission):
             "partial_update",
             "destroy",
             "current_user",
-            "emails",
             "emails_subscribed",
             "jury_users",
             "update_profile",
@@ -52,7 +49,10 @@ class UserPermission(permissions.BasePermission):
         ]:
             # a user can view its own info, or a staff can view any user's info
             return obj == request.user or request.user.is_staff
-        elif view.action in ["emails", "emails_subscribed", "update_status",]:
+        elif view.action in [
+            "emails_subscribed",
+            "update_status",
+        ]:
             return request.user.is_staff
         else:
             return False
@@ -69,7 +69,6 @@ class ContestPermission(permissions.BasePermission):
             "destroy",
             "entries",
             "send_email",
-            "current_contests",
             "get_contestants_amount",
             "group_individual_comp",
             "get_submissions_by_day",
@@ -116,9 +115,10 @@ class ContestPermission(permissions.BasePermission):
 class EntryPermission(permissions.BasePermission):
     def has_permission(self, request: Request, view: GenericAPIView) -> bool:
         if view.action == "list":
-            # VUNERABILITY HERE, TODO FIX, DONT ALLOW USERS TO LIST ALL ENTRIES
-            # JUST THEIR OWN ENTRIES, but this requires to rebuild the frontend
-            return request.user.is_authenticated
+            return request.user.is_authenticated and (
+                request.user.is_staff
+                or request.query_params.get("user", "") == str(request.user.id)
+            )
         if view.action == "create":
             return request.user.is_authenticated
         if view.action in [
@@ -234,8 +234,6 @@ class SchoolPermission(permissions.BasePermission):
             "partial_update",
             "destroy",
             "emails",
-            "emails_subscribed",
-            "delete_school",
         ]:
             return True
         else:
@@ -256,7 +254,10 @@ class SchoolPermission(permissions.BasePermission):
             "partial_update",
         ]:
             return request.user.is_staff
-        elif view.action in ["destroy", "emails", "emails_subscribed", "delete_school",]:
+        elif view.action in [
+            "destroy",
+            "emails",
+        ]:
             return request.user.is_staff
         else:
             return False

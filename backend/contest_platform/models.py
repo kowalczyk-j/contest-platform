@@ -36,25 +36,15 @@ class Contest(models.Model):
 
     def save(self, *args, **kwargs):
         today = timezone.localtime(timezone.now()).date()
-        if self.status != 'finished':
-            if self.date_start <= today <= self.date_end and self.status != 'ongoing':
-                self.status = 'ongoing'
-            elif today > self.date_end and self.status != 'judging':
-                self.status = 'judging'
+        if self.status != "finished":
+            if self.date_start <= today <= self.date_end and self.status != "ongoing":
+                self.status = "ongoing"
+            elif today > self.date_end and self.status != "judging":
+                self.status = "judging"
         super().save(*args, **kwargs)
 
 
 # REQ_09A_END
-
-
-class Address(models.Model):
-    street = models.CharField(max_length=50)
-    number = models.CharField(max_length=10)
-    postal_code = models.CharField(max_length=6)
-    city = models.CharField(max_length=20)
-
-    def __str__(self):
-        return f"{self.street} {self.number}, {self.postal_code} {self.city}"
 
 
 # REQ_23
@@ -116,8 +106,8 @@ class Grade(models.Model):
         if self.value > self.criterion.max_rating:
             raise ValidationError(
                 {
-                    "value": "Value must be less than or equal to the max \
-            rating of the criterion."
+                    "value": "Wartość musi być mniejsza lub równa \
+                        maksymalnej ocenie kryterium dla danego kryterium."
                 }
             )
 
