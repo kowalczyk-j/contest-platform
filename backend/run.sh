@@ -10,6 +10,10 @@ poetry install
 sudo service postgresql start &
 PID_POSTGRES=$!
 
+# Ekportowanie zmiennej środowiskowej
+export DJANGO_ENV=test
+echo "Running on "$DJANGO_ENV" database"
+
 # Migracje bazy danych
 python manage.py makemigrations
 python manage.py migrate
