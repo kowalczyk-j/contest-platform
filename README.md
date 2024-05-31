@@ -46,7 +46,7 @@ W projekcie korzystamy z Poetry, opartego o pyproject.toml, który jest narzędz
    chmod +x run.sh
    ```
 
-5. **Dodawanie zależności**: Aby dodać zależności do pliku pyproject.toml, użyj komend:
+6. **Dodawanie zależności**: Aby dodać zależności do pliku pyproject.toml, użyj komend:
 
    ```bash
    poetry add <nazwa pakietu>
@@ -54,7 +54,7 @@ W projekcie korzystamy z Poetry, opartego o pyproject.toml, który jest narzędz
    ```
    Pamiętaj, że plik `Poetry.lock` automatycznie zapisuje dokładne wersje zainstalowanych pakietów, aby zapewnić spójność środowiska na różnych maszynach. Przy kolejnych uruchomieniach projektu, zaleca się używanie poleceń `poetry install` w celu zainstalowania zależności zdefiniowanych w pliku `pyproject.toml`.
 
-6. **Instalacja RabbitMQ**: Do wysyłania maili potrzebny jest message broker RabbitMQ. Aby go zainstalowac, należy wywołać skrypt `install_rabbitmq.sh` znajdujący się w folderze `scripts`. Skrypt wymaga podania nazwy wersji Ubuntu.
+7. **Instalacja RabbitMQ**: Do wysyłania maili potrzebny jest message broker RabbitMQ. Aby go zainstalowac, należy wywołać skrypt `install_rabbitmq.sh` znajdujący się w folderze `scripts`. Skrypt wymaga podania nazwy wersji Ubuntu.
 
 Przykładowe nazwy wersji Ubuntu:
 * jammy - Ubuntu 23.04
@@ -71,7 +71,7 @@ scripts/install_rabbitmq.sh focal
 
 Jeśli skrypt nie zadziała, sugeruję po kolei wykonać wszystkie komendy, według [oficjalnej instrukcji](https://www.rabbitmq.com/docs/install-debian). Jeśli korzystasz z innej dystrybucji Linuxa, odsyłam do [dokumentacji](https://www.rabbitmq.com/docs/platforms).
 
-7. **Instalacja Redis**: Używany w cachowaniu zapytań do bazy danych. Instalacja i sprawdzenie działania przez następujące komendy:
+8. **Instalacja Redis**: Używany w cachowaniu zapytań do bazy danych. Instalacja i sprawdzenie działania przez następujące komendy:
 ```shell
 sudo apt update
 sudo apt install redis
@@ -84,7 +84,7 @@ sudo systemctl start redis
 sudo systemctl enable redis
 ```
 
-8. **Testy wydajnościowe locust**
+9. **Testy wydajnościowe locust**
 Uruchomienie serwera testowego:
 ```shell
 backend/locust-performance$ locust -f locust-tasks.py

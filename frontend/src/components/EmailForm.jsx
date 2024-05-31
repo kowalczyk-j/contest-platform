@@ -152,7 +152,9 @@ Zespół Fundacji "BoWarto"`;
             <Typography variant="subtitle1" sx={{ mt: 1, mx: 5 }}>
               Maksymalna liczba wysłanych maili wynosi 500 dziennie. W przypadku
               gdy wybrana lista liczy więcej odbiorców, system wyśle wiadomość
-              do pierwszych 500 osób.
+              do pierwszych 500 osób. Dostępne są 2 listy odbiorców (Użytkownicy
+              i Szkoły) widoczne, gdy w bazie znajdują się odpowiednie
+              jednostki.
             </Typography>
             {/*REQ_18*/}
             <form onSubmit={handleSubmit} style={{ width: "100%" }}>
