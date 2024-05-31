@@ -118,7 +118,7 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-POSTGRES_HOST = os.environ.get('POSTGRES_HOST', 'localhost')
+POSTGRESQL_HOST = os.environ.get("POSTGRES_HOST", 'localhost')
 
 DATABASES = {
     "default": {
@@ -126,7 +126,7 @@ DATABASES = {
         "NAME": "contest_platform_database",
         "USER": "admin",
         "PASSWORD": "admin",
-        "HOST": f"{POSTGRES_HOST}",
+        "HOST": POSTGRESQL_HOST,
         "PORT": "5432",
     }
 }
@@ -185,7 +185,13 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Mail settings
-EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "konkursy.bowarto@gmail.com"
+EMAIL_HOST_PASSWORD = os.getenv("GMAIL_HOST_PASSWORD")
+
 
 # rest framework settings
 REST_FRAMEWORK = {
@@ -202,14 +208,12 @@ SPECTACULAR_SETTINGS = {
     "REDOC_DIST": "SIDECAR",
 }
 
-
-RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
+RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "amqp://rabbitmq:5672/")
 
 DRAMATIQ_BROKER = {
     "BROKER": "dramatiq.brokers.rabbitmq.RabbitmqBroker",
     "OPTIONS": {
-        "url": f"amqp://{RABBITMQ_HOST}:5672",
-
+        "url": RABBITMQ_URL,
     },
     "MIDDLEWARE": [
         "dramatiq.middleware.Prometheus",
