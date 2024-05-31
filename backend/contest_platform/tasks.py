@@ -45,6 +45,7 @@ def send_certificates_task(
         html = HTML(string=html_string)
         pdf = html.write_pdf()
 
-        subject = "Twój certyfikat"
-        message = "Dziękujemy za udział!."
+        subject = "Dyplom uznania - fundacja BoWarto"
+        message = "Dziękujemy za udział i zachęcamy do zgłaszania prac w przyszłych konkursach! \
+              W załaczniku tej wiadomości znajduje się Twój dyplom do pobrania."
         send_certificate_task(subject, message, first_name, last_name, email, pdf)

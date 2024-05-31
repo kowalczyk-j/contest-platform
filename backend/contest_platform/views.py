@@ -103,7 +103,7 @@ class ContestViewSet(ModelViewSet):
             user_details,
             signatory,
             signature,
-            contest.description,
+            contest.title,
             self.default_achievement,
             self.certificate_template_path,
         )
