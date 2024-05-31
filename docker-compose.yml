@@ -11,6 +11,8 @@ services:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
       - ./backend:/backend
+    environment:
+      RABBITMQ_HEARTBEAT: 60
     restart: unless-stopped
     healthcheck:
       test: rabbitmq-diagnostics -q ping
