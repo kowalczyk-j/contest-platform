@@ -7,7 +7,8 @@ from integration.selenium_utils import (
 )
 from integration.database_connector import (
     get_entry_status,
-    databaset_update_sleep
+    databaset_update_sleep,
+    count_all_entries
 )
 
 
@@ -69,16 +70,11 @@ def examine_delete(chrome_driver: Chrome):
         By.XPATH,
         "//button[contains(text(), 'OK')]"
     )
+    init = count_all_entries()
     conf.click()
-    # conf = wait_for_elem(
-    #     chrome_driver,
-    #     By.XPATH,
-    #     "//button[contains(text(), 'Usuwanie zgłoszenia nieudane')]"
-    # )
-    # fav, can = get_entry_status("Grabione listki")
-    # assert fav is not None
-    # assert
-    # TODO after fix
+    databaset_update_sleep()
+    end = count_all_entries()
+    assert init - 1 == end
 
 
 @login_decorator("admin", "admin")
