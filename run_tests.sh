@@ -8,7 +8,7 @@ sudo service postgresql start &
 cd backend
 export DJANGO_ENV=test
 
-python manage.py test
+python manage.py test --settings=tests.test_settings
 
 sudo ../scripts/test_db_setup.sh
 

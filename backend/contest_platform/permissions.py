@@ -117,10 +117,9 @@ class EntryPermission(permissions.BasePermission):
         if view.action == "list":
             return request.user.is_authenticated and (
                 request.user.is_staff
+                or request.user.is_jury
                 or request.query_params.get("user", "") == str(request.user.id)
             )
-        if view.action == "create":
-            return request.user.is_authenticated
         if view.action in [
             "retrieve",
             "update",
