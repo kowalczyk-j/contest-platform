@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# run in environment
+# run in poetry shell
 sudo apt-get update
 sudo apt-get -y install chromium-chromedriver
 

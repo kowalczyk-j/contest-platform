@@ -5,6 +5,7 @@ from integration.selenium_utils import (
     login_decorator,
     navigate_contest_form,
     element_present,
+    wait_for_elem
 )
 
 
@@ -53,6 +54,11 @@ def examine_date(chrome_driver: Chrome):
 
 
 def examine_inputs(chrome_driver: Chrome):
+    wait_for_elem(
+        chrome_driver,
+        By.ID,
+        "title"
+    )
     assert element_present(chrome_driver, By.ID, "title")
     assert element_present(chrome_driver, By.ID, "description")
     assert element_present(
