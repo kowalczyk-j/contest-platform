@@ -4,7 +4,7 @@ Wymagania projektu
 1. Integracja ze stroną internetową:
 ------------------------------------
 
-.. req:: System ma umożliwiać prostą integrację z aktualną stroną internetową Fundacji. (https://www.fundacjabowarto.pl/) 
+.. req:: System ma umożliwiać prostą integrację z aktualną stroną internetową Fundacji. (https://www.fundacjabowarto.pl/)
     :id: REQ_01
     :osoba:
     :priorytet: wysoki
@@ -161,7 +161,7 @@ Wymagania projektu
         :start-after: REQ_09B
         :end-before: REQ_09B_END
 
-    
+
 
 .. req:: Harmonogram składa się z par danych (data/zakres dat, opis wydarzenia) w tym musi uwzględniać termin składania prac i ogłoszenia wyników.
     :id: REQ_10
@@ -261,7 +261,7 @@ Wymagania projektu
     :priorytet: średni
 
     **Kod realizujący wymaganie:**
-    
+
     .. literalinclude:: ../../frontend/src/components/EmailForm.jsx
         :start-after: REQ_18
         :end-before: REQ_18_END
@@ -275,6 +275,12 @@ Wymagania projektu
     :id: REQ_20
     :osoba:
     :priorytet: niski
+
+    - Po dodaniu zgłoszenia do osoby dodającej wysyłany jest email z potwierdzeniem
+
+    .. literalinclude:: ../../backend/contest_platform/models.py
+        :start-after: REQ_20
+        :end-before: REQ_20_END
 
 6. Zbieranie i obsługa zgłoszeń:
 ---------------------------------
@@ -331,7 +337,7 @@ Wymagania projektu
         :end-before: REQ_23_END
 
     - Koordynator szkoły posiada możliwość zamieszczenia większej liczby prac wraz z danymi uczniów/zespołów, którzy je wykonali. Status koordynatora nadawany jest zarejestrowanym użytkownikom przez administratora systemu.
-    
+
     .. literalinclude:: ../../backend/contest_platform/models.py
         :start-after: REQ_23B
         :end-before: REQ_23B_END
@@ -344,7 +350,7 @@ Wymagania projektu
 
 .. req:: Standardowy formularz zgłoszeniowy obowiązkowo składa się z pól: imię i nazwisko, adres e-mail, załączona praca, zgoda na przetwarzanie danych osobowych i akceptacja regulaminu.
     :id: REQ_24
-    :osoba: 
+    :osoba:
     :priorytet: wysoki
 
     Zbierane informacje odnośnie zgłoszenia:
@@ -358,7 +364,7 @@ Wymagania projektu
     :id: REQ_25
     :osoba:
     :priorytet: wysoki
-    
+
     Dla konkursów plastycznych przyjmowany jest dowolny typ pliku obrazu, natomiast dla literackich - pdf.
 
     .. literalinclude:: ../../frontend/src/components/EntryForm.jsx
@@ -467,6 +473,7 @@ Wymagania projektu
     :osoba:
     :priorytet: średni
 
+
     .. literalinclude:: ../../frontend/src/components/Entries.jsx
         :start-after: REQ_35
         :end-before: REQ_35_END
@@ -478,6 +485,14 @@ Wymagania projektu
     :id: REQ_36
     :osoba:
     :priorytet: średni
+
+    - Jurorzy i administratorzy mogą zobaczyć dane o ilości uczestników i prac na dany konkurs
+    - Generowane są też wykresy przedstawiające procent prac grupowych wobec samodzielnych i ilość prac dodanych w każdym dniu konkursu
+
+    .. literalinclude:: ../../backend/contest_platform/views.py
+        :start-after: REQ_36
+        :end-before: REQ_36_ENDmai
+
 
 .. req:: System ma umożliwiać generowanie raportu o zwycięzcach konkursu zawierające: dane osobowe zwycięzców możliwe do upublicznienia, ich prace konkursowe, zajęte miejsce / informacje o wyróżnieniu, *średnie ocen prac
     :id: REQ_37

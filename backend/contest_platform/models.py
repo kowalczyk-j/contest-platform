@@ -141,7 +141,7 @@ class School(models.Model):
 
 # REQ_03_END
 
-
+# REQ_20
 @receiver(post_save, sender=Entry)
 def send_confirmation_email(sender, instance, created, **kwargs):
     if created:
@@ -161,3 +161,6 @@ def send_confirmation_email(sender, instance, created, **kwargs):
             Zespół Fundacji \"BoWarto\" """
         messages = [(subject, message, host_email, [receiver_email])]
         send_email_task.send(messages)
+
+
+# REQ_20_END

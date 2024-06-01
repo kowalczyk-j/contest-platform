@@ -182,6 +182,7 @@ class ContestViewSet(ModelViewSet):
         except Contest.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    # REQ_36
     @action(detail=True, methods=["get"])
     def get_contestants_amount(self, request, pk):
         """
@@ -243,7 +244,6 @@ class ContestViewSet(ModelViewSet):
         """
         contest = self.get_object()
 
-        # possibly move to separate utilities
         def generate_date_range(start_date, end_date):
             current_date = start_date
             while current_date <= end_date:
@@ -274,6 +274,7 @@ class ContestViewSet(ModelViewSet):
 
         return Response({"daily_entries": all_daily_entries}, status=status.HTTP_200_OK)
 
+        # REQ_36_END
 
 class PersonViewSet(ModelViewSet):
     queryset = Person.objects.all()
