@@ -74,6 +74,7 @@ function CreateCriterion({ index, onCriterionChange, onCriterionRemove }) {
         InputLabelProps={{ shrink: true }}
         value={maxRating}
         onChange={(e) => setMaxRating(e.target.value)}
+        inputProps={{min: 1}}
       />
       <TextField
         select

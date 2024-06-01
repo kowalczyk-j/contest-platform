@@ -74,7 +74,9 @@ class ContestViewSet(ModelViewSet):
         if stored_sum:
             return Response({"total_max_rating": stored_sum or 0})
         contest = self.get_object()
-        total_max_rating = GradeCriterion.objects.filter(contest=contest).aggregate(
+        total_max_rating = GradeCriterion.objects.filter(
+            contest=contest
+            ).aggregate(
             Sum("max_rating")
         )["max_rating__sum"]
         cache_long_lived(key, total_max_rating)
@@ -90,15 +92,16 @@ class ContestViewSet(ModelViewSet):
     def send_certificates(self, request, pk=None):
         if pk is None:
             return Response(
-                {"error": "Nie podano id konkursu."}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Nie podano id konkursu."},
+                status=status.HTTP_400_BAD_REQUEST
             )
         contest = get_object_or_404(Contest, pk=pk)
         entries = Entry.objects.filter(contest_id=contest.id)
         signatory = request.data.get("signatory", "")
         signature = request.data.get("signature", "")
-        user_details = entries.values_list(
+        user_details = list(entries.values_list(
             "user__first_name", "user__last_name", "user__email"
-        ).distinct()
+        ).distinct())
         send_certificates_task.send(
             user_details,
             signatory,
