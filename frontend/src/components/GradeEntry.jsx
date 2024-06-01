@@ -41,9 +41,7 @@ const GradeEntry = () => {
       setEntry(entry);
 
       const gradeResponse = await axios.get(
-        `${import.meta.env.VITE_API_URL}api/grades/to_evaluate/?contestId=${
-          entry.contest
-        }`,
+        `${import.meta.env.VITE_API_URL}api/grades/to_evaluate/?entryId=${entry.id}`,
         headers
       );
       const grades = gradeResponse.data;
