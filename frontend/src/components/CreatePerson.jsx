@@ -15,6 +15,7 @@ function CreatePerson({ index, onPersonChange }) {
         <FormControl className="flex flex-col space-y-4" fullWidth={true}>
           <TextField
             required
+            id="participant-name"
             label="Imię uczestnika"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -26,6 +27,7 @@ function CreatePerson({ index, onPersonChange }) {
         <FormControl className="flex flex-col space-y-4" fullWidth={true}>
           <TextField
             required
+            id="participant-surname"
             label="Nazwisko uczestnika"
             value={surname}
             onChange={(e) => setSurname(e.target.value)}

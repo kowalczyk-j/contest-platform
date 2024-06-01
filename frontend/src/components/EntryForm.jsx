@@ -206,6 +206,7 @@ function EntryForm({ contestId, onSubmit }) {
             <TextField
               required
               label="Adres e-mail"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -216,6 +217,7 @@ function EntryForm({ contestId, onSubmit }) {
           <FormControl className="flex flex-col space-y-4" fullWidth={true}>
             <TextField
               required
+              id = "title"
               label="Tytuł pracy"
               value={entryTitle}
               onChange={(e) => setEntryTitle(e.target.value)}
@@ -227,7 +229,7 @@ function EntryForm({ contestId, onSubmit }) {
         <div className="checkbox">
           <FormControlLabel
             required
-            control={<Checkbox />}
+            control={<Checkbox id="consent-checkbox" />}
             label={
               <Typography style={{ fontSize: "0.7rem", fontWeight: "lighter" }}>
                 Wyrażam zgodę na przetwarzanie zawartych w niniejszym formularzu

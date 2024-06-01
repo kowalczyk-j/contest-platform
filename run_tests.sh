@@ -36,6 +36,8 @@ cd ../backend
 cd ..
 pytest integration/ > integration-tests.log
 
+echo "Finished testing, see report"
+
 cleanup() {
   sudo service postgresql stop
   kill $PID_DJANGO $PID_REACT

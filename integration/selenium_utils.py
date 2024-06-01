@@ -88,3 +88,41 @@ def navigate_to_entries(chrome_driver: Chrome):
     assert entry_button
     entry_button.click()
     return chrome_driver
+
+
+def navigate_to_entry_form(chrome_driver: Chrome):
+    ok_button = element_present(
+        chrome_driver,
+        By.CSS_SELECTOR,
+        ".MuiButton-containedSuccess"
+    )
+    assert ok_button
+    ok_button.click()
+    view_button = wait_for_elem(
+        chrome_driver,
+        By.XPATH,
+        "//button[contains(text(), 'Zobacz więcej')]"
+        )
+    assert view_button
+    view_button.click()
+
+    xpath = "//button[span[contains(@class, 'MuiButton-endIcon')]"
+    xpath += " and contains(text(), 'Nadesłane prace')]"
+    wait_for_elem(
+        chrome_driver,
+        By.XPATH,
+        xpath
+        )
+    entry_button = element_present(
+        chrome_driver,
+        By.XPATH,
+        "//p[contains(text(), 'Dodaj zgłoszenie poza terminem')]"
+    )
+    if entry_button is None:
+        entry_button = wait_for_elem(
+            chrome_driver,
+            By.XPATH,
+            "//p[contains(text(), 'Weź udział')]"
+            )
+    entry_button.click()
+    return chrome_driver

@@ -127,6 +127,7 @@ class EntryPermission(permissions.BasePermission):
             "destroy",
             "total_grade_value",
             "delete_with_related",
+            "create"
         ]:
             return True
         else:
